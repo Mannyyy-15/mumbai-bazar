@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Search, User, ShoppingBag, Menu, X, Phone, Heart } from "lucide-react";
 import { NAV } from "@/lib/site-data";
@@ -21,11 +22,16 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { count: cartCount, openCart } = useCart();
   const { wishlist, openWishlist } = useWishlist();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const drawerRef = useFocusTrap<HTMLDivElement>(open);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setOpen(false);
@@ -264,137 +270,142 @@ export function Header() {
         </div>
       )}
 
-      {/* Mobile drawer */}
-      <div
-        id="mobile-drawer"
-        className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ${
-          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
-        }`}
-        aria-hidden={!open}
-      >
-        <div
-          className="absolute inset-0 bg-ink/50 backdrop-blur-xs transition-opacity duration-300"
-          onClick={() => setOpen(false)}
-        />
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="mobile-drawer-title"
-          className={`absolute left-0 top-0 bottom-0 flex h-full w-[85%] max-w-xs flex-col bg-ivory shadow-2xl transition-transform duration-300 ease-out ${
-            open ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <div className="flex items-center justify-between border-b border-gold/50 px-5 py-4">
-            <Link
-              to="/"
+      {/* Mobile drawer rendered on document.body via Portal */}
+      {mounted &&
+        createPortal(
+          <div
+            id="mobile-drawer"
+            className={`fixed inset-0 z-[999999] lg:hidden transition-all duration-300 ${
+              open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+            }`}
+            aria-hidden={!open}
+          >
+            <div
+              className="absolute inset-0 bg-ink/60 backdrop-blur-sm transition-opacity duration-300"
               onClick={() => setOpen(false)}
-              id="mobile-drawer-title"
-              className="flex items-center"
-              aria-label="Mumbai Bazar — home"
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="mobile-drawer-title"
+              className={`absolute left-0 top-0 bottom-0 flex h-full w-[85%] max-w-sm flex-col bg-ivory shadow-2xl transition-transform duration-300 ease-out ${
+                open ? "translate-x-0" : "-translate-x-full"
+              }`}
             >
-              <img src="/logo.png" alt="Mumbai Bazar Logo" className="h-14 object-contain -my-2" />
-            </Link>
-            <button
-              aria-label="Close menu"
-              onClick={() => setOpen(false)}
-              className="grid h-9 w-9 place-items-center text-ink hover:text-maroon transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
+              <div className="flex items-center justify-between border-b border-gold/50 px-5 py-4 bg-maroon text-ivory">
+                <Link
+                  to="/"
+                  onClick={() => setOpen(false)}
+                  id="mobile-drawer-title"
+                  className="flex items-center gap-2"
+                  aria-label="Mumbai Bazar — home"
+                >
+                  <img src="/logo.png" alt="Mumbai Bazar Logo" className="h-10 object-contain brightness-0 invert" />
+                  <span className="font-serif text-lg font-bold tracking-wider text-ivory">Mumbai Bazar</span>
+                </Link>
+                <button
+                  aria-label="Close menu"
+                  onClick={() => setOpen(false)}
+                  className="grid h-9 w-9 place-items-center text-ivory hover:text-gold transition-colors"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
 
-          <nav className="flex-1 overflow-y-auto p-5 space-y-6" aria-label="Mobile primary">
-            <div>
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-maroon">
-                Main Menu
-              </p>
-              <ul className="flex flex-col space-y-1">
-                <li>
-                  <Link
-                    to="/"
-                    onClick={() => setOpen(false)}
-                    activeOptions={{ exact: true }}
-                    className={`flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-semibold transition-colors ${
-                      pathname === "/" ? "bg-maroon text-ivory" : "text-ink hover:bg-maroon/5 hover:text-maroon"
-                    }`}
+              <nav className="flex-1 overflow-y-auto p-5 space-y-6 bg-ivory text-ink" aria-label="Mobile primary">
+                <div>
+                  <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.25em] text-maroon border-b border-gold/40 pb-1">
+                    Main Navigation
+                  </p>
+                  <ul className="flex flex-col space-y-1.5">
+                    <li>
+                      <Link
+                        to="/"
+                        onClick={() => setOpen(false)}
+                        activeOptions={{ exact: true }}
+                        className={`flex items-center justify-between py-3 px-4 rounded-xl text-sm font-bold tracking-wide transition-colors ${
+                          pathname === "/" ? "bg-maroon text-ivory shadow-md" : "text-ink hover:bg-maroon/10 hover:text-maroon"
+                        }`}
+                      >
+                        Home
+                      </Link>
+                    </li>
+                    {PRIMARY_LEFT.map((item) => (
+                      <li key={item.to}>
+                        <Link
+                          to={item.to}
+                          onClick={() => setOpen(false)}
+                          activeOptions={{ exact: item.to === "/shop" ? false : true }}
+                          className={`flex items-center justify-between py-3 px-4 rounded-xl text-sm font-bold tracking-wide transition-colors ${
+                            pathname === item.to || pathname.startsWith(item.to)
+                              ? "bg-maroon text-ivory shadow-md"
+                              : "text-ink hover:bg-maroon/10 hover:text-maroon"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.25em] text-maroon border-b border-gold/40 pb-1">
+                    Shop by Weave & Category
+                  </p>
+                  <ul className="flex flex-col space-y-1">
+                    {CATEGORY_ROW.map((item) => (
+                      <li key={item.to}>
+                        <Link
+                          to={item.to}
+                          onClick={() => setOpen(false)}
+                          activeOptions={{ exact: false }}
+                          className={`block py-2.5 px-4 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors ${
+                            pathname === item.to || pathname.startsWith(item.to)
+                              ? "text-maroon font-bold bg-gold/20 border border-gold/50"
+                              : "text-ink/80 hover:text-maroon hover:bg-gold/10"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="border-t border-gold/40 pt-5 space-y-3">
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      openWishlist();
+                    }}
+                    className="flex w-full items-center gap-3 px-4 py-3 rounded-xl border border-gold/40 text-xs font-bold uppercase tracking-wider text-ink hover:bg-maroon hover:text-ivory transition-all shadow-sm"
                   >
-                    Home
-                  </Link>
-                </li>
-                {PRIMARY_LEFT.map((item) => (
-                  <li key={item.to}>
-                    <Link
-                      to={item.to}
-                      onClick={() => setOpen(false)}
-                      activeOptions={{ exact: item.to === "/shop" ? false : true }}
-                      className={`flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-semibold transition-colors ${
-                        pathname === item.to || pathname.startsWith(item.to)
-                          ? "bg-maroon text-ivory"
-                          : "text-ink hover:bg-maroon/5 hover:text-maroon"
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+                    <Heart className="h-4 w-4 text-maroon" /> Wishlist ({wishlist.length})
+                  </button>
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      openCart();
+                    }}
+                    className="flex w-full items-center gap-3 px-4 py-3 rounded-xl bg-maroon text-ivory text-xs font-bold uppercase tracking-wider hover:bg-wine transition-all shadow-md"
+                  >
+                    <ShoppingBag className="h-4 w-4" /> Shopping Bag ({cartCount})
+                  </button>
+                  <a
+                    href="https://wa.me/919999999999?text=Hi%20Mumbai%20Bazar"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-maroon/30 text-xs font-bold uppercase tracking-wider text-maroon hover:bg-maroon hover:text-ivory transition-all"
+                  >
+                    <Phone className="h-4 w-4" /> Chat on WhatsApp
+                  </a>
+                </div>
+              </nav>
             </div>
-
-            <div className="border-t border-gold/40 pt-5">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-maroon">
-                Shop by Weave & Category
-              </p>
-              <ul className="flex flex-col space-y-1">
-                {CATEGORY_ROW.map((item) => (
-                  <li key={item.to}>
-                    <Link
-                      to={item.to}
-                      onClick={() => setOpen(false)}
-                      activeOptions={{ exact: false }}
-                      className={`block py-2 px-3 rounded-lg text-xs font-medium uppercase tracking-wider transition-colors ${
-                        pathname === item.to || pathname.startsWith(item.to)
-                          ? "text-maroon font-bold bg-gold/15"
-                          : "text-ink/80 hover:text-maroon hover:bg-gold/10"
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="border-t border-gold/40 pt-5 space-y-3">
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  openWishlist();
-                }}
-                className="flex w-full items-center gap-3 px-3 py-2 text-xs font-semibold text-ink hover:text-maroon transition-colors"
-              >
-                <Heart className="h-4 w-4 text-maroon" /> Wishlist ({wishlist.length})
-              </button>
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  openCart();
-                }}
-                className="flex w-full items-center gap-3 px-3 py-2 text-xs font-semibold text-ink hover:text-maroon transition-colors"
-              >
-                <ShoppingBag className="h-4 w-4 text-maroon" /> Shopping Bag ({cartCount})
-              </button>
-              <a
-                href="https://wa.me/919999999999?text=Hi%20Mumbai%20Bazar"
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-ink hover:text-maroon transition-colors"
-              >
-                <Phone className="h-4 w-4 text-maroon" /> Chat on WhatsApp
-              </a>
-            </div>
-          </nav>
-        </div>
-      </div>
+          </div>,
+          document.body
+        )}
     </header>
   );
 }
