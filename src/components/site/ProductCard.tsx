@@ -77,7 +77,7 @@ export function ProductCard({ p }: { p: Product }) {
         <p className="text-[10px] uppercase tracking-[0.22em] text-gold-deep font-semibold">
           {p.weave}
         </p>
-        <h3 className="font-serif text-lg md:text-xl font-semibold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
+        <h3 className="font-sans text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
           {p.name}
         </h3>
         <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">

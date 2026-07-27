@@ -341,25 +341,45 @@ function FeedDivider() {
 type SortKey = "featured" | "newest" | "price-asc" | "price-desc";
 
 function ProductTile({ p }: { p: (typeof PRODUCTS)[number] }) {
-  const { addItem, openCart } = useCart();
+  const { wishlist, toggleWishlist } = useWishlist();
+  const { addItem } = useCart();
+  const isSaved = wishlist.some((w) => w.id === p.id);
+
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addItem({
-      id: p.id,
-      name: p.name,
-      weave: p.weave,
-      price: parsePriceToNumber(p.price),
-      priceLabel: p.price,
-      image: p.img,
-      shopifyVariantId: p.shopifyVariantId,
-    });
-    openCart();
+    addItem(p);
   };
 
   return (
-    <Link to="/products/$id" params={{ id: p.id }} className="group block">
-      <div className="relative aspect-[3/4] bg-[#F0E9DC] overflow-hidden rounded-lg border border-gold/50 shadow-sm transition-all duration-300 group-hover:shadow-md mb-4">
+    <Link
+      to="/products/$id"
+      params={{ id: p.id }}
+      className="group relative flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+    >
+      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F5EFEB]">
+        {p.tag && (
+          <span className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-maroon/95 text-ivory text-[9px] font-bold tracking-[0.2em] uppercase shadow-md backdrop-blur-sm border border-gold/30">
+            {p.tag}
+          </span>
+        )}
+
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleWishlist(p);
+          }}
+          aria-label={isSaved ? "Remove from wishlist" : "Add to wishlist"}
+          className={`absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${
+            isSaved
+              ? "bg-maroon text-ivory shadow-md"
+              : "bg-ivory/80 text-maroon hover:bg-maroon hover:text-ivory shadow-sm"
+          }`}
+        >
+          <Heart className={`h-4 w-4 ${isSaved ? "fill-ivory text-ivory" : ""}`} />
+        </button>
+
         <img
           src={p.img}
           alt={p.name}
@@ -367,28 +387,27 @@ function ProductTile({ p }: { p: (typeof PRODUCTS)[number] }) {
           height={800}
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover transition-transform duration-[1000ms] group-hover:scale-[1.04]"
+          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
         />
-        {p.tag && (
-          <div className="absolute top-3 left-3">
-            <span className="text-[8px] tracking-widest uppercase bg-maroon text-ivory px-2 py-1">
-              {p.tag === "New" ? "Limited Edition" : p.tag}
-            </span>
-          </div>
-        )}
-          <div className="absolute bottom-0 left-0 right-0 p-2.5 md:p-4 opacity-100 md:opacity-0 transition-all transform translate-y-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0">
+
+        <div className="absolute inset-x-3 bottom-3 z-10 opacity-100 md:opacity-0 translate-y-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
           <button
             onClick={handleQuickAdd}
-            className="w-full py-3 bg-brand-red text-ivory text-[10px] tracking-widest uppercase hover:bg-maroon transition-colors flex items-center justify-center gap-2"
-            >
+            className="w-full py-2.5 rounded-xl bg-maroon text-ivory text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-wine transition-colors flex items-center justify-center gap-2 shadow-lg"
+          >
             <ShoppingBag className="h-3.5 w-3.5" /> Add to Bag
           </button>
         </div>
       </div>
-      <div className="text-center">
-        <p className="text-[9px] uppercase tracking-[0.2em] text-maroon/50 mb-1">{p.weave}</p>
-        <h4 className="font-serif text-base md:text-lg font-semibold tracking-tight text-maroon mb-1 line-clamp-1">{p.name}</h4>
-        <div className="flex items-baseline justify-center gap-2">
+
+      <div className="p-4 md:p-5 flex flex-col space-y-1.5 text-left">
+        <p className="text-[10px] uppercase tracking-[0.22em] text-gold-deep font-semibold">
+          {p.weave}
+        </p>
+        <h4 className="font-sans text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
+          {p.name}
+        </h4>
+        <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">
           <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">{p.price}</span>
           {p.original && (
             <span className="text-xs text-taupe font-medium line-through font-sans">{p.original}</span>

@@ -267,87 +267,70 @@ export function Header() {
       {/* Mobile drawer */}
       <div
         id="mobile-drawer"
-        className={`fixed inset-0 z-50 lg:hidden ${open ? "pointer-events-auto" : "pointer-events-none"}`}
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ${
+          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        }`}
         aria-hidden={!open}
       >
         <div
-          className={`absolute inset-0 bg-ink/40 transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}
+          className="absolute inset-0 bg-ink/50 backdrop-blur-xs transition-opacity duration-300"
           onClick={() => setOpen(false)}
         />
         <div
-          ref={drawerRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="mobile-drawer-title"
-          tabIndex={-1}
-          className={`absolute left-0 top-0 flex h-full w-[86%] max-w-sm flex-col bg-ivory shadow-2xl transition-transform duration-300 ease-out focus:outline-none ${
+          className={`absolute left-0 top-0 bottom-0 flex h-full w-[85%] max-w-xs flex-col bg-ivory shadow-2xl transition-transform duration-300 ease-out ${
             open ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <div className="flex items-center justify-between border-b border-gold/50 px-5 py-4">
             <Link
               to="/"
+              onClick={() => setOpen(false)}
               id="mobile-drawer-title"
               className="flex items-center"
-              aria-label="Mumbai Bazar â€” home"
+              aria-label="Mumbai Bazar — home"
             >
-              <img src="/logo.png" alt="Mumbai Bazar Logo" className="h-16 object-contain -my-2" />
+              <img src="/logo.png" alt="Mumbai Bazar Logo" className="h-14 object-contain -my-2" />
             </Link>
             <button
               aria-label="Close menu"
               onClick={() => setOpen(false)}
-              className="grid h-9 w-9 place-items-center text-ink hover:text-maroon"
+              className="grid h-9 w-9 place-items-center text-ink hover:text-maroon transition-colors"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto" aria-label="Mobile primary">
-            <ul className="flex flex-col">
-              <li>
-                <Link
-                  to="/"
-                  activeOptions={{ exact: true }}
-                  className={`flex items-center justify-between border-b border-gold/50 px-5 py-3.5 font-serif text-base text-ink transition-colors hover:bg-beige/30 ${
-                    pathname === "/" ? "text-maroon" : ""
-                  }`}
-                >
-                  Home
-                  <span className="text-gold-deep text-xs">â†’</span>
-                </Link>
-              </li>
-              {PRIMARY_LEFT.map((item) => (
-                <li key={item.to}>
+          <nav className="flex-1 overflow-y-auto p-5 space-y-6" aria-label="Mobile primary">
+            <div>
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-maroon">
+                Main Menu
+              </p>
+              <ul className="flex flex-col space-y-1">
+                <li>
                   <Link
-                    to={item.to}
-                    activeOptions={{ exact: item.to === "/shop" ? false : true }}
-                    className={`flex items-center justify-between border-b border-gold/50 px-5 py-3.5 font-serif text-base transition-colors hover:bg-beige/30 ${
-                      pathname === item.to || pathname.startsWith(item.to)
-                        ? "text-maroon"
-                        : "text-ink"
+                    to="/"
+                    onClick={() => setOpen(false)}
+                    activeOptions={{ exact: true }}
+                    className={`flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-semibold transition-colors ${
+                      pathname === "/" ? "bg-maroon text-ivory" : "text-ink hover:bg-maroon/5 hover:text-maroon"
                     }`}
                   >
-                    {item.label}
-                    <span className="text-gold-deep text-xs">â†’</span>
+                    Home
                   </Link>
                 </li>
-              ))}
-            </ul>
-
-            <div className="border-b border-gold/50 px-5 py-4">
-              <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-taupe">
-                Shop by Category
-              </p>
-              <ul className="flex flex-col gap-2">
-                {CATEGORY_ROW.map((item) => (
+                {PRIMARY_LEFT.map((item) => (
                   <li key={item.to}>
                     <Link
                       to={item.to}
-                      activeOptions={{ exact: false }}
-                      className={`text-sm uppercase tracking-wider transition-colors hover:text-maroon ${
+                      onClick={() => setOpen(false)}
+                      activeOptions={{ exact: item.to === "/shop" ? false : true }}
+                      className={`flex items-center justify-between py-2.5 px-3 rounded-lg text-sm font-semibold transition-colors ${
                         pathname === item.to || pathname.startsWith(item.to)
-                          ? "text-maroon"
-                          : "text-ink/80"
+                          ? "bg-maroon text-ivory"
+                          : "text-ink hover:bg-maroon/5 hover:text-maroon"
                       }`}
                     >
                       {item.label}
@@ -357,31 +340,56 @@ export function Header() {
               </ul>
             </div>
 
-            <div className="px-5 py-6 space-y-4 text-sm text-ink">
-              <button className="flex w-full items-center gap-3 hover:text-maroon">
-                <User className="h-4 w-4" /> Sign in
+            <div className="border-t border-gold/40 pt-5">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.25em] text-maroon">
+                Shop by Weave & Category
+              </p>
+              <ul className="flex flex-col space-y-1">
+                {CATEGORY_ROW.map((item) => (
+                  <li key={item.to}>
+                    <Link
+                      to={item.to}
+                      onClick={() => setOpen(false)}
+                      activeOptions={{ exact: false }}
+                      className={`block py-2 px-3 rounded-lg text-xs font-medium uppercase tracking-wider transition-colors ${
+                        pathname === item.to || pathname.startsWith(item.to)
+                          ? "text-maroon font-bold bg-gold/15"
+                          : "text-ink/80 hover:text-maroon hover:bg-gold/10"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="border-t border-gold/40 pt-5 space-y-3">
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  openWishlist();
+                }}
+                className="flex w-full items-center gap-3 px-3 py-2 text-xs font-semibold text-ink hover:text-maroon transition-colors"
+              >
+                <Heart className="h-4 w-4 text-maroon" /> Wishlist ({wishlist.length})
               </button>
               <button
                 onClick={() => {
                   setOpen(false);
                   openCart();
                 }}
-                className="flex w-full items-center gap-3 hover:text-maroon"
+                className="flex w-full items-center gap-3 px-3 py-2 text-xs font-semibold text-ink hover:text-maroon transition-colors"
               >
-                <ShoppingBag className="h-4 w-4" /> Shopping Bag
-                {cartCount > 0 && (
-                  <span className="ml-1 grid h-5 min-w-5 place-items-center rounded-full bg-maroon px-1.5 text-[10px] text-ivory">
-                    {cartCount}
-                  </span>
-                )}
+                <ShoppingBag className="h-4 w-4 text-maroon" /> Shopping Bag ({cartCount})
               </button>
               <a
                 href="https://wa.me/919999999999?text=Hi%20Mumbai%20Bazar"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 hover:text-maroon"
+                className="flex items-center gap-3 px-3 py-2 text-xs font-semibold text-ink hover:text-maroon transition-colors"
               >
-                <Phone className="h-4 w-4" /> Chat on WhatsApp
+                <Phone className="h-4 w-4 text-maroon" /> Chat on WhatsApp
               </a>
             </div>
           </nav>
