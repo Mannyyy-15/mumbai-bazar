@@ -67,27 +67,19 @@ export function SitePreloader() {
   const [showStaticFallback, setShowStaticFallback] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const targetRateRef = useRef(1.0);
-  const currentRateRef = useRef(1.0);
   const siteReadyRef = useRef(false);
   const animFrameRef = useRef<number | null>(null);
   const startTimeRef = useRef<number>(Date.now());
 
   useEffect(() => {
-    // 1. Check Session Storage
-    if (typeof window !== "undefined" && sessionStorage.getItem(SESSION_KEY)) {
-      setShouldRender(false);
-      return;
-    }
-
-    // 2. Lock Scrolling & Hide Page from screen readers
+    // 1. Lock Scrolling & Hide Page from screen readers on mount
     document.body.style.overflow = "hidden";
     const mainContent = document.getElementById("main-content");
     if (mainContent) {
       mainContent.setAttribute("aria-hidden", "true");
     }
 
-    // 3. Reduced Motion Check
+    // 2. Reduced Motion Check
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mediaQuery.matches) {
       setIsReducedMotion(true);
@@ -97,7 +89,7 @@ export function SitePreloader() {
       return;
     }
 
-    // 4. Start readiness check promise
+    // 3. Start readiness check promise
     createSiteReadyPromise().then(() => {
       siteReadyRef.current = true;
     });
@@ -108,7 +100,7 @@ export function SitePreloader() {
   }, []);
 
   // Exit helper
-  const exitPreloader = (fadeDuration = 400) => {
+  const exitPreloader = (fadeDuration = 350) => {
     setOpacity(0);
     setTimeout(() => {
       setShouldRender(false);
@@ -117,13 +109,10 @@ export function SitePreloader() {
       if (mainContent) {
         mainContent.removeAttribute("aria-hidden");
       }
-      try {
-        sessionStorage.setItem(SESSION_KEY, "true");
-      } catch (_) { }
     }, fadeDuration);
   };
 
-  // Video loop & playback rate interpolation logic
+  // Video playback logic starting at 5.0 seconds at 2.0x speed
   useEffect(() => {
     if (!shouldRender || isReducedMotion) return;
 
@@ -132,7 +121,20 @@ export function SitePreloader() {
 
     let isExiting = false;
 
-    // Smooth playbackRate interpolation loop
+    // Fast-forward video to 5.0s and set 2x playback speed
+    const initVideo = () => {
+      if (video.currentTime < 5.0) {
+        video.currentTime = 5.0;
+      }
+      video.playbackRate = 2.0;
+    };
+
+    if (video.readyState >= 1) {
+      initVideo();
+    } else {
+      video.addEventListener("loadedmetadata", initVideo, { once: true });
+    }
+
     const updateLoop = () => {
       if (isExiting) return;
 
@@ -140,52 +142,35 @@ export function SitePreloader() {
       if (!v) return;
 
       const currentTime = v.currentTime;
+      const duration = v.duration || 10;
       const elapsedTime = (Date.now() - startTimeRef.current) / 1000;
       const isSiteReady = siteReadyRef.current;
 
-      // Determine target speed based on load status & time
-      if (isSiteReady) {
-        if (currentTime < 2.5) {
-          // FAST LOAD
-          targetRateRef.current = 1.85;
-        } else if (currentTime < 6.5) {
-          // NORMAL LOAD
-          targetRateRef.current = 1.35;
+      // Ensure we stay at or after 5.0 seconds
+      if (currentTime < 5.0 && !v.paused) {
+        v.currentTime = 5.0;
+      }
+
+      // Check loop or completion window
+      const clipEnded = currentTime >= duration - 0.2 || v.ended;
+      const minPlayTimeReached = elapsedTime >= 2.0;
+
+      if (isSiteReady && minPlayTimeReached && !isExiting) {
+        isExiting = true;
+        exitPreloader(350);
+        return;
+      }
+
+      // If video ends before site is ready, loop back to 5.0s
+      if (clipEnded) {
+        if (isSiteReady) {
+          isExiting = true;
+          exitPreloader(350);
+          return;
         } else {
-          targetRateRef.current = 1.0;
+          v.currentTime = 5.0;
+          v.play().catch(() => undefined);
         }
-      } else {
-        // SLOW LOAD: site not ready yet
-        if (currentTime >= 7.5 && !v.paused) {
-          v.pause(); // Pause at clean logo frame
-        }
-        targetRateRef.current = 1.0;
-      }
-
-      // Resume if site became ready after pause
-      if (isSiteReady && v.paused && currentTime >= 7.5) {
-        // Site ready after pausing on logo
-        isExiting = true;
-        setTimeout(() => exitPreloader(400), 200);
-        return;
-      }
-
-      // Smooth playback rate easing
-      if (Math.abs(currentRateRef.current - targetRateRef.current) > 0.02) {
-        currentRateRef.current += (targetRateRef.current - currentRateRef.current) * 0.1;
-        v.playbackRate = Math.min(2.0, Math.max(1.0, currentRateRef.current));
-      }
-
-      // Check for completion window (~6.8s to 7.3s) when site is ready
-      if (isSiteReady && currentTime >= 6.8 && !isExiting) {
-        // Enforce min total display time of 3.0s for smooth visual experience
-        const minTimeRemaining = Math.max(0, 3200 - elapsedTime * 1000);
-        isExiting = true;
-        setTimeout(() => {
-          v.pause();
-          exitPreloader(400);
-        }, Math.max(300, minTimeRemaining));
-        return;
       }
 
       animFrameRef.current = requestAnimationFrame(updateLoop);
@@ -213,7 +198,7 @@ export function SitePreloader() {
         alignItems: "center",
         justifyContent: "center",
         opacity: opacity,
-        transition: `opacity ${isReducedMotion ? 200 : 400}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+        transition: `opacity ${isReducedMotion ? 200 : 350}ms cubic-bezier(0.4, 0, 0.2, 1)`,
         pointerEvents: opacity === 0 ? "none" : "auto",
       }}
     >
@@ -231,6 +216,12 @@ export function SitePreloader() {
           muted
           playsInline
           preload="auto"
+          onPlay={() => {
+            if (videoRef.current && videoRef.current.currentTime < 5.0) {
+              videoRef.current.currentTime = 5.0;
+              videoRef.current.playbackRate = 2.0;
+            }
+          }}
           onError={() => setShowStaticFallback(true)}
           className="h-full w-full max-w-[1280px] max-h-[720px] object-contain object-center"
         />
