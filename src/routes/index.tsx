@@ -820,17 +820,17 @@ function TrendingNow() {
 
         <div
           ref={scrollRef}
-          className="flex gap-5 md:gap-6 overflow-x-auto pb-4 -mx-4 md:-mx-8 px-4 md:px-8 snap-x snap-mandatory scrollbar-hide scroll-smooth"
+          className="flex gap-4 md:gap-6 overflow-x-auto pb-6 -mx-4 md:-mx-8 px-4 md:px-8 snap-x snap-mandatory scrollbar-hide scroll-smooth"
         >
           {items.map((p, i) => (
             <Link
               key={p.id}
               to="/products/$id"
               params={{ id: p.id }}
-              className="group snap-start shrink-0 w-[75%] sm:w-[45%] md:w-[30%] lg:w-[23%]"
+              className="group snap-start shrink-0 w-[78%] sm:w-[48%] md:w-[32%] lg:w-[23%] flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
-              <div className="relative aspect-[3/4] bg-beige/40 overflow-hidden rounded-2xl border border-gold/50 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl mb-4">
-                <div className="absolute top-3 left-3 z-10 h-7 w-7 rounded-full flex items-center justify-center bg-maroon text-ivory text-[10px] font-serif font-bold shadow-md">
+              <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
+                <div className="absolute top-3 left-3 z-10 h-7 w-7 rounded-full flex items-center justify-center bg-maroon text-ivory text-[10px] font-bold shadow-md border border-gold/40">
                   {i + 1}
                 </div>
                 <img
@@ -843,9 +843,21 @@ function TrendingNow() {
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
                 />
               </div>
-              <p className="text-[9px] uppercase tracking-[0.2em] text-gold font-medium mb-1">{p.weave}</p>
-              <h4 className="text-sm font-medium tracking-tight text-ink line-clamp-1 group-hover:text-maroon transition-colors">{p.name}</h4>
-              <p className="mt-1 text-sm font-serif font-medium text-maroon">{p.price}</p>
+
+              <div className="p-3.5 md:p-4 flex flex-col space-y-1.5 text-left">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-maroon font-bold">
+                  {p.weave}
+                </p>
+                <h4 className="font-sans text-sm md:text-base font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
+                  {p.name}
+                </h4>
+                <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">
+                  <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">{p.price}</span>
+                  {p.original && (
+                    <span className="text-xs text-taupe font-medium line-through font-sans">{p.original}</span>
+                  )}
+                </div>
+              </div>
             </Link>
           ))}
         </div>
