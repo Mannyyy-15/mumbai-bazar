@@ -15,8 +15,7 @@ import { BlouseCustomizationModal } from "@/components/site/BlouseCustomizationM
 export const Route = createFileRoute("/products/$id")({
   loader: async ({ params }) => {
     const remote = await fetchShopifyProduct(params.id).catch(() => null);
-    const product = remote ?? PRODUCTS.find((p) => p.id === params.id);
-    if (!product) throw notFound();
+    const product = remote ?? PRODUCTS.find((p) => p.id === params.id) ?? PRODUCTS[0];
     return { product };
   },
   head: ({ loaderData }) => {
