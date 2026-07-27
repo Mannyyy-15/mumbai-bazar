@@ -4,7 +4,7 @@ const domain = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string | undefined;
 const token = import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN as string | undefined;
 const apiVersion = (import.meta.env.VITE_SHOPIFY_API_VERSION as string | undefined) ?? "2025-07";
 
-export const shopifyConfigured = Boolean(domain);
+export const shopifyConfigured = Boolean(domain && token);
 
 export type ShopifyProduct = Product & {
   shopifyProductId: string;

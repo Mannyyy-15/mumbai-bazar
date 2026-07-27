@@ -22,7 +22,7 @@ const FILTER_TABS = [
   { key: "festive", label: "Festive & Everyday" },
 ];
 
-export function CollectionsPage() {
+function CollectionsPage() {
   const [activeTab, setActiveTab] = useState("all");
 
   const filteredCollections = useMemo(() => {

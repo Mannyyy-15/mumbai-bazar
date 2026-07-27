@@ -7,34 +7,38 @@ export function ScrollReveal() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const observerCallback: IntersectionObserverCallback = (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
+    let observer: IntersectionObserver | null = null;
+    const raf = requestAnimationFrame(() => {
+      const observerCallback: IntersectionObserverCallback = (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      };
+
+      observer = new IntersectionObserver(observerCallback, {
+        root: null,
+        rootMargin: "0px 0px -40px 0px",
+        threshold: 0.05,
+      });
+
+      const elements = document.querySelectorAll(
+        "section, .reveal-on-scroll, [data-reveal]"
+      );
+
+      elements.forEach((el) => {
+        if (!el.classList.contains("is-visible")) {
+          el.classList.add("reveal-init");
+          observer?.observe(el);
         }
       });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, {
-      root: null,
-      rootMargin: "0px 0px -50px 0px",
-      threshold: 0.08,
-    });
-
-    const elements = document.querySelectorAll(
-      "section, .reveal-on-scroll, [data-reveal]"
-    );
-
-    elements.forEach((el) => {
-      if (!el.classList.contains("is-visible")) {
-        el.classList.add("reveal-init");
-        observer.observe(el);
-      }
     });
 
     return () => {
-      observer.disconnect();
+      cancelAnimationFrame(raf);
+      if (observer) observer.disconnect();
     };
   }, [pathname]);
 

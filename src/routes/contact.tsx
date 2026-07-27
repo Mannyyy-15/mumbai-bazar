@@ -22,7 +22,7 @@ const FAQS = [
   { q: "Do you offer international shipping?", a: "Yes, we ship globally via DHL Express with complete customs documentation and gift packaging." },
 ];
 
-export function ContactPage() {
+function ContactPage() {
   const [sent, setSent] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [form, setForm] = useState({ name: "", email: "", phone: "", topic: "Bridal Inquiry", message: "" });

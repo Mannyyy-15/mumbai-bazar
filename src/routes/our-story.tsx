@@ -14,7 +14,7 @@ export const Route = createFileRoute("/our-story")({
   component: StoryPage,
 });
 
-export function StoryPage() {
+function StoryPage() {
   return (
     <>
       {/* Hero Header */}
