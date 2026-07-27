@@ -112,7 +112,7 @@ export function SitePreloader() {
     }, fadeDuration);
   };
 
-  // Video playback logic starting at 5.0 seconds at 2.0x speed
+  // Video playback logic starting naturally from 0.0s
   useEffect(() => {
     if (!shouldRender || isReducedMotion) return;
 
@@ -121,12 +121,8 @@ export function SitePreloader() {
 
     let isExiting = false;
 
-    // Fast-forward video to 5.0s and set 2x playback speed
     const initVideo = () => {
-      if (video.currentTime < 5.0) {
-        video.currentTime = 5.0;
-      }
-      video.playbackRate = 2.0;
+      video.playbackRate = 1.8;
     };
 
     if (video.readyState >= 1) {
@@ -142,18 +138,13 @@ export function SitePreloader() {
       if (!v) return;
 
       const currentTime = v.currentTime;
-      const duration = v.duration || 10;
+      const duration = v.duration || 5;
       const elapsedTime = (Date.now() - startTimeRef.current) / 1000;
       const isSiteReady = siteReadyRef.current;
 
-      // Ensure we stay at or after 5.0 seconds
-      if (currentTime < 5.0 && !v.paused) {
-        v.currentTime = 5.0;
-      }
-
       // Check loop or completion window
       const clipEnded = currentTime >= duration - 0.2 || v.ended;
-      const minPlayTimeReached = elapsedTime >= 2.0;
+      const minPlayTimeReached = elapsedTime >= 1.8;
 
       if (isSiteReady && minPlayTimeReached && !isExiting) {
         isExiting = true;
@@ -161,14 +152,14 @@ export function SitePreloader() {
         return;
       }
 
-      // If video ends before site is ready, loop back to 5.0s
+      // If video ends before site is ready, loop back to start (0s)
       if (clipEnded) {
         if (isSiteReady) {
           isExiting = true;
           exitPreloader(350);
           return;
         } else {
-          v.currentTime = 5.0;
+          v.currentTime = 0;
           v.play().catch(() => undefined);
         }
       }
@@ -217,9 +208,8 @@ export function SitePreloader() {
           playsInline
           preload="auto"
           onPlay={() => {
-            if (videoRef.current && videoRef.current.currentTime < 5.0) {
-              videoRef.current.currentTime = 5.0;
-              videoRef.current.playbackRate = 2.0;
+            if (videoRef.current) {
+              videoRef.current.playbackRate = 1.8;
             }
           }}
           onError={() => setShowStaticFallback(true)}
