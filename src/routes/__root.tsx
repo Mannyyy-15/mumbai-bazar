@@ -23,6 +23,8 @@ import { SitePreloader } from "@/components/site/SitePreloader";
 import { SareeExpertChatbot } from "@/components/site/SareeExpertChatbot";
 import { WishlistProvider } from "@/lib/wishlist-context";
 import { WishlistDrawer } from "@/components/site/WishlistDrawer";
+import { PageTransition } from "@/components/site/PageTransition";
+import { ScrollReveal } from "@/components/site/ScrollReveal";
 
 function NotFoundComponent() {
   return (
@@ -149,11 +151,14 @@ function RootComponent() {
         <CatalogProvider>
           <WishlistProvider>
             <SmoothScroll />
+            <ScrollReveal />
             <div id="main-content" className="flex min-h-screen flex-col bg-ivory">
               <AnnouncementBar />
               <Header />
               <main className="flex-1">
-                <Outlet />
+                <PageTransition>
+                  <Outlet />
+                </PageTransition>
               </main>
               <Footer />
               <SareeExpertChatbot />
