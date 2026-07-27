@@ -1,0 +1,273 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@utility no-scrollbar {
+  &::-webkit-scrollbar { display: none; }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ---------------------------------------------------------------
+   Mumbai Bazar — Premium saree boutique design system.
+   Palette: Mumbai Bazar red, deep red, warm white,
+   muted + antique gold, dark brown, muted taupe.
+   Typography: DM Serif Display (selective display) + Manrope (clear UI/body).
+--------------------------------------------------------------- */
+
+@theme inline {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+  --radius-2xl: 10px;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand tokens */
+  --color-brand-red: var(--brand-red);
+  --color-maroon: var(--maroon);
+  --color-wine: var(--wine);
+  --color-ivory: var(--ivory);
+  --color-beige: var(--beige);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-ink: var(--ink);
+  --color-taupe: var(--taupe);
+}
+
+:root {
+  --radius: 3px;
+
+  /* Brand */
+  --brand-red: #F20D18;
+  --maroon: #9B1018;
+  --wine: #680910;
+  --ivory: #FFFDF8;
+  --beige: #EADBC8;
+  --gold: #B69054;
+  --gold-deep: #8C6A3F;
+  --ink: #191313;
+  --taupe: #75665E;
+
+  /* Semantic mapping */
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
+  --primary: var(--brand-red);
+  --primary-foreground: var(--ivory);
+  --secondary: var(--beige);
+  --secondary-foreground: var(--ink);
+  --muted: #F3E9DA;
+  --muted-foreground: var(--taupe);
+  --accent: var(--gold);
+  --accent-foreground: var(--wine);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: var(--ivory);
+  --border: rgba(140, 106, 63, 0.5);
+  --input: rgba(140, 106, 63, 0.28);
+  --ring: var(--gold-deep);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-foreground);
+    background-color: var(--color-background);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-synthesis: none;
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+
+  h4, h5 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  button, a, input { text-rendering: optimizeLegibility; }
+
+  ::selection {
+    background-color: var(--color-maroon);
+    color: var(--color-ivory);
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-gold-deep);
+}
+
+@utility gold-divider {
+  display: inline-block;
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+}
+
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.75rem;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background-color: var(--color-brand-red);
+  color: var(--color-ivory);
+  border: 1px solid var(--color-brand-red);
+  transition: background-color 220ms ease, color 220ms ease, transform 220ms ease;
+
+  &:hover {
+    background-color: var(--color-maroon);
+    border-color: var(--color-maroon);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+}
+
+@utility btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.75rem;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background-color: transparent;
+  color: var(--color-maroon);
+  border: 1px solid var(--color-maroon);
+  transition: background-color 220ms ease, color 220ms ease;
+
+  &:hover {
+    background-color: var(--color-maroon);
+    color: var(--color-ivory);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+}
+
+@utility link-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold-deep);
+  border-bottom: 1px solid var(--color-gold);
+  padding-bottom: 3px;
+  transition: color 200ms ease, border-color 200ms ease;
+
+  &:hover {
+    color: var(--color-maroon);
+    border-color: var(--color-maroon);
+  }
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: reveal-in 700ms ease-out forwards;
+}
+
+@keyframes reveal-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@utility marquee-track {
+  display: flex;
+  gap: 3rem;
+  width: max-content;
+  animation: marquee 42s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .marquee-track { animation: none !important; opacity: 1; transform: none; }
+}
+
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Lenis owns scroll interpolation; prevent native CSS smooth-scroll from
+   competing with its momentum on route changes and anchor links. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
