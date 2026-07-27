@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, SlidersHorizontal, ShoppingBag, Truck, ShieldCheck, Sparkles, Instagram, Star, Quote } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, SlidersHorizontal, ShoppingBag, Truck, ShieldCheck, Sparkles, Instagram, Star, Quote, Heart } from "lucide-react";
 
 
 import { IMG, PRODUCTS, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
+import { useWishlist } from "@/lib/wishlist-context";
 import { fetchShopifyProducts, shopifyConfigured } from "@/lib/shopify";
 import { TrousseauBuilder } from "@/components/site/TrousseauBuilder";
 import { WeavesOfIndiaMap } from "@/components/site/WeavesOfIndiaMap";
