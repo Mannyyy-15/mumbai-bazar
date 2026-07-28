@@ -18,7 +18,6 @@ import { CartDrawer } from "@/components/site/CartDrawer";
 import { CartProvider } from "@/lib/cart-context";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { CatalogProvider } from "@/lib/catalog-context";
-import { SitePreloader } from "@/components/site/SitePreloader";
 import { SareeExpertChatbot } from "@/components/site/SareeExpertChatbot";
 import { WishlistProvider } from "@/lib/wishlist-context";
 import { WishlistDrawer } from "@/components/site/WishlistDrawer";
@@ -147,7 +146,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SitePreloader />
       <CartProvider>
         <CatalogProvider>
           <WishlistProvider>
