@@ -162,7 +162,7 @@ function HeroCarousel() {
         onTouchEnd={onTouchEnd}
         onTouchCancel={onTouchEnd}
         style={{ touchAction: "pan-y" }}
-        className="relative h-[calc(100svh-100px)] min-h-[460px] w-full select-none overflow-hidden md:h-[calc(100svh-145px)] md:min-h-[560px]"
+        className="relative h-[calc(100svh-100px)] min-h-[520px] w-full select-none overflow-hidden md:h-[calc(100svh-145px)] md:min-h-[560px]"
       >
         {SLIDES.map((s, i) => {
           const active = i === index;
@@ -212,13 +212,13 @@ function HeroCarousel() {
 
               {/* Content */}
               <div
-                className={`absolute inset-x-12 bottom-24 flex flex-col items-start text-left text-ivory sm:inset-x-14 md:inset-x-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:max-w-[560px] lg:max-w-[620px] ${positionCls}`}
+              className={`absolute inset-x-5 bottom-20 flex flex-col items-start text-left text-ivory sm:inset-x-8 md:inset-x-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:max-w-[560px] lg:max-w-[620px] ${positionCls}`}
               >
                 <span className="flex items-center gap-3 text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-gold">
                   <span className="h-px w-10 bg-gold" />
                   {s.eyebrow}
                 </span>
-                <h2 className="mt-5 md:mt-6 font-serif text-4xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92]">
+                <h2 className="mt-4 md:mt-6 font-serif text-3xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92]">
                     {s.title}
                     {s.italic && (
                       <>
@@ -230,17 +230,17 @@ function HeroCarousel() {
                 <p className="mt-4 md:mt-6 max-w-md text-sm md:text-base lg:text-lg leading-relaxed text-ivory/85">
                   {s.copy}
                 </p>
-                <div className="mt-8 md:mt-10 flex flex-wrap items-center gap-4">
+                <div className="mt-6 md:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
                   <Link
                     to={s.cta.to}
-                    className="inline-flex items-center justify-center min-w-[190px] px-8 py-4 bg-ivory text-maroon text-[10px] md:text-[11px] tracking-[0.25em] uppercase hover:bg-gold hover:text-ivory transition-colors duration-300"
+                    className="inline-flex items-center justify-center w-full sm:w-auto sm:min-w-[190px] px-8 py-3.5 bg-ivory text-maroon text-[10px] md:text-[11px] tracking-[0.25em] uppercase hover:bg-gold hover:text-ivory transition-colors duration-300"
                   >
                     {s.cta.label}
                   </Link>
                   {s.secondary && (
                     <Link
                       to={s.secondary.to}
-                      className="inline-flex items-center justify-center min-w-[190px] px-8 py-4 border border-ivory/70 text-ivory text-[10px] md:text-[11px] tracking-[0.25em] uppercase hover:bg-ivory hover:text-maroon transition-colors duration-300"
+                      className="inline-flex items-center justify-center w-full sm:w-auto sm:min-w-[190px] px-8 py-3.5 border border-ivory/70 text-ivory text-[10px] md:text-[11px] tracking-[0.25em] uppercase hover:bg-ivory hover:text-maroon transition-colors duration-300"
                     >
                       {s.secondary.label}
                     </Link>
@@ -466,7 +466,7 @@ function ProductFeed() {
               Sort: {sortLabel[sort]} <ChevronDown className="h-3 w-3" />
             </button>
             {sortOpen && (
-              <div className="absolute right-0 top-full mt-2 z-20 bg-ivory border border-maroon/40 shadow-lg min-w-[200px]">
+              <div className="absolute right-0 top-full mt-2 z-20 bg-ivory border border-maroon/40 shadow-lg min-w-[200px] max-w-[240px]">
                 {(Object.keys(sortLabel) as SortKey[]).map((k) => (
                   <button
                     key={k}
@@ -712,12 +712,12 @@ function ShopByOccasion() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
         {OCCASIONS.map((o) => (
           <Link
             key={o.label}
             to={o.to}
-            className="group block relative aspect-[4/5] overflow-hidden rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/40"
+            className="group block relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/40"
           >
             <img
               src={o.img}
@@ -798,6 +798,7 @@ function TrendingNow() {
         <div
           ref={scrollRef}
           className="flex gap-4 md:gap-6 overflow-x-auto pb-6 -mx-4 md:-mx-8 px-4 md:px-8 snap-x snap-mandatory scrollbar-hide scroll-smooth"
+          style={{ touchAction: "pan-x" }}
         >
           {items.map((p, i) => (
             <Link
