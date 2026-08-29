@@ -46,18 +46,18 @@ const MILESTONES: [string, string][] = [
 const VALUES = [
   {
     icon: Heart,
-    title: "Human hands",
-    copy: "Every piece is handwoven — no power looms, no shortcuts.",
+    title: "Seen in person",
+    copy: "Eight stores on the western line, so you can see and drape before you buy.",
   },
   {
     icon: Award,
-    title: "Silk Mark verified",
-    copy: "Independently tested silks and real zari, always disclosed.",
+    title: "Honest about fabric",
+    copy: "Our staff will tell you plainly what a piece is made of, before you buy.",
   },
   {
     icon: MapPin,
     title: "Rooted in India",
-    copy: "Direct-from-cluster sourcing across seven weaving regions.",
+    copy: "Serving Nalasopara, Virar, Vasai, Bhayandar and Goregaon since 2009.",
   },
 ];
 

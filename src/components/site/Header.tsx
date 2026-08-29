@@ -146,7 +146,7 @@ const MEGA_CATEGORIES: MegaMenu[] = [
       {
         title: "Purity & Craft",
         items: [
-          { label: "100% Silk Mark Certified", to: "/silk-sarees" },
+          { label: "Silk & Silk-Blend Sarees", to: "/silk-sarees" },
           { label: "Handloom Master Weavers", to: "/our-story" },
           { label: "Care & Preservation Guide", to: "/care-guide" },
           { label: "View Complete Silk Archive", to: "/silk-sarees" },
@@ -219,7 +219,7 @@ const MOBILE_NAV_ITEMS: MobileNavItem[] = [
       { label: "Kanjivaram Temple Borders", to: "/silk-sarees" },
       { label: "Paithani & Maharashtra Weaves", to: "/silk-sarees" },
       { label: "Chanderi & Handloom Tissue", to: "/silk-sarees" },
-      { label: "Silk Mark Certified Collection", to: "/silk-sarees" },
+      { label: "Silk & Silk-Blend Collection", to: "/silk-sarees" },
       { label: "View All Heritage Silks", to: "/silk-sarees" },
     ],
   },

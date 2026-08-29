@@ -129,7 +129,7 @@ function FAQ() {
         eyebrow="Help & Support"
         title="Frequently Asked Questions"
         crumb="FAQ"
-        copy="Everything you need to know about our handwoven sarees, pure silk certifications, global shipping, and custom blouse tailoring."
+        copy="Everything you need to know about our range, store visits, delivery and blouse tailoring."
         img={IMG.look4}
       />
 

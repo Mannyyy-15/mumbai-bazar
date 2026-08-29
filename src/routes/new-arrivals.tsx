@@ -11,7 +11,7 @@ export const Route = createFileRoute("/new-arrivals")({
     const { meta, links } = seo({
       title: "New Arrival Sarees | Latest Handwoven Silks — Mumbai Bazar",
       description:
-        "The newest handwoven sarees fresh from Varanasi and Kanchipuram looms. Latest Banarasi, Kanjivaram and tissue silk designs added weekly at Mumbai Bazar.",
+        "New saree, lehenga and dress material arrivals, added weekly across our 8 stores. Latest Banarasi, Kanjivaram and party wear styles.",
       path: "/new-arrivals",
       keywords: [
         "new saree designs",
@@ -65,14 +65,14 @@ function NewArrivalsPage() {
             </h1>
 
             <p className="text-base md:text-lg text-taupe leading-relaxed max-w-xl">
-              Be the first to drape our newest batch of handwoven silks—freshly off the looms of
-              Varanasi, Kanchipuram, and Chanderi. Limited edition pieces with zero repeat weaves.
+              Be the first to drape our newest arrivals—fresh stock, in store now across Varanasi,
+              Kanchipuram, and Chanderi. Limited edition pieces with zero repeat weaves.
             </p>
 
             <div className="flex flex-wrap items-center gap-6 pt-2 text-sm text-ink">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-5 w-5 text-maroon" />
-                <span>100% Pure Silk Mark</span>
+                <span>See it in store first</span>
               </div>
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-gold-deep" />
@@ -108,7 +108,7 @@ function NewArrivalsPage() {
         eyebrow="Weekly Drop"
         title="Explore The Latest Additions"
         crumb="New Arrivals"
-        copy="Each piece is handcrafted over 120+ hours by master artisans."
+        copy="New stock arrives weekly across all eight stores."
         heroImg={IMG.colKanjivaram}
         category="new-arrivals"
         showHero={false}

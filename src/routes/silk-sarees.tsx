@@ -59,10 +59,10 @@ function SilkSareesPage() {
         <div className="mx-auto max-w-[1360px] px-4 md:px-8">
           <div className="max-w-3xl">
             <span className="inline-flex items-center gap-2 bg-maroon/10 text-maroon px-3 py-1 text-xs font-semibold uppercase tracking-widest border border-maroon/30">
-              <Award className="h-4 w-4 text-gold-deep" /> Silk Mark Certified
+              <Award className="h-4 w-4 text-gold-deep" /> Available In Store
             </span>
             <h1 className="mt-4 font-serif text-4xl sm:text-5xl lg:text-6xl text-ink leading-tight">
-              Pure Handwoven Silks
+              Silk & Silk-Blend Sarees
             </h1>
             <p className="mt-4 text-base md:text-lg text-taupe leading-relaxed">
               Every drape in our silk collection is crafted from 100% pure mulberry silk and tested

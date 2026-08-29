@@ -75,7 +75,7 @@ const SLIDES: Slide[] = [
     eyebrow: "The Heritage Edit",
     title: "Handwoven",
     italic: "Banarasi Silks",
-    copy: "Zari-drenched weaves crafted over 40 days by master artisans of Varanasi.",
+    copy: "Banarasi-style weaves and rich zari work, picked for wedding and festive wear.",
     cta: { label: "Shop Heritage Silks", to: "/silk-sarees" },
     secondary: { label: "Explore the Craft", to: "/our-story" },
     img: IMG.heroSaree,
@@ -662,17 +662,15 @@ function Craftsmanship() {
             <div className="absolute inset-0 bg-gradient-to-t from-maroon/70 via-transparent to-transparent" />
           </div>
 
-          {/* Floating Silk Mark Badge */}
+          {/* Floating store-count badge */}
           <div className="absolute -bottom-5 -right-5 md:bottom-6 md:-right-6 bg-ivory text-maroon p-4 md:p-5 rounded-2xl shadow-2xl border border-gold/40 flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-maroon text-gold flex items-center justify-center font-serif text-lg font-bold shrink-0">
               ✓
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-maroon">
-                100% Certified
-              </p>
+              <p className="text-xs font-bold uppercase tracking-wider text-maroon">8 Stores</p>
               <p className="text-[10px] text-maroon/70 uppercase tracking-widest">
-                Pure Silk Mark Certified
+                Across the Western Line
               </p>
             </div>
           </div>
@@ -710,9 +708,9 @@ function Craftsmanship() {
               </p>
             </div>
             <div className="border-l border-gold/50 pl-4">
-              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">100%</p>
+              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">8</p>
               <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">
-                Pure Silk Mark
+                Stores Near You
               </p>
             </div>
           </div>
@@ -742,8 +740,8 @@ function Craftsmanship() {
 function TrustBar() {
   const items = [
     { icon: Truck, title: "Complimentary Shipping", copy: "On all India orders above ₹5,000" },
-    { icon: ShieldCheck, title: "Authenticity Assured", copy: "Silk Mark certified handlooms" },
-    { icon: Sparkles, title: "Handwoven with Care", copy: "Directly from master weavers" },
+    { icon: ShieldCheck, title: "See Before You Buy", copy: "Drape any piece in store first" },
+    { icon: Sparkles, title: "Open Every Day", copy: "10 AM – 9 PM, all seven days" },
     { icon: ShoppingBag, title: "Easy 7-Day Returns", copy: "No-questions exchange policy" },
   ];
   return (

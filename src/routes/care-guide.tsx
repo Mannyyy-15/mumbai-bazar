@@ -19,7 +19,7 @@ export const Route = createFileRoute("/care-guide")({
     const { meta, links } = seo({
       title: "How to Care for Silk Sarees | Washing & Storage Guide — Mumbai Bazar",
       description:
-        "Learn how to wash, store, iron and preserve handwoven silk sarees. Expert care rituals to protect zari, natural dyes and pure silk for generations.",
+        "How to wash, store, iron and protect silk sarees — practical care advice for zari, natural dyes and Mumbai humidity.",
       path: "/care-guide",
       keywords: [
         "how to wash silk saree",
@@ -185,9 +185,9 @@ function CareGuide() {
               <div className="flex items-center gap-3">
                 <ShieldCheck className="h-6 w-6 text-maroon shrink-0" />
                 <div>
-                  <h4 className="font-serif text-base text-ink">Pure Silk Mark Assurance</h4>
+                  <h4 className="font-serif text-base text-ink">Ask About Your Fabric</h4>
                   <p className="text-xs text-taupe mt-0.5">
-                    Tested for pure silver & gold tested zari wires.
+                    Our staff will tell you what any piece is made of.
                   </p>
                 </div>
               </div>
@@ -205,9 +205,8 @@ function CareGuide() {
           <h2 className="mt-4 font-serif text-3xl md:text-5xl">The Mumbai Bazar Saree Spa</h2>
           <GoldRule className="my-6" />
           <p className="mt-5 max-w-xl mx-auto text-ivory/85 leading-relaxed text-base">
-            Every pure handwoven saree purchased from our boutique qualifies for a complimentary
-            annual press-and-refresh service. Return your saree to us anytime for expert steaming,
-            crease restoration, and fresh muslin wrapping.
+            Bring any saree bought from us back to your nearest store for a press and refresh —
+            steaming, crease restoration and fresh wrapping, so it is ready for the next occasion.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link to="/contact" className="btn-primary inline-flex items-center gap-2">

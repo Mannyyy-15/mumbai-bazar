@@ -41,7 +41,7 @@ export const Route = createFileRoute("/products/$id")({
     const p = loaderData.product;
     const desc =
       p.details?.description ??
-      `${p.name} handwoven in ${p.weave}. Silk Mark certified, with a matching unstitched blouse piece. Free shipping across India.`;
+      `${p.name} in ${p.weave}. Available to see and drape at our stores, with delivery across India.`;
     const { meta, links } = seo({
       // Google Shopping title formula: Brand + Colour/Name + Fabric + Product + Occasion.
       title: `${p.name} | ${p.weave} — Mumbai Bazar`,
@@ -49,7 +49,7 @@ export const Route = createFileRoute("/products/$id")({
       path: `/products/${p.id}`,
       image: p.img,
       type: "product",
-      keywords: [p.name, p.weave, "buy saree online", "handwoven saree"],
+      keywords: [p.name, p.weave, "buy saree online", "saree shop near me"],
     });
     return {
       meta: [
@@ -425,8 +425,8 @@ function ProductDetail() {
                 />
                 <TrustItem
                   icon={<ShieldCheck className="h-4 w-4" />}
-                  label="Silk Mark"
-                  sub="Certified"
+                  label="In Store"
+                  sub="See before you buy"
                 />
               </ul>
 

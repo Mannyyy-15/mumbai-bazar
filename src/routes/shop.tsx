@@ -12,7 +12,7 @@ export const Route = createFileRoute("/shop")({
     const { meta, links } = seo({
       title: "Shop All Sarees Online | Silk, Banarasi & Designer — Mumbai Bazar",
       description:
-        "Browse every handwoven saree at Mumbai Bazar. Filter by weave, occasion, fabric and price across Banarasi, Kanjivaram, tissue and cotton silk sarees.",
+        "Browse the full Mumbai Bazar range — sarees, dress material and lehengas. Filter by style, occasion and price, then see it in store.",
       path: "/shop",
       keywords: [
         "buy sarees online",

@@ -84,8 +84,8 @@ function CollectionsPage() {
                 The Collections
               </h1>
               <p className="mt-3 max-w-2xl text-sm md:text-base text-maroon/80 leading-relaxed">
-                Explore our handwoven edits — each curated for its loom cluster, ancestral weave
-                technique, and the occasion it was born to celebrate.
+                Explore our edits — each grouped by weave style, occasion technique, and the
+                occasion it was born to celebrate.
               </p>
             </div>
 

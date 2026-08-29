@@ -33,7 +33,7 @@ const INITIAL_MESSAGES: Message[] = [
     quickReplies: [
       "✨ Suggest a Wedding Saree",
       "🌿 Soft Silks for Everyday",
-      "📜 How to verify Silk Mark?",
+      "📍 Where are your stores?",
       "✂️ Need Blouse Stitching",
     ],
   },
@@ -99,7 +99,7 @@ export function SareeExpertChatbot() {
       lower.includes("reception")
     ) {
       replyText =
-        "For wedding functions and grand bridal trousseaus, I strongly recommend our pure gold zari Kanjivarams and royal Banarasi brocades. Here are our top handwoven bridal drapes:";
+        "For wedding functions and bridal shopping, I would point you to our rich zari Kanjivaram-styles and royal Banarasi brocades. Here are our top handwoven bridal drapes:";
       matchedProducts = PRODUCTS.filter((p) => p.category.includes("wedding-sarees")).slice(0, 3);
       quickReplies = ["Custom Blouse Options", "Book Video Call Consultation", "Other Weaves"];
     } else if (
@@ -112,7 +112,7 @@ export function SareeExpertChatbot() {
       replyText =
         "For effortless daily wear and 1-minute dressing, our pre-pleated ready-to-wear drapes and lightweight soft silks offer zero-fatigue elegance:";
       matchedProducts = PRODUCTS.filter((p) => p.category.includes("everyday-sarees")).slice(0, 3);
-      quickReplies = ["1-Minute Sarees", "Festive Sarees", "Silk Mark Info"];
+      quickReplies = ["1-Minute Sarees", "Festive Sarees", "Store Locations"];
     } else if (
       lower.includes("silk mark") ||
       lower.includes("pure") ||
@@ -120,7 +120,7 @@ export function SareeExpertChatbot() {
       lower.includes("verify")
     ) {
       replyText =
-        "Every silk saree at Mumbai Bazar carries the official Silk Mark certification tag. Each piece is independently laboratory-tested for 100% pure mulberry silk and authentic zari content!";
+        "Our staff will tell you exactly what any piece is made of before you buy, and you are welcome to handle and drape it in store first. If a saree carries a Silk Mark tag, we will show it to you.";
       quickReplies = ["Browse Pure Silks", "Care Guide", "Speak to Stylist"];
     } else if (
       lower.includes("festive") ||
@@ -134,7 +134,7 @@ export function SareeExpertChatbot() {
       quickReplies = ["Wedding Sarees", "Care Guide"];
     } else {
       replyText =
-        "Thank you for asking! I've curated a few of our most loved handwoven pieces for you. Is there a specific occasion, color, or weave region you have in mind?";
+        "Thank you for asking! I've picked out a few of our most loved pieces for you. Is there a specific occasion, color, or weave region you have in mind?";
       matchedProducts = PRODUCTS.slice(0, 2);
       quickReplies = ["Wedding Sarees", "1-Minute Sarees", "Speak to Live Stylist"];
     }

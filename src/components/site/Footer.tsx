@@ -30,7 +30,7 @@ export function Footer() {
               Sarees · Since Tradition
             </p>
             <p className="mt-5 max-w-sm text-sm text-ivory/90 leading-relaxed">
-              A modern boutique for heirloom and everyday sarees — handwoven with care, delivered
+              Sarees, lehengas and dress material across eight stores — chosen with care, delivered
               with warmth, across India and beyond.
             </p>
 
