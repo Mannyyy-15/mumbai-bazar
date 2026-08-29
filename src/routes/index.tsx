@@ -3,10 +3,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight, SlidersHorizontal, ShoppingBag, Truck, ShieldCheck, Sparkles, Instagram, Star, Quote, Heart } from "lucide-react";
 
 
-import { IMG, PRODUCTS, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS } from "@/lib/site-data";
+import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
-import { fetchShopifyProducts, shopifyConfigured } from "@/lib/shopify";
+import { useCatalog } from "@/lib/catalog-context";
 import { TrousseauBuilder } from "@/components/site/TrousseauBuilder";
 import { WeavesOfIndiaMap } from "@/components/site/WeavesOfIndiaMap";
 import { RealBridesGallery } from "@/components/site/RealBridesGallery";
@@ -317,7 +317,7 @@ function FeedDivider() {
 /* ---------------- Dense Product Feed ---------------- */
 type SortKey = "featured" | "newest" | "price-asc" | "price-desc";
 
-function ProductTile({ p }: { p: (typeof PRODUCTS)[number] }) {
+function ProductTile({ p }: { p: Product }) {
   const { wishlist, toggleWishlist } = useWishlist();
   const { addItem } = useCart();
   const isSaved = wishlist.some((w) => w.id === p.id);
@@ -396,14 +396,8 @@ function ProductTile({ p }: { p: (typeof PRODUCTS)[number] }) {
 }
 
 function ImmediateProductShelf() {
-  const [items, setItems] = useState(PRODUCTS.slice(0, 4));
-
-  useEffect(() => {
-    if (!shopifyConfigured) return;
-    fetchShopifyProducts(4).then((products) => {
-      if (products.length) setItems(products);
-    }).catch(() => undefined);
-  }, []);
+  const { products, loading } = useCatalog();
+  const items = products.slice(0, 4);
 
   return (
     <section className="bg-ivory px-4 py-8 md:px-8 md:py-14" aria-labelledby="shop-best-sellers">
@@ -415,28 +409,34 @@ function ImmediateProductShelf() {
           </div>
           <Link to="/shop" className="shrink-0 border-b border-maroon/50 pb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-maroon">View all</Link>
         </div>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-4 md:gap-x-5 md:gap-y-10">
-          {items.map((p) => <ProductTile key={p.id} p={p} />)}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-4 md:gap-x-5 md:gap-y-10">
+            {[...Array(4)].map((_, i) => <div key={i} className="aspect-[3/4] rounded-2xl bg-beige/60 animate-pulse" />)}
+          </div>
+        ) : items.length > 0 ? (
+          <div className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-4 md:gap-x-5 md:gap-y-10">
+            {items.map((p) => <ProductTile key={p.id} p={p} />)}
+          </div>
+        ) : null}
       </div>
     </section>
   );
 }
 
 function ProductFeed() {
+  const { products } = useCatalog();
   const [sort, setSort] = useState<SortKey>("featured");
   const [sortOpen, setSortOpen] = useState(false);
   const [visible, setVisible] = useState(10);
 
-  // Extend product pool by repeating to reach the density feel of a real feed
   const pool = useMemo(() => {
-    const dupes = PRODUCTS.concat(PRODUCTS).map((p, i) => ({ ...p, _k: `${p.id}-${i}` }));
-    const sorted = [...dupes];
+    const indexed = products.map((p, i) => ({ ...p, _k: `${p.id}-${i}` }));
+    const sorted = [...indexed];
     if (sort === "price-asc") sorted.sort((a, b) => parsePriceToNumber(a.price) - parsePriceToNumber(b.price));
     else if (sort === "price-desc") sorted.sort((a, b) => parsePriceToNumber(b.price) - parsePriceToNumber(a.price));
     else if (sort === "newest") sorted.sort((a, b) => (a.tag === "New" ? -1 : 1) - (b.tag === "New" ? -1 : 1));
     return sorted;
-  }, [sort]);
+  }, [sort, products]);
 
   const sortLabel: Record<SortKey, string> = {
     featured: "Featured",
@@ -749,7 +749,8 @@ function ShopByOccasion() {
 
 /* ---------------- Trending Now (horizontal scroll with navigation buttons) ---------------- */
 function TrendingNow() {
-  const items = PRODUCTS.slice(0, 8);
+  const { products } = useCatalog();
+  const items = products.slice(0, 8);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -882,7 +883,8 @@ function EditorialSplit() {
 
 /* ---------------- Bestsellers ---------------- */
 function Bestsellers() {
-  const items = [...PRODUCTS].filter(p => p.tag === "Bestseller").concat(PRODUCTS).slice(0, 4);
+  const { products } = useCatalog();
+  const items = products.slice(0, 4);
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-20">
       <div className="flex items-end justify-between mb-8 md:mb-10 border-b border-maroon/40 pb-6">

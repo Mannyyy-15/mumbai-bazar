@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { COLLECTIONS, PRODUCTS, type Product } from "@/lib/site-data";
+import { COLLECTIONS, type Product } from "@/lib/site-data";
+import { useCatalog } from "@/lib/catalog-context";
 import { Sparkles, MapPin, ChevronRight, Filter } from "lucide-react";
 
 export const Route = createFileRoute("/collections")({
@@ -23,6 +24,7 @@ const FILTER_TABS = [
 ];
 
 function CollectionsPage() {
+  const { products } = useCatalog();
   const [activeTab, setActiveTab] = useState("all");
 
   const filteredCollections = useMemo(() => {
@@ -103,7 +105,7 @@ function CollectionsPage() {
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 space-y-16 md:space-y-24">
           {filteredCollections.map((c, index) => {
             const isEven = index % 2 === 0;
-            const count = PRODUCTS.filter((p) =>
+            const count = products.filter((p) =>
               p.category.some((cat) => c.slug.includes(cat) || cat.includes(c.slug))
             ).length;
 

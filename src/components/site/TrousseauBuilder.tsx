@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { PRODUCTS, type Product } from "@/lib/site-data";
+import type { Product } from "@/lib/site-data";
 import { Check, Sparkles, ShoppingBag, Gift, ArrowRight } from "lucide-react";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
+import { useCatalog } from "@/lib/catalog-context";
 
 export function TrousseauBuilder() {
   const { addItem, openCart } = useCart();
+  const { products } = useCatalog();
   const [selected, setSelected] = useState<Product[]>([]);
 
   const toggleSelect = (p: Product) => {
@@ -93,7 +95,7 @@ export function TrousseauBuilder() {
 
         {/* Saree Picker Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {PRODUCTS.slice(0, 8).map((p) => {
+          {products.slice(0, 8).map((p) => {
             const isSelected = selected.some((item) => item.id === p.id);
             return (
               <div

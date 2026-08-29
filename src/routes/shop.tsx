@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PRODUCTS, IMG, type Product } from "@/lib/site-data";
+import { IMG, type Product } from "@/lib/site-data";
 import { ProductCard } from "@/components/site/ProductCard";
 import { Check, X, ChevronDown, SlidersHorizontal, ChevronRight, Filter } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-context";

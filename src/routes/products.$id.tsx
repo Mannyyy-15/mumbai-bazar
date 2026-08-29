@@ -5,7 +5,6 @@ import {
   Truck, ShieldCheck, RotateCcw, ChevronRight, Check,
   Scissors,
 } from "lucide-react";
-import { PRODUCTS } from "@/lib/site-data";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { fetchShopifyProduct } from "@/lib/shopify";
@@ -14,8 +13,8 @@ import { BlouseCustomizationModal } from "@/components/site/BlouseCustomizationM
 
 export const Route = createFileRoute("/products/$id")({
   loader: async ({ params }) => {
-    const remote = await fetchShopifyProduct(params.id).catch(() => null);
-    const product = remote ?? PRODUCTS.find((p) => p.id === params.id) ?? PRODUCTS[0];
+    const product = await fetchShopifyProduct(params.id).catch(() => null);
+    if (!product) throw notFound();
     return { product };
   },
   head: ({ loaderData }) => {

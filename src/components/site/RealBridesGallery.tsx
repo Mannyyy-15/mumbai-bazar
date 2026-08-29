@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Camera, Heart, Sparkles, X, ShoppingBag } from "lucide-react";
-import { PRODUCTS, type Product } from "@/lib/site-data";
+import type { Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
+import { useCatalog } from "@/lib/catalog-context";
 
 type BridePost = {
   id: string;
@@ -54,6 +55,7 @@ const REAL_BRIDES: BridePost[] = [
 
 export function RealBridesGallery() {
   const { addItem, openCart } = useCart();
+  const { products } = useCatalog();
   const [selectedPost, setSelectedPost] = useState<BridePost | null>(null);
 
   const handleQuickAdd = (p: Product) => {
@@ -88,7 +90,7 @@ export function RealBridesGallery() {
         {/* Masonry Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {REAL_BRIDES.map((b) => {
-            const saree = PRODUCTS.find((p) => p.id === b.sareeId) || PRODUCTS[0];
+            const saree = products.find((p) => p.id === b.sareeId) || products[0];
             return (
               <div
                 key={b.id}
@@ -151,7 +153,7 @@ export function RealBridesGallery() {
                 </div>
 
                 {(() => {
-                  const saree = PRODUCTS.find((p) => p.id === selectedPost.sareeId) || PRODUCTS[0];
+                  const saree = products.find((p) => p.id === selectedPost.sareeId) || products[0];
                   return (
                     <div className="rounded-2xl bg-beige/30 p-4 border border-gold/40 space-y-3">
                       <span className="text-[9px] uppercase tracking-widest text-gold-deep font-semibold">Featured Saree</span>

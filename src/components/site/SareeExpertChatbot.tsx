@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { MessageSquare, X, Send, Sparkles, ShoppingBag, ArrowRight, ShieldCheck, Heart, RefreshCw, MessageCircle } from "lucide-react";
-import { PRODUCTS, type Product } from "@/lib/site-data";
+import type { Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { Link } from "@tanstack/react-router";
+import { useCatalog } from "@/lib/catalog-context";
 
 interface Message {
   id: string;
@@ -36,6 +37,7 @@ export function SareeExpertChatbot() {
   const [unreadCount, setUnreadCount] = useState(1);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const { addItem, openCart } = useCart();
+  const { products } = useCatalog();
 
   useEffect(() => {
     if (isOpen) {
@@ -83,22 +85,22 @@ export function SareeExpertChatbot() {
 
     if (lower.includes("wedding") || lower.includes("bridal") || lower.includes("trousseau") || lower.includes("reception")) {
       replyText = "For wedding functions and grand bridal trousseaus, I strongly recommend our pure gold zari Kanjivarams and royal Banarasi brocades. Here are our top handwoven bridal drapes:";
-      matchedProducts = PRODUCTS.filter((p) => p.category.includes("wedding-sarees")).slice(0, 3);
+      matchedProducts = products.filter((p) => p.category.includes("wedding-sarees")).slice(0, 3);
       quickReplies = ["Custom Blouse Options", "Book Video Call Consultation", "Other Weaves"];
     } else if (lower.includes("everyday") || lower.includes("office") || lower.includes("soft") || lower.includes("daily") || lower.includes("ready")) {
       replyText = "For effortless daily wear and 1-minute dressing, our pre-pleated ready-to-wear drapes and lightweight soft silks offer zero-fatigue elegance:";
-      matchedProducts = PRODUCTS.filter((p) => p.category.includes("everyday-sarees")).slice(0, 3);
+      matchedProducts = products.filter((p) => p.category.includes("everyday-sarees")).slice(0, 3);
       quickReplies = ["1-Minute Sarees", "Festive Sarees", "Silk Mark Info"];
     } else if (lower.includes("silk mark") || lower.includes("pure") || lower.includes("quality") || lower.includes("verify")) {
       replyText = "Every silk saree at Mumbai Bazar carries the official Silk Mark certification tag. Each piece is independently laboratory-tested for 100% pure mulberry silk and authentic zari content!";
       quickReplies = ["Browse Pure Silks", "Care Guide", "Speak to Stylist"];
     } else if (lower.includes("festive") || lower.includes("puja") || lower.includes("diwali") || lower.includes("party")) {
       replyText = "For grand pujas and evening celebrations, vibrant jewel-toned Banarasis and metallic tissue silks create an enchanting presence:";
-      matchedProducts = PRODUCTS.filter((p) => p.category.includes("festive-edit")).slice(0, 3);
+      matchedProducts = products.filter((p) => p.category.includes("festive-edit")).slice(0, 3);
       quickReplies = ["Wedding Sarees", "Care Guide"];
     } else {
       replyText = "Thank you for asking! I've curated a few of our most loved handwoven pieces for you. Is there a specific occasion, color, or weave region you have in mind?";
-      matchedProducts = PRODUCTS.slice(0, 2);
+      matchedProducts = products.slice(0, 2);
       quickReplies = ["Wedding Sarees", "1-Minute Sarees", "Speak to Live Stylist"];
     }
 
