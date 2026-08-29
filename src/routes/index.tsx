@@ -875,9 +875,9 @@ function TrendingNow() {
                   {p.name}
                 </h4>
                 <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">
-                  <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">{p.price}</span>
+                  <span className="font-sans text-lg sm:text-xl md:text-2xl font-bold text-maroon tracking-tight">{p.price}</span>
                   {p.original && (
-                    <span className="text-xs text-taupe font-medium line-through font-sans">{p.original}</span>
+                    <span className="text-xs sm:text-sm text-taupe font-medium line-through font-sans">{p.original}</span>
                   )}
                 </div>
               </div>

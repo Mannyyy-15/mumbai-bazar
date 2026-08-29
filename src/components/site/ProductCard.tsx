@@ -77,13 +77,13 @@ export function ProductCard({ p }: { p: Product }) {
           <Heart className={`h-4 w-4 ${isSaved ? "fill-ivory text-ivory" : ""}`} />
         </button>
 
-        {/* Hover Add to Bag Action */}
-        <div className="absolute inset-x-2 sm:inset-x-3 bottom-2 sm:bottom-3 z-10 opacity-100 md:opacity-0 translate-y-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+        {/* Hover Add to Bag Action (Desktop hover only so mobile images stay completely clear) */}
+        <div className="hidden md:block absolute inset-x-3 bottom-3 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
           <button
             onClick={quickAdd}
-            className="w-full py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-maroon text-ivory text-[8.5px] sm:text-[10px] font-medium tracking-[0.16em] uppercase hover:bg-wine transition-colors flex items-center justify-center gap-1.5 shadow-lg"
+            className="w-full py-2.5 rounded-xl bg-maroon text-ivory text-[10px] font-medium tracking-[0.16em] uppercase hover:bg-wine transition-colors flex items-center justify-center gap-1.5 shadow-lg"
           >
-            <ShoppingBag className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Add to Bag
+            <ShoppingBag className="h-3.5 w-3.5" /> Add to Bag
           </button>
         </div>
       </div>
@@ -96,10 +96,10 @@ export function ProductCard({ p }: { p: Product }) {
         <h3 className="font-sans text-xs sm:text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
           {p.name}
         </h3>
-        <div className="flex items-baseline gap-1.5 sm:gap-2 pt-1.5 sm:pt-2 border-t border-gold/45 mt-0.5 sm:mt-1">
-          <span className="font-sans text-xs sm:text-base md:text-lg font-bold text-ink tracking-tight">{p.price}</span>
+        <div className="flex items-baseline gap-2 pt-1.5 sm:pt-2 border-t border-gold/45 mt-0.5 sm:mt-1">
+          <span className="font-sans text-base sm:text-lg md:text-xl font-bold text-maroon tracking-tight">{p.price}</span>
           {p.original && (
-            <span className="text-[10px] sm:text-xs text-taupe font-medium line-through font-sans">{p.original}</span>
+            <span className="text-xs sm:text-sm text-taupe font-medium line-through font-sans">{p.original}</span>
           )}
         </div>
       </div>
