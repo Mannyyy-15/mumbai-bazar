@@ -147,9 +147,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // No canonical here: every page route emits its own via seo(). A root-level
       // one renders a second, conflicting tag and Google then ignores both.
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico?v=2" },
-      { rel: "icon", href: "/favicon.png?v=2", type: "image/png", sizes: "32x32" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=2", sizes: "180x180" },
+      { rel: "icon", href: "/favicon.ico?v=3" },
+      { rel: "icon", href: "/favicon.png?v=3", type: "image/png", sizes: "32x32" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=3", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       // Warms the DNS/TLS handshake for the font host before the CSS request lands.
@@ -179,8 +179,8 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en-IN">
       <head>
-        {/* Every meta tag is emitted through head() above, from SITE. Hardcoding
-            them here as well would render a second, conflicting copy. */}
+        {/* Every meta and link tag is emitted through head() above, from SITE.
+            Hardcoding them here as well renders a second, conflicting copy. */}
         <HeadContent />
       </head>
       <body>

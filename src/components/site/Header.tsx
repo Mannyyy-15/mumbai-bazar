@@ -346,7 +346,7 @@ export function Header() {
         }`}
       >
         {/* Left: primary links (desktop) */}
-        <nav className="hidden lg:flex flex-1 items-center gap-8" aria-label="Primary">
+        <nav className="hidden lg:flex flex-1 items-center gap-4 xl:gap-8" aria-label="Primary">
           {PRIMARY_LEFT.map((item) => (
             <Link
               key={item.to}
@@ -397,7 +397,7 @@ export function Header() {
             <div
               className={`flex items-center overflow-hidden rounded-full border transition-all duration-300 ease-out ${
                 searchOpen
-                  ? "w-64 border-gold/50 bg-white/90 shadow-sm"
+                  ? "w-44 lg:w-52 xl:w-64 border-gold/50 bg-white/90 shadow-sm"
                   : "w-11 border-transparent bg-transparent"
               }`}
             >
@@ -479,12 +479,30 @@ export function Header() {
       {/* Category Row with Interactive Mega Dropdowns (Desktop) */}
       <div className="hidden border-t border-gold/40 lg:block relative">
         <nav
-          className="mx-auto flex max-w-[1400px] items-center justify-center gap-9 px-4 py-1.5"
+          className="mx-auto flex max-w-[1400px] items-center justify-center gap-4 lg:gap-6 xl:gap-9 px-4 py-1.5"
           aria-label="Categories"
         >
-          {MEGA_CATEGORIES.map((cat) => {
+          {MEGA_CATEGORIES.map((cat, catIdx) => {
             const isDropdownOpen = activeDropdown === cat.label;
             const isCurrentPage = pathname === cat.to || pathname.startsWith(cat.to);
+
+            // Smart alignment to ensure dropdown never goes out of frame:
+            // - First item (New Arrivals) aligns to its left edge and opens inwards towards the right
+            // - Second item (Ready to Wear) aligns left with gentle offset
+            // - Last item (Festive Edit) aligns to its right edge and opens inwards towards the left
+            // - Second to last (Heritage Silks) aligns right with gentle offset
+            // - Center item (Wedding & Bridal) centers cleanly
+            const total = MEGA_CATEGORIES.length;
+            const alignmentCls =
+              catIdx === 0
+                ? "left-0 translate-x-0"
+                : catIdx === 1
+                  ? "left-0 xl:-left-6 translate-x-0"
+                  : catIdx === total - 1
+                    ? "right-0 left-auto translate-x-0"
+                    : catIdx === total - 2
+                      ? "right-0 xl:-right-6 left-auto translate-x-0"
+                      : "left-1/2 -translate-x-1/2";
 
             return (
               <div
@@ -509,9 +527,9 @@ export function Header() {
                   />
                 </Link>
 
-                {/* Mega Dropdown Menu (Wide 820px, large readable text, instant CSS group-hover & state) */}
+                {/* Mega Dropdown Menu (Smart-aligned, clamped to viewport, never overflows frame) */}
                 <div
-                  className={`absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50 w-[820px] transition-all duration-200 ${
+                  className={`absolute ${alignmentCls} top-full pt-2 z-50 w-[92vw] sm:w-[480px] lg:w-[500px] xl:w-[520px] max-w-[calc(100vw-2rem)] transition-all duration-200 ${
                     isDropdownOpen
                       ? "opacity-100 pointer-events-auto translate-y-0"
                       : "opacity-0 pointer-events-none -translate-y-1 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0"
@@ -519,8 +537,8 @@ export function Header() {
                   onMouseEnter={() => handleMouseEnter(cat.label)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <div className="rounded-2xl border border-gold/50 bg-ivory/98 p-7 shadow-[0_20px_50px_rgba(66,23,30,0.18)] backdrop-blur-2xl">
-                    <div className="grid grid-cols-3 gap-8">
+                  <div className="rounded-2xl border border-gold/50 bg-ivory/98 p-6 shadow-[0_20px_50px_rgba(66,23,30,0.18)] backdrop-blur-2xl">
+                    <div className="grid grid-cols-2 gap-8">
                       {/* Subcategory Columns */}
                       {cat.groups.map((group) => (
                         <div key={group.title} className="space-y-4">
@@ -543,29 +561,6 @@ export function Header() {
                           </ul>
                         </div>
                       ))}
-
-                      {/* Featured Spotlight Card */}
-                      {cat.featured && (
-                        <div className="rounded-xl border border-gold/40 bg-gradient-to-br from-beige/50 via-ivory to-beige/30 p-5 flex flex-col justify-between shadow-sm">
-                          <div>
-                            <span className="inline-block rounded-full bg-maroon/10 border border-maroon/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-maroon">
-                              {cat.featured.tag}
-                            </span>
-                            <h5 className="mt-3 font-serif text-base font-bold text-ink leading-snug">
-                              {cat.featured.title}
-                            </h5>
-                            <p className="mt-2 text-xs text-taupe leading-relaxed">
-                              {cat.featured.desc}
-                            </p>
-                          </div>
-                          <Link
-                            to={cat.featured.to}
-                            className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-maroon hover:underline"
-                          >
-                            Explore Now <ChevronRight className="h-3.5 w-3.5" />
-                          </Link>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>

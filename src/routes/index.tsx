@@ -63,6 +63,7 @@ type Slide = {
   cta: { label: string; to: string };
   secondary?: { label: string; to: string };
   img: string;
+  imgMobile?: string;
   align: "left" | "right" | "center";
   accent: string; // small tag e.g. "01 / 03"
 };
@@ -221,18 +222,21 @@ function HeroCarousel() {
               }`}
               aria-hidden={!active}
             >
-              <img
-                src={s.img}
-                alt={`${s.title} ${s.italic ?? ""}`.trim()}
-                width={1920}
-                height={1080}
-                fetchPriority={i === 0 ? "high" : "low"}
-                loading={i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                className={`absolute inset-0 h-full w-full object-cover transition-transform duration-[9000ms] ease-out ${
-                  active ? "scale-105" : "scale-100"
-                }`}
-              />
+              <picture className="absolute inset-0 h-full w-full">
+                {s.imgMobile && <source media="(max-width: 767px)" srcSet={s.imgMobile} />}
+                <img
+                  src={s.img}
+                  alt={`${s.title} ${s.italic ?? ""}`.trim()}
+                  width={1920}
+                  height={1080}
+                  fetchPriority={i === 0 ? "high" : "low"}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  className={`h-full w-full object-cover transition-transform duration-[9000ms] ease-out ${
+                    active ? "scale-105" : "scale-100"
+                  }`}
+                />
+              </picture>
               {/* gradient overlay for legibility */}
               <div
                 className={`absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/15 ${overlayCls}`}
