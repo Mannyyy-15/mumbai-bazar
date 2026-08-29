@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { SITE } from "@/lib/seo";
-import { PRODUCTS, COLLECTIONS } from "@/lib/site-data";
+import { COLLECTIONS } from "@/lib/site-data";
+import { fetchShopifyProducts } from "@/lib/shopify";
 import { GUIDES } from "@/lib/guides";
 import { PUBLISHED_OUTLETS, OUTLET_COUNT } from "@/lib/locations";
 
@@ -10,13 +11,15 @@ import { PUBLISHED_OUTLETS, OUTLET_COUNT } from "@/lib/locations";
  * Google does not treat this file specially, but ChatGPT/Perplexity-class
  * crawlers use it to resolve entity facts, so it keeps brand claims consistent.
  */
-function buildLlmsTxt(): string {
+async function buildLlmsTxt(): Promise<string> {
   const collections = COLLECTIONS.map(
     (c) => `- [${c.name}](${SITE.url}/collections): ${c.tagline}`,
   );
 
-  const products = PRODUCTS.map(
-    (p) => `- [${p.name}](${SITE.url}/products/${p.id}): ${p.weave}, ${p.price}`,
+  // Live catalogue, so the URLs listed here actually resolve.
+  const catalogue = await fetchShopifyProducts(60).catch(() => []);
+  const products = catalogue.map(
+    (p) => `- [${p.name}](${SITE.url}/products/${p.handle}): ${p.weave}, ${p.price}`,
   );
 
   return [
@@ -59,10 +62,9 @@ function buildLlmsTxt(): string {
     "",
     ...collections,
     "",
-    "## Featured sarees",
-    "",
-    ...products,
-    "",
+    // Omit the section entirely when the catalogue fetch came back empty,
+    // rather than printing a heading with nothing under it.
+    ...(products.length ? ["## Featured sarees", "", ...products, ""] : []),
     "## Guides",
     "",
     "Expert reference content, written by our head of curation:",
@@ -90,8 +92,8 @@ function buildLlmsTxt(): string {
 export const Route = createFileRoute("/llms.txt")({
   server: {
     handlers: {
-      GET: () =>
-        new Response(buildLlmsTxt(), {
+      GET: async () =>
+        new Response(await buildLlmsTxt(), {
           headers: {
             "content-type": "text/plain; charset=utf-8",
             "cache-control": "public, max-age=3600, s-maxage=86400",

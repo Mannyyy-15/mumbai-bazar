@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { SITE } from "@/lib/seo";
-import { PRODUCTS, COLLECTIONS } from "@/lib/site-data";
+import { COLLECTIONS } from "@/lib/site-data";
+import { fetchShopifyProducts } from "@/lib/shopify";
 import { PUBLISHED_OUTLETS } from "@/lib/locations";
 import { GUIDES } from "@/lib/guides";
 
@@ -48,12 +49,19 @@ function urlEntry(path: string, lastmod: string, changefreq: string, priority: s
   ].join("\n");
 }
 
-function buildSitemap(): string {
+async function buildSitemap(): Promise<string> {
   const lastmod = new Date().toISOString().slice(0, 10);
 
   const staticUrls = STATIC_ENTRIES.map((e) => urlEntry(e.path, lastmod, e.changefreq, e.priority));
 
-  const productUrls = PRODUCTS.map((p) => urlEntry(`/products/${p.id}`, lastmod, "weekly", "0.8"));
+  // Product URLs come from the live Shopify catalogue, not the local seed data —
+  // the PDP loader only resolves Shopify handles, so anything else would be a
+  // 404 handed straight to Google. On a fetch failure we emit no product URLs
+  // rather than stale ones.
+  const products = await fetchShopifyProducts(250).catch(() => []);
+  const productUrls = products.map((p) =>
+    urlEntry(`/products/${p.handle}`, lastmod, "weekly", "0.8"),
+  );
 
   // Collection landing pages are rendered by /collections; list them so the
   // weave-specific URLs are discoverable rather than orphaned.
@@ -85,8 +93,8 @@ function buildSitemap(): string {
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
-      GET: () =>
-        new Response(buildSitemap(), {
+      GET: async () =>
+        new Response(await buildSitemap(), {
           headers: {
             "content-type": "application/xml; charset=utf-8",
             "cache-control": "public, max-age=3600, s-maxage=86400",
