@@ -61,6 +61,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <p className="mt-2 text-sm text-ink/75 leading-relaxed">
           We encountered a brief connection update. Please refresh or explore our collections.
         </p>
+        {process.env.NODE_ENV !== "production" && error?.message && (
+          <p className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded text-left overflow-auto max-h-24 font-mono">
+            {error.message}
+          </p>
+        )}
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => {

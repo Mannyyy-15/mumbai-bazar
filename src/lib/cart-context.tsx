@@ -135,7 +135,9 @@ export function useCart() {
   return ctx;
 }
 
-export function parsePriceToNumber(price: string): number {
+export function parsePriceToNumber(price?: string | number | null): number {
+  if (typeof price === "number") return price;
+  if (!price || typeof price !== "string") return 0;
   const digits = price.replace(/[^\d]/g, "");
   return digits ? parseInt(digits, 10) : 0;
 }

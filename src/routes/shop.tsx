@@ -49,7 +49,7 @@ const SORTS: { key: SortKey; label: string }[] = [
   { key: "price-desc", label: "Price: High to Low" },
 ];
 
-const parsePrice = (s: string) => Number(s.replace(/[^\d]/g, "")) || 0;
+const parsePrice = (s?: string | number | null) => Number(String(s || "").replace(/[^\d]/g, "")) || 0;
 
 function ShopPage() {
   const { products } = useCatalog();

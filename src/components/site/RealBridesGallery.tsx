@@ -20,7 +20,7 @@ const REAL_BRIDES: BridePost[] = [
     brideName: "Radhika & Anish",
     location: "Udaipur Palace Wedding",
     occasion: "Bridal Pheras",
-    sareeId: "1",
+    sareeId: "meher-wine-banarasi-silk-saree",
     image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800",
     quote: "My Banarasi silk saree from Mumbai Bazar made me feel like royalty on my Pheras. The gold zari work glistened under the mandap lights!",
   },
@@ -29,7 +29,7 @@ const REAL_BRIDES: BridePost[] = [
     brideName: "Dr. Priyamvada R.",
     location: "Chennai Temple Wedding",
     occasion: "Kalyanam Ceremony",
-    sareeId: "2",
+    sareeId: "sunehri-rani-saree",
     image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
     quote: "The pure Kanjivaram silk weight and authentic Silk Mark tag gave me complete peace of mind. Truly heirloom quality.",
   },
@@ -38,7 +38,7 @@ const REAL_BRIDES: BridePost[] = [
     brideName: "Meera & Siddharth",
     location: "Goa Beach Sunset Sangeet",
     occasion: "Sangeet Gala",
-    sareeId: "3",
+    sareeId: "gulabi-shringar-saree",
     image: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&q=80&w=800",
     quote: "Custom blouse fitting was 100% spot on! I didn't need a single alter before my sangeet performance.",
   },
@@ -47,7 +47,7 @@ const REAL_BRIDES: BridePost[] = [
     brideName: "Ananya Deshmukh",
     location: "Mumbai Heritage Club",
     occasion: "Reception Party",
-    sareeId: "4",
+    sareeId: "rangrez-royale-saree",
     image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800",
     quote: "Received endless compliments on my Paithani saree. The peacock motif border is a work of art.",
   },
@@ -58,7 +58,8 @@ export function RealBridesGallery() {
   const { products } = useCatalog();
   const [selectedPost, setSelectedPost] = useState<BridePost | null>(null);
 
-  const handleQuickAdd = (p: Product) => {
+  const handleQuickAdd = (p?: Product | null) => {
+    if (!p) return;
     addItem({
       id: p.id,
       name: p.name,
@@ -89,8 +90,10 @@ export function RealBridesGallery() {
 
         {/* Masonry Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {REAL_BRIDES.map((b) => {
-            const saree = products.find((p) => p.id === b.sareeId) || products[0];
+          {REAL_BRIDES.map((b, i) => {
+            const saree =
+              products.find((p) => p.id === b.sareeId) ||
+              (products.length > 0 ? products[i % products.length] : null);
             return (
               <div
                 key={b.id}
@@ -113,7 +116,7 @@ export function RealBridesGallery() {
                     <h4 className="font-serif text-lg text-ivory font-medium leading-tight">{b.brideName}</h4>
                     <p className="text-[11px] text-ivory/80">{b.location}</p>
                     <div className="mt-3 flex items-center justify-between border-t border-white/20 pt-2 text-[10px] uppercase tracking-wider font-semibold text-gold">
-                      <span>Wearing {saree.name}</span>
+                      <span>Wearing {saree ? saree.name : "Heritage Silk"}</span>
                       <span>Shop Look →</span>
                     </div>
                   </div>
@@ -153,21 +156,25 @@ export function RealBridesGallery() {
                 </div>
 
                 {(() => {
-                  const saree = products.find((p) => p.id === selectedPost.sareeId) || products[0];
+                  const saree =
+                    products.find((p) => p.id === selectedPost.sareeId) ||
+                    (products.length > 0 ? products[0] : null);
                   return (
                     <div className="rounded-2xl bg-beige/30 p-4 border border-gold/40 space-y-3">
                       <span className="text-[9px] uppercase tracking-widest text-gold-deep font-semibold">Featured Saree</span>
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-serif text-base text-maroon font-medium">{saree.name}</h4>
-                          <p className="font-sans text-base font-bold text-ink">{saree.price}</p>
+                          <h4 className="font-serif text-base text-maroon font-medium">{saree ? saree.name : "Heritage Pure Silk"}</h4>
+                          <p className="font-sans text-base font-bold text-ink">{saree ? saree.price : ""}</p>
                         </div>
-                        <button
-                          onClick={() => handleQuickAdd(saree)}
-                          className="px-4 py-2 rounded-full bg-maroon text-ivory text-xs uppercase tracking-wider font-semibold hover:bg-wine transition-all flex items-center gap-1.5 shadow-md"
-                        >
-                          <ShoppingBag className="h-3.5 w-3.5" /> Buy Saree
-                        </button>
+                        {saree && (
+                          <button
+                            onClick={() => handleQuickAdd(saree)}
+                            className="px-4 py-2 rounded-full bg-maroon text-ivory text-xs uppercase tracking-wider font-semibold hover:bg-wine transition-all flex items-center gap-1.5 shadow-md"
+                          >
+                            <ShoppingBag className="h-3.5 w-3.5" /> Buy Saree
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
