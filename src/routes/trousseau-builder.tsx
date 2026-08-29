@@ -44,7 +44,7 @@ function TrousseauBuilderPage() {
         title="Interactive Trousseau Box Builder"
         crumb="Trousseau Builder"
         copy="Curate 3 heirloom sarees for your wedding functions to unlock custom 15% bundle savings and a luxury velvet chest."
-        heroImg={IMG.colWedding}
+        img={IMG.colWedding}
       />
       <TrousseauBuilder />
     </div>

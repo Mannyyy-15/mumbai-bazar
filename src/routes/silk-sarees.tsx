@@ -47,8 +47,8 @@ export const Route = createFileRoute("/silk-sarees")({
 const CLUSTERS = [
   { name: "Varanasi", weave: "Banarasi Katantan Silk", img: IMG.colBanarasi },
   { name: "Kanchipuram", weave: "Pure Mulberry Kanjivaram", img: IMG.colKanjivaram },
-  { name: "Chanderi", weave: "Tissue & Silk Cotton", img: IMG.colChanderi },
-  { name: "Paithan", weave: "Real Gold Zari Paithani", img: IMG.colPaithani },
+  { name: "Chanderi", weave: "Tissue & Silk Cotton", img: IMG.colPuresilk },
+  { name: "Paithan", weave: "Real Gold Zari Paithani", img: IMG.colFestive },
 ];
 
 function SilkSareesPage() {

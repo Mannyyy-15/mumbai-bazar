@@ -6,35 +6,41 @@ export function SmoothScroll() {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    let lenisInstance: any = null;
+    // Both libraries are dynamically imported, so their types come from the
+    // import itself rather than a top-level import that would defeat the split.
+    let lenisInstance: InstanceType<typeof import("lenis").default> | null = null;
     let onTickFn: ((time: number) => void) | null = null;
-    let gsapModule: any = null;
+    let gsapModule: typeof import("gsap").gsap | null = null;
 
-    Promise.all([import("lenis"), import("gsap")]).then(([{ default: Lenis }, { gsap }]) => {
-      try {
-        gsapModule = gsap;
-        lenisInstance = new Lenis({
-          autoRaf: false,
-          lerp: 0.085,
-          duration: 1.15,
-          smoothWheel: true,
-          wheelMultiplier: 0.9,
-        });
+    Promise.all([import("lenis"), import("gsap")])
+      .then(([{ default: Lenis }, { gsap }]) => {
+        try {
+          gsapModule = gsap;
+          lenisInstance = new Lenis({
+            autoRaf: false,
+            lerp: 0.085,
+            duration: 1.15,
+            smoothWheel: true,
+            wheelMultiplier: 0.9,
+          });
 
-        onTickFn = (time: number) => {
-          if (lenisInstance) {
-            try {
-              lenisInstance.raf(time * 1000);
-            } catch (_) {}
-          }
-        };
+          onTickFn = (time: number) => {
+            if (lenisInstance) {
+              try {
+                lenisInstance.raf(time * 1000);
+              } catch {
+                // A single dropped frame must never break the ticker loop.
+              }
+            }
+          };
 
-        gsap.ticker.add(onTickFn);
-        gsap.ticker.lagSmoothing(0);
-      } catch (err) {
-        console.warn("SmoothScroll init skipped:", err);
-      }
-    }).catch(() => undefined);
+          gsap.ticker.add(onTickFn);
+          gsap.ticker.lagSmoothing(0);
+        } catch (err) {
+          console.warn("SmoothScroll init skipped:", err);
+        }
+      })
+      .catch(() => undefined);
 
     return () => {
       if (gsapModule && onTickFn) {
@@ -43,7 +49,9 @@ export function SmoothScroll() {
       if (lenisInstance) {
         try {
           lenisInstance.destroy();
-        } catch (_) {}
+        } catch {
+          // Already torn down by a prior unmount; nothing to clean up.
+        }
       }
     };
   }, []);

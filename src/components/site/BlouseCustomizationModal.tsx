@@ -14,7 +14,9 @@ export function BlouseCustomizationModal({
 }) {
   const { addItem, openCart } = useCart();
 
-  const [stitchingType, setStitchingType] = useState<"unstitched" | "standard" | "custom">("unstitched");
+  const [stitchingType, setStitchingType] = useState<"unstitched" | "standard" | "custom">(
+    "unstitched",
+  );
   const [size, setSize] = useState("M (38 in)");
   const [neckline, setNeckline] = useState("Sweetheart Neck");
   const [includeFall, setIncludeFall] = useState(true);
@@ -67,7 +69,9 @@ export function BlouseCustomizationModal({
           <div className="flex items-center justify-between border-b border-gold/40 pb-4">
             <div className="flex items-center gap-2">
               <Scissors className="h-5 w-5 text-maroon" />
-              <h2 className="font-serif text-2xl text-maroon font-medium">Blouse & Finishing Service</h2>
+              <h2 className="font-serif text-2xl text-maroon font-medium">
+                Blouse & Finishing Service
+              </h2>
             </div>
             <button onClick={onClose} className="rounded-full p-2 text-taupe hover:text-maroon">
               <X className="h-5 w-5" />
@@ -77,10 +81,18 @@ export function BlouseCustomizationModal({
           <div className="mt-6 space-y-6">
             {/* Saree Info */}
             <div className="flex items-center gap-4 rounded-2xl bg-beige/30 p-3 border border-gold/30">
-              <img src={product.img} alt={product.name} className="h-16 w-14 object-cover rounded-lg" />
+              <img
+                src={product.img}
+                alt={product.name}
+                className="h-16 w-14 object-cover rounded-lg"
+              />
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-gold-deep font-semibold">{product.weave}</span>
-                <h4 className="font-serif text-base text-maroon font-medium line-clamp-1">{product.name}</h4>
+                <span className="text-[10px] uppercase tracking-widest text-gold-deep font-semibold">
+                  {product.weave}
+                </span>
+                <h4 className="font-serif text-base text-maroon font-medium line-clamp-1">
+                  {product.name}
+                </h4>
                 <p className="text-base font-sans font-bold text-ink">{product.price}</p>
               </div>
             </div>
@@ -136,15 +148,26 @@ export function BlouseCustomizationModal({
             {stitchingType === "standard" && (
               <div className="space-y-4 rounded-2xl bg-white p-4 border border-gold/40">
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-taupe font-semibold mb-2">Bust Size</label>
+                  <label className="block text-xs uppercase tracking-wider text-taupe font-semibold mb-2">
+                    Bust Size
+                  </label>
                   <div className="flex flex-wrap gap-2">
-                    {["XS (34 in)", "S (36 in)", "M (38 in)", "L (40 in)", "XL (42 in)", "2XL (44 in)"].map((s) => (
+                    {[
+                      "XS (34 in)",
+                      "S (36 in)",
+                      "M (38 in)",
+                      "L (40 in)",
+                      "XL (42 in)",
+                      "2XL (44 in)",
+                    ].map((s) => (
                       <button
                         key={s}
                         type="button"
                         onClick={() => setSize(s)}
                         className={`px-3 py-1.5 rounded-lg text-xs border transition-colors ${
-                          size === s ? "border-maroon bg-maroon text-ivory font-semibold" : "border-gold/30 text-ink hover:border-maroon"
+                          size === s
+                            ? "border-maroon bg-maroon text-ivory font-semibold"
+                            : "border-gold/30 text-ink hover:border-maroon"
                         }`}
                       >
                         {s}
@@ -154,15 +177,25 @@ export function BlouseCustomizationModal({
                 </div>
 
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-taupe font-semibold mb-2">Neckline Cut</label>
+                  <label className="block text-xs uppercase tracking-wider text-taupe font-semibold mb-2">
+                    Neckline Cut
+                  </label>
                   <div className="flex flex-wrap gap-2">
-                    {["Sweetheart Neck", "Deep V-Neck", "Boat Neck", "Square Neck", "Royal High Neck"].map((n) => (
+                    {[
+                      "Sweetheart Neck",
+                      "Deep V-Neck",
+                      "Boat Neck",
+                      "Square Neck",
+                      "Royal High Neck",
+                    ].map((n) => (
                       <button
                         key={n}
                         type="button"
                         onClick={() => setNeckline(n)}
                         className={`px-3 py-1.5 rounded-lg text-xs border transition-colors ${
-                          neckline === n ? "border-maroon bg-maroon text-ivory font-semibold" : "border-gold/30 text-ink hover:border-maroon"
+                          neckline === n
+                            ? "border-maroon bg-maroon text-ivory font-semibold"
+                            : "border-gold/30 text-ink hover:border-maroon"
                         }`}
                       >
                         {n}
@@ -176,10 +209,15 @@ export function BlouseCustomizationModal({
             {/* Custom Measurement Inputs */}
             {stitchingType === "custom" && (
               <div className="space-y-4 rounded-2xl bg-white p-4 border border-gold/40">
-                <p className="text-xs text-taupe">Provide your measurements in inches. Our boutique master tailor will craft your perfect silhouette.</p>
+                <p className="text-xs text-taupe">
+                  Provide your measurements in inches. Our boutique master tailor will craft your
+                  perfect silhouette.
+                </p>
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-[10px] uppercase font-semibold text-taupe">Bust (in)</label>
+                    <label className="block text-[10px] uppercase font-semibold text-taupe">
+                      Bust (in)
+                    </label>
                     <input
                       type="number"
                       value={bust}
@@ -188,7 +226,9 @@ export function BlouseCustomizationModal({
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-semibold text-taupe">Waist (in)</label>
+                    <label className="block text-[10px] uppercase font-semibold text-taupe">
+                      Waist (in)
+                    </label>
                     <input
                       type="number"
                       value={waist}
@@ -197,7 +237,9 @@ export function BlouseCustomizationModal({
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase font-semibold text-taupe">Sleeve (in)</label>
+                    <label className="block text-[10px] uppercase font-semibold text-taupe">
+                      Sleeve (in)
+                    </label>
                     <input
                       type="number"
                       value={sleeveLength}
@@ -214,8 +256,12 @@ export function BlouseCustomizationModal({
               <div className="flex items-center gap-3">
                 <Sparkles className="h-5 w-5 text-gold-deep" />
                 <div>
-                  <p className="text-xs font-semibold text-maroon uppercase tracking-wider">Saree Fall & Picot Edging</p>
-                  <p className="text-[11px] text-taupe">Pre-stitched cotton fall hem and pico edge for ready-to-drape wear.</p>
+                  <p className="text-xs font-semibold text-maroon uppercase tracking-wider">
+                    Saree Fall & Picot Edging
+                  </p>
+                  <p className="text-[11px] text-taupe">
+                    Pre-stitched cotton fall hem and pico edge for ready-to-drape wear.
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -232,8 +278,12 @@ export function BlouseCustomizationModal({
             {/* Summary & Submit Button */}
             <div className="border-t border-gold/40 pt-4 flex items-center justify-between">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-taupe font-semibold block">Total Package Price</span>
-                <span className="font-serif text-2xl font-bold text-maroon">₹ {totalPrice.toLocaleString("en-IN")}</span>
+                <span className="text-[10px] uppercase tracking-widest text-taupe font-semibold block">
+                  Total Package Price
+                </span>
+                <span className="font-serif text-2xl font-bold text-maroon">
+                  ₹ {totalPrice.toLocaleString("en-IN")}
+                </span>
               </div>
 
               <button

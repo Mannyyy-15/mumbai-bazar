@@ -47,7 +47,8 @@ export function TrousseauBuilder() {
             Build Your 3-Piece Trousseau Box
           </h2>
           <p className="mt-3 text-sm md:text-base text-maroon/80 leading-relaxed">
-            Select 3 sarees for your wedding functions to receive our complimentary gold-embossed Velvet Trousseau Chest + 15% bundle savings.
+            Select 3 sarees for your wedding functions to receive our complimentary gold-embossed
+            Velvet Trousseau Chest + 15% bundle savings.
           </p>
         </div>
 
@@ -61,7 +62,9 @@ export function TrousseauBuilder() {
                   <div
                     key={idx}
                     className={`h-12 w-10 rounded-lg border-2 overflow-hidden flex items-center justify-center ${
-                      item ? "border-maroon bg-white" : "border-dashed border-gold/50 bg-beige/30 text-gold-deep"
+                      item
+                        ? "border-maroon bg-white"
+                        : "border-dashed border-gold/50 bg-beige/30 text-gold-deep"
                     }`}
                   >
                     {item ? (
@@ -78,15 +81,21 @@ export function TrousseauBuilder() {
                 {selected.length} of 3 Sarees Selected
               </p>
               <p className="text-[11px] text-taupe">
-                {selected.length === 3 ? "Trousseau unlocked! 15% discount applied." : `Add ${3 - selected.length} more pieces.`}
+                {selected.length === 3
+                  ? "Trousseau unlocked! 15% discount applied."
+                  : `Add ${3 - selected.length} more pieces.`}
               </p>
             </div>
           </div>
 
           {selected.length === 3 && (
             <div className="text-right">
-              <span className="text-[10px] uppercase tracking-widest text-taupe block line-through">₹ {rawTotal.toLocaleString("en-IN")}</span>
-              <span className="font-serif text-xl font-bold text-maroon">₹ {finalTotal.toLocaleString("en-IN")}</span>
+              <span className="text-[10px] uppercase tracking-widest text-taupe block line-through">
+                ₹ {rawTotal.toLocaleString("en-IN")}
+              </span>
+              <span className="font-serif text-xl font-bold text-maroon">
+                ₹ {finalTotal.toLocaleString("en-IN")}
+              </span>
             </div>
           )}
         </div>
@@ -106,7 +115,11 @@ export function TrousseauBuilder() {
                 }`}
               >
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
-                  <img src={p.img} alt={p.name} className="h-full w-full object-cover transition-transform group-hover:scale-105" />
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                  />
                   {isSelected && (
                     <div className="absolute inset-0 bg-maroon/20 backdrop-blur-[1px] flex items-center justify-center">
                       <span className="h-10 w-10 rounded-full bg-maroon text-ivory flex items-center justify-center shadow-lg">
@@ -117,7 +130,9 @@ export function TrousseauBuilder() {
                 </div>
 
                 <div className="p-3">
-                  <span className="text-[9px] uppercase tracking-widest text-gold-deep font-semibold block">{p.weave}</span>
+                  <span className="text-[9px] uppercase tracking-widest text-gold-deep font-semibold block">
+                    {p.weave}
+                  </span>
                   <h4 className="font-serif text-sm text-maroon font-medium truncate">{p.name}</h4>
                   <p className="font-sans text-base text-ink font-bold mt-1">{p.price}</p>
                 </div>

@@ -19,7 +19,9 @@ export function PageHero({
       <div className="mx-auto grid max-w-[1360px] grid-cols-1 items-stretch gap-0 px-0 md:grid-cols-12 md:gap-10 md:px-8 md:py-16">
         <div className="order-2 flex flex-col justify-center px-4 py-10 md:order-1 md:col-span-5 md:px-0 md:py-0">
           <nav className="mb-6 text-[11px] tracking-[0.22em] uppercase text-taupe">
-            <Link to="/" className="hover:text-maroon">Home</Link>
+            <Link to="/" className="hover:text-maroon">
+              Home
+            </Link>
             <span className="mx-2 text-gold">/</span>
             <span className="text-ink">{crumb}</span>
           </nav>

@@ -2,7 +2,10 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { PRODUCTS, type Product } from "./site-data";
 import { fetchShopifyProducts, shopifyConfigured } from "./shopify";
 
-const CatalogContext = createContext<{ products: Product[]; loading: boolean }>({ products: PRODUCTS, loading: false });
+const CatalogContext = createContext<{ products: Product[]; loading: boolean }>({
+  products: PRODUCTS,
+  loading: false,
+});
 
 export function CatalogProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>(PRODUCTS);
@@ -11,7 +14,13 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!shopifyConfigured) return;
     fetchShopifyProducts(50)
-      .then((remote) => { if (remote.length) setProducts(remote); })
+      .then((remote) => {
+        if (remote.length) {
+          const remoteIds = new Set(remote.map((r) => r.handle || r.id));
+          const nonCollidingDefaults = PRODUCTS.filter((p) => !remoteIds.has(p.id));
+          setProducts([...remote, ...nonCollidingDefaults]);
+        }
+      })
       .catch(() => undefined)
       .finally(() => setLoading(false));
   }, []);

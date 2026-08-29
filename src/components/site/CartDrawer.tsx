@@ -1,10 +1,18 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { X, Minus, Plus, Trash2, ShoppingBag, MessageCircle, ShieldCheck, Truck } from "lucide-react";
+import {
+  X,
+  Minus,
+  Plus,
+  Trash2,
+  ShoppingBag,
+  MessageCircle,
+  ShieldCheck,
+  Truck,
+} from "lucide-react";
 import { useCart, formatINR, type CartItem } from "@/lib/cart-context";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { useCountUp } from "@/hooks/use-count-up";
-
 
 const WHATSAPP_NUMBER = "919999999999";
 
@@ -15,7 +23,7 @@ export function CartDrawer() {
   const waMsg = encodeURIComponent(
     `Hello Mumbai Bazar, I'd like to place an order:\n\n${items
       .map((i) => `• ${i.name} × ${i.qty} — ${i.priceLabel}`)
-      .join("\n")}\n\nSubtotal: ${formatINR(subtotal)}`
+      .join("\n")}\n\nSubtotal: ${formatINR(subtotal)}`,
   );
   const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMsg}`;
 
@@ -44,7 +52,6 @@ export function CartDrawer() {
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gold/50 px-5 py-4">
           <div className="flex items-center gap-2">
@@ -76,11 +83,7 @@ export function CartDrawer() {
             <p className="mt-2 max-w-xs text-sm text-taupe">
               Discover heirloom weaves and festive edits curated for you.
             </p>
-            <Link
-              to="/new-arrivals"
-              onClick={closeCart}
-              className="btn-primary mt-6 inline-flex"
-            >
+            <Link to="/new-arrivals" onClick={closeCart} className="btn-primary mt-6 inline-flex">
               Shop New Arrivals
             </Link>
             <Link
@@ -112,14 +115,19 @@ export function CartDrawer() {
                 Shipping & taxes calculated at checkout.
               </p>
 
-
               <div className="mt-4 grid gap-2">
                 {checkoutUrl ? (
-                  <a href={checkoutUrl} className="btn-primary inline-flex w-full items-center justify-center gap-2">
+                  <a
+                    href={checkoutUrl}
+                    className="btn-primary inline-flex w-full items-center justify-center gap-2"
+                  >
                     Proceed to Checkout
                   </a>
                 ) : (
-                  <button disabled className="btn-primary inline-flex w-full items-center justify-center gap-2 opacity-50">
+                  <button
+                    disabled
+                    className="btn-primary inline-flex w-full items-center justify-center gap-2 opacity-50"
+                  >
                     Preparing Checkout
                   </button>
                 )}
@@ -135,8 +143,12 @@ export function CartDrawer() {
               </div>
 
               <div className="mt-4 flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-taupe">
-                <span className="inline-flex items-center gap-1.5"><Truck className="h-3.5 w-3.5" /> Free Shipping</span>
-                <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5" /> Authentic</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Truck className="h-3.5 w-3.5" /> Free Shipping
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck className="h-3.5 w-3.5" /> Authentic
+                </span>
               </div>
             </div>
           </>
@@ -186,13 +198,15 @@ function CartRow({
   };
 
   // Flush on unmount so pending edits don't get lost
-  useEffect(() => () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      if (qty !== item.qty) onChange(qty);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useEffect(
+    () => () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        if (qty !== item.qty) onChange(qty);
+      }
+    },
+    [],
+  );
 
   const lineTotal = useCountUp(item.price * qty, 300);
 
@@ -241,10 +255,7 @@ function CartRow({
             >
               <Minus className="h-3.5 w-3.5" />
             </button>
-            <span
-              key={qty}
-              className="inline-block w-8 text-center text-sm animate-scale-in"
-            >
+            <span key={qty} className="inline-block w-8 text-center text-sm animate-scale-in">
               {qty}
             </span>
             <button

@@ -92,7 +92,11 @@ function ShopPage() {
 
   const toggle = <T,>(setter: (v: Set<T>) => void, set: Set<T>, v: T) => {
     const n = new Set(set);
-    n.has(v) ? n.delete(v) : n.add(v);
+    if (n.has(v)) {
+      n.delete(v);
+    } else {
+      n.add(v);
+    }
     setter(n);
   };
 

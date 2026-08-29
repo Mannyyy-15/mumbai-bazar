@@ -25,6 +25,7 @@ import { WishlistProvider } from "@/lib/wishlist-context";
 import { WishlistDrawer } from "@/components/site/WishlistDrawer";
 import { PageTransition } from "@/components/site/PageTransition";
 import { ScrollReveal } from "@/components/site/ScrollReveal";
+import { MobileBottomNav } from "@/components/site/MobileBottomNav";
 
 function NotFoundComponent() {
   return (
@@ -156,6 +157,8 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en-IN">
       <head>
+        {/* Verification tags come from SITE.verification via verificationMeta();
+            a hardcoded tag here would render a second, duplicate copy. */}
         <HeadContent />
       </head>
       <body>
@@ -176,7 +179,7 @@ function RootComponent() {
           <WishlistProvider>
             <SmoothScroll />
             <ScrollReveal />
-            <div id="main-content" className="flex min-h-screen flex-col bg-ivory">
+            <div id="main-content" className="flex min-h-screen flex-col bg-ivory pb-14 lg:pb-0">
               <AnnouncementBar />
               <Header />
               <main className="flex-1">
@@ -188,6 +191,7 @@ function RootComponent() {
               <SareeExpertChatbot />
               <CartDrawer />
               <WishlistDrawer />
+              <MobileBottomNav />
             </div>
           </WishlistProvider>
         </CatalogProvider>

@@ -11,9 +11,9 @@ export function Motif({ className = "" }: { className?: string }) {
   );
 }
 
-export function GoldRule() {
+export function GoldRule({ className = "" }: { className?: string }) {
   return (
-    <div className="flex items-center justify-center gap-3 text-gold">
+    <div className={`flex items-center justify-center gap-3 text-gold ${className}`}>
       <span className="h-px w-10 bg-gold/60" />
       <Motif className="h-3 w-3" />
       <span className="h-px w-10 bg-gold/60" />

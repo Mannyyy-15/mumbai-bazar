@@ -31,15 +31,13 @@ export function useFocusTrap<T extends HTMLElement>(active: boolean) {
     previouslyFocused.current = document.activeElement as HTMLElement | null;
 
     const getFocusable = (): HTMLElement[] => {
-      const nodes = Array.from(
-        container.querySelectorAll<HTMLElement>(FOCUSABLE)
-      );
+      const nodes = Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE));
       return nodes.filter(
         (el) =>
           !el.hasAttribute("disabled") &&
           el.getAttribute("aria-hidden") !== "true" &&
           // must be visible / focusable
-          (el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement)
+          (el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement),
       );
     };
 

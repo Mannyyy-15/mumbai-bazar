@@ -24,7 +24,8 @@ const REGIONS: Region[] = [
     zariDetail: "Real Tested Gold & Silver Zari",
     description:
       "Crafted along the ancient banks of the Ganges, Banarasi sarees feature intricate brocade weaving, floral jaals, and Mughal-inspired motifs woven by master Muslim and Hindu weavers passed down through 5 generations.",
-    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: "kanchipuram",
@@ -36,7 +37,8 @@ const REGIONS: Region[] = [
     zariDetail: "Pure Silver Threaded Gold Zari",
     description:
       "Renowned as the Temple Town Weave, Kanjivaram sarees use three ply silk yarn twisted with silver zari. The body and border are woven separately and interlocking in a seamless 'Korvai' joint that lasts for generations.",
-    image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: "paithan",
@@ -48,7 +50,8 @@ const REGIONS: Region[] = [
     zariDetail: "Solid Gold Thread Borders",
     description:
       "Famous for its peacock (Mor) and lotus motifs, Paithani sarees feature hand-tapestry weaves where identical patterns appear on both front and back without any floats.",
-    image: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&q=80&w=800",
   },
   {
     id: "chanderi",
@@ -60,7 +63,8 @@ const REGIONS: Region[] = [
     zariDetail: "Antique Gold Thread",
     description:
       "Favored by Scindia royalty, Chanderi sarees are celebrated for their shimmering sheer texture, featherlight weight, and delicate coin (Ashrafi) motifs.",
-    image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800",
+    image:
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800",
   },
 ];
 
@@ -78,7 +82,8 @@ export function WeavesOfIndiaMap() {
             Craftsmanship & Weaves of India
           </h2>
           <p className="mt-3 text-sm md:text-base text-taupe leading-relaxed">
-            Every thread in Mumbai Bazar originates from India's most prestigious handloom clusters. Select a cluster below to explore its weaving heritage.
+            Every thread in Mumbai Bazar originates from India's most prestigious handloom clusters.
+            Select a cluster below to explore its weaving heritage.
           </p>
         </div>
 
@@ -133,21 +138,27 @@ export function WeavesOfIndiaMap() {
                 <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-taupe">
                   <Clock className="h-3 w-3 text-gold-deep" /> Weave Time
                 </span>
-                <p className="font-serif text-base text-maroon font-semibold">{activeRegion.hoursToWeave}</p>
+                <p className="font-serif text-base text-maroon font-semibold">
+                  {activeRegion.hoursToWeave}
+                </p>
               </div>
 
               <div className="space-y-1">
                 <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-taupe">
                   <Award className="h-3 w-3 text-gold-deep" /> Silk Purity
                 </span>
-                <p className="font-serif text-base text-maroon font-semibold">{activeRegion.silkGrade}</p>
+                <p className="font-serif text-base text-maroon font-semibold">
+                  {activeRegion.silkGrade}
+                </p>
               </div>
 
               <div className="space-y-1">
                 <span className="flex items-center gap-1.5 text-[10px] uppercase font-bold text-taupe">
                   <Sparkles className="h-3 w-3 text-gold-deep" /> Zari Purity
                 </span>
-                <p className="font-serif text-base text-maroon font-semibold">{activeRegion.zariDetail}</p>
+                <p className="font-serif text-base text-maroon font-semibold">
+                  {activeRegion.zariDetail}
+                </p>
               </div>
             </div>
           </div>

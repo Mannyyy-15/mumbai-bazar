@@ -1,5 +1,16 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageSquare, X, Send, Sparkles, ShoppingBag, ArrowRight, ShieldCheck, Heart, RefreshCw, MessageCircle } from "lucide-react";
+import {
+  MessageSquare,
+  X,
+  Send,
+  Sparkles,
+  ShoppingBag,
+  ArrowRight,
+  ShieldCheck,
+  Heart,
+  RefreshCw,
+  MessageCircle,
+} from "lucide-react";
 import { PRODUCTS, type Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { Link } from "@tanstack/react-router";
@@ -69,34 +80,63 @@ export function SareeExpertChatbot() {
     }, 900);
   };
 
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener("mb:open-chatbot", handleOpen);
+    return () => window.removeEventListener("mb:open-chatbot", handleOpen);
+  }, []);
+
   const generateResponse = (userText: string) => {
     const lower = userText.toLowerCase();
     let replyText = "";
     let matchedProducts: Product[] = [];
     let quickReplies: string[] = [];
 
-    if (lower.includes("wedding") || lower.includes("bridal") || lower.includes("trousseau") || lower.includes("reception")) {
-      replyText = "For wedding functions and grand bridal trousseaus, I strongly recommend our pure gold zari Kanjivarams and royal Banarasi brocades. Here are our top handwoven bridal drapes:";
+    if (
+      lower.includes("wedding") ||
+      lower.includes("bridal") ||
+      lower.includes("trousseau") ||
+      lower.includes("reception")
+    ) {
+      replyText =
+        "For wedding functions and grand bridal trousseaus, I strongly recommend our pure gold zari Kanjivarams and royal Banarasi brocades. Here are our top handwoven bridal drapes:";
       matchedProducts = PRODUCTS.filter((p) => p.category.includes("wedding-sarees")).slice(0, 3);
       quickReplies = ["Custom Blouse Options", "Book Video Call Consultation", "Other Weaves"];
-    } else if (lower.includes("everyday") || lower.includes("office") || lower.includes("soft") || lower.includes("daily")) {
-      replyText = "For effortless daily wear and long office hours, our lightweight soft silks and tissue drapes offer zero-fatigue comfort with elegant sheen:";
+    } else if (
+      lower.includes("everyday") ||
+      lower.includes("office") ||
+      lower.includes("soft") ||
+      lower.includes("daily") ||
+      lower.includes("ready")
+    ) {
+      replyText =
+        "For effortless daily wear and 1-minute dressing, our pre-pleated ready-to-wear drapes and lightweight soft silks offer zero-fatigue elegance:";
       matchedProducts = PRODUCTS.filter((p) => p.category.includes("everyday-sarees")).slice(0, 3);
-      quickReplies = ["Care Instructions", "Festive Sarees", "Silk Mark Info"];
-    } else if (lower.includes("silk mark") || lower.includes("pure") || lower.includes("quality") || lower.includes("verify")) {
-      replyText = "Every silk saree at Mumbai Bazar carries the official Silk Mark certification tag. Each piece is independently laboratory-tested for 100% pure mulberry silk and authentic zari content!";
+      quickReplies = ["1-Minute Sarees", "Festive Sarees", "Silk Mark Info"];
+    } else if (
+      lower.includes("silk mark") ||
+      lower.includes("pure") ||
+      lower.includes("quality") ||
+      lower.includes("verify")
+    ) {
+      replyText =
+        "Every silk saree at Mumbai Bazar carries the official Silk Mark certification tag. Each piece is independently laboratory-tested for 100% pure mulberry silk and authentic zari content!";
       quickReplies = ["Browse Pure Silks", "Care Guide", "Speak to Stylist"];
-    } else if (lower.includes("blouse") || lower.includes("stitching") || lower.includes("fall")) {
-      replyText = "All our sarees come with a coordinating unstitched blouse piece (0.80m–0.90m). Fall and pico edging are complimentary! For custom blouse tailoring, our stylists record your exact measurements via WhatsApp.";
-      quickReplies = ["Bridal Sarees", "WhatsApp Concierge", "Main Boutique"];
-    } else if (lower.includes("festive") || lower.includes("puja") || lower.includes("diwali") || lower.includes("party")) {
-      replyText = "For grand pujas and evening celebrations, vibrant jewel-toned Banarasis and metallic tissue silks create an enchanting presence:";
+    } else if (
+      lower.includes("festive") ||
+      lower.includes("puja") ||
+      lower.includes("diwali") ||
+      lower.includes("party")
+    ) {
+      replyText =
+        "For grand pujas and evening celebrations, vibrant jewel-toned Banarasis and metallic tissue silks create an enchanting presence:";
       matchedProducts = PRODUCTS.filter((p) => p.category.includes("festive-edit")).slice(0, 3);
       quickReplies = ["Wedding Sarees", "Care Guide"];
     } else {
-      replyText = `Thank you for asking! I've curated a few of our most loved handwoven pieces for you. Is there a specific occasion, color, or weave region you have in mind?`;
+      replyText =
+        "Thank you for asking! I've curated a few of our most loved handwoven pieces for you. Is there a specific occasion, color, or weave region you have in mind?";
       matchedProducts = PRODUCTS.slice(0, 2);
-      quickReplies = ["Wedding Sarees", "Everyday Soft Silks", "Speak to Live Stylist"];
+      quickReplies = ["Wedding Sarees", "1-Minute Sarees", "Speak to Live Stylist"];
     }
 
     const botMsg: Message = {
@@ -123,12 +163,14 @@ export function SareeExpertChatbot() {
     openCart();
   };
 
-  const waMsg = encodeURIComponent("Hello Mumbai Bazar Concierge, I am chatting with Aisha on your website and would like live stylist assistance.");
+  const waMsg = encodeURIComponent(
+    "Hi Aisha! I was chatting with you on Mumbai Bazar and would like to speak to a senior stylist.",
+  );
 
   return (
     <>
-      {/* Floating Chat Trigger Button */}
-      <div className="fixed bottom-5 right-5 z-40">
+      {/* Floating Chat Trigger Button (hidden on mobile to favor the bottom nav Stylist button) */}
+      <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 hidden sm:block">
         <button
           onClick={() => setIsOpen((prev) => !prev)}
           className="group relative flex items-center gap-3 border border-gold/60 bg-maroon px-4 py-3 text-ivory shadow-[0_10px_25px_-5px_rgba(66,23,30,0.4)] transition-all duration-300 hover:bg-wine hover:scale-105"
@@ -141,7 +183,9 @@ export function SareeExpertChatbot() {
           </div>
 
           <div className="text-left">
-            <span className="block text-[10px] font-semibold uppercase tracking-wider text-gold">Saree Stylist AI</span>
+            <span className="block text-[10px] font-semibold uppercase tracking-wider text-gold">
+              Saree Stylist AI
+            </span>
             <span className="block font-serif text-xs">Chat with Aisha</span>
           </div>
 
@@ -155,7 +199,7 @@ export function SareeExpertChatbot() {
 
       {/* Floating Chat Window Drawer */}
       {isOpen && (
-        <div className="fixed bottom-4 right-4 sm:bottom-24 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[400px] h-[580px] max-h-[85vh] border border-gold/60 bg-ivory shadow-[0_25px_60px_-15px_rgba(66,23,30,0.35)] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed inset-x-2 bottom-20 sm:bottom-24 sm:right-6 sm:left-auto sm:w-[400px] z-50 h-[560px] max-h-[82vh] border border-gold/60 bg-ivory shadow-[0_25px_60px_-15px_rgba(66,23,30,0.35)] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
           {/* Chat Header */}
           <div className="border-b border-gold/40 bg-wine px-5 py-4 text-ivory flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -208,11 +252,21 @@ export function SareeExpertChatbot() {
                           key={p.id}
                           className="flex items-center gap-3 border border-gold/40 bg-beige/30 p-2 text-left"
                         >
-                          <img src={p.img} alt={p.name} className="h-14 w-12 object-cover border border-gold/40 shrink-0" />
+                          <img
+                            src={p.img}
+                            alt={p.name}
+                            className="h-14 w-12 object-cover border border-gold/40 shrink-0"
+                          />
                           <div className="flex-1 min-w-0">
-                            <span className="text-[9px] uppercase tracking-widest text-gold-deep block truncate">{p.weave}</span>
-                            <h4 className="font-serif text-xs text-ink font-medium truncate">{p.name}</h4>
-                            <span className="text-xs font-semibold text-maroon block mt-0.5">{p.price}</span>
+                            <span className="text-[9px] uppercase tracking-widest text-gold-deep block truncate">
+                              {p.weave}
+                            </span>
+                            <h4 className="font-serif text-xs text-ink font-medium truncate">
+                              {p.name}
+                            </h4>
+                            <span className="text-xs font-semibold text-maroon block mt-0.5">
+                              {p.price}
+                            </span>
                           </div>
                           <button
                             onClick={() => handleAddToCart(p)}
@@ -226,7 +280,9 @@ export function SareeExpertChatbot() {
                     </div>
                   )}
 
-                  <span className={`block text-[9px] mt-1.5 ${m.sender === "user" ? "text-ivory/70" : "text-taupe"}`}>
+                  <span
+                    className={`block text-[9px] mt-1.5 ${m.sender === "user" ? "text-ivory/70" : "text-taupe"}`}
+                  >
                     {m.timestamp}
                   </span>
                 </div>

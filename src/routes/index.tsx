@@ -57,32 +57,6 @@ export const Route = createFileRoute("/")({
   },
 });
 
-/* ---------------- Sub-nav quick access ---------------- */
-const QUICK_LINKS: { label: string; to: string }[] = [
-  { label: "Banarasi", to: "/silk-sarees" },
-  { label: "Kanjivaram", to: "/silk-sarees" },
-  { label: "Bridal", to: "/wedding-sarees" },
-  { label: "Festive Edit", to: "/festive-edit" },
-  { label: "Pure Silks", to: "/silk-sarees" },
-  { label: "Everyday", to: "/everyday-sarees" },
-];
-
-function SubNav() {
-  return (
-    <div className="border-b border-maroon/40 bg-ivory">
-      <div className="mx-auto max-w-[1600px] no-scrollbar overflow-x-auto">
-        <div className="flex justify-start md:justify-center gap-5 md:gap-10 px-4 md:px-8 py-3 text-[10px] tracking-[0.22em] md:tracking-[0.25em] uppercase text-maroon/70 whitespace-nowrap">
-          {QUICK_LINKS.map((q) => (
-            <Link key={q.label} to={q.to} className="shrink-0 hover:text-maroon transition-colors">
-              {q.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ---------------- Hero Carousel ---------------- */
 type Slide = {
   eyebrow: string;
@@ -385,7 +359,17 @@ function ProductTile({ p }: { p: (typeof PRODUCTS)[number] }) {
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addItem(p);
+    // A Product is not a CartItem — price has to be parsed to a number and the
+    // display string kept separately, the same mapping ProductCard uses.
+    addItem({
+      id: p.id,
+      name: p.name,
+      price: parsePriceToNumber(p.price),
+      priceLabel: p.price,
+      image: p.img,
+      weave: p.weave,
+      shopifyVariantId: p.shopifyVariantId,
+    });
   };
 
   return (
@@ -1238,7 +1222,6 @@ function Newsletter() {
 function Home() {
   return (
     <div className="bg-ivory text-ink">
-      <SubNav />
       <HeroCarousel />
       <TrustBar />
       <ImmediateProductShelf />
