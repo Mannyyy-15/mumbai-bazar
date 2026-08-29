@@ -208,7 +208,7 @@ function HeroCarousel() {
                   fetchPriority={i === 0 ? "high" : "low"}
                   loading={i === 0 ? "eager" : "lazy"}
                   decoding="async"
-                  className={`h-full w-full object-cover transition-transform duration-[9000ms] ease-out ${
+                  className={`h-full w-full object-cover object-top transition-transform duration-[9000ms] ease-out ${
                     active ? "scale-105" : "scale-100"
                   }`}
                 />
@@ -755,10 +755,10 @@ function ShopByOccasion() {
             {/* Multi-stage dark gradient scrim */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 via-50% to-transparent opacity-85 transition-opacity duration-300 group-hover:opacity-100" />
             
-            <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 text-ivory flex flex-col justify-end">
-              <p className="text-[10px] tracking-[0.3em] uppercase text-gold font-medium drop-shadow-sm">{o.sub}</p>
-              <p className="font-serif text-3xl md:text-4xl mt-1 font-normal drop-shadow-md leading-tight">{o.label}</p>
-              <div className="mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+            <div className="absolute inset-x-0 bottom-0 p-3.5 sm:p-5 md:p-8 text-ivory flex flex-col justify-end">
+              <p className="text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-gold font-medium drop-shadow-sm">{o.sub}</p>
+              <p className="font-serif text-xl sm:text-2xl md:text-4xl mt-0.5 sm:mt-1 font-normal drop-shadow-md leading-tight">{o.label}</p>
+              <div className="hidden md:block mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ivory/20 backdrop-blur-md text-[10px] tracking-widest uppercase text-ivory border border-ivory/30">
                   Explore Collection →
                 </span>
@@ -780,7 +780,8 @@ function TrendingNow() {
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const firstCard = scrollRef.current.querySelector("a");
-      const cardWidth = firstCard ? firstCard.clientWidth + 24 : 320;
+      const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
+      const cardWidth = firstCard ? firstCard.clientWidth + gap : 320;
       const amount = direction === "left" ? -cardWidth : cardWidth;
       scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
     }
@@ -823,7 +824,7 @@ function TrendingNow() {
 
         <div
           ref={scrollRef}
-          className="flex gap-4 md:gap-6 overflow-x-auto pb-6 -mx-4 md:-mx-8 px-4 md:px-8 snap-x snap-mandatory scrollbar-hide scroll-smooth"
+          className="flex gap-4 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide scroll-smooth"
           style={{ touchAction: "pan-x" }}
         >
           {items.map((p, i) => (
@@ -831,7 +832,7 @@ function TrendingNow() {
               key={p.id}
               to="/products/$id"
               params={{ id: p.id }}
-              className="group snap-start shrink-0 w-[78%] sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)] flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+              className="group snap-center sm:snap-start shrink-0 w-full sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)] flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
                 <div className="absolute top-3 left-3 z-10 h-7 w-7 rounded-full flex items-center justify-center bg-maroon text-ivory text-[10px] font-bold shadow-md border border-gold/40">

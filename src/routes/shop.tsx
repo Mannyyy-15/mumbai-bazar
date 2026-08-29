@@ -220,7 +220,7 @@ function ShopPage() {
                     <button onClick={clearAll} className="mt-6 px-8 py-3.5 rounded-full bg-maroon text-ivory text-[11px] tracking-[0.25em] uppercase hover:bg-wine transition-all shadow-md">Clear Filters</button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
+                  <div className="grid grid-cols-2 gap-3.5 sm:gap-6 md:grid-cols-3 xl:grid-cols-4 lg:gap-8">
                     {filtered.map((p) => <ProductCard key={p.id} p={p} />)}
                   </div>
                 )}
