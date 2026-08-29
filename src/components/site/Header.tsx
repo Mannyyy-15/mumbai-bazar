@@ -422,92 +422,94 @@ export function Header() {
             return (
               <div
                 key={cat.label}
-                className="relative py-1"
+                className="group relative py-1"
                 onMouseEnter={() => handleMouseEnter(cat.label)}
                 onMouseLeave={handleMouseLeave}
               >
                 <Link
                   to={cat.to}
-                  className={`inline-flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.16em] transition-colors ${
-                    isCurrentPage ? "text-maroon font-bold" : "text-ink/75 hover:text-maroon"
+                  className={`inline-flex items-center gap-2 whitespace-nowrap text-xs font-semibold uppercase tracking-[0.16em] transition-colors py-1.5 ${
+                    isCurrentPage ? "text-maroon font-bold" : "text-ink/80 group-hover:text-maroon hover:text-maroon"
                   }`}
                 >
                   <span>{cat.label}</span>
                   {cat.badge && (
-                    <span className="rounded-full bg-maroon/90 px-1.5 py-0.5 text-[8px] font-bold tracking-wider text-ivory">
+                    <span className="rounded-full bg-maroon px-2 py-0.5 text-[8.5px] font-bold tracking-wider text-ivory">
                       {cat.badge}
                     </span>
                   )}
                   <ChevronDown
-                    className={`h-3 w-3 text-taupe/70 transition-transform duration-200 ${
+                    className={`h-3.5 w-3.5 text-taupe/80 transition-transform duration-200 group-hover:rotate-180 group-hover:text-maroon ${
                       isDropdownOpen ? "rotate-180 text-maroon" : ""
                     }`}
                   />
                 </Link>
 
-                {/* Mega Dropdown Menu */}
-                {isDropdownOpen && (
-                  <div
-                    className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50 w-[620px] transition-all duration-200"
-                    onMouseEnter={() => handleMouseEnter(cat.label)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <div className="rounded-2xl border border-gold/45 bg-ivory/95 p-6 shadow-2xl backdrop-blur-xl">
-                      <div className="grid grid-cols-3 gap-6">
-                        {/* Subcategory Columns */}
-                        {cat.groups.map((group) => (
-                          <div key={group.title} className="space-y-3">
-                            <h4 className="border-b border-gold/30 pb-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-maroon">
-                              {group.title}
-                            </h4>
-                            <ul className="space-y-2">
-                              {group.items.map((sub) => (
-                                <li key={sub.label}>
-                                  <Link
-                                    to={sub.to}
-                                    className="group/item flex items-center justify-between text-xs text-ink/80 transition-colors hover:text-maroon"
-                                  >
-                                    <span className="group-hover/item:translate-x-0.5 transition-transform duration-150">
-                                      {sub.label}
+                {/* Mega Dropdown Menu (Wide 820px, large readable text, instant CSS group-hover & state) */}
+                <div
+                  className={`absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50 w-[820px] transition-all duration-200 ${
+                    isDropdownOpen
+                      ? "opacity-100 pointer-events-auto translate-y-0"
+                      : "opacity-0 pointer-events-none -translate-y-1 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0"
+                  }`}
+                  onMouseEnter={() => handleMouseEnter(cat.label)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <div className="rounded-2xl border border-gold/50 bg-ivory/98 p-7 shadow-[0_20px_50px_rgba(66,23,30,0.18)] backdrop-blur-2xl">
+                    <div className="grid grid-cols-3 gap-8">
+                      {/* Subcategory Columns */}
+                      {cat.groups.map((group) => (
+                        <div key={group.title} className="space-y-4">
+                          <h4 className="border-b border-gold/40 pb-2 text-xs font-bold uppercase tracking-[0.2em] text-maroon">
+                            {group.title}
+                          </h4>
+                          <ul className="space-y-2.5">
+                            {group.items.map((sub) => (
+                              <li key={sub.label}>
+                                <Link
+                                  to={sub.to}
+                                  className="group/item flex items-center justify-between text-sm font-medium text-ink/85 transition-colors hover:text-maroon hover:font-semibold"
+                                >
+                                  <span className="group-hover/item:translate-x-1 transition-transform duration-150">
+                                    {sub.label}
+                                  </span>
+                                  {sub.badge && (
+                                    <span className="rounded bg-gold/30 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-maroon">
+                                      {sub.badge}
                                     </span>
-                                    {sub.badge && (
-                                      <span className="rounded bg-gold/30 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-maroon">
-                                        {sub.badge}
-                                      </span>
-                                    )}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
+                                  )}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
 
-                        {/* Featured Spotlight Card */}
-                        {cat.featured && (
-                          <div className="rounded-xl border border-gold/30 bg-gradient-to-br from-beige/40 to-ivory p-4 flex flex-col justify-between shadow-sm">
-                            <div>
-                              <span className="inline-block rounded-full bg-maroon/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-maroon">
-                                {cat.featured.tag}
-                              </span>
-                              <h5 className="mt-2 font-serif text-sm font-bold text-ink leading-snug">
-                                {cat.featured.title}
-                              </h5>
-                              <p className="mt-1.5 text-[11px] text-taupe leading-relaxed">
-                                {cat.featured.desc}
-                              </p>
-                            </div>
-                            <Link
-                              to={cat.featured.to}
-                              className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-maroon hover:underline"
-                            >
-                              Explore Now <ChevronRight className="h-3 w-3" />
-                            </Link>
+                      {/* Featured Spotlight Card */}
+                      {cat.featured && (
+                        <div className="rounded-xl border border-gold/40 bg-gradient-to-br from-beige/50 via-ivory to-beige/30 p-5 flex flex-col justify-between shadow-sm">
+                          <div>
+                            <span className="inline-block rounded-full bg-maroon/10 border border-maroon/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-maroon">
+                              {cat.featured.tag}
+                            </span>
+                            <h5 className="mt-3 font-serif text-base font-bold text-ink leading-snug">
+                              {cat.featured.title}
+                            </h5>
+                            <p className="mt-2 text-xs text-taupe leading-relaxed">
+                              {cat.featured.desc}
+                            </p>
                           </div>
-                        )}
-                      </div>
+                          <Link
+                            to={cat.featured.to}
+                            className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-maroon hover:underline"
+                          >
+                            Explore Now <ChevronRight className="h-3.5 w-3.5" />
+                          </Link>
+                        </div>
+                      )}
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}
