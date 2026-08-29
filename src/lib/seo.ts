@@ -7,7 +7,7 @@
 
 export const SITE = {
   /** Production origin — no trailing slash. Update if the domain changes. */
-  url: "https://www.mumbaibazar.com",
+  url: "https://mumbaibazar.com",
   name: "Mumbai Bazar",
   legalName: "Mumbai Bazar",
   tagline: "Sarees, Lehengas & Bridal Wear",
