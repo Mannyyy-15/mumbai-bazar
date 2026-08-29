@@ -70,36 +70,38 @@ type Slide = {
 
 const SLIDES: Slide[] = [
   {
-    eyebrow: "The Heritage Edit",
-    title: "Handwoven",
-    italic: "Banarasi Silks",
-    copy: "Banarasi-style weaves and rich zari work, picked for wedding and festive wear.",
-    cta: { label: "Shop Heritage Silks", to: "/silk-sarees" },
-    secondary: { label: "Explore the Craft", to: "/our-story" },
-    img: IMG.heroSaree,
+    eyebrow: "Bridal & Trousseau 2026",
+    title: "The Royal",
+    italic: "Trousseau Edit",
+    copy: "Bridal and dulhan sarees, designer lehengas and tissue drapes for the bride and her celebrations.",
+    cta: { label: "Shop Bridal Sarees", to: "/wedding-sarees" },
+    secondary: { label: "View Collections", to: "/collections" },
+    img: "/hero/slide-1-horizontal.png",
+    imgMobile: "/hero/slide-1-vertical.png",
     align: "left",
     accent: "Volume I",
   },
   {
-    eyebrow: "Bridal Couture 2026",
-    title: "The Wedding",
-    italic: "Trousseau",
-    copy: "Kanjivaram, Paithani and Tissue silks — heirlooms for the most sacred day.",
-    cta: { label: "Shop Bridal", to: "/wedding-sarees" },
-    secondary: { label: "View Collections", to: "/collections" },
-    img: IMG.colWedding,
-    align: "right",
+    eyebrow: "Ancestral Master Weaves",
+    title: "Silk & Silk-Blend",
+    italic: "Silk Archive",
+    copy: "Banarasi, Kanjivaram and Paithani styles, in store across Nalasopara, Virar, Bhayandar and Goregaon.",
+    cta: { label: "Shop Heritage Silks", to: "/silk-sarees" },
+    secondary: { label: "Explore The Craft", to: "/our-story" },
+    img: "/hero/slide-2-horizontal.png",
+    imgMobile: "/hero/slide-2-vertical.png",
+    align: "left",
     accent: "Volume II",
   },
   {
-    eyebrow: "Festive Edit",
+    eyebrow: "Festive & Cocktail Edit",
     title: "Celebrate in",
-    italic: "Silk & Gold",
-    copy: "Festive drapes rich in tradition — spun for Diwali, Karwa Chauth and beyond.",
-    cta: { label: "Shop Festive", to: "/festive-edit" },
+    italic: "Pastels & Gold",
+    copy: "Featherlight organza, fluid tissue, and modern pastel silks spun for Sangeet, Diwali, and festive soirées.",
+    cta: { label: "Shop Festive Edit", to: "/festive-edit" },
     secondary: { label: "New Arrivals", to: "/new-arrivals" },
-
-    img: IMG.colFestive,
+    img: "/hero/slide-3-horizontal.png",
+    imgMobile: "/hero/slide-3-vertical.png",
     align: "left",
     accent: "Volume III",
   },
@@ -685,7 +687,9 @@ function Craftsmanship() {
               ✓
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-maroon">8 Stores</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-maroon">
+                100% Certified
+              </p>
               <p className="text-[10px] text-maroon/70 uppercase tracking-widest">
                 Across the Western Line
               </p>
@@ -697,7 +701,7 @@ function Craftsmanship() {
         <div className="order-1 md:order-2 max-w-xl">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold/40 bg-gold/10 text-[10px] tracking-[0.3em] uppercase text-gold font-medium mb-6">
             <Sparkles className="h-3 w-3" />
-            <span>Handwoven Heritage</span>
+            <span>Eight Stores Near You</span>
           </div>
 
           <h3 className="font-serif text-4xl md:text-6xl font-normal leading-tight mb-6">
@@ -725,7 +729,7 @@ function Craftsmanship() {
               </p>
             </div>
             <div className="border-l border-gold/50 pl-4">
-              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">8</p>
+              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">100%</p>
               <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">
                 Stores Near You
               </p>
@@ -758,7 +762,7 @@ function TrustBar() {
   const items = [
     { icon: Truck, title: "Complimentary Shipping", copy: "On all India orders above ₹5,000" },
     { icon: ShieldCheck, title: "See Before You Buy", copy: "Drape any piece in store first" },
-    { icon: Sparkles, title: "Handwoven with Care", copy: "Directly from master weavers" },
+    { icon: Sparkles, title: "Open Every Day", copy: "10 AM – 9 PM, all seven days" },
     { icon: ShoppingBag, title: "Easy 7-Day Returns", copy: "No-questions exchange policy" },
   ];
   return (
