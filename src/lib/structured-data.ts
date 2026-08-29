@@ -370,12 +370,17 @@ export function articleSchema(a: {
     dateModified: a.dateModified ?? a.datePublished,
     inLanguage: "en-IN",
     isPartOf: { "@id": WEBSITE_ID },
-    author: {
-      "@type": "Person",
-      name: a.authorName,
-      jobTitle: a.authorTitle,
-      worksFor: { "@id": ORG_ID },
-    },
+    // A house byline is an Organization; only a real, named individual should
+    // be marked up as a Person.
+    author:
+      a.authorName === SITE.name || a.authorName.includes("Team")
+        ? { "@type": "Organization", name: a.authorName, "@id": ORG_ID }
+        : {
+            "@type": "Person",
+            name: a.authorName,
+            jobTitle: a.authorTitle,
+            worksFor: { "@id": ORG_ID },
+          },
     publisher: { "@id": ORG_ID },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     ...(a.wordCount ? { wordCount: a.wordCount } : {}),

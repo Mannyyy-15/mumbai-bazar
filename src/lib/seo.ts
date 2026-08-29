@@ -79,7 +79,7 @@ export const SITE = {
    * Yandex, Naver and Seznam (Google does not consume IndexNow). Generate any
    * 8-128 char hex string; it is served at /<key>.txt to prove ownership.
    */
-  indexNowKey: "",
+  indexNowKey: "46822c85822579eec5647124e3f618e3",
   /** Agency credit — powers the About/Story backlink to the studio site. */
   agency: {
     name: "ThePieCraft Marketing",

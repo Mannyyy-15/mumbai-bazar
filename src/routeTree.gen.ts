@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IndexnowkeyDottxtRouteImport } from './routes/$indexnowkey[.]txt'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as CareGuideRouteImport } from './routes/care-guide'
 import { Route as CollectionsRouteImport } from './routes/collections'
@@ -37,6 +38,11 @@ import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexnowkeyDottxtRoute = IndexnowkeyDottxtRouteImport.update({
+  id: '/$indexnowkey.txt',
+  path: '/$indexnowkey.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -157,6 +163,7 @@ const StoresSlugRoute = StoresSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$indexnowkey.txt': typeof IndexnowkeyDottxtRoute
   '/about': typeof AboutRoute
   '/care-guide': typeof CareGuideRoute
   '/collections': typeof CollectionsRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$indexnowkey.txt': typeof IndexnowkeyDottxtRoute
   '/about': typeof AboutRoute
   '/care-guide': typeof CareGuideRoute
   '/collections': typeof CollectionsRoute
@@ -210,6 +218,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$indexnowkey.txt': typeof IndexnowkeyDottxtRoute
   '/about': typeof AboutRoute
   '/care-guide': typeof CareGuideRoute
   '/collections': typeof CollectionsRoute
@@ -238,6 +247,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$indexnowkey.txt'
     | '/about'
     | '/care-guide'
     | '/collections'
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$indexnowkey.txt'
     | '/about'
     | '/care-guide'
     | '/collections'
@@ -290,6 +301,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/$indexnowkey.txt'
     | '/about'
     | '/care-guide'
     | '/collections'
@@ -317,6 +329,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  IndexnowkeyDottxtRoute: typeof IndexnowkeyDottxtRoute
   AboutRoute: typeof AboutRoute
   CareGuideRoute: typeof CareGuideRoute
   CollectionsRoute: typeof CollectionsRoute
@@ -349,6 +362,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$indexnowkey.txt': {
+      id: '/$indexnowkey.txt'
+      path: '/$indexnowkey.txt'
+      fullPath: '/$indexnowkey.txt'
+      preLoaderRoute: typeof IndexnowkeyDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -517,6 +537,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  IndexnowkeyDottxtRoute: IndexnowkeyDottxtRoute,
   AboutRoute: AboutRoute,
   CareGuideRoute: CareGuideRoute,
   CollectionsRoute: CollectionsRoute,

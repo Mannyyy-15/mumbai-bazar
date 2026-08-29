@@ -53,9 +53,18 @@ export type Guide = {
   faqs: { q: string; a: string }[];
 };
 
+/**
+ * Guide byline.
+ *
+ * Attributed to the business, not an invented individual — a fabricated expert
+ * name in Article schema is an E-E-A-T risk if anyone checks. Replace `name`
+ * and `title` with a real member of staff whenever one is willing to be
+ * credited; a named person with stated experience is a materially stronger
+ * signal than a house byline.
+ */
 const AUTHOR_CURATOR = {
-  name: "Meera Kulkarni",
-  title: "Head of Curation, Mumbai Bazar",
+  name: "The Mumbai Bazar Team",
+  title: "Saree buyers, Mumbai Bazar",
 };
 
 export const GUIDES: Guide[] = [
