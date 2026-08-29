@@ -92,7 +92,7 @@ export function Header() {
       {/* Main navigation row */}
       <div
         className={`mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-4 transition-[padding] duration-300 ease-out md:px-8 lg:px-10 ${
-          scrolled ? "py-2.5" : "py-3.5"
+          scrolled ? "py-1.5" : "py-2 sm:py-2.5"
         }`}
       >
         {/* Left: primary links (desktop) */}
@@ -109,10 +109,10 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Mobile menu toggle + Logo area */}
-        <div className="flex items-center gap-3 lg:hidden">
+        {/* Mobile menu toggle */}
+        <div className="flex items-center gap-2 lg:hidden">
           <button
-            className="-ml-1 grid h-9 w-9 place-items-center text-ink transition-colors hover:text-maroon"
+            className="-ml-1 grid h-8 w-8 place-items-center text-ink transition-colors hover:text-maroon"
             aria-label="Open menu"
             aria-expanded={open}
             aria-controls="mobile-drawer"
@@ -122,20 +122,19 @@ export function Header() {
           </button>
         </div>
 
-        {/* Center: logo */}
+        {/* Center: logo (compact luxury sizing) */}
         <Link
           to="/"
-          aria-label="Mumbai Bazar â€” home"
-          className="group flex flex-col items-center justify-center"
+          aria-label="Mumbai Bazar — home"
+          className="group flex items-center justify-center py-0.5"
         >
-          <img src="/logo.png" alt="Mumbai Bazar Logo" className={`transition-all duration-300 ease-out object-contain ${scrolled ? "h-12 md:h-14" : "h-16 md:h-20 -my-2"}`} />
-          <span
-            className={`text-[9px] font-medium uppercase tracking-[0.35em] text-taupe/70 transition-all duration-300 group-hover:text-taupe ${
-              scrolled ? "mt-0.5 opacity-0 max-h-0" : "mt-2 opacity-100 max-h-4"
+          <img
+            src="/logo.png"
+            alt="Mumbai Bazar"
+            className={`transition-all duration-300 ease-out object-contain ${
+              scrolled ? "h-8 md:h-9" : "h-9 sm:h-10 md:h-11"
             }`}
-          >
-            Mumbai Bazar
-          </span>
+          />
         </Link>
 
         {/* Right: search + actions */}
@@ -225,9 +224,9 @@ export function Header() {
       </div>
 
       {/* Category row (desktop only) */}
-      <div className="hidden border-t border-gold/50 lg:block">
+      <div className="hidden border-t border-gold/40 lg:block">
         <nav
-          className="mx-auto flex max-w-[1400px] items-center justify-center gap-10 overflow-x-auto px-4 py-2.5"
+          className="mx-auto flex max-w-[1400px] items-center justify-center gap-10 overflow-x-auto px-4 py-1.5"
           aria-label="Categories"
         >
           {CATEGORY_ROW.map((item) => (
