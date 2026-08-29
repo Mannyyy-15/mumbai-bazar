@@ -58,6 +58,7 @@ export type ProductDetails = {
 export type Product = {
   id: string;
   img: string;
+  secondaryImg?: string;
   name: string;
   weave: string;
   price: string;

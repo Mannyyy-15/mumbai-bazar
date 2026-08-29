@@ -108,9 +108,28 @@ export function TrousseauBuilder() {
                 }`}
               >
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
-                  <img src={p.img} alt={p.name} className="h-full w-full object-cover transition-transform group-hover:scale-105" />
+                  {/* Primary Image */}
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    className={`h-full w-full object-cover transition-all duration-700 ease-out ${
+                      p.secondaryImg
+                        ? "group-hover:opacity-0 group-hover:scale-105"
+                        : "group-hover:scale-105"
+                    }`}
+                  />
+
+                  {/* Secondary Hover Image */}
+                  {p.secondaryImg && (
+                    <img
+                      src={p.secondaryImg}
+                      alt={`${p.name} alternate view`}
+                      className="absolute inset-0 h-full w-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+                    />
+                  )}
+
                   {isSelected && (
-                    <div className="absolute inset-0 bg-maroon/20 backdrop-blur-[1px] flex items-center justify-center">
+                    <div className="absolute inset-0 z-10 bg-maroon/20 backdrop-blur-[1px] flex items-center justify-center">
                       <span className="h-10 w-10 rounded-full bg-maroon text-ivory flex items-center justify-center shadow-lg">
                         <Check className="h-6 w-6" />
                       </span>

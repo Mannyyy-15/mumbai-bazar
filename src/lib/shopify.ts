@@ -63,12 +63,14 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
     ...(text.includes("everyday") ? ["everyday-sarees"] : []),
   ];
   const gallery = (node.images?.nodes ?? [image]).map((item) => item.url);
+  const secondaryImage = gallery.length > 1 ? gallery[1] : undefined;
   return {
     id: node.handle,
     handle: node.handle,
     shopifyProductId: node.id,
     shopifyVariantId: variant.id,
     img: image.url,
+    secondaryImg: secondaryImage,
     name: node.title,
     weave: node.productType || node.vendor || "Mumbai Bazar",
     price: formatShopifyPrice(node.priceRange.minVariantPrice.amount, node.priceRange.minVariantPrice.currencyCode),

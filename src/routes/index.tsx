@@ -357,6 +357,7 @@ function ProductTile({ p }: { p: Product }) {
           <Heart className={`h-4 w-4 ${isSaved ? "fill-ivory text-ivory" : ""}`} />
         </button>
 
+        {/* Primary Image */}
         <img
           src={p.img}
           alt={p.name}
@@ -364,8 +365,25 @@ function ProductTile({ p }: { p: Product }) {
           height={800}
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+          className={`w-full h-full object-cover transition-all duration-700 ease-out ${
+            p.secondaryImg
+              ? "group-hover:opacity-0 group-hover:scale-105"
+              : "group-hover:scale-108"
+          }`}
         />
+
+        {/* Secondary Hover Image */}
+        {p.secondaryImg && (
+          <img
+            src={p.secondaryImg}
+            alt={`${p.name} alternate view`}
+            width={600}
+            height={800}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+          />
+        )}
 
         <div className="absolute inset-x-3 bottom-3 z-10 opacity-100 md:opacity-0 translate-y-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
           <button
@@ -811,6 +829,7 @@ function TrendingNow() {
                 <div className="absolute top-3 left-3 z-10 h-7 w-7 rounded-full flex items-center justify-center bg-maroon text-ivory text-[10px] font-bold shadow-md border border-gold/40">
                   {i + 1}
                 </div>
+                {/* Primary Image */}
                 <img
                   src={p.img}
                   alt={p.name}
@@ -818,8 +837,25 @@ function TrendingNow() {
                   height={800}
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                  className={`w-full h-full object-cover transition-all duration-700 ease-out ${
+                    p.secondaryImg
+                      ? "group-hover:opacity-0 group-hover:scale-105"
+                      : "group-hover:scale-108"
+                  }`}
                 />
+
+                {/* Secondary Hover Image */}
+                {p.secondaryImg && (
+                  <img
+                    src={p.secondaryImg}
+                    alt={`${p.name} alternate view`}
+                    width={600}
+                    height={800}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+                  />
+                )}
               </div>
 
               <div className="p-3.5 md:p-4 flex flex-col space-y-1.5 text-left">
