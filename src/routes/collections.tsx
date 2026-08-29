@@ -1,18 +1,39 @@
 import { useState, useMemo } from "react";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { COLLECTIONS, type Product } from "@/lib/site-data";
 import { useCatalog } from "@/lib/catalog-context";
 import { Sparkles, MapPin, ChevronRight, Filter } from "lucide-react";
 
 export const Route = createFileRoute("/collections")({
-  head: () => ({
-    meta: [
-      { title: "Collections & Weaves — Mumbai Bazar" },
-      { name: "description", content: "Explore curated Mumbai Bazar saree collections — Banarasi, Kanjivaram, Pure Silk, Wedding and Festive edits." },
-      { property: "og:title", content: "Collections & Weaves — Mumbai Bazar" },
-      { property: "og:description", content: "Authentic loom clusters and heritage edits." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Saree Collections | Banarasi, Kanjivaram & Bridal — Mumbai Bazar",
+      description:
+        "Browse saree collections by style and occasion — Banarasi, Kanjivaram, party wear, bridal and festive edits, available across our 8 stores.",
+      path: "/collections",
+      keywords: [
+        "saree collections",
+        "banarasi collection",
+        "kanjivaram collection",
+        "bridal saree collection",
+        "festive saree",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Collections", path: "/collections" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: CollectionsPage,
 });
 
@@ -32,7 +53,10 @@ function CollectionsPage() {
       return COLLECTIONS.filter((c) => c.slug.includes("wedding") || c.slug.includes("kanjivaram"));
     }
     if (activeTab === "artisan") {
-      return COLLECTIONS.filter((c) => c.slug.includes("banarasi") || c.slug.includes("silk") || c.slug.includes("kanjivaram"));
+      return COLLECTIONS.filter(
+        (c) =>
+          c.slug.includes("banarasi") || c.slug.includes("silk") || c.slug.includes("kanjivaram"),
+      );
     }
     if (activeTab === "festive") {
       return COLLECTIONS.filter((c) => c.slug.includes("festive") || c.slug.includes("everyday"));
@@ -76,7 +100,7 @@ function CollectionsPage() {
           {filteredCollections.map((c, index) => {
             const isEven = index % 2 === 0;
             const count = products.filter((p) =>
-              p.category.some((cat) => c.slug.includes(cat) || cat.includes(c.slug))
+              p.category.some((cat) => c.slug.includes(cat) || cat.includes(c.slug)),
             ).length;
 
             return (
@@ -105,7 +129,7 @@ function CollectionsPage() {
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    
+
                     {/* Region Tag */}
                     <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-ivory/90 backdrop-blur-md text-[10px] uppercase tracking-widest text-maroon font-medium shadow-md">
                       <MapPin className="h-3 w-3 text-gold" />
@@ -129,7 +153,9 @@ function CollectionsPage() {
                     </h2>
 
                     <p className="mt-4 text-sm md:text-base text-ink/80 leading-relaxed">
-                      {c.tagline}. Each saree in this collection is hand-selected directly from master weavers, preserving museum-grade artistry, natural silk purity, and authentic Zari embellishment.
+                      {c.tagline}. Each saree in this collection is hand-selected directly from
+                      master weavers, preserving museum-grade artistry, natural silk purity, and
+                      authentic Zari embellishment.
                     </p>
 
                     {/* Features Tags */}
@@ -155,7 +181,9 @@ function CollectionsPage() {
                         <ChevronRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                       </Link>
                       <span className="text-xs text-taupe font-serif italic">
-                        {count > 0 ? `${count}+ curated sarees available` : "Exclusive limited edition"}
+                        {count > 0
+                          ? `${count}+ curated sarees available`
+                          : "Exclusive limited edition"}
                       </span>
                     </div>
                   </div>
@@ -169,10 +197,15 @@ function CollectionsPage() {
       {/* Guide Banner */}
       <section className="bg-beige/30 py-16 border-t border-gold/30">
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 text-center max-w-3xl mx-auto">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-maroon font-medium">Private Assistance</span>
-          <h3 className="font-serif text-3xl md:text-4xl text-maroon mt-2">Not sure which weave suits your event?</h3>
+          <span className="text-[10px] uppercase tracking-[0.3em] text-maroon font-medium">
+            Private Assistance
+          </span>
+          <h3 className="font-serif text-3xl md:text-4xl text-maroon mt-2">
+            Not sure which weave suits your event?
+          </h3>
           <p className="text-sm text-maroon/80 mt-3 leading-relaxed">
-            Our saree stylists are available on WhatsApp to guide you through fabric feel, drape weight, and blouse customisations.
+            Our saree stylists are available on WhatsApp to guide you through fabric feel, drape
+            weight, and blouse customisations.
           </p>
           <a
             href="https://wa.me/919999999999"

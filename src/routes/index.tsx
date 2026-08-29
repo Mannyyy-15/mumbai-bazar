@@ -1,9 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, SlidersHorizontal, ShoppingBag, Truck, ShieldCheck, Sparkles, Instagram, Star, Quote, Heart } from "lucide-react";
-
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  SlidersHorizontal,
+  ShoppingBag,
+  Truck,
+  ShieldCheck,
+  Sparkles,
+  Instagram,
+  Star,
+  Quote,
+  Heart,
+} from "lucide-react";
 
 import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useCatalog } from "@/lib/catalog-context";
@@ -13,22 +27,32 @@ import { RealBridesGallery } from "@/components/site/RealBridesGallery";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  head: () => ({
-    meta: [
-      { title: "Mumbai Bazar — Heritage Silk Sarees & Bridal Couture" },
-      { name: "description", content: "Shop handwoven Banarasi, Kanjivaram, Tissue and Pure Silk sarees. Bridal couture, festive edits and everyday drapes — curated at Mumbai Bazar." },
-      { property: "og:title", content: "Mumbai Bazar — Heritage Silk Sarees" },
-      { property: "og:description", content: "Handwoven silks, bridal couture and festive drapes, curated for the modern Indian wardrobe." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [
-      { rel: "preload", as: "image", href: IMG.heroSaree, fetchPriority: "high" },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Mumbai Bazar | Saree, Lehenga & Bridal Wear Shops in Nalasopara & Virar",
+      description:
+        "Sarees, dress material, designer lehengas and dulhan wear at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. Open daily 10 AM-9 PM.",
+      path: "/",
+      keywords: [
+        "saree shop near me",
+        "saree shop nalasopara",
+        "saree shop virar",
+        "lehenga shop nalasopara",
+        "dulhan saree",
+        "party wear saree",
+        "dress material shop",
+      ],
+    });
+    return {
+      meta,
+      links: [
+        ...links,
+        { rel: "preload", as: "image", href: IMG.heroSaree, fetchPriority: "high" },
+      ],
+      scripts: [jsonLd(breadcrumbSchema([{ name: "Home", path: "/" }]))],
+    };
+  },
 });
-
-
 
 /* ---------------- Hero Carousel ---------------- */
 type Slide = {
@@ -49,7 +73,7 @@ const SLIDES: Slide[] = [
     eyebrow: "Bridal & Trousseau 2026",
     title: "The Royal",
     italic: "Trousseau Edit",
-    copy: "Heirloom Banarasi, Kanjivaram and tissue drapes curated for the bride and her sacred celebrations.",
+    copy: "Bridal and dulhan sarees, designer lehengas and tissue drapes for the bride and her celebrations.",
     cta: { label: "Shop Bridal Sarees", to: "/wedding-sarees" },
     secondary: { label: "View Collections", to: "/collections" },
     img: "/hero/slide-1-horizontal.png",
@@ -59,9 +83,9 @@ const SLIDES: Slide[] = [
   },
   {
     eyebrow: "Ancestral Master Weaves",
-    title: "Pure Handloom",
+    title: "Silk & Silk-Blend",
     italic: "Silk Archive",
-    copy: "100% Silk Mark certified drapes woven on traditional pit looms across Varanasi, Kanchipuram and Paithan.",
+    copy: "Banarasi, Kanjivaram and Paithani styles, in store across Nalasopara, Virar, Bhayandar and Goregaon.",
     cta: { label: "Shop Heritage Silks", to: "/silk-sarees" },
     secondary: { label: "Explore The Craft", to: "/our-story" },
     img: "/hero/slide-2-horizontal.png",
@@ -174,13 +198,13 @@ function HeroCarousel() {
           const positionCls = isCenter
             ? "md:left-1/2 md:-translate-x-1/2 md:items-center md:text-center"
             : isRight
-            ? "md:left-auto md:right-8 lg:right-16 xl:right-24 md:items-start md:text-left"
-            : "md:left-8 lg:left-16 xl:left-24 md:right-auto md:items-start md:text-left";
+              ? "md:left-auto md:right-8 lg:right-16 xl:right-24 md:items-start md:text-left"
+              : "md:left-8 lg:left-16 xl:left-24 md:right-auto md:items-start md:text-left";
           const overlayCls = isRight
             ? "md:bg-gradient-to-l md:from-black/60 md:via-black/25 md:to-transparent"
             : isCenter
-            ? "md:bg-gradient-to-t md:from-black/60 md:via-black/30 md:to-black/30"
-            : "md:bg-gradient-to-r md:from-black/60 md:via-black/25 md:to-transparent";
+              ? "md:bg-gradient-to-t md:from-black/60 md:via-black/30 md:to-black/30"
+              : "md:bg-gradient-to-r md:from-black/60 md:via-black/25 md:to-transparent";
           let delta = i - index;
           if (delta > total / 2) delta -= total;
           if (delta < -total / 2) delta += total;
@@ -191,7 +215,9 @@ function HeroCarousel() {
               key={i}
               style={{
                 transform: `translate3d(calc(${delta * 100}% + ${dragX}px), 0, 0)`,
-                transition: dragging ? "none" : "transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 900ms ease-out",
+                transition: dragging
+                  ? "none"
+                  : "transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 900ms ease-out",
               }}
               className={`absolute inset-0 will-change-transform ${
                 active || showDuringDrag ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
@@ -214,25 +240,27 @@ function HeroCarousel() {
                 />
               </picture>
               {/* gradient overlay for legibility */}
-              <div className={`absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/15 ${overlayCls}`} />
+              <div
+                className={`absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/15 ${overlayCls}`}
+              />
 
               {/* Content */}
               <div
-              className={`absolute inset-x-5 bottom-20 flex flex-col items-start text-left text-ivory sm:inset-x-8 md:inset-x-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:max-w-[560px] lg:max-w-[620px] ${positionCls}`}
+                className={`absolute inset-x-5 bottom-20 flex flex-col items-start text-left text-ivory sm:inset-x-8 md:inset-x-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:max-w-[560px] lg:max-w-[620px] ${positionCls}`}
               >
                 <span className="flex items-center gap-3 text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-gold">
                   <span className="h-px w-10 bg-gold" />
                   {s.eyebrow}
                 </span>
                 <h2 className="mt-4 md:mt-6 font-serif text-3xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92]">
-                    {s.title}
-                    {s.italic && (
-                      <>
-                        <br />
-                        <span className="italic font-light">{s.italic}</span>
-                      </>
-                    )}
-                  </h2>
+                  {s.title}
+                  {s.italic && (
+                    <>
+                      <br />
+                      <span className="italic font-light">{s.italic}</span>
+                    </>
+                  )}
+                </h2>
                 <p className="mt-4 md:mt-6 max-w-md text-sm md:text-base lg:text-lg leading-relaxed text-ivory/85">
                   {s.copy}
                 </p>
@@ -256,7 +284,9 @@ function HeroCarousel() {
 
               {/* Volume tag */}
               <div className="absolute top-6 md:top-10 right-6 md:right-10 text-ivory/80">
-                <span className="text-[10px] md:text-[11px] tracking-[0.35em] uppercase">{s.accent}</span>
+                <span className="text-[10px] md:text-[11px] tracking-[0.35em] uppercase">
+                  {s.accent}
+                </span>
               </div>
             </div>
           );
@@ -283,24 +313,23 @@ function HeroCarousel() {
           <span className="text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-ivory/90 tabular-nums">
             {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
-            <div className="flex items-center gap-2">
-              {SLIDES.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => go(i)}
-                  aria-label={`Go to slide ${i + 1}`}
-                  className={`h-[3px] transition-all ${
-                    i === index ? "w-10 bg-ivory" : "w-5 bg-ivory/50 hover:bg-ivory/80"
-                  }`}
-                />
-              ))}
-            </div>
+          <div className="flex items-center gap-2">
+            {SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => go(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                className={`h-[3px] transition-all ${
+                  i === index ? "w-10 bg-ivory" : "w-5 bg-ivory/50 hover:bg-ivory/80"
+                }`}
+              />
+            ))}
           </div>
         </div>
+      </div>
     </section>
   );
 }
-
 
 /* ---------------- Premium transition divider ---------------- */
 function FeedDivider() {
@@ -310,7 +339,9 @@ function FeedDivider() {
         <div className="flex items-center gap-6 md:gap-10 py-10 md:py-14">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-maroon/25 to-transparent" />
           <div className="flex flex-col items-center gap-2.5">
-            <span className="text-[10px] tracking-[0.35em] uppercase text-maroon/60">The Boutique</span>
+            <span className="text-[10px] tracking-[0.35em] uppercase text-maroon/60">
+              The Boutique
+            </span>
             <div className="w-1.5 h-1.5 rotate-45 bg-gold" />
           </div>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-maroon/25 to-transparent" />
@@ -331,7 +362,17 @@ function ProductTile({ p }: { p: Product }) {
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addItem(p);
+    // A Product is not a CartItem — price has to be parsed to a number and the
+    // display string kept separately, the same mapping ProductCard uses.
+    addItem({
+      id: p.id,
+      name: p.name,
+      price: parsePriceToNumber(p.price),
+      priceLabel: p.price,
+      image: p.img,
+      weave: p.weave,
+      shopifyVariantId: p.shopifyVariantId,
+    });
   };
 
   return (
@@ -372,9 +413,7 @@ function ProductTile({ p }: { p: Product }) {
           loading="lazy"
           decoding="async"
           className={`w-full h-full object-cover transition-all duration-700 ease-out ${
-            p.secondaryImg
-              ? "group-hover:opacity-0 group-hover:scale-105"
-              : "group-hover:scale-108"
+            p.secondaryImg ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-108"
           }`}
         />
 
@@ -409,9 +448,13 @@ function ProductTile({ p }: { p: Product }) {
           {p.name}
         </h4>
         <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">
-          <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">{p.price}</span>
+          <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">
+            {p.price}
+          </span>
           {p.original && (
-            <span className="text-xs text-taupe font-medium line-through font-sans">{p.original}</span>
+            <span className="text-xs text-taupe font-medium line-through font-sans">
+              {p.original}
+            </span>
           )}
         </div>
       </div>
@@ -428,18 +471,31 @@ function ImmediateProductShelf() {
       <div className="mx-auto max-w-[1600px]">
         <div className="mb-5 flex items-end justify-between gap-4 md:mb-8">
           <div>
-            <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-maroon/70">Made to be worn now</p>
-            <h2 id="shop-best-sellers" className="mt-1 font-serif text-3xl text-maroon md:text-5xl">Shop Bestsellers</h2>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-maroon/70">
+              Made to be worn now
+            </p>
+            <h2 id="shop-best-sellers" className="mt-1 font-serif text-3xl text-maroon md:text-5xl">
+              Shop Bestsellers
+            </h2>
           </div>
-          <Link to="/shop" className="shrink-0 border-b border-maroon/50 pb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-maroon">View all</Link>
+          <Link
+            to="/shop"
+            className="shrink-0 border-b border-maroon/50 pb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-maroon"
+          >
+            View all
+          </Link>
         </div>
         {loading ? (
           <div className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-4 md:gap-x-5 md:gap-y-10">
-            {[...Array(4)].map((_, i) => <div key={i} className="aspect-[3/4] rounded-2xl bg-beige/60 animate-pulse" />)}
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="aspect-[3/4] rounded-2xl bg-beige/60 animate-pulse" />
+            ))}
           </div>
         ) : items.length > 0 ? (
           <div className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-4 md:gap-x-5 md:gap-y-10">
-            {items.map((p) => <ProductTile key={p.id} p={p} />)}
+            {items.map((p) => (
+              <ProductTile key={p.id} p={p} />
+            ))}
           </div>
         ) : null}
       </div>
@@ -456,9 +512,12 @@ function ProductFeed() {
   const pool = useMemo(() => {
     const indexed = products.map((p, i) => ({ ...p, _k: `${p.id}-${i}` }));
     const sorted = [...indexed];
-    if (sort === "price-asc") sorted.sort((a, b) => parsePriceToNumber(a.price) - parsePriceToNumber(b.price));
-    else if (sort === "price-desc") sorted.sort((a, b) => parsePriceToNumber(b.price) - parsePriceToNumber(a.price));
-    else if (sort === "newest") sorted.sort((a, b) => (a.tag === "New" ? -1 : 1) - (b.tag === "New" ? -1 : 1));
+    if (sort === "price-asc")
+      sorted.sort((a, b) => parsePriceToNumber(a.price) - parsePriceToNumber(b.price));
+    else if (sort === "price-desc")
+      sorted.sort((a, b) => parsePriceToNumber(b.price) - parsePriceToNumber(a.price));
+    else if (sort === "newest")
+      sorted.sort((a, b) => (a.tag === "New" ? -1 : 1) - (b.tag === "New" ? -1 : 1));
     return sorted;
   }, [sort, products]);
 
@@ -494,7 +553,10 @@ function ProductFeed() {
                 {(Object.keys(sortLabel) as SortKey[]).map((k) => (
                   <button
                     key={k}
-                    onClick={() => { setSort(k); setSortOpen(false); }}
+                    onClick={() => {
+                      setSort(k);
+                      setSortOpen(false);
+                    }}
                     className={`w-full text-left px-4 py-3 text-[10px] tracking-widest uppercase hover:bg-maroon/5 ${sort === k ? "text-maroon font-medium" : "text-maroon/70"}`}
                   >
                     {sortLabel[k]}
@@ -544,7 +606,8 @@ function CollectionStrip() {
         <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl text-maroon">Shop by Weave</h3>
         <div className="w-16 h-0.5 bg-gold/60 mx-auto mt-4 mb-3" />
         <p className="text-sm md:text-base text-maroon/75 max-w-xl mx-auto">
-          Handpicked weaves from India's legendary artisan clusters — Banarasi, Kanjivaram, Paithani & Pure Silks.
+          Handpicked weaves from India's legendary artisan clusters — Banarasi, Kanjivaram, Paithani
+          & Pure Silks.
         </p>
       </div>
 
@@ -568,7 +631,7 @@ function CollectionStrip() {
             />
             {/* Multi-stage dark gradient scrim */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 via-50% to-transparent opacity-85 transition-opacity duration-300 group-hover:opacity-100" />
-            
+
             {/* Card Content */}
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 text-ivory flex flex-col justify-end">
               <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-medium mb-1 drop-shadow-sm">
@@ -580,7 +643,7 @@ function CollectionStrip() {
               <p className="text-xs uppercase tracking-widest text-ivory/85 mt-2 line-clamp-1 font-medium">
                 {c.tagline}
               </p>
-              
+
               <div className="mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ivory/20 backdrop-blur-md text-[10px] tracking-widest uppercase text-ivory border border-ivory/30">
                   Explore Weave →
@@ -618,14 +681,18 @@ function Craftsmanship() {
             <div className="absolute inset-0 bg-gradient-to-t from-maroon/70 via-transparent to-transparent" />
           </div>
 
-          {/* Floating Silk Mark Badge */}
+          {/* Floating store-count badge */}
           <div className="absolute -bottom-5 -right-5 md:bottom-6 md:-right-6 bg-ivory text-maroon p-4 md:p-5 rounded-2xl shadow-2xl border border-gold/40 flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-maroon text-gold flex items-center justify-center font-serif text-lg font-bold shrink-0">
               ✓
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-maroon">100% Certified</p>
-              <p className="text-[10px] text-maroon/70 uppercase tracking-widest">Pure Silk Mark Certified</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-maroon">
+                100% Certified
+              </p>
+              <p className="text-[10px] text-maroon/70 uppercase tracking-widest">
+                Across the Western Line
+              </p>
             </div>
           </div>
         </div>
@@ -634,7 +701,7 @@ function Craftsmanship() {
         <div className="order-1 md:order-2 max-w-xl">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold/40 bg-gold/10 text-[10px] tracking-[0.3em] uppercase text-gold font-medium mb-6">
             <Sparkles className="h-3 w-3" />
-            <span>Handwoven Heritage</span>
+            <span>Eight Stores Near You</span>
           </div>
 
           <h3 className="font-serif text-4xl md:text-6xl font-normal leading-tight mb-6">
@@ -642,22 +709,30 @@ function Craftsmanship() {
           </h3>
 
           <p className="text-sm md:text-base leading-relaxed mb-8 text-ivory/85">
-            Behind every Mumbai Bazar saree lies the meticulous craftsmanship of master weavers who have preserved ancestral weaving techniques across generations. From raw silk extraction to hand-spun Zari, each drape represents weeks of dedicated artistry.
+            Behind every Mumbai Bazar saree lies the meticulous craftsmanship of master weavers who
+            have preserved ancestral weaving techniques across generations. From raw silk extraction
+            to hand-spun Zari, each drape represents weeks of dedicated artistry.
           </p>
 
           {/* Stats Bar */}
           <div className="grid grid-cols-3 gap-4 p-5 rounded-2xl bg-ivory/5 border border-gold/50 backdrop-blur-sm mb-10">
             <div>
-              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">100+</p>
-              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">Master Weavers</p>
+              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">2009</p>
+              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">
+                Serving Since
+              </p>
             </div>
             <div className="border-l border-gold/50 pl-4">
-              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">45+</p>
-              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">Days Per Heirloom</p>
+              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">10–9</p>
+              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">
+                Open Every Day
+              </p>
             </div>
             <div className="border-l border-gold/50 pl-4">
               <p className="font-serif text-2xl md:text-3xl text-gold font-medium">100%</p>
-              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">Pure Silk Mark</p>
+              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">
+                Stores Near You
+              </p>
             </div>
           </div>
 
@@ -686,23 +761,22 @@ function Craftsmanship() {
 function TrustBar() {
   const items = [
     { icon: Truck, title: "Complimentary Shipping", copy: "On all India orders above ₹5,000" },
-    { icon: ShieldCheck, title: "Authenticity Assured", copy: "Silk Mark certified handlooms" },
-    { icon: Sparkles, title: "Handwoven with Care", copy: "Directly from master weavers" },
+    { icon: ShieldCheck, title: "See Before You Buy", copy: "Drape any piece in store first" },
+    { icon: Sparkles, title: "Open Every Day", copy: "10 AM – 9 PM, all seven days" },
     { icon: ShoppingBag, title: "Easy 7-Day Returns", copy: "No-questions exchange policy" },
   ];
   return (
     <section className="w-full bg-ivory border-y border-maroon/40">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8 py-6 md:py-10 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-5 md:gap-8 divide-maroon/10">
         {items.map(({ icon: Icon, title, copy }) => (
-          <div
-            key={title}
-            className="flex items-center gap-3 md:gap-4 md:flex-row"
-          >
+          <div key={title} className="flex items-center gap-3 md:gap-4 md:flex-row">
             <div className="h-9 w-9 md:h-11 md:w-11 flex items-center justify-center border border-maroon/40 text-maroon shrink-0">
               <Icon className="h-4 w-4 md:h-5 md:w-5" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] md:text-xs tracking-[0.18em] md:tracking-[0.2em] uppercase text-maroon leading-tight">{title}</p>
+              <p className="text-[10px] md:text-xs tracking-[0.18em] md:tracking-[0.2em] uppercase text-maroon leading-tight">
+                {title}
+              </p>
               <p className="hidden sm:block text-[11px] md:text-xs text-maroon/60 mt-1">{copy}</p>
             </div>
           </div>
@@ -729,7 +803,9 @@ function ShopByOccasion() {
         <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-maroon font-medium mb-3">
           The Boutique Collection
         </span>
-        <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl text-maroon">Shop by Occasion</h3>
+        <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl text-maroon">
+          Shop by Occasion
+        </h3>
         <div className="w-16 h-0.5 bg-gold/60 mx-auto mt-4 mb-3" />
         <p className="text-sm md:text-base text-maroon/75 max-w-xl mx-auto">
           A drape for every moment — from sacred bridal vows to everyday grace.
@@ -754,10 +830,14 @@ function ShopByOccasion() {
             />
             {/* Multi-stage dark gradient scrim */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 via-50% to-transparent opacity-85 transition-opacity duration-300 group-hover:opacity-100" />
-            
+
             <div className="absolute inset-x-0 bottom-0 p-3.5 sm:p-5 md:p-8 text-ivory flex flex-col justify-end">
-              <p className="text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-gold font-medium drop-shadow-sm">{o.sub}</p>
-              <p className="font-serif text-xl sm:text-2xl md:text-4xl mt-0.5 sm:mt-1 font-normal drop-shadow-md leading-tight">{o.label}</p>
+              <p className="text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-gold font-medium drop-shadow-sm">
+                {o.sub}
+              </p>
+              <p className="font-serif text-xl sm:text-2xl md:text-4xl mt-0.5 sm:mt-1 font-normal drop-shadow-md leading-tight">
+                {o.label}
+              </p>
               <div className="hidden md:block mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ivory/20 backdrop-blur-md text-[10px] tracking-widest uppercase text-ivory border border-ivory/30">
                   Explore Collection →
@@ -893,33 +973,85 @@ function TrendingNow() {
 function EditorialSplit() {
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-20 grid md:grid-cols-2 gap-4 md:gap-6">
-      <Link to="/wedding-sarees" className="group relative block aspect-[4/5] md:aspect-[4/5] overflow-hidden rounded-2xl border border-gold/50 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl">
-        <img src={IMG.colWedding} alt="Bridal Trousseau" width={800} height={1000} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+      <Link
+        to="/wedding-sarees"
+        className="group relative block aspect-[4/5] md:aspect-[4/5] overflow-hidden rounded-2xl border border-gold/50 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl"
+      >
+        <img
+          src={IMG.colWedding}
+          alt="Bridal Trousseau"
+          width={800}
+          height={1000}
+          loading="lazy"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 via-55% to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 text-ivory">
-          <span className="text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-gold/90 font-medium">Bridal Trousseau</span>
-          <h3 className="mt-3 font-serif text-3xl md:text-5xl leading-tight drop-shadow-sm">The <span className="italic">Wedding</span><br/>Collection</h3>
-          <p className="mt-3 max-w-sm text-sm text-ivory/85">Kanjivaram, Paithani & Tissue heirlooms for the most sacred day.</p>
-          <span className="mt-5 inline-block text-[10px] md:text-[11px] tracking-[0.3em] uppercase border-b border-ivory/60 pb-1">Discover →</span>
+          <span className="text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-gold/90 font-medium">
+            Bridal Trousseau
+          </span>
+          <h3 className="mt-3 font-serif text-3xl md:text-5xl leading-tight drop-shadow-sm">
+            The <span className="italic">Wedding</span>
+            <br />
+            Collection
+          </h3>
+          <p className="mt-3 max-w-sm text-sm text-ivory/85">
+            Kanjivaram, Paithani & Tissue heirlooms for the most sacred day.
+          </p>
+          <span className="mt-5 inline-block text-[10px] md:text-[11px] tracking-[0.3em] uppercase border-b border-ivory/60 pb-1">
+            Discover →
+          </span>
         </div>
       </Link>
       <div className="grid gap-4 md:gap-6">
-        <Link to="/new-arrivals" className="group relative block aspect-[16/9] md:aspect-auto md:h-full overflow-hidden rounded-2xl border border-gold/50 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl">
-          <img src={IMG.look1} alt="New Arrivals" width={800} height={500} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+        <Link
+          to="/new-arrivals"
+          className="group relative block aspect-[16/9] md:aspect-auto md:h-full overflow-hidden rounded-2xl border border-gold/50 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl"
+        >
+          <img
+            src={IMG.look1}
+            alt="New Arrivals"
+            width={800}
+            height={500}
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/30 via-55% to-transparent" />
           <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-6 md:p-10 text-ivory max-w-xs">
-            <span className="text-[10px] tracking-[0.4em] uppercase text-gold/90 font-medium">Just In</span>
-            <h3 className="mt-2 font-serif text-2xl md:text-4xl leading-tight drop-shadow-sm">New <span className="italic">Arrivals</span></h3>
-            <span className="mt-3 text-[10px] tracking-[0.3em] uppercase border-b border-ivory/60 pb-1 self-start">Shop new →</span>
+            <span className="text-[10px] tracking-[0.4em] uppercase text-gold/90 font-medium">
+              Just In
+            </span>
+            <h3 className="mt-2 font-serif text-2xl md:text-4xl leading-tight drop-shadow-sm">
+              New <span className="italic">Arrivals</span>
+            </h3>
+            <span className="mt-3 text-[10px] tracking-[0.3em] uppercase border-b border-ivory/60 pb-1 self-start">
+              Shop new →
+            </span>
           </div>
         </Link>
-        <Link to="/festive-edit" className="group relative block aspect-[16/9] md:aspect-auto md:h-full overflow-hidden rounded-2xl border border-gold/50 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl">
-          <img src={IMG.colFestive} alt="Festive Edit" width={800} height={500} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+        <Link
+          to="/festive-edit"
+          className="group relative block aspect-[16/9] md:aspect-auto md:h-full overflow-hidden rounded-2xl border border-gold/50 shadow-md transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl"
+        >
+          <img
+            src={IMG.colFestive}
+            alt="Festive Edit"
+            width={800}
+            height={500}
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/30 via-55% to-transparent" />
           <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-6 md:p-10 text-ivory max-w-xs">
-            <span className="text-[10px] tracking-[0.4em] uppercase text-gold/90 font-medium">Silk & Gold</span>
-            <h3 className="mt-2 font-serif text-2xl md:text-4xl leading-tight drop-shadow-sm">Festive <span className="italic">Edit</span></h3>
-            <span className="mt-3 text-[10px] tracking-[0.3em] uppercase border-b border-ivory/60 pb-1 self-start">Shop festive →</span>
+            <span className="text-[10px] tracking-[0.4em] uppercase text-gold/90 font-medium">
+              Silk & Gold
+            </span>
+            <h3 className="mt-2 font-serif text-2xl md:text-4xl leading-tight drop-shadow-sm">
+              Festive <span className="italic">Edit</span>
+            </h3>
+            <span className="mt-3 text-[10px] tracking-[0.3em] uppercase border-b border-ivory/60 pb-1 self-start">
+              Shop festive →
+            </span>
           </div>
         </Link>
       </div>
@@ -935,15 +1067,24 @@ function Bestsellers() {
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-20">
       <div className="flex items-end justify-between mb-8 md:mb-10 border-b border-maroon/40 pb-6">
         <div>
-          <span className="text-[10px] tracking-[0.4em] uppercase text-maroon/60">Signature Silks</span>
-          <h3 className="mt-2 font-serif text-3xl md:text-4xl lg:text-5xl text-maroon">Bestsellers</h3>
+          <span className="text-[10px] tracking-[0.4em] uppercase text-maroon/60">
+            Signature Silks
+          </span>
+          <h3 className="mt-2 font-serif text-3xl md:text-4xl lg:text-5xl text-maroon">
+            Bestsellers
+          </h3>
         </div>
-        <Link to="/shop" className="text-[10px] tracking-widest uppercase text-maroon border-b border-maroon/40 pb-1 hover:opacity-60">
+        <Link
+          to="/shop"
+          className="text-[10px] tracking-widest uppercase text-maroon border-b border-maroon/40 pb-1 hover:opacity-60"
+        >
           Shop all
         </Link>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 md:gap-x-4 gap-y-10">
-        {items.map((p) => <ProductTile key={p.id} p={p} />)}
+        {items.map((p) => (
+          <ProductTile key={p.id} p={p} />
+        ))}
       </div>
     </section>
   );
@@ -952,9 +1093,27 @@ function Bestsellers() {
 /* ---------------- Testimonials ---------------- */
 function Testimonials() {
   const reviews = [
-    { name: "Aanya Kapoor", city: "Mumbai", img: TESTIMONIAL_IMGS.t1, quote: "My Meher Wine Banarasi felt like an heirloom the moment I opened the box. The zari work is beyond anything I've seen." },
-    { name: "Priya Menon", city: "Bengaluru", img: TESTIMONIAL_IMGS.t2, quote: "Wore my Kanjivaram for our wedding reception — every guest asked where it was from. Truly museum-grade craftsmanship." },
-    { name: "Ishita Rao", city: "Hyderabad", img: TESTIMONIAL_IMGS.t3, quote: "The tissue silk drapes like a dream. Mumbai Bazar has become my go-to for every festive occasion." },
+    {
+      name: "Aanya Kapoor",
+      city: "Mumbai",
+      img: TESTIMONIAL_IMGS.t1,
+      quote:
+        "My Meher Wine Banarasi felt like an heirloom the moment I opened the box. The zari work is beyond anything I've seen.",
+    },
+    {
+      name: "Priya Menon",
+      city: "Bengaluru",
+      img: TESTIMONIAL_IMGS.t2,
+      quote:
+        "Wore my Kanjivaram for our wedding reception — every guest asked where it was from. Truly museum-grade craftsmanship.",
+    },
+    {
+      name: "Ishita Rao",
+      city: "Hyderabad",
+      img: TESTIMONIAL_IMGS.t3,
+      quote:
+        "The tissue silk drapes like a dream. Mumbai Bazar has become my go-to for every festive occasion.",
+    },
   ];
 
   return (
@@ -994,7 +1153,9 @@ function Testimonials() {
                 />
                 <div>
                   <p className="text-sm text-maroon font-medium font-serif">{r.name}</p>
-                  <p className="text-[10px] tracking-widest uppercase text-maroon/60 font-medium">{r.city}</p>
+                  <p className="text-[10px] tracking-widest uppercase text-maroon/60 font-medium">
+                    {r.city}
+                  </p>
                 </div>
               </div>
             </div>
@@ -1012,13 +1173,30 @@ function InstagramGrid() {
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-20">
       <div className="text-center mb-10 md:mb-12">
         <span className="text-[10px] tracking-[0.4em] uppercase text-maroon/60">@mumbaiBazar</span>
-        <h3 className="mt-3 font-serif text-3xl md:text-4xl lg:text-5xl text-maroon">Drape Diaries</h3>
-        <p className="mt-3 text-sm text-maroon/70">Tag <span className="italic">#DrapedInMumbaiBazar</span> to be featured</p>
+        <h3 className="mt-3 font-serif text-3xl md:text-4xl lg:text-5xl text-maroon">
+          Drape Diaries
+        </h3>
+        <p className="mt-3 text-sm text-maroon/70">
+          Tag <span className="italic">#DrapedInMumbaiBazar</span> to be featured
+        </p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-3">
         {shots.map((src, i) => (
-          <a key={i} href="https://instagram.com" target="_blank" rel="noreferrer" className="group relative block aspect-square overflow-hidden bg-beige/40">
-            <img src={src} alt="Instagram look" width={400} height={400} loading="lazy" className="w-full h-full object-cover transition-transform duration-[1000ms] group-hover:scale-110" />
+          <a
+            key={i}
+            href="https://instagram.com"
+            target="_blank"
+            rel="noreferrer"
+            className="group relative block aspect-square overflow-hidden bg-beige/40"
+          >
+            <img
+              src={src}
+              alt="Instagram look"
+              width={400}
+              height={400}
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-[1000ms] group-hover:scale-110"
+            />
             <div className="absolute inset-0 bg-maroon/0 group-hover:bg-maroon/40 transition-colors flex items-center justify-center">
               <Instagram className="h-6 w-6 text-ivory opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
@@ -1036,15 +1214,21 @@ function Newsletter() {
   return (
     <section className="w-full bg-maroon text-ivory py-16 md:py-24">
       <div className="mx-auto max-w-3xl px-4 md:px-8 text-center">
-        <span className="text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-ivory/60">The Atelier Letter</span>
+        <span className="text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-ivory/60">
+          The Atelier Letter
+        </span>
         <h3 className="mt-4 font-serif text-3xl md:text-5xl leading-tight">
           Be the first to <span className="italic">know</span>
         </h3>
         <p className="mt-4 text-sm md:text-base text-ivory/75 max-w-xl mx-auto">
-          Early access to new arrivals, bridal previews and private atelier events. Plus a heartfelt ₹1,000 off your first heirloom.
+          Early access to new arrivals, bridal previews and private atelier events. Plus a heartfelt
+          ₹1,000 off your first heirloom.
         </p>
         <form
-          onSubmit={(e) => { e.preventDefault(); if (email) setDone(true); }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (email) setDone(true);
+          }}
           className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-3 max-w-lg mx-auto"
         >
           <input
@@ -1062,7 +1246,9 @@ function Newsletter() {
             {done ? "Subscribed ✓" : "Subscribe"}
           </button>
         </form>
-        <p className="mt-4 text-[10px] tracking-widest uppercase text-ivory/50">No spam, only silk stories.</p>
+        <p className="mt-4 text-[10px] tracking-widest uppercase text-ivory/50">
+          No spam, only silk stories.
+        </p>
       </div>
     </section>
   );

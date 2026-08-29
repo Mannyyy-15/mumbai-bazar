@@ -1,18 +1,47 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Droplets, Sun, Wind, Sparkles, ShieldCheck, HeartHandshake, CheckCircle2 } from "lucide-react";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
+import {
+  Droplets,
+  Sun,
+  Wind,
+  Sparkles,
+  ShieldCheck,
+  HeartHandshake,
+  CheckCircle2,
+} from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { GoldRule } from "@/components/site/Motif";
 import { IMG } from "@/lib/site-data";
 
 export const Route = createFileRoute("/care-guide")({
-  head: () => ({
-    meta: [
-      { title: "Saree Care Guide — Mumbai Bazar" },
-      { name: "description", content: "How to wash, store and preserve your handwoven silk sarees for generations." },
-      { property: "og:title", content: "Saree Care Guide — Mumbai Bazar" },
-      { property: "og:description", content: "Care for your saree the way it was made — by hand, with patience." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "How to Care for Silk Sarees | Washing & Storage Guide — Mumbai Bazar",
+      description:
+        "How to wash, store, iron and protect silk sarees — practical care advice for zari, natural dyes and Mumbai humidity.",
+      path: "/care-guide",
+      keywords: [
+        "how to wash silk saree",
+        "silk saree care",
+        "how to store sarees",
+        "zari saree care",
+        "saree maintenance guide",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Saree Care Guide", path: "/care-guide" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: CareGuide,
 });
 
@@ -84,7 +113,8 @@ function CareGuide() {
             <span className="eyebrow text-gold-deep">Gentle Preservation</span>
             <h2 className="mt-3 font-serif text-3xl md:text-5xl text-ink">The 4 Care Rituals</h2>
             <p className="mt-4 text-taupe leading-relaxed">
-              Follow these simple guidelines to safeguard the natural luster, zari strength, and silk longevity of your drapes.
+              Follow these simple guidelines to safeguard the natural luster, zari strength, and
+              silk longevity of your drapes.
             </p>
           </div>
 
@@ -117,15 +147,21 @@ function CareGuide() {
           <div className="space-y-6">
             <div>
               <span className="eyebrow text-gold-deep">Wardrobe Management</span>
-              <h2 className="mt-2 font-serif text-3xl md:text-5xl text-ink">Storing Handwoven Silks</h2>
+              <h2 className="mt-2 font-serif text-3xl md:text-5xl text-ink">
+                Storing Handwoven Silks
+              </h2>
               <p className="mt-3 text-taupe">
-                Proper storage guarantees that zari threadwork retains its regal sparkle without tarnishing.
+                Proper storage guarantees that zari threadwork retains its regal sparkle without
+                tarnishing.
               </p>
             </div>
 
             <div className="space-y-5 pt-2">
               {PRESERVATION_STEPS.map((step, idx) => (
-                <div key={idx} className="flex gap-4 items-start p-4 border border-gold/40 bg-ivory">
+                <div
+                  key={idx}
+                  className="flex gap-4 items-start p-4 border border-gold/40 bg-ivory"
+                >
                   <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gold/20 text-maroon font-bold text-xs">
                     {idx + 1}
                   </span>
@@ -149,8 +185,10 @@ function CareGuide() {
               <div className="flex items-center gap-3">
                 <ShieldCheck className="h-6 w-6 text-maroon shrink-0" />
                 <div>
-                  <h4 className="font-serif text-base text-ink">Pure Silk Mark Assurance</h4>
-                  <p className="text-xs text-taupe mt-0.5">Tested for pure silver & gold tested zari wires.</p>
+                  <h4 className="font-serif text-base text-ink">Ask About Your Fabric</h4>
+                  <p className="text-xs text-taupe mt-0.5">
+                    Our staff will tell you what any piece is made of.
+                  </p>
                 </div>
               </div>
             </div>
@@ -167,7 +205,8 @@ function CareGuide() {
           <h2 className="mt-4 font-serif text-3xl md:text-5xl">The Mumbai Bazar Saree Spa</h2>
           <GoldRule className="my-6" />
           <p className="mt-5 max-w-xl mx-auto text-ivory/85 leading-relaxed text-base">
-            Every pure handwoven saree purchased from our boutique qualifies for a complimentary annual press-and-refresh service. Return your saree to us anytime for expert steaming, crease restoration, and fresh muslin wrapping.
+            Bring any saree bought from us back to your nearest store for a press and refresh —
+            steaming, crease restoration and fresh wrapping, so it is ready for the next occasion.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link to="/contact" className="btn-primary inline-flex items-center gap-2">
@@ -180,4 +219,3 @@ function CareGuide() {
     </div>
   );
 }
-

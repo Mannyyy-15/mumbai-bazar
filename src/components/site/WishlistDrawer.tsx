@@ -59,9 +59,12 @@ export function WishlistDrawer() {
                 <div className="h-16 w-16 rounded-full bg-beige/30 border border-gold/40 flex items-center justify-center mb-4">
                   <Heart className="h-8 w-8 text-gold-deep" />
                 </div>
-                <h3 className="font-serif text-2xl text-maroon font-medium">Your Wishlist is Empty</h3>
+                <h3 className="font-serif text-2xl text-maroon font-medium">
+                  Your Wishlist is Empty
+                </h3>
                 <p className="mt-2 text-sm text-maroon/70 max-w-xs leading-relaxed">
-                  Save your favorite heirloom and everyday sarees to view or move them to bag anytime.
+                  Save your favorite heirloom and everyday sarees to view or move them to bag
+                  anytime.
                 </p>
                 <button
                   onClick={closeWishlist}

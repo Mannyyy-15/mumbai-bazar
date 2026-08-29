@@ -37,7 +37,8 @@ const SORTS: { key: SortKey; label: string }[] = [
   { key: "price-desc", label: "Price: High to Low" },
 ];
 
-const parsePrice = (s?: string | number | null) => Number(String(s || "").replace(/[^\d]/g, "")) || 0;
+const parsePrice = (s?: string | number | null) =>
+  Number(String(s || "").replace(/[^\d]/g, "")) || 0;
 
 export function CategoryPage({
   eyebrow,
@@ -60,12 +61,12 @@ export function CategoryPage({
 
   const inCategory = useMemo(
     () => (category ? products.filter((p) => p.category.includes(category)) : products),
-    [category, products]
+    [category, products],
   );
 
   const fabrics = useMemo(
     () => Array.from(new Set(products.map((p) => p.weave))).sort(),
-    [products]
+    [products],
   );
 
   const tags = ["New", "Bestseller"];
@@ -81,7 +82,8 @@ export function CategoryPage({
 
   const toggle = <T,>(setter: (v: Set<T>) => void, set: Set<T>, v: T) => {
     const next = new Set(set);
-    if (next.has(v)) next.delete(v); else next.add(v);
+    if (next.has(v)) next.delete(v);
+    else next.add(v);
     setter(next);
   };
 
@@ -90,7 +92,7 @@ export function CategoryPage({
     if (selCat.size) out = out.filter((p) => p.category.some((c) => selCat.has(c)));
     if (selOcc.size) {
       out = out.filter((p) =>
-        Array.from(selOcc).some((k) => OCCASIONS.find((o) => o.key === k)!.match(p))
+        Array.from(selOcc).some((k) => OCCASIONS.find((o) => o.key === k)!.match(p)),
       );
     }
     if (selFab.size) {
@@ -134,7 +136,9 @@ export function CategoryPage({
     if (!drawerOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [drawerOpen]);
 
   const sidebar = (
@@ -166,7 +170,6 @@ export function CategoryPage({
       <section className="py-8 md:py-14">
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
           <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-8 md:gap-10 lg:gap-12">
-            
             {/* Left Sidebar: Sticky Scroll */}
             <aside className="hidden md:block self-start sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto no-scrollbar md:border-r md:border-gold/50 md:pr-8 lg:pr-10">
               {sidebar}
@@ -181,7 +184,8 @@ export function CategoryPage({
                     <Sparkles className="h-3 w-3 text-gold-deep" /> Handwoven
                   </span>
                   <p className="text-sm text-maroon/80">
-                    Showing <span className="text-maroon font-semibold">{filtered.length}</span> of {inCategory.length} pieces
+                    Showing <span className="text-maroon font-semibold">{filtered.length}</span> of{" "}
+                    {inCategory.length} pieces
                   </p>
                 </div>
 
@@ -194,7 +198,9 @@ export function CategoryPage({
                     <SlidersHorizontal className="h-4 w-4" />
                     Filter
                     {activeCount > 0 && (
-                      <span className="ml-1 grid h-4 w-4 place-items-center rounded-full bg-maroon text-[10px] text-ivory">{activeCount}</span>
+                      <span className="ml-1 grid h-4 w-4 place-items-center rounded-full bg-maroon text-[10px] text-ivory">
+                        {activeCount}
+                      </span>
                     )}
                   </button>
 
@@ -206,7 +212,9 @@ export function CategoryPage({
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/40 bg-beige/30 text-[11px] tracking-[0.2em] uppercase text-maroon hover:border-maroon transition-all"
                     >
                       <span>Sort: {SORTS.find((s) => s.key === sort)!.label}</span>
-                      <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`} />
+                      <ChevronDown
+                        className={`h-3.5 w-3.5 transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`}
+                      />
                     </button>
 
                     {sortOpen && (
@@ -214,9 +222,15 @@ export function CategoryPage({
                         {SORTS.map((s) => (
                           <li key={s.key}>
                             <button
-                              onMouseDown={(e) => { e.preventDefault(); setSort(s.key); setSortOpen(false); }}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setSort(s.key);
+                                setSortOpen(false);
+                              }}
                               className={`flex w-full items-center justify-between px-4 py-2.5 rounded-xl text-left text-xs tracking-wider uppercase transition-colors ${
-                                sort === s.key ? "bg-maroon text-ivory font-medium" : "text-ink hover:bg-beige/40"
+                                sort === s.key
+                                  ? "bg-maroon text-ivory font-medium"
+                                  : "text-ink hover:bg-beige/40"
                               }`}
                             >
                               {s.label}
@@ -233,23 +247,48 @@ export function CategoryPage({
               {/* Active Filter Chips */}
               {activeCount > 0 && (
                 <div className="flex flex-wrap items-center gap-2.5 pt-5">
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-maroon/60 font-medium">Active Filters:</span>
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-maroon/60 font-medium">
+                    Active Filters:
+                  </span>
                   {Array.from(selCat).map((k) => (
-                    <ActiveChip key={"c-" + k} label={CATEGORIES.find((c) => c.key === k)!.label} onClear={() => toggle(setSelCat, selCat, k)} />
+                    <ActiveChip
+                      key={"c-" + k}
+                      label={CATEGORIES.find((c) => c.key === k)!.label}
+                      onClear={() => toggle(setSelCat, selCat, k)}
+                    />
                   ))}
                   {Array.from(selOcc).map((k) => (
-                    <ActiveChip key={"o-" + k} label={OCCASIONS.find((o) => o.key === k)!.label} onClear={() => toggle(setSelOcc, selOcc, k)} />
+                    <ActiveChip
+                      key={"o-" + k}
+                      label={OCCASIONS.find((o) => o.key === k)!.label}
+                      onClear={() => toggle(setSelOcc, selOcc, k)}
+                    />
                   ))}
                   {Array.from(selFab).map((k) => (
-                    <ActiveChip key={"f-" + k} label={k} onClear={() => toggle(setSelFab, selFab, k)} />
+                    <ActiveChip
+                      key={"f-" + k}
+                      label={k}
+                      onClear={() => toggle(setSelFab, selFab, k)}
+                    />
                   ))}
                   {Array.from(selPrice).map((k) => (
-                    <ActiveChip key={"p-" + k} label={PRICE_BUCKETS.find((b) => b.key === k)!.label} onClear={() => toggle(setSelPrice, selPrice, k)} />
+                    <ActiveChip
+                      key={"p-" + k}
+                      label={PRICE_BUCKETS.find((b) => b.key === k)!.label}
+                      onClear={() => toggle(setSelPrice, selPrice, k)}
+                    />
                   ))}
                   {Array.from(selTag).map((k) => (
-                    <ActiveChip key={"t-" + k} label={k} onClear={() => toggle(setSelTag, selTag, k)} />
+                    <ActiveChip
+                      key={"t-" + k}
+                      label={k}
+                      onClear={() => toggle(setSelTag, selTag, k)}
+                    />
                   ))}
-                  <button onClick={clearAll} className="ml-auto text-[11px] tracking-[0.22em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold hover:border-gold transition-colors">
+                  <button
+                    onClick={clearAll}
+                    className="ml-auto text-[11px] tracking-[0.22em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold hover:border-gold transition-colors"
+                  >
                     Clear All ({activeCount})
                   </button>
                 </div>
@@ -259,9 +298,18 @@ export function CategoryPage({
               <div className="mt-8">
                 {filtered.length === 0 ? (
                   <div className="py-24 text-center rounded-2xl border border-dashed border-gold/50 bg-beige/10 p-8">
-                    <p className="font-serif text-3xl text-maroon">No sarees match your filter selection.</p>
-                    <p className="mt-3 text-sm text-maroon/70 max-w-md mx-auto">Try resetting one of your selected filters or explore our full collection.</p>
-                    <button onClick={clearAll} className="mt-6 px-8 py-3.5 rounded-full bg-maroon text-ivory text-[11px] tracking-[0.25em] uppercase hover:bg-wine transition-all shadow-md">Clear Filters</button>
+                    <p className="font-serif text-3xl text-maroon">
+                      No sarees match your filter selection.
+                    </p>
+                    <p className="mt-3 text-sm text-maroon/70 max-w-md mx-auto">
+                      Try resetting one of your selected filters or explore our full collection.
+                    </p>
+                    <button
+                      onClick={clearAll}
+                      className="mt-6 px-8 py-3.5 rounded-full bg-maroon text-ivory text-[11px] tracking-[0.25em] uppercase hover:bg-wine transition-all shadow-md"
+                    >
+                      Clear Filters
+                    </button>
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 xl:grid-cols-4 lg:gap-8">
@@ -279,7 +327,10 @@ export function CategoryPage({
       {/* Mobile Drawer Filter */}
       {drawerOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-ink/40 backdrop-blur-sm" onClick={() => setDrawerOpen(false)} />
+          <div
+            className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
+            onClick={() => setDrawerOpen(false)}
+          />
           <div className="absolute right-0 top-0 h-full w-[88%] max-w-xs bg-ivory p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
             <div>
               <div className="flex items-center justify-between border-b border-gold/50 pb-4 mb-6">
@@ -287,7 +338,10 @@ export function CategoryPage({
                   <Filter className="h-4 w-4 text-maroon" />
                   <h3 className="font-serif text-lg text-maroon">Filter Sarees</h3>
                 </div>
-                <button onClick={() => setDrawerOpen(false)} className="text-taupe hover:text-maroon">
+                <button
+                  onClick={() => setDrawerOpen(false)}
+                  className="text-taupe hover:text-maroon"
+                >
                   <X className="h-5 w-5" />
                 </button>
               </div>
@@ -342,7 +396,10 @@ function CategoryFilterPanel({
       <div className="flex items-center justify-between border-b border-gold/50 pb-4">
         <h3 className="font-serif text-2xl text-maroon font-normal">Refine Selection</h3>
         {activeCount > 0 && (
-          <button onClick={clearAll} className="text-[11px] tracking-[0.2em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold transition-colors">
+          <button
+            onClick={clearAll}
+            className="text-[11px] tracking-[0.2em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold transition-colors"
+          >
             Reset ({activeCount})
           </button>
         )}
@@ -350,13 +407,23 @@ function CategoryFilterPanel({
 
       <FilterGroup title="Category">
         {CATEGORIES.map((c) => (
-          <CheckRow key={c.key} label={c.label} active={selCat.has(c.key)} onClick={() => onCat(c.key)} />
+          <CheckRow
+            key={c.key}
+            label={c.label}
+            active={selCat.has(c.key)}
+            onClick={() => onCat(c.key)}
+          />
         ))}
       </FilterGroup>
 
       <FilterGroup title="Occasion">
         {OCCASIONS.map((o) => (
-          <CheckRow key={o.key} label={o.label} active={selOcc.has(o.key)} onClick={() => onOcc(o.key)} />
+          <CheckRow
+            key={o.key}
+            label={o.label}
+            active={selOcc.has(o.key)}
+            onClick={() => onOcc(o.key)}
+          />
         ))}
       </FilterGroup>
 
@@ -368,7 +435,12 @@ function CategoryFilterPanel({
 
       <FilterGroup title="Price Range">
         {PRICE_BUCKETS.map((b) => (
-          <CheckRow key={b.key} label={b.label} active={selPrice.has(b.key)} onClick={() => onPrice(b.key)} />
+          <CheckRow
+            key={b.key}
+            label={b.label}
+            active={selPrice.has(b.key)}
+            onClick={() => onPrice(b.key)}
+          />
         ))}
       </FilterGroup>
 
@@ -390,14 +462,24 @@ function FilterGroup({ title, children }: { title: string; children: React.React
         className="flex w-full items-center justify-between text-[11px] uppercase tracking-[0.24em] text-maroon font-semibold"
       >
         <span>{title}</span>
-        <ChevronDown className={`h-3.5 w-3.5 text-maroon/70 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`h-3.5 w-3.5 text-maroon/70 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
       </button>
       {open && <div className="mt-4 space-y-3">{children}</div>}
     </div>
   );
 }
 
-function CheckRow({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function CheckRow({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
   return (
     <button
       onClick={onClick}
@@ -406,12 +488,18 @@ function CheckRow({ label, active, onClick }: { label: string; active: boolean; 
     >
       <span
         className={`grid h-4 w-4 shrink-0 place-items-center rounded border transition-all ${
-          active ? "border-maroon bg-maroon text-ivory shadow-sm" : "border-gold/50 bg-ivory group-hover:border-maroon"
+          active
+            ? "border-maroon bg-maroon text-ivory shadow-sm"
+            : "border-gold/50 bg-ivory group-hover:border-maroon"
         }`}
       >
         {active && <Check className="h-3 w-3" strokeWidth={3} />}
       </span>
-      <span className={`text-xs md:text-sm transition-colors ${active ? "text-maroon font-semibold" : "text-ink/80 group-hover:text-maroon font-medium"}`}>{label}</span>
+      <span
+        className={`text-xs md:text-sm transition-colors ${active ? "text-maroon font-semibold" : "text-ink/80 group-hover:text-maroon font-medium"}`}
+      >
+        {label}
+      </span>
     </button>
   );
 }
@@ -420,12 +508,13 @@ function ActiveChip({ label, onClear }: { label: string; onClear: () => void }) 
   return (
     <span className="inline-flex items-center gap-2 border border-gold/40 bg-beige/40 px-3 py-1.5 rounded-full text-xs text-maroon font-medium shadow-sm">
       {label}
-      <button onClick={onClear} aria-label={`Remove ${label}`} className="text-maroon/60 hover:text-maroon">
+      <button
+        onClick={onClear}
+        aria-label={`Remove ${label}`}
+        className="text-maroon/60 hover:text-maroon"
+      >
         <X className="h-3.5 w-3.5" />
       </button>
     </span>
   );
 }
-
-
-

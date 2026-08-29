@@ -2,17 +2,45 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Sparkles, Clock, ArrowUpRight, Flame, ShieldCheck } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
 import { GoldRule } from "@/components/site/Motif";
-import { IMG } from "@/lib/site-data";
+import { IMG, PRODUCTS } from "@/lib/site-data";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/new-arrivals")({
-  head: () => ({
-    meta: [
-      { title: "New Arrivals — Fresh From The Looms | Mumbai Bazar" },
-      { name: "description", content: "Discover the latest handwoven silk sarees, fresh from Varanasi and Kanchipuram looms." },
-      { property: "og:title", content: "New Arrivals — Mumbai Bazar" },
-      { property: "og:description", content: "Fresh handwoven silks, newly unboxed this week." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "New Arrival Sarees | Latest Handwoven Silks — Mumbai Bazar",
+      description:
+        "New saree, lehenga and dress material arrivals, added weekly across our 8 stores. Latest Banarasi, Kanjivaram and party wear styles.",
+      path: "/new-arrivals",
+      keywords: [
+        "new saree designs",
+        "latest saree collection",
+        "new arrival sarees",
+        "new banarasi saree",
+        "2026 saree trends",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(
+          itemListSchema(
+            PRODUCTS.filter((p) => p.category.includes("new-arrivals")),
+            "New Arrival Sarees",
+            "/new-arrivals",
+          ),
+        ),
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "New Arrivals", path: "/new-arrivals" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: NewArrivalsPage,
 });
 
@@ -37,13 +65,14 @@ function NewArrivalsPage() {
             </h1>
 
             <p className="text-base md:text-lg text-taupe leading-relaxed max-w-xl">
-              Be the first to drape our newest batch of handwoven silks—freshly off the looms of Varanasi, Kanchipuram, and Chanderi. Limited edition pieces with zero repeat weaves.
+              Be the first to drape our newest arrivals—fresh stock, in store now across Varanasi,
+              Kanchipuram, and Chanderi. Limited edition pieces with zero repeat weaves.
             </p>
 
             <div className="flex flex-wrap items-center gap-6 pt-2 text-sm text-ink">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-5 w-5 text-maroon" />
-                <span>100% Pure Silk Mark</span>
+                <span>See it in store first</span>
               </div>
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-gold-deep" />
@@ -61,9 +90,13 @@ function NewArrivalsPage() {
                 className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
               />
               <div className="absolute bottom-4 left-4 right-4 border border-gold/50 bg-ivory/95 p-4 backdrop-blur-md">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-gold-deep">Spotlight Weave</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gold-deep">
+                  Spotlight Weave
+                </span>
                 <h3 className="font-serif text-lg text-ink">Royal Crimson Kanjivaram Brocade</h3>
-                <p className="text-xs text-taupe mt-0.5">Hand-loomed in Kanchipuram · Pure Gold Zari</p>
+                <p className="text-xs text-taupe mt-0.5">
+                  Hand-loomed in Kanchipuram · Pure Gold Zari
+                </p>
               </div>
             </div>
           </div>
@@ -75,7 +108,7 @@ function NewArrivalsPage() {
         eyebrow="Weekly Drop"
         title="Explore The Latest Additions"
         crumb="New Arrivals"
-        copy="Each piece is handcrafted over 120+ hours by master artisans."
+        copy="New stock arrives weekly across all eight stores."
         heroImg={IMG.colKanjivaram}
         category="new-arrivals"
         showHero={false}
@@ -83,5 +116,3 @@ function NewArrivalsPage() {
     </div>
   );
 }
-
-

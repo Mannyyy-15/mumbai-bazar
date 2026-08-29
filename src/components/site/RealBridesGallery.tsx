@@ -21,8 +21,10 @@ const REAL_BRIDES: BridePost[] = [
     location: "Udaipur Palace Wedding",
     occasion: "Bridal Pheras",
     sareeId: "meher-wine-banarasi-silk-saree",
-    image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800",
-    quote: "My Banarasi silk saree from Mumbai Bazar made me feel like royalty on my Pheras. The gold zari work glistened under the mandap lights!",
+    image:
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=800",
+    quote:
+      "My Banarasi silk saree from Mumbai Bazar made me feel like royalty on my Pheras. The gold zari work glistened under the mandap lights!",
   },
   {
     id: "b2",
@@ -30,8 +32,10 @@ const REAL_BRIDES: BridePost[] = [
     location: "Chennai Temple Wedding",
     occasion: "Kalyanam Ceremony",
     sareeId: "sunehri-rani-saree",
-    image: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
-    quote: "The pure Kanjivaram silk weight and authentic Silk Mark tag gave me complete peace of mind. Truly heirloom quality.",
+    image:
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
+    quote:
+      "The weight and fall of the silk was exactly what I wanted, and being able to drape it in store before buying made the decision easy.",
   },
   {
     id: "b3",
@@ -39,8 +43,10 @@ const REAL_BRIDES: BridePost[] = [
     location: "Goa Beach Sunset Sangeet",
     occasion: "Sangeet Gala",
     sareeId: "gulabi-shringar-saree",
-    image: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&q=80&w=800",
-    quote: "Custom blouse fitting was 100% spot on! I didn't need a single alter before my sangeet performance.",
+    image:
+      "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&q=80&w=800",
+    quote:
+      "Custom blouse fitting was 100% spot on! I didn't need a single alter before my sangeet performance.",
   },
   {
     id: "b4",
@@ -48,8 +54,10 @@ const REAL_BRIDES: BridePost[] = [
     location: "Mumbai Heritage Club",
     occasion: "Reception Party",
     sareeId: "rangrez-royale-saree",
-    image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800",
-    quote: "Received endless compliments on my Paithani saree. The peacock motif border is a work of art.",
+    image:
+      "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&q=80&w=800",
+    quote:
+      "Received endless compliments on my Paithani saree. The peacock motif border is a work of art.",
   },
 ];
 
@@ -84,7 +92,8 @@ export function RealBridesGallery() {
             As Seen On Our Brides
           </h2>
           <p className="mt-3 text-sm md:text-base text-taupe leading-relaxed">
-            Real celebrations, real heirloom drapes. Discover how women across the world celebrate their special moments in Mumbai Bazar sarees.
+            Real celebrations, real heirloom drapes. Discover how women across the world celebrate
+            their special moments in Mumbai Bazar sarees.
           </p>
         </div>
 
@@ -113,7 +122,9 @@ export function RealBridesGallery() {
                   </div>
 
                   <div className="absolute bottom-4 left-4 right-4 text-ivory">
-                    <h4 className="font-serif text-lg text-ivory font-medium leading-tight">{b.brideName}</h4>
+                    <h4 className="font-serif text-lg text-ivory font-medium leading-tight">
+                      {b.brideName}
+                    </h4>
                     <p className="text-[11px] text-ivory/80">{b.location}</p>
                     <div className="mt-3 flex items-center justify-between border-t border-white/20 pt-2 text-[10px] uppercase tracking-wider font-semibold text-gold">
                       <span>Wearing {saree ? saree.name : "Heritage Silk"}</span>
@@ -130,7 +141,10 @@ export function RealBridesGallery() {
       {/* Modal Preview */}
       {selectedPost && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="fixed inset-0 bg-ink/60 backdrop-blur-sm" onClick={() => setSelectedPost(null)} />
+          <div
+            className="fixed inset-0 bg-ink/60 backdrop-blur-sm"
+            onClick={() => setSelectedPost(null)}
+          />
           <div className="relative min-h-screen flex items-center justify-center p-4">
             <div className="relative w-full max-w-2xl rounded-3xl border border-gold/50 bg-ivory p-6 md:p-8 shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-6">
               <button
@@ -141,13 +155,21 @@ export function RealBridesGallery() {
               </button>
 
               <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-gold/30">
-                <img src={selectedPost.image} alt={selectedPost.brideName} className="h-full w-full object-cover" />
+                <img
+                  src={selectedPost.image}
+                  alt={selectedPost.brideName}
+                  className="h-full w-full object-cover"
+                />
               </div>
 
               <div className="flex flex-col justify-between space-y-4">
                 <div>
-                  <span className="text-[10px] uppercase tracking-widest text-gold-deep font-semibold">{selectedPost.occasion}</span>
-                  <h3 className="font-serif text-2xl text-maroon font-medium mt-1">{selectedPost.brideName}</h3>
+                  <span className="text-[10px] uppercase tracking-widest text-gold-deep font-semibold">
+                    {selectedPost.occasion}
+                  </span>
+                  <h3 className="font-serif text-2xl text-maroon font-medium mt-1">
+                    {selectedPost.brideName}
+                  </h3>
                   <p className="text-xs text-taupe">{selectedPost.location}</p>
 
                   <blockquote className="mt-4 text-sm font-serif italic text-ink/85 border-l-2 border-gold pl-3 py-1">
@@ -161,11 +183,17 @@ export function RealBridesGallery() {
                     (products.length > 0 ? products[0] : null);
                   return (
                     <div className="rounded-2xl bg-beige/30 p-4 border border-gold/40 space-y-3">
-                      <span className="text-[9px] uppercase tracking-widest text-gold-deep font-semibold">Featured Saree</span>
+                      <span className="text-[9px] uppercase tracking-widest text-gold-deep font-semibold">
+                        Featured Saree
+                      </span>
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-serif text-base text-maroon font-medium">{saree ? saree.name : "Heritage Pure Silk"}</h4>
-                          <p className="font-sans text-base font-bold text-ink">{saree ? saree.price : ""}</p>
+                          <h4 className="font-serif text-base text-maroon font-medium">
+                            {saree ? saree.name : "Heritage Pure Silk"}
+                          </h4>
+                          <p className="font-sans text-base font-bold text-ink">
+                            {saree ? saree.price : ""}
+                          </p>
                         </div>
                         {saree && (
                           <button

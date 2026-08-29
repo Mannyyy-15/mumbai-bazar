@@ -1,7 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Search, User, ShoppingBag, Menu, X, Phone, Heart, ChevronDown, ChevronRight, ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  Search,
+  User,
+  ShoppingBag,
+  Menu,
+  X,
+  Phone,
+  Heart,
+  ChevronDown,
+  ChevronRight,
+  ArrowLeft,
+  ArrowRight,
+} from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
@@ -134,8 +146,8 @@ const MEGA_CATEGORIES: MegaMenu[] = [
       {
         title: "Purity & Craft",
         items: [
-          { label: "100% Silk Mark Certified", to: "/silk-sarees" },
-          { label: "Handloom Master Weavers", to: "/our-story" },
+          { label: "Silk & Silk-Blend Sarees", to: "/silk-sarees" },
+          { label: "Our Story", to: "/our-story" },
           { label: "Care & Preservation Guide", to: "/care-guide" },
           { label: "View Complete Silk Archive", to: "/silk-sarees" },
         ],
@@ -207,7 +219,7 @@ const MOBILE_NAV_ITEMS: MobileNavItem[] = [
       { label: "Kanjivaram Temple Borders", to: "/silk-sarees" },
       { label: "Paithani & Maharashtra Weaves", to: "/silk-sarees" },
       { label: "Chanderi & Handloom Tissue", to: "/silk-sarees" },
-      { label: "Silk Mark Certified Collection", to: "/silk-sarees" },
+      { label: "Silk & Silk-Blend Collection", to: "/silk-sarees" },
       { label: "View All Heritage Silks", to: "/silk-sarees" },
     ],
   },
@@ -324,9 +336,7 @@ export function Header() {
     <header
       data-scrolled={scrolled ? "true" : "false"}
       className={`sticky top-0 z-40 border-b border-gold/50 bg-ivory/95 backdrop-blur-md transition-[box-shadow,background-color] duration-300 ease-out ${
-        scrolled
-          ? "shadow-[0_8px_24px_-14px_rgba(100,31,42,0.22)]"
-          : "shadow-none"
+        scrolled ? "shadow-[0_8px_24px_-14px_rgba(100,31,42,0.22)]" : "shadow-none"
       }`}
     >
       {/* Main navigation row */}
@@ -487,12 +497,12 @@ export function Header() {
               catIdx === 0
                 ? "left-0 translate-x-0"
                 : catIdx === 1
-                ? "left-0 xl:-left-6 translate-x-0"
-                : catIdx === total - 1
-                ? "right-0 left-auto translate-x-0"
-                : catIdx === total - 2
-                ? "right-0 xl:-right-6 left-auto translate-x-0"
-                : "left-1/2 -translate-x-1/2";
+                  ? "left-0 xl:-left-6 translate-x-0"
+                  : catIdx === total - 1
+                    ? "right-0 left-auto translate-x-0"
+                    : catIdx === total - 2
+                      ? "right-0 xl:-right-6 left-auto translate-x-0"
+                      : "left-1/2 -translate-x-1/2";
 
             return (
               <div
@@ -504,7 +514,9 @@ export function Header() {
                 <Link
                   to={cat.to}
                   className={`inline-flex items-center gap-2 whitespace-nowrap text-xs font-semibold uppercase tracking-[0.16em] transition-colors py-1.5 ${
-                    isCurrentPage ? "text-maroon font-bold" : "text-ink/80 group-hover:text-maroon hover:text-maroon"
+                    isCurrentPage
+                      ? "text-maroon font-bold"
+                      : "text-ink/80 group-hover:text-maroon hover:text-maroon"
                   }`}
                 >
                   <span>{cat.label}</span>
@@ -709,7 +721,7 @@ export function Header() {
               </div>
             </div>
           </div>,
-          document.body
+          document.body,
         )}
     </header>
   );

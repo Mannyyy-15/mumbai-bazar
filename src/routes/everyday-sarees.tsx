@@ -1,24 +1,65 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Feather, Sun, ShieldCheck, Sparkles, Heart } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
-import { IMG } from "@/lib/site-data";
+import { IMG, PRODUCTS } from "@/lib/site-data";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/everyday-sarees")({
-  head: () => ({
-    meta: [
-      { title: "Everyday Sarees — Soft Silks & Daily Drapes | Mumbai Bazar" },
-      { name: "description", content: "Lightweight soft silks, linen blends, and effortless daily drapes for office wear and family gatherings." },
-      { property: "og:title", content: "Everyday Sarees — Mumbai Bazar" },
-      { property: "og:description", content: "Elegance for every single day." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Everyday & Office Wear Sarees Online | Soft Silk & Cotton — Mumbai Bazar",
+      description:
+        "Lightweight everyday sarees for office wear, family functions and daily drapes. Soft silks, cotton blends and easy-care fabrics with free shipping across India.",
+      path: "/everyday-sarees",
+      keywords: [
+        "everyday saree",
+        "office wear saree",
+        "daily wear saree",
+        "cotton saree online",
+        "soft silk saree",
+        "lightweight saree",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(
+          itemListSchema(
+            PRODUCTS.filter((p) => p.category.includes("everyday-sarees")),
+            "Everyday Sarees",
+            "/everyday-sarees",
+          ),
+        ),
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Everyday Sarees", path: "/everyday-sarees" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: EverydaySareesPage,
 });
 
 const FEATURES = [
-  { icon: Feather, title: "Featherlight Weight", desc: "Under 450 grams for zero shoulder fatigue during long working hours." },
-  { icon: Sun, title: "Breathable Weave", desc: "Natural silk-cotton and soft mulberry weaves that stay cool all day." },
-  { icon: ShieldCheck, title: "Wrinkle Resistant", desc: "Formulated for minimal creasing, ideal for travel and daily drapes." },
+  {
+    icon: Feather,
+    title: "Featherlight Weight",
+    desc: "Under 450 grams for zero shoulder fatigue during long working hours.",
+  },
+  {
+    icon: Sun,
+    title: "Breathable Weave",
+    desc: "Natural silk-cotton and soft mulberry weaves that stay cool all day.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Wrinkle Resistant",
+    desc: "Formulated for minimal creasing, ideal for travel and daily drapes.",
+  },
 ];
 
 function EverydaySareesPage() {
@@ -36,7 +77,9 @@ function EverydaySareesPage() {
                 Effortless Everyday Drapes
               </h1>
               <p className="text-base md:text-lg text-taupe leading-relaxed">
-                Who says silk is reserved only for grand weddings? Discover soft silks, chanderi tissue, and fluid drapes designed for office meetings, brunch with friends, and quiet family evenings.
+                Who says silk is reserved only for grand weddings? Discover soft silks, chanderi
+                tissue, and fluid drapes designed for office meetings, brunch with friends, and
+                quiet family evenings.
               </p>
 
               <div className="grid gap-4 sm:grid-cols-3 pt-4">
@@ -75,5 +118,3 @@ function EverydaySareesPage() {
     </div>
   );
 }
-
-

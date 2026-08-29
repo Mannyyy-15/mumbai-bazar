@@ -2,7 +2,10 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import type { Product } from "./site-data";
 import { fetchShopifyProducts } from "./shopify";
 
-const CatalogContext = createContext<{ products: Product[]; loading: boolean }>({ products: [], loading: true });
+const CatalogContext = createContext<{ products: Product[]; loading: boolean }>({
+  products: [],
+  loading: true,
+});
 
 export function CatalogProvider({ children }: { children: ReactNode }) {
   const [products, setProducts] = useState<Product[]>([]);

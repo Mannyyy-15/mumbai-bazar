@@ -1,15 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
 import { TrousseauBuilder } from "@/components/site/TrousseauBuilder";
 import { PageHero } from "@/components/site/PageHero";
 import { IMG } from "@/lib/site-data";
 
 export const Route = createFileRoute("/trousseau-builder")({
-  head: () => ({
-    meta: [
-      { title: "Bridal Trousseau Box Builder — Mumbai Bazar" },
-      { name: "description", content: "Build your custom 3-piece bridal trousseau saree set and receive a luxury gold-embossed chest + 15% bundle savings." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Bridal Trousseau Builder | Custom 3-Saree Wedding Set — Mumbai Bazar",
+      description:
+        "Build a custom three-saree bridal trousseau and receive a gold-embossed keepsake chest plus 15% bundle savings. Personal styling for Mumbai brides.",
+      path: "/trousseau-builder",
+      keywords: [
+        "bridal trousseau",
+        "wedding saree set",
+        "trousseau saree package",
+        "bridal saree bundle",
+        "Mumbai bridal styling",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Trousseau Builder", path: "/trousseau-builder" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: TrousseauBuilderPage,
 });
 
@@ -21,7 +44,7 @@ function TrousseauBuilderPage() {
         title="Interactive Trousseau Box Builder"
         crumb="Trousseau Builder"
         copy="Curate 3 heirloom sarees for your wedding functions to unlock custom 15% bundle savings and a luxury velvet chest."
-        heroImg={IMG.colWedding}
+        img={IMG.colWedding}
       />
       <TrousseauBuilder />
     </div>

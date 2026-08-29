@@ -1,13 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import type { Collection } from "@/lib/site-data";
 
-export function CollectionCard({
-  c,
-  className = "",
-}: {
-  c: Collection;
-  className?: string;
-}) {
+export function CollectionCard({ c, className = "" }: { c: Collection; className?: string }) {
   return (
     <a href="#" className={`group relative block overflow-hidden bg-beige ${className}`}>
       <img

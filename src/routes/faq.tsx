@@ -1,19 +1,53 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Minus, Search, MessageCircle, HelpCircle, ShieldCheck, Truck, Scissors, RefreshCw } from "lucide-react";
+import {
+  Plus,
+  Minus,
+  Search,
+  MessageCircle,
+  HelpCircle,
+  ShieldCheck,
+  Truck,
+  Scissors,
+  RefreshCw,
+} from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { GoldRule } from "@/components/site/Motif";
 import { IMG } from "@/lib/site-data";
+import { seo, jsonLd } from "@/lib/seo";
+import { faqSchema, breadcrumbSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/faq")({
-  head: () => ({
-    meta: [
-      { title: "FAQ — Mumbai Bazar" },
-      { name: "description", content: "Frequently asked questions about sarees, shipping, blouse stitching, exchanges and personal styling at Mumbai Bazar." },
-      { property: "og:title", content: "FAQ — Mumbai Bazar" },
-      { property: "og:description", content: "Answers to the questions we get most." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Saree FAQs | Silk, Blouse Stitching, Shipping & Returns — Mumbai Bazar",
+      description:
+        "Answers on our saree and lehenga range, store timings and locations, blouse stitching, exchanges and delivery across India.",
+      path: "/faq",
+      keywords: [
+        "saree FAQ",
+        "saree shop timings",
+        "saree blouse stitching",
+        "saree return policy",
+        "international saree shipping",
+      ],
+    });
+    return {
+      meta,
+      links,
+      // FAQPage markup is the single biggest structured-data gap among our
+      // competitors — it wins People Also Ask slots and AI Overview citations.
+      scripts: [
+        jsonLd(faqSchema(FAQS)),
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "FAQ", path: "/faq" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: FAQ,
 });
 
@@ -28,13 +62,13 @@ const CATEGORIES = [
 const FAQS = [
   {
     category: "weaves",
-    q: "Are all your sarees 100% handwoven on traditional looms?",
-    a: "Yes — every saree in our catalog is handwoven by master artisans on traditional pit or frame looms across verified weaving clusters (Kanchipuram, Varanasi, Chanderi, Paithan). We do not stock any power-loom pieces. Each saree ships with details on its artisan cluster and weave technique.",
+    q: "What kinds of sarees do you stock?",
+    a: "We carry fancy and party wear sarees, dress material, designer lehengas and dulhan (bridal) wear across all our stores. The range spans everyday budgets through to heavier bridal pieces. Our Nalasopara East store holds the widest bridal selection.",
   },
   {
     category: "weaves",
-    q: "Is the silk and zari certified pure?",
-    a: "All our silk sarees carry the official Silk Mark certification. Furthermore, we independently laboratory-test our gold and silver zari wires for metal purity before listing.",
+    q: "Can I check the fabric before buying?",
+    a: "Yes. Every piece can be seen, handled and draped in store before you buy, and our staff will tell you exactly what a saree is made of. If you are shopping remotely, message us on WhatsApp and we will send photos or video of the fabric, border and palla.",
   },
   {
     category: "weaves",
@@ -85,7 +119,9 @@ function FAQ() {
     return matchesTab && matchesSearch;
   });
 
-  const waMsg = encodeURIComponent("Hello Mumbai Bazar Concierge, I have a custom question about your sarees.");
+  const waMsg = encodeURIComponent(
+    "Hello Mumbai Bazar Concierge, I have a custom question about your sarees.",
+  );
 
   return (
     <div className="w-full overflow-x-hidden bg-ivory">
@@ -93,7 +129,7 @@ function FAQ() {
         eyebrow="Help & Support"
         title="Frequently Asked Questions"
         crumb="FAQ"
-        copy="Everything you need to know about our handwoven sarees, pure silk certifications, global shipping, and custom blouse tailoring."
+        copy="Everything you need to know about our range, store visits, delivery and blouse tailoring."
         img={IMG.look4}
       />
 
@@ -134,9 +170,14 @@ function FAQ() {
             {filteredFaqs.length === 0 ? (
               <div className="py-16 text-center border border-dashed border-gold/50 bg-beige/10">
                 <p className="font-serif text-xl text-ink">No matching questions found.</p>
-                <p className="mt-2 text-sm text-taupe">Try searching for a different keyword or chat with our team directly.</p>
+                <p className="mt-2 text-sm text-taupe">
+                  Try searching for a different keyword or chat with our team directly.
+                </p>
                 <button
-                  onClick={() => { setActiveTab("all"); setSearchQuery(""); }}
+                  onClick={() => {
+                    setActiveTab("all");
+                    setSearchQuery("");
+                  }}
                   className="btn-outline mt-6 inline-flex"
                 >
                   Reset Search & Filters
@@ -171,7 +212,8 @@ function FAQ() {
           <GoldRule className="mb-6" />
           <h2 className="font-serif text-3xl md:text-4xl text-ink">Have a unique question?</h2>
           <p className="mt-3 text-taupe text-base">
-            Our personal saree stylists are available on WhatsApp to answer questions, share drape videos, or assist with custom orders.
+            Our personal saree stylists are available on WhatsApp to answer questions, share drape
+            videos, or assist with custom orders.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <a
@@ -192,4 +234,3 @@ function FAQ() {
     </div>
   );
 }
-

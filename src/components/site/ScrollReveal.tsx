@@ -24,9 +24,7 @@ export function ScrollReveal() {
         threshold: 0.05,
       });
 
-      const elements = document.querySelectorAll(
-        "section, .reveal-on-scroll, [data-reveal]"
-      );
+      const elements = document.querySelectorAll("section, .reveal-on-scroll, [data-reveal]");
 
       elements.forEach((el) => {
         if (!el.classList.contains("is-visible")) {

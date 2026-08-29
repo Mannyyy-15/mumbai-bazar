@@ -10,6 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { SITE, OG_IMAGE, jsonLd, verificationMeta } from "@/lib/seo";
+import { organizationSchema, websiteSchema, localBusinessSchema } from "@/lib/structured-data";
 import { AnnouncementBar } from "@/components/site/AnnouncementBar";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -53,7 +55,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-[70vh] items-center justify-center bg-ivory px-4 py-16">
       <div className="max-w-md text-center bg-white p-8 rounded-2xl border border-gold/40 shadow-xl">
-        <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-maroon">Mumbai Bazar</span>
+        <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-maroon">
+          Mumbai Bazar
+        </span>
         <h1 className="mt-3 font-serif text-2xl md:text-3xl font-semibold text-maroon">
           Reconnecting to Boutique
         </h1>
@@ -96,60 +100,73 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "google-site-verification", content: "T575kNhBnJsmhlPUp9FUcAjjqBKnfyNPXgAFZTPTG6g" },
+      { title: `${SITE.name} — ${SITE.tagline}` },
+      { name: "description", content: SITE.description },
+      { name: "author", content: SITE.name },
+      { name: "publisher", content: SITE.name },
+      // Let Google build full-size image previews and long snippets.
+      {
+        name: "robots",
+        content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+      },
+      { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+      { name: "format-detection", content: "telephone=no" },
       { name: "theme-color", content: "#641F2A" },
       { name: "msapplication-TileColor", content: "#641F2A" },
-      { title: "Mumbai Bazar — Royal Heritage Silk Sarees & Bridal Couture" },
-      {
-        name: "description",
-        content:
-          "Discover timeless Banarasi, Kanjivaram and 1-minute ready-to-wear pure silk sarees crafted for weddings, festivities and celebrations. Shop Mumbai Bazar.",
-      },
-      { name: "author", content: "Mumbai Bazar" },
+      { name: "geo.region", content: "IN-MH" },
+      { name: "geo.placename", content: SITE.address.city },
 
-      /* OpenGraph (WhatsApp, Facebook, LinkedIn, iMessage) */
-      { property: "og:site_name", content: "Mumbai Bazar" },
+      /* OpenGraph — WhatsApp, Facebook, LinkedIn, iMessage unfurls */
+      { property: "og:site_name", content: SITE.name },
+      { property: "og:locale", content: SITE.locale },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://mumbaibazar.com" },
-      { property: "og:title", content: "Mumbai Bazar — Royal Heritage Silk Sarees & Bridal Couture" },
-      {
-        property: "og:description",
-        content:
-          "Discover heirloom Banarasi, Kanjivaram, and 1-minute ready-to-wear silk sarees crafted for weddings, grand festivities, and celebrations.",
-      },
-      { property: "og:image", content: "https://mumbaibazar.com/og-share.jpg" },
-      { property: "og:image:secure_url", content: "https://mumbaibazar.com/og-share.jpg" },
+      { property: "og:title", content: `${SITE.name} — ${SITE.tagline}` },
+      { property: "og:description", content: SITE.description },
+      { property: "og:url", content: SITE.url },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:secure_url", content: OG_IMAGE },
       { property: "og:image:type", content: "image/jpeg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "Mumbai Bazar Royal Heritage Silk Sarees" },
-      { property: "og:locale", content: "en_IN" },
+      { property: "og:image:alt", content: `${SITE.name} — ${SITE.tagline}` },
 
       /* Twitter / X */
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@MumbaiBazar" },
       { name: "twitter:creator", content: "@MumbaiBazar" },
-      { name: "twitter:title", content: "Mumbai Bazar — Royal Heritage Silk Sarees & Bridal Couture" },
-      {
-        name: "twitter:description",
-        content:
-          "Handpicked Banarasi & Kanjivaram silks, festive edits, and 1-minute drapes. Styled for the moments that matter.",
-      },
-      { name: "twitter:image", content: "https://mumbaibazar.com/og-share.jpg" },
-      { name: "twitter:image:alt", content: "Mumbai Bazar Heritage Silk Sarees" },
+      { name: "twitter:title", content: `${SITE.name} — ${SITE.tagline}` },
+      { name: "twitter:description", content: SITE.description },
+      { name: "twitter:image", content: OG_IMAGE },
+      { name: "twitter:image:alt", content: `${SITE.name} — ${SITE.tagline}` },
+
+      // Search-engine ownership verification. Entries with an empty token are
+      // filtered out so no blank meta tags ship before the accounts exist.
+      ...verificationMeta(),
     ],
     links: [
-      { rel: "canonical", href: "https://mumbaibazar.com" },
+      // No canonical here: every page route emits its own via seo(). A root-level
+      // one renders a second, conflicting tag and Google then ignores both.
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico?v=3" },
       { rel: "icon", href: "/favicon.png?v=3", type: "image/png", sizes: "32x32" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=3", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      // Warms the DNS/TLS handshake for the font host before the CSS request lands.
+      { rel: "dns-prefetch", href: "https://fonts.gstatic.com" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
       },
+    ],
+    // Site-wide entity graph: who we are, what the site is, where the store is.
+    scripts: [
+      // Google Preferred Sources library. Renders any
+      // [google-add-preferred-source-btn] node on the page.
+      { src: "https://news.google.com/swg/js/v1/publisher.js", async: true },
+      jsonLd(organizationSchema()),
+      jsonLd(websiteSchema()),
+      jsonLd(localBusinessSchema()),
     ],
   }),
   shellComponent: RootShell,
@@ -160,34 +177,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en-IN">
       <head>
-        <meta name="google-site-verification" content="T575kNhBnJsmhlPUp9FUcAjjqBKnfyNPXgAFZTPTG6g" />
-        <meta name="theme-color" content="#641F2A" />
-        <meta property="og:site_name" content="Mumbai Bazar" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://mumbaibazar.com" />
-        <meta property="og:title" content="Mumbai Bazar — Royal Heritage Silk Sarees & Bridal Couture" />
-        <meta
-          property="og:description"
-          content="Discover heirloom Banarasi, Kanjivaram, and 1-minute ready-to-wear silk sarees crafted for weddings, grand festivities, and celebrations."
-        />
-        <meta property="og:image" content="https://mumbaibazar.com/og-share.jpg" />
-        <meta property="og:image:secure_url" content="https://mumbaibazar.com/og-share.jpg" />
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:locale" content="en_IN" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Mumbai Bazar — Royal Heritage Silk Sarees & Bridal Couture" />
-        <meta
-          name="twitter:description"
-          content="Handpicked Banarasi & Kanjivaram silks, festive edits, and 1-minute drapes. Styled for the moments that matter."
-        />
-        <meta name="twitter:image" content="https://mumbaibazar.com/og-share.jpg" />
-        <link rel="icon" href="/favicon.ico?v=3" />
-        <link rel="icon" type="image/png" href="/favicon.png?v=3" sizes="32x32" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" sizes="180x180" />
+        {/* Every meta and link tag is emitted through head() above, from SITE.
+            Hardcoding them here as well renders a second, conflicting copy. */}
         <HeadContent />
       </head>
       <body>
@@ -227,5 +220,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-
-

@@ -1,5 +1,11 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { addToShopifyCart, createShopifyCart, removeFromShopifyCart, shopifyConfigured, updateShopifyCartLine } from "./shopify";
+import {
+  addToShopifyCart,
+  createShopifyCart,
+  removeFromShopifyCart,
+  shopifyConfigured,
+  updateShopifyCartLine,
+} from "./shopify";
 
 export type CartItem = {
   id: string;
@@ -50,7 +56,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
           setCheckoutUrl(stored.checkoutUrl);
         }
       }
-    } catch {}
+    } catch {
+      // Corrupt or unavailable storage (private mode, quota): start with an
+      // empty cart rather than blocking hydration.
+    }
     setHydrated(true);
   }, []);
 
@@ -58,7 +67,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (!hydrated) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, shopifyCartId, checkoutUrl }));
-    } catch {}
+    } catch {
+      // Storage full or blocked — the cart still works for this session.
+    }
   }, [items, shopifyCartId, checkoutUrl, hydrated]);
 
   // Lock scroll when open
@@ -98,27 +109,36 @@ export function CartProvider({ children }: { children: ReactNode }) {
           const sync = shopifyCartId
             ? addToShopifyCart(shopifyCartId, item.shopifyVariantId, qty)
             : createShopifyCart(item.shopifyVariantId, qty);
-          sync.then((cart) => {
-            setShopifyCartId(cart.id); setCheckoutUrl(cart.checkoutUrl);
-            setItems((prev) => prev.map((line) => {
-              const remote = cart.lines.find((r) => r.merchandiseId === line.shopifyVariantId);
-              return remote ? { ...line, lineId: remote.id, qty: remote.quantity } : line;
-            }));
-          }).catch(() => undefined);
+          sync
+            .then((cart) => {
+              setShopifyCartId(cart.id);
+              setCheckoutUrl(cart.checkoutUrl);
+              setItems((prev) =>
+                prev.map((line) => {
+                  const remote = cart.lines.find((r) => r.merchandiseId === line.shopifyVariantId);
+                  return remote ? { ...line, lineId: remote.id, qty: remote.quantity } : line;
+                }),
+              );
+            })
+            .catch(() => undefined);
         }
       },
       removeItem: (id) => {
         const existing = items.find((item) => item.id === id);
         setItems((prev) => prev.filter((p) => p.id !== id));
-        if (shopifyCartId && existing?.lineId) removeFromShopifyCart(shopifyCartId, existing.lineId).catch(() => undefined);
+        if (shopifyCartId && existing?.lineId)
+          removeFromShopifyCart(shopifyCartId, existing.lineId).catch(() => undefined);
       },
       setQty: (id, qty) => {
         const existing = items.find((item) => item.id === id);
         setItems((prev) =>
-          qty <= 0 ? prev.filter((p) => p.id !== id) : prev.map((p) => (p.id === id ? { ...p, qty } : p))
+          qty <= 0
+            ? prev.filter((p) => p.id !== id)
+            : prev.map((p) => (p.id === id ? { ...p, qty } : p)),
         );
         if (shopifyCartId && existing?.lineId) {
-          if (qty <= 0) removeFromShopifyCart(shopifyCartId, existing.lineId).catch(() => undefined);
+          if (qty <= 0)
+            removeFromShopifyCart(shopifyCartId, existing.lineId).catch(() => undefined);
           else updateShopifyCartLine(shopifyCartId, existing.lineId, qty).catch(() => undefined);
         }
       },
