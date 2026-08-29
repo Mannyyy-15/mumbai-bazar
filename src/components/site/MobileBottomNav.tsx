@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, LayoutGrid, Heart, ShoppingBag, MessageCircle, Sparkles } from "lucide-react";
+import { Home, LayoutGrid, Heart, ShoppingBag, MessageCircle } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 
@@ -12,11 +11,6 @@ export function MobileBottomNav() {
 
   const handleOpenCategories = () => {
     window.dispatchEvent(new CustomEvent("mb:open-drawer"));
-  };
-
-  const handleOpenChatbot = () => {
-    // Open the Saree Stylist AI chatbot
-    window.dispatchEvent(new CustomEvent("mb:open-chatbot"));
   };
 
   return (
@@ -80,17 +74,17 @@ export function MobileBottomNav() {
           <span className="mt-1 text-[10px] font-bold tracking-wider uppercase">Bag</span>
         </button>
 
-        {/* 5. Personal Stylist / WhatsApp */}
-        <button
-          onClick={handleOpenChatbot}
-          className="flex flex-1 flex-col items-center justify-center py-1 text-maroon hover:text-wine transition-colors"
-          aria-label="Ask Saree Stylist"
+        {/* 5. WhatsApp Support */}
+        <a
+          href="https://wa.me/919999999999?text=Hi%20Mumbai%20Bazar"
+          target="_blank"
+          rel="noreferrer"
+          className="flex flex-1 flex-col items-center justify-center py-1 text-ink/65 hover:text-maroon transition-colors"
+          aria-label="WhatsApp Support"
         >
-          <div className="relative">
-            <Sparkles className="h-5 w-5 animate-pulse text-gold-deep" />
-          </div>
-          <span className="mt-1 text-[10px] font-bold tracking-wider uppercase text-maroon">Stylist</span>
-        </button>
+          <MessageCircle className="h-5 w-5 text-maroon" />
+          <span className="mt-1 text-[10px] font-bold tracking-wider uppercase text-maroon">WhatsApp</span>
+        </a>
       </nav>
     </div>
   );

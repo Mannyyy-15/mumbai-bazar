@@ -18,7 +18,6 @@ import { CartDrawer } from "@/components/site/CartDrawer";
 import { CartProvider } from "@/lib/cart-context";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { CatalogProvider } from "@/lib/catalog-context";
-import { SareeExpertChatbot } from "@/components/site/SareeExpertChatbot";
 import { WishlistProvider } from "@/lib/wishlist-context";
 import { WishlistDrawer } from "@/components/site/WishlistDrawer";
 import { PageTransition } from "@/components/site/PageTransition";
@@ -142,9 +141,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "canonical", href: "https://www.mumbaibazar.com" },
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico" },
-      { rel: "icon", href: "/favicon.png", type: "image/png", sizes: "32x32" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
+      { rel: "icon", href: "/favicon.ico?v=2" },
+      { rel: "icon", href: "/favicon.png?v=2", type: "image/png", sizes: "32x32" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=2", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -186,9 +185,9 @@ function RootShell({ children }: { children: ReactNode }) {
           content="Handpicked Banarasi & Kanjivaram silks, festive edits, and 1-minute drapes. Styled for the moments that matter."
         />
         <meta name="twitter:image" content="https://www.mumbaibazar.com/og-share.jpg" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+        <link rel="icon" href="/favicon.ico?v=2" />
+        <link rel="icon" type="image/png" href="/favicon.png?v=2" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" sizes="180x180" />
         <HeadContent />
       </head>
       <body>
@@ -218,7 +217,6 @@ function RootComponent() {
                 </PageTransition>
               </main>
               <Footer />
-              <SareeExpertChatbot />
               <CartDrawer />
               <WishlistDrawer />
               <MobileBottomNav />
