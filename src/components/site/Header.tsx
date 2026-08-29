@@ -147,7 +147,7 @@ const MEGA_CATEGORIES: MegaMenu[] = [
         title: "Purity & Craft",
         items: [
           { label: "Silk & Silk-Blend Sarees", to: "/silk-sarees" },
-          { label: "Handloom Master Weavers", to: "/our-story" },
+          { label: "Our Story", to: "/our-story" },
           { label: "Care & Preservation Guide", to: "/care-guide" },
           { label: "View Complete Silk Archive", to: "/silk-sarees" },
         ],

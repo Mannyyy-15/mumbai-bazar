@@ -395,8 +395,8 @@ function ProductDetail() {
                 />
                 <TrustItem
                   icon={<ShieldCheck className="h-4 w-4" />}
-                  label="Silk Mark"
-                  sub="Certified"
+                  label="In Store"
+                  sub="See before you buy"
                 />
               </ul>
 

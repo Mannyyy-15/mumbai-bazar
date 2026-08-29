@@ -35,7 +35,7 @@ const REAL_BRIDES: BridePost[] = [
     image:
       "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=800",
     quote:
-      "The pure Kanjivaram silk weight and authentic Silk Mark tag gave me complete peace of mind. Truly heirloom quality.",
+      "The weight and fall of the silk was exactly what I wanted, and being able to drape it in store before buying made the decision easy.",
   },
   {
     id: "b3",
