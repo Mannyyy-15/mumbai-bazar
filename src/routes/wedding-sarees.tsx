@@ -8,9 +8,9 @@ import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 export const Route = createFileRoute("/wedding-sarees")({
   head: () => {
     const { meta, links } = seo({
-      title: "Bridal & Wedding Sarees Online | Kanjivaram & Banarasi — Mumbai Bazar",
+      title: "Dulhan Sarees & Bridal Lehengas | Nalasopara, Virar & Bhayandar — Mumbai Bazar",
       description:
-        "Shop handwoven bridal sarees for weddings, sangeet and reception. Silk Mark certified Kanjivaram and Banarasi trousseau silks with free India shipping and expert styling.",
+        "Dulhan sarees, designer lehengas and bridal wear for weddings, sangeet and reception. Visit our Nalasopara East store for the widest bridal range, or shop online.",
       path: "/wedding-sarees",
       keywords: [
         "bridal saree online",

@@ -8,9 +8,9 @@ import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 export const Route = createFileRoute("/silk-sarees")({
   head: () => {
     const { meta, links } = seo({
-      title: "Pure Silk Sarees Online | Banarasi, Kanjivaram & Paithani — Mumbai Bazar",
+      title: "Silk Sarees | Banarasi, Kanjivaram & Paithani Styles — Mumbai Bazar",
       description:
-        "Buy Silk Mark certified pure silk sarees handwoven in Kanchipuram, Varanasi and Paithan. Real zari, mulberry silk and a matching blouse piece with every saree.",
+        "Silk and silk-blend sarees in Banarasi, Kanjivaram and Paithani styles. See and drape every piece in store across Nalasopara, Virar, Bhayandar and Goregaon.",
       path: "/silk-sarees",
       keywords: [
         "pure silk saree",

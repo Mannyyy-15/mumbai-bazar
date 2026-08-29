@@ -31,7 +31,8 @@ import { Route as WeddingSareesRouteImport } from './routes/wedding-sarees'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
-import { Route as SareeShopCityRouteImport } from './routes/saree-shop.$city'
+import { Route as StoresIndexRouteImport } from './routes/stores.index'
+import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -143,9 +144,14 @@ const ProductsIdRoute = ProductsIdRouteImport.update({
   path: '/products/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SareeShopCityRoute = SareeShopCityRouteImport.update({
-  id: '/saree-shop/$city',
-  path: '/saree-shop/$city',
+const StoresIndexRoute = StoresIndexRouteImport.update({
+  id: '/stores/',
+  path: '/stores/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoresSlugRoute = StoresSlugRouteImport.update({
+  id: '/stores/$slug',
+  path: '/stores/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -171,8 +177,9 @@ export interface FileRoutesByFullPath {
   '/wedding-sarees': typeof WeddingSareesRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/products/$id': typeof ProductsIdRoute
-  '/saree-shop/$city': typeof SareeShopCityRoute
+  '/stores/$slug': typeof StoresSlugRoute
   '/guides/': typeof GuidesIndexRoute
+  '/stores/': typeof StoresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -196,8 +203,9 @@ export interface FileRoutesByTo {
   '/wedding-sarees': typeof WeddingSareesRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/products/$id': typeof ProductsIdRoute
-  '/saree-shop/$city': typeof SareeShopCityRoute
+  '/stores/$slug': typeof StoresSlugRoute
   '/guides': typeof GuidesIndexRoute
+  '/stores': typeof StoresIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -222,8 +230,9 @@ export interface FileRoutesById {
   '/wedding-sarees': typeof WeddingSareesRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/products/$id': typeof ProductsIdRoute
-  '/saree-shop/$city': typeof SareeShopCityRoute
+  '/stores/$slug': typeof StoresSlugRoute
   '/guides/': typeof GuidesIndexRoute
+  '/stores/': typeof StoresIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -249,8 +258,9 @@ export interface FileRouteTypes {
     | '/wedding-sarees'
     | '/guides/$slug'
     | '/products/$id'
-    | '/saree-shop/$city'
+    | '/stores/$slug'
     | '/guides/'
+    | '/stores/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -274,8 +284,9 @@ export interface FileRouteTypes {
     | '/wedding-sarees'
     | '/guides/$slug'
     | '/products/$id'
-    | '/saree-shop/$city'
+    | '/stores/$slug'
     | '/guides'
+    | '/stores'
   id:
     | '__root__'
     | '/'
@@ -299,8 +310,9 @@ export interface FileRouteTypes {
     | '/wedding-sarees'
     | '/guides/$slug'
     | '/products/$id'
-    | '/saree-shop/$city'
+    | '/stores/$slug'
     | '/guides/'
+    | '/stores/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -325,8 +337,9 @@ export interface RootRouteChildren {
   WeddingSareesRoute: typeof WeddingSareesRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
   ProductsIdRoute: typeof ProductsIdRoute
-  SareeShopCityRoute: typeof SareeShopCityRoute
+  StoresSlugRoute: typeof StoresSlugRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
+  StoresIndexRoute: typeof StoresIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -485,11 +498,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/saree-shop/$city': {
-      id: '/saree-shop/$city'
-      path: '/saree-shop/$city'
-      fullPath: '/saree-shop/$city'
-      preLoaderRoute: typeof SareeShopCityRouteImport
+    '/stores/': {
+      id: '/stores/'
+      path: '/stores'
+      fullPath: '/stores/'
+      preLoaderRoute: typeof StoresIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stores/$slug': {
+      id: '/stores/$slug'
+      path: '/stores/$slug'
+      fullPath: '/stores/$slug'
+      preLoaderRoute: typeof StoresSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -517,8 +537,9 @@ const rootRouteChildren: RootRouteChildren = {
   WeddingSareesRoute: WeddingSareesRoute,
   GuidesSlugRoute: GuidesSlugRoute,
   ProductsIdRoute: ProductsIdRoute,
-  SareeShopCityRoute: SareeShopCityRoute,
+  StoresSlugRoute: StoresSlugRoute,
   GuidesIndexRoute: GuidesIndexRoute,
+  StoresIndexRoute: StoresIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -7,9 +7,9 @@ import { ArrowRight, Sparkles, ShieldCheck, HeartHandshake, Award } from "lucide
 export const Route = createFileRoute("/our-story")({
   head: () => {
     const { meta, links } = seo({
-      title: "Our Story | A Vasai-Virar Saree Boutique — Mumbai Bazar",
+      title: "Our Story | From One Shop to Eight — Mumbai Bazar",
       description:
-        "The story behind Mumbai Bazar — direct-from-weaver sourcing across seven Indian clusters, Silk Mark certified handlooms, and personal styling for every drape.",
+        "How Mumbai Bazar grew from one shop into 8 stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon, serving the western line since 2009.",
       path: "/our-story",
       keywords: [
         "Mumbai Bazar story",

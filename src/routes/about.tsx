@@ -9,14 +9,14 @@ import { IMG } from "@/lib/site-data";
 export const Route = createFileRoute("/about")({
   head: () => {
     const { meta, links } = seo({
-      title: "About Mumbai Bazar | Handwoven Saree Boutique in Mumbai",
+      title: "About Mumbai Bazar | 8 Saree & Lehenga Stores Across Mumbai",
       description:
-        "Meet Mumbai Bazar — a modern saree boutique built on heirloom weaves, Silk Mark certified silk, honest fabric disclosure and personal styling.",
+        "Mumbai Bazar runs 8 saree and ethnic wear stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon, serving the western line since 2009.",
       path: "/about",
       keywords: [
         "about Mumbai Bazar",
-        "handwoven saree boutique",
-        "silk mark certified brand",
+        "saree shop nalasopara",
+        "ethnic wear store mumbai",
         "saree shop Mumbai",
       ],
     });

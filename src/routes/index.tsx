@@ -29,18 +29,18 @@ export const Route = createFileRoute("/")({
   component: Home,
   head: () => {
     const { meta, links } = seo({
-      title: "Buy Handwoven Silk Sarees Online | Banarasi & Kanjivaram — Mumbai Bazar",
+      title: "Mumbai Bazar | Saree, Lehenga & Bridal Wear Shops in Nalasopara & Virar",
       description:
-        "Shop Silk Mark certified handwoven sarees online — Banarasi, Kanjivaram, Paithani and pure silk. Bridal, festive and everyday drapes. Free shipping across India, worldwide delivery.",
+        "Sarees, dress material, designer lehengas and dulhan wear at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. Open daily 10 AM-9 PM.",
       path: "/",
       keywords: [
-        "buy silk sarees online",
-        "banarasi saree online",
-        "kanjivaram saree online",
-        "handloom saree India",
-        "bridal saree online",
-        "pure silk saree",
-        "wedding saree Mumbai",
+        "saree shop near me",
+        "saree shop nalasopara",
+        "saree shop virar",
+        "lehenga shop nalasopara",
+        "dulhan saree",
+        "party wear saree",
+        "dress material shop",
       ],
     });
     return {

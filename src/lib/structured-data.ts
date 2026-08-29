@@ -7,6 +7,7 @@
  */
 
 import { SITE, absoluteUrl, OG_IMAGE } from "./seo";
+import type { Outlet } from "./locations";
 import type { Product } from "./site-data";
 
 const ORG_ID = `${SITE.url}/#organization`;
@@ -29,6 +30,8 @@ export function organizationSchema() {
     logo: { "@type": "ImageObject", url: absoluteUrl("/logo-main.png") },
     image: OG_IMAGE,
     description: SITE.description,
+    // Declares the brand as a multi-outlet retailer; the store-locator page
+    // enumerates the branches themselves.
     email: SITE.email,
     telephone: SITE.phone,
     currenciesAccepted: SITE.currency,
@@ -90,7 +93,8 @@ export function localBusinessSchema() {
     "@context": "https://schema.org",
     "@type": "ClothingStore",
     "@id": `${SITE.url}/#store`,
-    name: `${SITE.name} Boutique Studio`,
+    name: `${SITE.name} — Nalasopara East`,
+    branchCode: "nalasopara",
     image: OG_IMAGE,
     url: SITE.url,
     telephone: SITE.phone,
@@ -247,56 +251,91 @@ export function itemListSchema(products: Product[], listName: string, path: stri
 }
 
 /**
- * Per-locality store schema for the /saree-shop/<city> pages.
+ * Per-outlet store schema for /stores/<slug>.
  *
- * Uses the real boutique address (a fabricated per-city address would be a
- * fake-location signal and risks a Google Business Profile penalty) while
- * declaring the specific neighbourhoods served, which is what actually earns
- * "saree shop near me" visibility in surrounding areas.
+ * Each physical store is its own ClothingStore entity with its own address and
+ * @id, and declares the parent organisation. That is what lets Google model the
+ * network as one brand with eight branches, rather than eight unrelated shops
+ * or — worse — one shop with conflicting addresses.
  */
-export function localAreaSchema(city: string, nearby: string[], postalCode: string) {
+export function outletSchema(o: Outlet) {
+  const url = absoluteUrl(`/stores/${o.slug}`);
   return {
     "@context": "https://schema.org",
     "@type": "ClothingStore",
-    "@id": `${SITE.url}/saree-shop/${city.toLowerCase().replace(/\s+/g, "-")}#store`,
-    name: `${SITE.name} — Sarees in ${city}`,
-    description: `Handwoven silk, Paithani and bridal sarees available in ${city} and nearby areas including ${nearby.join(", ")}.`,
+    "@id": `${url}#store`,
+    name: `${SITE.name} — ${o.area}`,
+    branchCode: o.slug,
+    description: `Sarees, dress material, designer lehengas and dulhan wear in ${o.area}. Serving ${o.nearby.slice(0, 3).join(", ")}.`,
     image: OG_IMAGE,
-    url: `${SITE.url}/saree-shop/${city.toLowerCase().replace(/\s+/g, "-")}`,
-    telephone: SITE.phone,
+    url,
+    telephone: o.phone ?? SITE.phone,
     email: SITE.email,
-    priceRange: "₹₹₹",
+    priceRange: "₹₹",
     address: {
       "@type": "PostalAddress",
-      streetAddress: SITE.address.street,
-      addressLocality: SITE.address.city,
+      streetAddress: o.street,
+      addressLocality: o.area,
       addressRegion: SITE.address.region,
-      postalCode: SITE.address.postalCode,
+      postalCode: o.postalCode,
       addressCountry: SITE.address.country,
     },
-    geo: { "@type": "GeoCoordinates", latitude: SITE.geo.lat, longitude: SITE.geo.lng },
-    areaServed: [city, ...nearby].map((name) => ({
+    areaServed: o.nearby.map((name) => ({
       "@type": "City",
       name,
       containedInPlace: { "@type": "State", name: SITE.address.region },
     })),
-    // Delivery-only catchment around the named locality.
-    serviceArea: {
-      "@type": "GeoCircle",
-      geoMidpoint: { "@type": "GeoCoordinates", latitude: SITE.geo.lat, longitude: SITE.geo.lng },
-      geoRadius: "25000",
-      description: `Free saree delivery across ${city} ${postalCode} and surrounding areas.`,
-    },
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
         opens: "10:00",
-        closes: "20:00",
+        closes: "21:00",
       },
     ],
+    makesOffer: o.specialities.map((item) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Product", name: item },
+    })),
+    // Ties every branch back to the single brand entity.
     parentOrganization: { "@id": ORG_ID },
-    sameAs: [...SITE.social],
+    sameAs: o.instagram ? [o.instagram] : [],
+  };
+}
+
+/**
+ * The store-locator page: an ItemList of every published outlet, which is how
+ * Google discovers the branch network from one URL.
+ */
+export function storeListSchema(outlets: Outlet[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `${SITE.name} Stores`,
+    url: absoluteUrl("/stores"),
+    isPartOf: { "@id": WEBSITE_ID },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: outlets.length,
+      itemListElement: outlets.map((o, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "ClothingStore",
+          "@id": `${absoluteUrl(`/stores/${o.slug}`)}#store`,
+          name: `${SITE.name} — ${o.area}`,
+          url: absoluteUrl(`/stores/${o.slug}`),
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: o.street,
+            addressLocality: o.area,
+            addressRegion: SITE.address.region,
+            postalCode: o.postalCode,
+            addressCountry: SITE.address.country,
+          },
+        },
+      })),
+    },
   };
 }
 
@@ -304,8 +343,8 @@ export function localAreaSchema(city: string, nearby: string[], postalCode: stri
  * Editorial article schema for the /guides cluster.
  *
  * `speakable` marks the passages voice assistants read aloud, and the
- * author/publisher pair is the E-E-A-T signal Google weighs on YMYL-adjacent
- * commercial advice — a named human with stated expertise, not "Admin".
+ * author/publisher pair is the E-E-A-T signal Google weighs on commercial
+ * advice — a named human with stated expertise, not "Admin".
  */
 export function articleSchema(a: {
   title: string;
@@ -386,7 +425,7 @@ export function howToSchema(h: {
  *
  * Deliberately NOT called anywhere yet: emitting ratings that are not backed by
  * real, verifiable, on-page customer reviews is a manual-action risk. Wire this
- * in only once server-rendered reviews exist (see the reviews pipeline).
+ * in only once server-rendered reviews exist.
  */
 export function withReviews(
   product: ReturnType<typeof productSchema>,

@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, Youtube, Phone, Mail } from "lucide-react";
 import { NAV } from "@/lib/site-data";
-import { PUBLISHED_LOCATIONS } from "@/lib/locations";
+import { PUBLISHED_OUTLETS } from "@/lib/locations";
 import { SITE } from "@/lib/seo";
 
 function Col({ title, children }: { title: string; children: React.ReactNode }) {
@@ -127,24 +127,27 @@ export function Footer() {
           </Col>
         </div>
 
-        {/* Local service areas — keeps the geo landing pages internally linked
-            rather than reachable only from the sitemap. */}
+        {/* Store network — keeps every branch page internally linked rather than
+            reachable only from the sitemap. */}
         <div className="mt-12 border-t border-gold/30 pt-6">
-          <h4 className="font-serif text-sm text-gold font-normal tracking-wide">
-            Saree Delivery Near You
-          </h4>
+          <h4 className="font-serif text-sm text-gold font-normal tracking-wide">Our Stores</h4>
           <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-xs text-ivory/85">
-            {PUBLISHED_LOCATIONS.map((l) => (
-              <li key={l.slug}>
+            {PUBLISHED_OUTLETS.map((o) => (
+              <li key={o.slug}>
                 <Link
-                  to="/saree-shop/$city"
-                  params={{ city: l.slug }}
+                  to="/stores/$slug"
+                  params={{ slug: o.slug }}
                   className="hover:text-gold transition-colors"
                 >
-                  Sarees in {l.city}
+                  Saree Shop in {o.area}
                 </Link>
               </li>
             ))}
+            <li>
+              <Link to="/stores" className="hover:text-gold transition-colors">
+                All stores →
+              </Link>
+            </li>
           </ul>
         </div>
 

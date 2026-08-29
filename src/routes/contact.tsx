@@ -10,20 +10,20 @@ import {
   CheckCircle2,
   ChevronDown,
 } from "lucide-react";
-import { seo, jsonLd } from "@/lib/seo";
+import { seo, jsonLd, SITE } from "@/lib/seo";
 import { localBusinessSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/contact")({
   head: () => {
     const { meta, links } = seo({
-      title: "Contact Us | Saree Concierge & Vasai-Virar Boutique — Mumbai Bazar",
+      title: "Contact Us | Store Numbers & Locations — Mumbai Bazar",
       description:
-        "Talk to a saree expert on WhatsApp, email or phone, or visit our Vasai-Virar boutique studio. Free styling consultations for bridal and festive drapes.",
+        "Call or WhatsApp any Mumbai Bazar store, or visit us in Nalasopara, Virar, Bhayandar or Goregaon. Open daily 10 AM-9 PM.",
       path: "/contact",
       keywords: [
         "saree shop near me",
-        "saree boutique Vasai Virar",
-        "saree store Mumbai contact",
+        "saree shop nalasopara contact",
+        "mumbai bazar store phone number",
         "bridal saree consultation",
       ],
     });
@@ -48,7 +48,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 const WA_HREF =
-  "https://wa.me/919999999999?text=" +
+  `https://wa.me/${SITE.whatsapp}?text=` +
   encodeURIComponent("Hello Mumbai Bazar, I'd like to speak to a saree expert.");
 
 const FAQS = [
@@ -137,7 +137,7 @@ function ContactPage() {
             </a>
 
             <a
-              href="mailto:care@mumbaiBazar.in"
+              href={`mailto:${SITE.email}`}
               className="group rounded-2xl border border-gold/50 bg-beige/20 p-8 shadow-sm hover:shadow-xl hover:border-maroon transition-all flex flex-col justify-between"
             >
               <div>
@@ -146,7 +146,7 @@ function ContactPage() {
                 </span>
                 <h3 className="mt-6 font-serif text-2xl text-maroon">Email Atelier</h3>
                 <p className="mt-2 text-sm text-ink/80 leading-relaxed">
-                  care@mumbaiBazar.in · For order inquiries, custom weaving requests & press.
+                  {SITE.email} · For order enquiries, stock checks and press.
                 </p>
               </div>
               <p className="mt-6 text-xs uppercase tracking-[0.25em] text-maroon font-semibold group-hover:text-gold transition-colors">
@@ -164,7 +164,7 @@ function ContactPage() {
                 </span>
                 <h3 className="mt-6 font-serif text-2xl text-maroon">Call Boutique</h3>
                 <p className="mt-2 text-sm text-ink/80 leading-relaxed">
-                  +91 98200 00000 · Mon–Sat · 10:00 AM – 8:00 PM IST.
+                  {SITE.phone} · Open daily · 10:00 AM – 9:00 PM IST.
                 </p>
               </div>
               <p className="mt-6 text-xs uppercase tracking-[0.25em] text-maroon font-semibold group-hover:text-gold transition-colors">
@@ -278,9 +278,9 @@ function ContactPage() {
                   <div className="flex items-start gap-3">
                     <MapPin className="h-5 w-5 text-gold shrink-0 mt-0.5" />
                     <p>
-                      Mumbai Bazar Boutique Studio
+                      {SITE.name} — Nalasopara East (flagship)
                       <br />
-                      Marine Drive & Churchgate Promenade, Mumbai, India
+                      {SITE.address.street}, {SITE.address.city} {SITE.address.postalCode}
                     </p>
                   </div>
                   <div className="flex items-start gap-3">

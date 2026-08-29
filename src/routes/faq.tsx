@@ -22,11 +22,11 @@ export const Route = createFileRoute("/faq")({
     const { meta, links } = seo({
       title: "Saree FAQs | Silk, Blouse Stitching, Shipping & Returns — Mumbai Bazar",
       description:
-        "Answers on handwoven silk authenticity, Silk Mark certification, blouse stitching, fall and pico, international shipping and our 7-day return policy.",
+        "Answers on our saree and lehenga range, store timings and locations, blouse stitching, exchanges and delivery across India.",
       path: "/faq",
       keywords: [
         "saree FAQ",
-        "is silk mark certified",
+        "saree shop timings",
         "saree blouse stitching",
         "saree return policy",
         "international saree shipping",
@@ -62,13 +62,13 @@ const CATEGORIES = [
 const FAQS = [
   {
     category: "weaves",
-    q: "Are all your sarees 100% handwoven on traditional looms?",
-    a: "Yes — every saree in our catalog is handwoven by master artisans on traditional pit or frame looms across verified weaving clusters (Kanchipuram, Varanasi, Chanderi, Paithan). We do not stock any power-loom pieces. Each saree ships with details on its artisan cluster and weave technique.",
+    q: "What kinds of sarees do you stock?",
+    a: "We carry fancy and party wear sarees, dress material, designer lehengas and dulhan (bridal) wear across all our stores. The range spans everyday budgets through to heavier bridal pieces. Our Nalasopara East store holds the widest bridal selection.",
   },
   {
     category: "weaves",
-    q: "Is the silk and zari certified pure?",
-    a: "All our silk sarees carry the official Silk Mark certification. Furthermore, we independently laboratory-test our gold and silver zari wires for metal purity before listing.",
+    q: "Can I check the fabric before buying?",
+    a: "Yes. Every piece can be seen, handled and draped in store before you buy, and our staff will tell you exactly what a saree is made of. If you are shopping remotely, message us on WhatsApp and we will send photos or video of the fabric, border and palla.",
   },
   {
     category: "weaves",

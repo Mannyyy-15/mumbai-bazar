@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { SITE } from "@/lib/seo";
 import { PRODUCTS, COLLECTIONS } from "@/lib/site-data";
-import { PUBLISHED_LOCATIONS } from "@/lib/locations";
+import { PUBLISHED_OUTLETS } from "@/lib/locations";
 import { GUIDES } from "@/lib/guides";
 
 type Entry = { path: string; changefreq: string; priority: string };
@@ -21,6 +21,7 @@ const STATIC_ENTRIES: Entry[] = [
   { path: "/our-story", changefreq: "monthly", priority: "0.6" },
   { path: "/about", changefreq: "monthly", priority: "0.6" },
   { path: "/care-guide", changefreq: "monthly", priority: "0.6" },
+  { path: "/stores", changefreq: "monthly", priority: "0.9" },
   { path: "/guides", changefreq: "weekly", priority: "0.7" },
   { path: "/faq", changefreq: "monthly", priority: "0.6" },
   { path: "/contact", changefreq: "monthly", priority: "0.5" },
@@ -60,9 +61,10 @@ function buildSitemap(): string {
     urlEntry(`/collections#${c.slug}`, lastmod, "monthly", "0.6"),
   );
 
-  // Hyper-local landing pages (Vasai-Virar belt first, Mumbai metro to follow).
-  const locationUrls = PUBLISHED_LOCATIONS.map((l) =>
-    urlEntry(`/saree-shop/${l.slug}`, lastmod, "monthly", "0.7"),
+  // Store pages. These carry the branch NAP, so they rank for "saree shop near
+  // me" in each locality and back the Google Business Profile listings.
+  const outletUrls = PUBLISHED_OUTLETS.map((o) =>
+    urlEntry(`/stores/${o.slug}`, lastmod, "monthly", o.flagship ? "0.9" : "0.8"),
   );
 
   // Editorial guides — the topical-authority cluster.
@@ -73,7 +75,7 @@ function buildSitemap(): string {
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...staticUrls,
     ...productUrls,
-    ...locationUrls,
+    ...outletUrls,
     ...guideUrls,
     ...collectionUrls,
     "</urlset>",

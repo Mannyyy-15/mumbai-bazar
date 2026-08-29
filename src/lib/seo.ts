@@ -10,23 +10,29 @@ export const SITE = {
   url: "https://www.mumbaibazar.com",
   name: "Mumbai Bazar",
   legalName: "Mumbai Bazar",
-  tagline: "Heritage Silk Sarees & Bridal Couture",
+  tagline: "Sarees, Lehengas & Bridal Wear",
   description:
-    "Shop handwoven Banarasi, Kanjivaram, Paithani and pure silk sarees. Silk Mark certified bridal couture, festive edits and everyday drapes, delivered across India and worldwide.",
+    "Sarees, dress material, designer lehengas and dulhan wear across 8 stores in Nalasopara, Virar, Vasai, Bhayandar and Goregaon. Party wear, bridal and festive collections, plus delivery across India.",
   locale: "en_IN",
   currency: "INR",
   email: "care@mumbaibazar.com",
-  phone: "+91 98200 00000",
+  /** Flagship (Nalasopara East) number, from the live JustDial listing. */
+  phone: "+91 89566 64631",
   /** E.164, digits only — used for wa.me links. */
-  whatsapp: "919820000000",
+  whatsapp: "918956664631",
+  /**
+   * Canonical NAP = the Nalasopara East flagship. This must match the Google
+   * Business Profile for that store byte-for-byte; a mismatch between schema
+   * and GBP suppresses local ranking for the whole network.
+   */
   address: {
-    street: "Ambadi Road, Vasai West",
-    city: "Vasai-Virar",
+    street: "Shop 1, Tiwari Nagar, Tulinj Road",
+    city: "Nalasopara",
     region: "Maharashtra",
-    postalCode: "401202",
+    postalCode: "401209",
     country: "IN",
   },
-  geo: { lat: 19.3919, lng: 72.8397 },
+  geo: { lat: 19.4162, lng: 72.8619 },
   /** Phase 1 hyper-local, Phase 2 Mumbai metro. Drives areaServed + geo pages. */
   serviceAreas: [
     "Vasai",
@@ -47,7 +53,8 @@ export const SITE = {
   ],
   openingHours: "Mo-Sa 10:00-20:00",
   social: [
-    "https://www.instagram.com/mumbaibazar",
+    "https://www.instagram.com/mumbai__bazar__nalasopara/",
+    "https://www.instagram.com/mumbai_bazar__bhayandar_/",
     "https://www.facebook.com/mumbaibazar",
     "https://www.youtube.com/@mumbaibazar",
     "https://in.pinterest.com/mumbaibazar",

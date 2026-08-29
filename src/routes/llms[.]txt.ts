@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SITE } from "@/lib/seo";
 import { PRODUCTS, COLLECTIONS } from "@/lib/site-data";
 import { GUIDES } from "@/lib/guides";
+import { PUBLISHED_OUTLETS, OUTLET_COUNT } from "@/lib/locations";
 
 /**
  * llms.txt — a plain-language brand + catalogue summary for AI answer engines.
@@ -25,27 +26,34 @@ function buildLlmsTxt(): string {
     "",
     "## About",
     "",
-    `${SITE.name} is an Indian saree boutique specialising in handwoven, Silk Mark certified sarees.`,
-    "Every saree is woven by master artisans on traditional pit or frame looms in verified clusters",
-    "(Kanchipuram, Varanasi, Chanderi, Paithan). No power-loom pieces are stocked. Each saree includes",
-    "a coordinating unstitched blouse piece, with complimentary fall and pico edging on silk sarees.",
+    `${SITE.name} is a saree and ethnic wear retailer running ${OUTLET_COUNT} stores across the`,
+    "western line of the Mumbai metropolitan region. We sell sarees, dress material, designer",
+    "lehengas, dulhan (bridal) wear and party wear. Every piece can be seen and draped in store",
+    "before purchase. The flagship store is in Nalasopara East.",
     "",
     "## Key facts",
     "",
-    `- Founded and operated in ${SITE.address.city}, ${SITE.address.region}, India`,
-    "- Ships free across India; tracked delivery to 40+ countries via DHL Express and FedEx",
-    "- 7-day returns on unused sarees in original condition",
-    "- Dispatch within 24-48 hours; 2-4 days to Indian metros, 5-8 days internationally",
-    "- Every parcel is fully insured against loss or transit damage",
-    "- Free WhatsApp video consultations before purchase",
-    `- Contact: ${SITE.email} / ${SITE.phone}`,
+    `- ${OUTLET_COUNT} stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon`,
+    `- Flagship: ${SITE.address.street}, ${SITE.address.city} ${SITE.address.postalCode}`,
+    "- All stores open daily, 10:00 AM to 9:00 PM",
+    "- WhatsApp photos and videos of any piece before you visit",
+    "- Delivery across India",
+    `- Contact: ${SITE.phone}`,
     "",
     "## Specialities",
     "",
-    "- Banarasi silk sarees (Katan silk, real zari brocade, Varanasi pit looms)",
-    "- Kanjivaram silk sarees (pure mulberry silk, korvai temple borders, Kanchipuram)",
-    "- Bridal and trousseau sarees for weddings, sangeet and receptions",
-    "- Tissue, organza and soft silk sarees for festive and everyday wear",
+    "- Dulhan and bridal sarees",
+    "- Designer lehengas",
+    "- Party wear and fancy sarees",
+    "- Dress material",
+    "- Festive collections for Diwali, Navratri and Ganesh Chaturthi",
+    "",
+    "## Stores",
+    "",
+    ...PUBLISHED_OUTLETS.map(
+      (o) =>
+        `- [${o.area}](${SITE.url}/stores/${o.slug}): ${o.street}, ${o.landmark}, ${o.postalCode}${o.flagship ? " (flagship)" : ""}`,
+    ),
     "",
     "## Collections",
     "",

@@ -88,7 +88,7 @@ export const GUIDES: Guide[] = [
         body: [
           "Turn the saree over. On a handloom piece the reverse of the palla and border shows floating threads where the weaver carried the zari between motifs — untrimmed, slightly uneven, and impossible to fake at powerloom speed. A machine-made saree has a flat, clean reverse because the floats are cut mechanically.",
           "The second check is the motif edge. Hand-woven kadhwa motifs have a slightly soft outline because each one is woven separately; printed or powerloom motifs have a hard, photographic edge and repeat at an exact fixed interval down the length.",
-          "Ask for the Silk Mark tag. It is issued by the Central Silk Board and certifies pure silk content — not handloom status, but it rules out art silk and polyester blends immediately. Every silk saree we list carries one.",
+          "Ask for the Silk Mark tag. It is issued by the Central Silk Board and certifies pure silk content — not handloom status, but it rules out art silk and polyester blends immediately. Any seller should be able to tell you plainly whether a piece carries one.",
         ],
       },
       {
@@ -191,7 +191,7 @@ export const GUIDES: Guide[] = [
           "Real Kanjivaram zari is silver wire electroplated with gold, wound on a silk core. Pull a thread from an inconspicuous edge and burn it: pure zari leaves a silver-grey metallic residue, while polyester-coated tested zari melts into a dark bead. Reputable sellers also state the zari's silver and gold content on the bill.",
         body: [
           "The industry terms matter. 'Pure zari' means real silver and gold. 'Half-fine zari' means reduced silver content. 'Tested zari' usually means an electroplated copper or polyester substitute — perfectly acceptable at lower price points, but it should be disclosed, and it should be reflected in the price.",
-          "We lab-test the zari on every silk saree before listing and state the result on the product page.",
+          "Ask which one you are buying before you pay. A shop that will not answer that question directly is telling you something.",
         ],
       },
       {

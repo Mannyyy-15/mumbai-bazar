@@ -48,6 +48,7 @@ export const NAV: NavItem[] = [
   { label: "Festive Edit", to: "/festive-edit" },
   { label: "Everyday Sarees", to: "/everyday-sarees" },
   { label: "Collections", to: "/collections" },
+  { label: "Stores", to: "/stores" },
   { label: "Guides", to: "/guides" },
   { label: "Our Story", to: "/our-story" },
 ];

@@ -10,7 +10,7 @@ export const Route = createFileRoute("/collections")({
     const { meta, links } = seo({
       title: "Saree Collections | Banarasi, Kanjivaram & Wedding Weaves — Mumbai Bazar",
       description:
-        "Explore curated saree collections by weave and occasion — Banarasi, Kanjivaram, pure silk, wedding and festive edits, each handwoven in its home cluster.",
+        "Browse saree collections by style and occasion — Banarasi, Kanjivaram, party wear, bridal and festive edits, available across our 8 stores.",
       path: "/collections",
       keywords: [
         "saree collections",
