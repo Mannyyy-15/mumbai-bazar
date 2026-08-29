@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.mumbaibazar.com/sitemap.xml
+Sitemap: https://mumbaibazar.com/sitemap.xml

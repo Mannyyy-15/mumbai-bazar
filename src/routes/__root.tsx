@@ -110,15 +110,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       /* OpenGraph (WhatsApp, Facebook, LinkedIn, iMessage) */
       { property: "og:site_name", content: "Mumbai Bazar" },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://www.mumbaibazar.com" },
+      { property: "og:url", content: "https://mumbaibazar.com" },
       { property: "og:title", content: "Mumbai Bazar — Royal Heritage Silk Sarees & Bridal Couture" },
       {
         property: "og:description",
         content:
           "Discover heirloom Banarasi, Kanjivaram, and 1-minute ready-to-wear silk sarees crafted for weddings, grand festivities, and celebrations.",
       },
-      { property: "og:image", content: "https://www.mumbaibazar.com/og-share.jpg" },
-      { property: "og:image:secure_url", content: "https://www.mumbaibazar.com/og-share.jpg" },
+      { property: "og:image", content: "https://mumbaibazar.com/og-share.jpg" },
+      { property: "og:image:secure_url", content: "https://mumbaibazar.com/og-share.jpg" },
       { property: "og:image:type", content: "image/jpeg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
@@ -135,11 +135,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Handpicked Banarasi & Kanjivaram silks, festive edits, and 1-minute drapes. Styled for the moments that matter.",
       },
-      { name: "twitter:image", content: "https://www.mumbaibazar.com/og-share.jpg" },
+      { name: "twitter:image", content: "https://mumbaibazar.com/og-share.jpg" },
       { name: "twitter:image:alt", content: "Mumbai Bazar Heritage Silk Sarees" },
     ],
     links: [
-      { rel: "canonical", href: "https://www.mumbaibazar.com" },
+      { rel: "canonical", href: "https://mumbaibazar.com" },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico?v=3" },
       { rel: "icon", href: "/favicon.png?v=3", type: "image/png", sizes: "32x32" },
@@ -166,14 +166,14 @@ function RootShell({ children }: { children: ReactNode }) {
         <meta name="theme-color" content="#641F2A" />
         <meta property="og:site_name" content="Mumbai Bazar" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.mumbaibazar.com" />
+        <meta property="og:url" content="https://mumbaibazar.com" />
         <meta property="og:title" content="Mumbai Bazar — Royal Heritage Silk Sarees & Bridal Couture" />
         <meta
           property="og:description"
           content="Discover heirloom Banarasi, Kanjivaram, and 1-minute ready-to-wear silk sarees crafted for weddings, grand festivities, and celebrations."
         />
-        <meta property="og:image" content="https://www.mumbaibazar.com/og-share.jpg" />
-        <meta property="og:image:secure_url" content="https://www.mumbaibazar.com/og-share.jpg" />
+        <meta property="og:image" content="https://mumbaibazar.com/og-share.jpg" />
+        <meta property="og:image:secure_url" content="https://mumbaibazar.com/og-share.jpg" />
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -184,7 +184,7 @@ function RootShell({ children }: { children: ReactNode }) {
           name="twitter:description"
           content="Handpicked Banarasi & Kanjivaram silks, festive edits, and 1-minute drapes. Styled for the moments that matter."
         />
-        <meta name="twitter:image" content="https://www.mumbaibazar.com/og-share.jpg" />
+        <meta name="twitter:image" content="https://mumbaibazar.com/og-share.jpg" />
         <link rel="icon" href="/favicon.ico?v=3" />
         <link rel="icon" type="image/png" href="/favicon.png?v=3" sizes="32x32" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" sizes="180x180" />
