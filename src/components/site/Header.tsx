@@ -210,6 +210,9 @@ export function Header() {
 
   useEffect(() => {
     setMounted(true);
+    const handleOpenDrawer = () => setOpen(true);
+    window.addEventListener("mb:open-drawer", handleOpenDrawer);
+    return () => window.removeEventListener("mb:open-drawer", handleOpenDrawer);
   }, []);
 
   useEffect(() => {
@@ -518,147 +521,134 @@ export function Header() {
             <Search className="h-4 w-4 shrink-0 text-taupe" />
             <input
               autoFocus
-              ref={searchInputRef}
               type="search"
-              placeholder="Search sarees, weaves, occasionsâ€¦"
-              className="flex-1 bg-transparent text-sm text-ink placeholder:text-taupe/70 focus:outline-none"
+              placeholder="Search sarees, weaves, bridal…"
+              className="w-full bg-transparent text-sm text-ink placeholder:text-taupe focus:outline-none"
+              onKeyDown={(e) => {
+                if (e.key === "Escape") setSearchOpen(false);
+              }}
             />
             <button
               onClick={() => setSearchOpen(false)}
-              aria-label="Close search"
-              className="text-taupe hover:text-maroon"
+              className="text-xs uppercase tracking-wider text-maroon font-semibold"
             >
-              <X className="h-4 w-4" />
+              Cancel
             </button>
           </div>
         </div>
       )}
 
-      {/* Mobile drawer rendered on document.body via Portal */}
+      {/* Mobile Drawer (App-like layout modeled after top ethnic brands) */}
       {mounted &&
         createPortal(
           <div
             id="mobile-drawer"
             className={`fixed inset-0 z-[999999] lg:hidden transition-all duration-300 ${
-              open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+              open ? "pointer-events-auto" : "pointer-events-none"
             }`}
             aria-hidden={!open}
           >
+            {/* Backdrop */}
             <div
-              className="absolute inset-0 bg-ink/60 backdrop-blur-sm transition-opacity duration-300"
+              className={`absolute inset-0 bg-ink/60 backdrop-blur-sm transition-opacity duration-300 ${
+                open ? "opacity-100" : "opacity-0"
+              }`}
               onClick={() => setOpen(false)}
             />
+
+            {/* Slide-over Content Drawer */}
             <div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="mobile-drawer-title"
-              className={`absolute left-0 top-0 bottom-0 flex h-full w-[85%] max-w-sm flex-col bg-ivory shadow-2xl transition-transform duration-300 ease-out ${
+              ref={drawerRef}
+              className={`absolute inset-y-0 left-0 w-[88vw] max-w-[360px] bg-ivory shadow-2xl flex flex-col transition-transform duration-300 ease-out border-r border-gold/40 ${
                 open ? "translate-x-0" : "-translate-x-full"
               }`}
             >
-              <div className="flex items-center justify-between border-b border-gold/50 px-5 py-4 bg-maroon text-ivory">
-                <Link
-                  to="/"
-                  onClick={() => setOpen(false)}
-                  id="mobile-drawer-title"
-                  className="flex items-center gap-2"
-                  aria-label="Mumbai Bazar — home"
-                >
-                  <img src="/logo.png" alt="Mumbai Bazar Logo" className="h-10 object-contain brightness-0 invert" />
-                  <span className="font-serif text-lg font-bold tracking-wider text-ivory">Mumbai Bazar</span>
-                </Link>
+              {/* App Drawer Top Header */}
+              <div className="flex items-center justify-between border-b border-gold/40 bg-wine px-5 py-4 text-ivory">
+                <div className="flex items-center gap-3">
+                  <img src="/logo.png" alt="Mumbai Bazar" className="h-8 w-auto object-contain brightness-0 invert" />
+                  <div>
+                    <h3 className="font-serif text-sm font-semibold tracking-wide text-ivory">Mumbai Bazar</h3>
+                    <p className="text-[9px] uppercase tracking-[0.25em] text-gold/90">Heritage Silk Couture</p>
+                  </div>
+                </div>
                 <button
                   aria-label="Close menu"
                   onClick={() => setOpen(false)}
-                  className="grid h-9 w-9 place-items-center text-ivory hover:text-gold transition-colors"
+                  className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-ivory hover:bg-white/20 transition-colors"
                 >
-                  <X className="h-6 w-6" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
 
-              <nav className="flex-1 overflow-y-auto p-5 space-y-6 bg-ivory text-ink" aria-label="Mobile primary">
-                <div>
-                  <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.25em] text-maroon border-b border-gold/40 pb-1">
-                    Main Navigation
-                  </p>
-                  <ul className="flex flex-col space-y-1.5">
-                    <li>
-                      <Link
-                        to="/"
-                        onClick={() => setOpen(false)}
-                        activeOptions={{ exact: true }}
-                        className={`flex items-center justify-between py-3 px-4 rounded-xl text-sm font-bold tracking-wide transition-colors ${
-                          pathname === "/" ? "bg-maroon text-ivory shadow-md" : "text-ink hover:bg-maroon/10 hover:text-maroon"
-                        }`}
-                      >
-                        Home
-                      </Link>
-                    </li>
-                    {PRIMARY_LEFT.map((item) => (
-                      <li key={item.to}>
-                        <Link
-                          to={item.to}
-                          onClick={() => setOpen(false)}
-                          activeOptions={{ exact: item.to === "/shop" ? false : true }}
-                          className={`flex items-center justify-between py-3 px-4 rounded-xl text-sm font-bold tracking-wide transition-colors ${
-                            pathname === item.to || pathname.startsWith(item.to)
-                              ? "bg-maroon text-ivory shadow-md"
-                              : "text-ink hover:bg-maroon/10 hover:text-maroon"
-                          }`}
-                        >
-                          {item.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+              {/* In-drawer Search Bar */}
+              <div className="border-b border-gold/30 bg-beige/30 p-3">
+                <div className="flex items-center gap-2 rounded-xl border border-gold/40 bg-ivory px-3 py-2 shadow-inner">
+                  <Search className="h-4 w-4 text-taupe/70" />
+                  <input
+                    type="search"
+                    placeholder="Search 1-minute, Banarasi, bridal..."
+                    className="w-full bg-transparent text-xs text-ink placeholder:text-taupe/70 focus:outline-none"
+                  />
                 </div>
+              </div>
 
+              {/* Drawer Scrollable Navigation */}
+              <nav className="flex-1 overflow-y-auto p-4 space-y-5 bg-ivory text-ink" aria-label="Mobile primary">
+                {/* Categories Accordion Section */}
                 <div>
-                  <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.25em] text-maroon border-b border-gold/40 pb-1">
-                    Collections & Categories
-                  </p>
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex items-center justify-between border-b border-gold/40 pb-2 mb-3">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-maroon">
+                      Shop Categories
+                    </p>
+                    <span className="text-[10px] font-semibold text-taupe uppercase tracking-wider">All Weaves</span>
+                  </div>
+
+                  <div className="flex flex-col space-y-2.5">
                     {MEGA_CATEGORIES.map((cat) => {
                       const isExpanded = mobileExpandedCat === cat.label;
                       return (
-                        <div key={cat.label} className="rounded-xl border border-gold/30 bg-ivory/60 overflow-hidden">
+                        <div
+                          key={cat.label}
+                          className="rounded-xl border border-gold/30 bg-ivory/80 overflow-hidden shadow-sm transition-all"
+                        >
                           <button
                             onClick={() => setMobileExpandedCat(isExpanded ? null : cat.label)}
-                            className="w-full flex items-center justify-between py-2.5 px-3.5 text-xs font-bold uppercase tracking-wider text-ink hover:text-maroon transition-colors"
+                            className="w-full flex items-center justify-between py-3 px-4 text-xs font-bold uppercase tracking-wider text-ink hover:text-maroon transition-colors"
                           >
-                            <div className="flex items-center gap-2">
-                              <span>{cat.label}</span>
+                            <div className="flex items-center gap-2.5">
+                              <span className="text-sm font-serif font-semibold">{cat.label}</span>
                               {cat.badge && (
-                                <span className="rounded-full bg-maroon/90 px-1.5 py-0.5 text-[8px] font-bold text-ivory">
+                                <span className="rounded-full bg-maroon px-2 py-0.5 text-[8.5px] font-bold text-ivory">
                                   {cat.badge}
                                 </span>
                               )}
                             </div>
                             <ChevronDown
-                              className={`h-3.5 w-3.5 text-taupe transition-transform duration-200 ${
+                              className={`h-4 w-4 text-taupe transition-transform duration-200 ${
                                 isExpanded ? "rotate-180 text-maroon" : ""
                               }`}
                             />
                           </button>
 
                           {isExpanded && (
-                            <div className="border-t border-gold/20 bg-ivory/90 px-3.5 py-2.5 space-y-3">
+                            <div className="border-t border-gold/25 bg-beige/20 px-4 py-3 space-y-3.5">
                               {cat.groups.map((group) => (
-                                <div key={group.title} className="space-y-1.5">
-                                  <p className="text-[9px] font-bold uppercase tracking-widest text-maroon/80">
+                                <div key={group.title} className="space-y-2">
+                                  <p className="text-[10px] font-bold uppercase tracking-widest text-maroon">
                                     {group.title}
                                   </p>
-                                  <ul className="space-y-1 pl-2">
+                                  <ul className="space-y-1.5 pl-2 border-l border-gold/30">
                                     {group.items.map((sub) => (
                                       <li key={sub.label}>
                                         <Link
                                           to={sub.to}
                                           onClick={() => setOpen(false)}
-                                          className="flex items-center justify-between py-1 text-xs text-ink/80 hover:text-maroon"
+                                          className="flex items-center justify-between py-1.5 text-[13px] font-medium text-ink/85 hover:text-maroon transition-colors"
                                         >
                                           <span>{sub.label}</span>
                                           {sub.badge && (
-                                            <span className="rounded bg-gold/30 px-1 py-0.5 text-[8px] font-bold text-maroon">
+                                            <span className="rounded bg-gold/30 px-1.5 py-0.5 text-[8.5px] font-bold text-maroon">
                                               {sub.badge}
                                             </span>
                                           )}
@@ -668,13 +658,14 @@ export function Header() {
                                   </ul>
                                 </div>
                               ))}
-                              <div className="pt-1 border-t border-gold/20">
+                              <div className="pt-2 border-t border-gold/30">
                                 <Link
                                   to={cat.to}
                                   onClick={() => setOpen(false)}
-                                  className="text-[10px] font-bold uppercase tracking-widest text-maroon hover:underline flex items-center gap-1"
+                                  className="text-xs font-bold uppercase tracking-widest text-maroon hover:underline flex items-center justify-between"
                                 >
-                                  View All {cat.label} <ChevronRight className="h-3 w-3" />
+                                  <span>View All {cat.label}</span>
+                                  <ChevronRight className="h-3.5 w-3.5" />
                                 </Link>
                               </div>
                             </div>
@@ -685,33 +676,81 @@ export function Header() {
                   </div>
                 </div>
 
-                <div className="border-t border-gold/40 pt-5 space-y-3">
+                {/* Primary Site Pages */}
+                <div>
+                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-maroon border-b border-gold/40 pb-1.5">
+                    Explore Mumbai Bazar
+                  </p>
+                  <ul className="grid grid-cols-2 gap-2 pt-1">
+                    <li>
+                      <Link
+                        to="/"
+                        onClick={() => setOpen(false)}
+                        className={`flex items-center justify-center py-2.5 px-3 rounded-lg text-xs font-bold tracking-wider uppercase transition-colors text-center border ${
+                          pathname === "/"
+                            ? "border-maroon bg-maroon text-ivory shadow-sm"
+                            : "border-gold/30 bg-ivory text-ink/80 hover:border-maroon hover:text-maroon"
+                        }`}
+                      >
+                        Home
+                      </Link>
+                    </li>
+                    {PRIMARY_LEFT.map((item) => (
+                      <li key={item.to}>
+                        <Link
+                          to={item.to}
+                          onClick={() => setOpen(false)}
+                          className={`flex items-center justify-center py-2.5 px-3 rounded-lg text-xs font-bold tracking-wider uppercase transition-colors text-center border ${
+                            pathname === item.to || pathname.startsWith(item.to)
+                              ? "border-maroon bg-maroon text-ivory shadow-sm"
+                              : "border-gold/30 bg-ivory text-ink/80 hover:border-maroon hover:text-maroon"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Quick App Actions & Concierge */}
+                <div className="border-t border-gold/40 pt-4 space-y-2.5">
+                  <a
+                    href="https://wa.me/919999999999?text=Hi%20Mumbai%20Bazar"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-700 text-ivory text-xs font-bold uppercase tracking-wider hover:bg-emerald-800 transition-all shadow-sm"
+                  >
+                    <Phone className="h-4 w-4" /> WhatsApp Personal Stylist
+                  </a>
                   <button
                     onClick={() => {
                       setOpen(false);
                       openWishlist();
                     }}
-                    className="flex w-full items-center gap-3 px-4 py-3 rounded-xl border border-gold/40 text-xs font-bold uppercase tracking-wider text-ink hover:bg-maroon hover:text-ivory transition-all shadow-sm"
+                    className="flex w-full items-center justify-between px-4 py-2.5 rounded-xl border border-gold/40 text-xs font-bold uppercase tracking-wider text-ink hover:bg-maroon hover:text-ivory transition-all"
                   >
-                    <Heart className="h-4 w-4 text-maroon" /> Wishlist ({wishlist.length})
+                    <span className="flex items-center gap-2">
+                      <Heart className="h-4 w-4 text-maroon" /> My Wishlist
+                    </span>
+                    <span className="rounded-full bg-gold/30 px-2 py-0.5 text-[10px] text-maroon font-bold">
+                      {wishlist.length}
+                    </span>
                   </button>
                   <button
                     onClick={() => {
                       setOpen(false);
                       openCart();
                     }}
-                    className="flex w-full items-center gap-3 px-4 py-3 rounded-xl bg-maroon text-ivory text-xs font-bold uppercase tracking-wider hover:bg-wine transition-all shadow-md"
+                    className="flex w-full items-center justify-between px-4 py-2.5 rounded-xl bg-maroon text-ivory text-xs font-bold uppercase tracking-wider hover:bg-wine transition-all shadow-md"
                   >
-                    <ShoppingBag className="h-4 w-4" /> Shopping Bag ({cartCount})
+                    <span className="flex items-center gap-2">
+                      <ShoppingBag className="h-4 w-4" /> View Bag
+                    </span>
+                    <span className="rounded-full bg-ivory/20 px-2 py-0.5 text-[10px] text-ivory font-bold">
+                      {cartCount}
+                    </span>
                   </button>
-                  <a
-                    href="https://wa.me/919999999999?text=Hi%20Mumbai%20Bazar"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-maroon/30 text-xs font-bold uppercase tracking-wider text-maroon hover:bg-maroon hover:text-ivory transition-all"
-                  >
-                    <Phone className="h-4 w-4" /> Chat on WhatsApp
-                  </a>
                 </div>
               </nav>
             </div>
