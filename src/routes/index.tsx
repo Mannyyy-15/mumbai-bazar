@@ -773,7 +773,9 @@ function TrendingNow() {
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const amount = direction === "left" ? -380 : 380;
+      const firstCard = scrollRef.current.querySelector("a");
+      const cardWidth = firstCard ? firstCard.clientWidth + 24 : 320;
+      const amount = direction === "left" ? -cardWidth : cardWidth;
       scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
     }
   };
@@ -823,7 +825,7 @@ function TrendingNow() {
               key={p.id}
               to="/products/$id"
               params={{ id: p.id }}
-              className="group snap-start shrink-0 w-[78%] sm:w-[48%] md:w-[32%] lg:w-[23%] flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+              className="group snap-start shrink-0 w-[78%] sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)] flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
                 <div className="absolute top-3 left-3 z-10 h-7 w-7 rounded-full flex items-center justify-center bg-maroon text-ivory text-[10px] font-bold shadow-md border border-gold/40">

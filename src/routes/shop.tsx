@@ -123,38 +123,8 @@ function ShopPage() {
 
   return (
     <>
-      {/* Header Banner */}
-      <section className="relative border-b border-gold/50 bg-beige/25">
-        <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 py-10 md:py-14">
-          <nav className="mb-4 flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase text-taupe font-medium">
-            <Link to="/" className="hover:text-maroon transition-colors">Home</Link>
-            <span className="text-gold/60">/</span>
-            <span className="text-maroon">Shop Catalog</span>
-          </nav>
-
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-maroon font-medium mb-3">
-                The Boutique Catalog
-              </span>
-              <h1 className="font-serif text-4xl leading-tight text-maroon md:text-6xl">Shop All Sarees</h1>
-              <p className="mt-3 max-w-2xl text-sm md:text-base text-maroon/80 leading-relaxed">
-                Every drape in the house — Banarasi heirlooms, Kanjivaram classics, festive edits and everyday silks. Refine by category, occasion, fabric and price.
-              </p>
-            </div>
-            
-            <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-ivory/80 border border-gold/50 shadow-sm shrink-0">
-              <span className="font-serif text-3xl md:text-4xl text-maroon font-medium">{products.length}</span>
-              <span className="uppercase tracking-[0.22em] text-[10px] md:text-[11px] text-maroon/70 font-medium leading-tight">
-                Authentic<br />Pieces In-Store
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Main Grid Section */}
-      <section className="bg-ivory py-8 md:py-14">
+      <section className="bg-ivory pt-6 pb-12 md:pt-8 md:pb-16">
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
           <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-8 md:gap-10 lg:gap-12">
             
