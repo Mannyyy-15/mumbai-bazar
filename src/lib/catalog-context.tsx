@@ -11,7 +11,13 @@ export function CatalogProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!shopifyConfigured) return;
     fetchShopifyProducts(50)
-      .then((remote) => { if (remote.length) setProducts(remote); })
+      .then((remote) => {
+        if (remote.length) {
+          const remoteIds = new Set(remote.map((r) => r.handle || r.id));
+          const nonCollidingDefaults = PRODUCTS.filter((p) => !remoteIds.has(p.id));
+          setProducts([...remote, ...nonCollidingDefaults]);
+        }
+      })
       .catch(() => undefined)
       .finally(() => setLoading(false));
   }, []);

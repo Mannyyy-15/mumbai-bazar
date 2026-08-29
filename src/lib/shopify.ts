@@ -2,7 +2,7 @@ import type { Product } from "./site-data";
 
 const domain = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string | undefined;
 const token = import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN as string | undefined;
-const apiVersion = (import.meta.env.VITE_SHOPIFY_API_VERSION as string | undefined) ?? "2025-07";
+const apiVersion = (import.meta.env.VITE_SHOPIFY_API_VERSION as string | undefined) ?? "2024-10";
 
 export const shopifyConfigured = Boolean(domain && token);
 
@@ -54,13 +54,13 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
   const variant = node.variants.nodes[0];
   if (!image || !variant) return null;
   const price = Number(node.priceRange.minVariantPrice.amount);
-  const type = (node.productType || node.vendor || "Sarees").toLowerCase();
+  const text = `${node.title} ${node.productType || ""} ${node.vendor || ""}`.toLowerCase();
   const category: Product["category"] = [
     "new-arrivals",
-    ...(type.includes("wedding") || type.includes("bridal") ? ["wedding-sarees"] : []),
-    ...(type.includes("silk") || type.includes("banarasi") || type.includes("kanjivaram") ? ["silk-sarees"] : []),
-    ...(type.includes("festive") ? ["festive-edit"] : []),
-    ...(type.includes("everyday") ? ["everyday-sarees"] : []),
+    ...(text.includes("wedding") || text.includes("bridal") ? ["wedding-sarees"] : []),
+    ...(text.includes("silk") || text.includes("banarasi") || text.includes("kanjivaram") ? ["silk-sarees"] : []),
+    ...(text.includes("festive") ? ["festive-edit"] : []),
+    ...(text.includes("everyday") ? ["everyday-sarees"] : []),
   ];
   const gallery = (node.images?.nodes ?? [image]).map((item) => item.url);
   return {
