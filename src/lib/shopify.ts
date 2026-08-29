@@ -57,6 +57,34 @@ export async function fetchShopifyProduct(handle: string): Promise<ShopifyProduc
   return payload.product ? toProduct(payload.product) : null;
 }
 
+function getWeaveFromProduct(node: ProductNode): string {
+  if (node.productType && node.productType.trim() && node.productType.toLowerCase() !== "default") {
+    return node.productType.trim();
+  }
+  if (
+    node.vendor &&
+    node.vendor.trim() &&
+    !["my store", "mumbai-baazar-store", "mumbai bazar", "default"].includes(
+      node.vendor.trim().toLowerCase(),
+    )
+  ) {
+    return node.vendor.trim();
+  }
+  const title = node.title.toLowerCase();
+  if (title.includes("banarasi")) return "Banarasi Silk";
+  if (title.includes("kanjivaram")) return "Kanjivaram Silk";
+  if (title.includes("paithani")) return "Paithani Weave";
+  if (title.includes("chanderi")) return "Chanderi Handloom";
+  if (title.includes("kalamkari")) return "Kalamkari Handloom";
+  if (title.includes("tissue")) return "Metallic Tissue Silk";
+  if (title.includes("organza")) return "Pure Silk Organza";
+  if (title.includes("tussar")) return "Tussar Silk";
+  if (title.includes("georgette")) return "Pure Silk Georgette";
+  if (title.includes("chiffon")) return "Pure Silk Chiffon";
+  if (title.includes("saree") || title.includes("silk")) return "Heritage Pure Silk";
+  return "Handwoven Heritage Silk";
+}
+
 function toProduct(node: ProductNode): ShopifyProduct | null {
   const image = node.featuredImage ?? node.images?.nodes[0];
   const variant = node.variants.nodes[0];
@@ -75,14 +103,17 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
     ...(text.includes("everyday") ? (["everyday-sarees"] as const) : []),
   ];
   const gallery = (node.images?.nodes ?? [image]).map((item) => item.url);
+  const secondaryImage = gallery.length > 1 ? gallery[1] : undefined;
+  const weave = getWeaveFromProduct(node);
   return {
     id: node.handle,
     handle: node.handle,
     shopifyProductId: node.id,
     shopifyVariantId: variant.id,
     img: image.url,
+    secondaryImg: secondaryImage,
     name: node.title,
-    weave: node.productType || node.vendor || "Mumbai Bazar",
+    weave,
     price: formatShopifyPrice(
       node.priceRange.minVariantPrice.amount,
       node.priceRange.minVariantPrice.currencyCode,
@@ -96,7 +127,7 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
         : undefined,
     category,
     details: {
-      fabric: node.productType || "Handwoven textile",
+      fabric: node.productType || weave,
       drape: "Refined, easy drape",
       blousePiece: "Matching unstitched blouse piece",
       length: "5.5 m saree + blouse piece",

@@ -13,27 +13,25 @@ import {
   Check,
   Scissors,
 } from "lucide-react";
-import { PRODUCTS } from "@/lib/site-data";
-import { seo, jsonLd, SITE, productAltText } from "@/lib/seo";
-import { productSchema, breadcrumbSchema, priceToSchema } from "@/lib/structured-data";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { fetchShopifyProduct } from "@/lib/shopify";
 import { useCatalog } from "@/lib/catalog-context";
 import { BlouseCustomizationModal } from "@/components/site/BlouseCustomizationModal";
+import { seo, jsonLd, SITE } from "@/lib/seo";
+import { productSchema, breadcrumbSchema, priceToSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/products/$id")({
   loader: async ({ params }) => {
-    const remote = await fetchShopifyProduct(params.id).catch(() => null);
-    const product = remote ?? PRODUCTS.find((p) => p.id === params.id) ?? PRODUCTS[0];
+    const product = await fetchShopifyProduct(params.id).catch(() => null);
+    if (!product) throw notFound();
     return { product };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
       return seo({
         title: "Saree Not Found — Mumbai Bazar",
-        description:
-          "This saree is no longer available. Browse the current collection at Mumbai Bazar.",
+        description: "This piece is no longer available. Browse the current range at Mumbai Bazar.",
         path: "/shop",
         noindex: true,
       });
@@ -43,7 +41,6 @@ export const Route = createFileRoute("/products/$id")({
       p.details?.description ??
       `${p.name} in ${p.weave}. Available to see and drape at our stores, with delivery across India.`;
     const { meta, links } = seo({
-      // Google Shopping title formula: Brand + Colour/Name + Fabric + Product + Occasion.
       title: `${p.name} | ${p.weave} — Mumbai Bazar`,
       description: desc.slice(0, 160),
       path: `/products/${p.id}`,
@@ -93,9 +90,6 @@ const SWATCHES = [
   { name: "Emerald", hex: "#1A3E35" },
   { name: "Antique", hex: "#B69054" },
 ];
-
-/** Cycled across gallery thumbnails so each image gets distinct alt text. */
-const GALLERY_VIEWS = ["front drape", "palla detail", "border detail", "blouse piece"] as const;
 
 const DRAPE_OPTIONS = ["Standard 5.5 m", "Pre-stitched", "With Fall & Pico"];
 
@@ -182,17 +176,7 @@ function ProductDetail() {
                         : "border-transparent hover:border-maroon/40 opacity-70 hover:opacity-100"
                     }`}
                   >
-                    <img
-                      src={g}
-                      alt={productAltText(
-                        product.name,
-                        product.weave,
-                        GALLERY_VIEWS[i % GALLERY_VIEWS.length],
-                      )}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-full w-full object-cover"
-                    />
+                    <img src={g} alt="" className="h-full w-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -202,11 +186,7 @@ function ProductDetail() {
                 <div className="aspect-[4/5] w-full max-h-[calc(100vh-8rem)]">
                   <img
                     src={d.gallery[active]}
-                    alt={productAltText(product.name, product.weave, "front drape")}
-                    // The PDP hero is the LCP element — never lazy-load it.
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="async"
+                    alt={product.name}
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -235,17 +215,7 @@ function ProductDetail() {
                   active === i ? "border-maroon" : "border-transparent"
                 }`}
               >
-                <img
-                  src={g}
-                  alt={productAltText(
-                    product.name,
-                    product.weave,
-                    GALLERY_VIEWS[i % GALLERY_VIEWS.length],
-                  )}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-full object-cover"
-                />
+                <img src={g} alt="" className="h-full w-full object-cover" />
               </button>
             ))}
           </div>
@@ -425,8 +395,8 @@ function ProductDetail() {
                 />
                 <TrustItem
                   icon={<ShieldCheck className="h-4 w-4" />}
-                  label="In Store"
-                  sub="See before you buy"
+                  label="Silk Mark"
+                  sub="Certified"
                 />
               </ul>
 

@@ -20,7 +20,6 @@ import { CartDrawer } from "@/components/site/CartDrawer";
 import { CartProvider } from "@/lib/cart-context";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { CatalogProvider } from "@/lib/catalog-context";
-import { SareeExpertChatbot } from "@/components/site/SareeExpertChatbot";
 import { WishlistProvider } from "@/lib/wishlist-context";
 import { WishlistDrawer } from "@/components/site/WishlistDrawer";
 import { PageTransition } from "@/components/site/PageTransition";
@@ -65,6 +64,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <p className="mt-2 text-sm text-ink/75 leading-relaxed">
           We encountered a brief connection update. Please refresh or explore our collections.
         </p>
+        {process.env.NODE_ENV !== "production" && error?.message && (
+          <p className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded text-left overflow-auto max-h-24 font-mono">
+            {error.message}
+          </p>
+        )}
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => {
@@ -108,26 +112,44 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1" },
       { name: "format-detection", content: "telephone=no" },
       { name: "theme-color", content: "#641F2A" },
+      { name: "msapplication-TileColor", content: "#641F2A" },
       { name: "geo.region", content: "IN-MH" },
       { name: "geo.placename", content: SITE.address.city },
+
+      /* OpenGraph — WhatsApp, Facebook, LinkedIn, iMessage unfurls */
       { property: "og:site_name", content: SITE.name },
       { property: "og:locale", content: SITE.locale },
       { property: "og:type", content: "website" },
       { property: "og:title", content: `${SITE.name} — ${SITE.tagline}` },
       { property: "og:description", content: SITE.description },
-      { property: "og:image", content: OG_IMAGE },
       { property: "og:url", content: SITE.url },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:secure_url", content: OG_IMAGE },
+      { property: "og:image:type", content: "image/jpeg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: `${SITE.name} — ${SITE.tagline}` },
+
+      /* Twitter / X */
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@MumbaiBazar" },
+      { name: "twitter:creator", content: "@MumbaiBazar" },
+      { name: "twitter:title", content: `${SITE.name} — ${SITE.tagline}` },
+      { name: "twitter:description", content: SITE.description },
       { name: "twitter:image", content: OG_IMAGE },
+      { name: "twitter:image:alt", content: `${SITE.name} — ${SITE.tagline}` },
+
       // Search-engine ownership verification. Entries with an empty token are
       // filtered out so no blank meta tags ship before the accounts exist.
       ...verificationMeta(),
     ],
     links: [
+      // No canonical here: every page route emits its own via seo(). A root-level
+      // one renders a second, conflicting tag and Google then ignores both.
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.png", type: "image/png" },
-      { rel: "apple-touch-icon", href: "/favicon.png" },
+      { rel: "icon", href: "/favicon.ico?v=2" },
+      { rel: "icon", href: "/favicon.png?v=2", type: "image/png", sizes: "32x32" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=2", sizes: "180x180" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       // Warms the DNS/TLS handshake for the font host before the CSS request lands.
@@ -157,8 +179,8 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en-IN">
       <head>
-        {/* Verification tags come from SITE.verification via verificationMeta();
-            a hardcoded tag here would render a second, duplicate copy. */}
+        {/* Every meta tag is emitted through head() above, from SITE. Hardcoding
+            them here as well would render a second, conflicting copy. */}
         <HeadContent />
       </head>
       <body>
@@ -188,7 +210,6 @@ function RootComponent() {
                 </PageTransition>
               </main>
               <Footer />
-              <SareeExpertChatbot />
               <CartDrawer />
               <WishlistDrawer />
               <MobileBottomNav />

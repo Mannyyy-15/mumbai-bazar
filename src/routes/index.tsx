@@ -15,12 +15,12 @@ import {
   Heart,
 } from "lucide-react";
 
-import { IMG, PRODUCTS, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS } from "@/lib/site-data";
+import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
 import { seo, jsonLd } from "@/lib/seo";
-import { itemListSchema, breadcrumbSchema } from "@/lib/structured-data";
+import { breadcrumbSchema } from "@/lib/structured-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
-import { fetchShopifyProducts, shopifyConfigured } from "@/lib/shopify";
+import { useCatalog } from "@/lib/catalog-context";
 import { TrousseauBuilder } from "@/components/site/TrousseauBuilder";
 import { WeavesOfIndiaMap } from "@/components/site/WeavesOfIndiaMap";
 import { RealBridesGallery } from "@/components/site/RealBridesGallery";
@@ -49,10 +49,7 @@ export const Route = createFileRoute("/")({
         ...links,
         { rel: "preload", as: "image", href: IMG.heroSaree, fetchPriority: "high" },
       ],
-      scripts: [
-        jsonLd(itemListSchema(PRODUCTS, "Featured Sarees", "/")),
-        jsonLd(breadcrumbSchema([{ name: "Home", path: "/" }])),
-      ],
+      scripts: [jsonLd(breadcrumbSchema([{ name: "Home", path: "/" }]))],
     };
   },
 });
@@ -75,7 +72,7 @@ const SLIDES: Slide[] = [
     eyebrow: "The Heritage Edit",
     title: "Handwoven",
     italic: "Banarasi Silks",
-    copy: "Banarasi-style weaves and rich zari work, picked for wedding and festive wear.",
+    copy: "Zari-drenched weaves crafted over 40 days by master artisans of Varanasi.",
     cta: { label: "Shop Heritage Silks", to: "/silk-sarees" },
     secondary: { label: "Explore the Craft", to: "/our-story" },
     img: IMG.heroSaree,
@@ -189,7 +186,7 @@ function HeroCarousel() {
         onTouchEnd={onTouchEnd}
         onTouchCancel={onTouchEnd}
         style={{ touchAction: "pan-y" }}
-        className="relative h-[calc(100svh-100px)] min-h-[460px] w-full select-none overflow-hidden md:h-[calc(100svh-145px)] md:min-h-[560px]"
+        className="relative h-[calc(100svh-100px)] min-h-[520px] w-full select-none overflow-hidden md:h-[calc(100svh-145px)] md:min-h-[560px]"
       >
         {SLIDES.map((s, i) => {
           const active = i === index;
@@ -243,13 +240,13 @@ function HeroCarousel() {
 
               {/* Content */}
               <div
-                className={`absolute inset-x-12 bottom-24 flex flex-col items-start text-left text-ivory sm:inset-x-14 md:inset-x-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:max-w-[560px] lg:max-w-[620px] ${positionCls}`}
+                className={`absolute inset-x-5 bottom-20 flex flex-col items-start text-left text-ivory sm:inset-x-8 md:inset-x-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:max-w-[560px] lg:max-w-[620px] ${positionCls}`}
               >
                 <span className="flex items-center gap-3 text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-gold">
                   <span className="h-px w-10 bg-gold" />
                   {s.eyebrow}
                 </span>
-                <h2 className="mt-5 md:mt-6 font-serif text-4xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92]">
+                <h2 className="mt-4 md:mt-6 font-serif text-3xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92]">
                   {s.title}
                   {s.italic && (
                     <>
@@ -261,17 +258,17 @@ function HeroCarousel() {
                 <p className="mt-4 md:mt-6 max-w-md text-sm md:text-base lg:text-lg leading-relaxed text-ivory/85">
                   {s.copy}
                 </p>
-                <div className="mt-8 md:mt-10 flex flex-wrap items-center gap-4">
+                <div className="mt-6 md:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
                   <Link
                     to={s.cta.to}
-                    className="inline-flex items-center justify-center min-w-[190px] px-8 py-4 bg-ivory text-maroon text-[10px] md:text-[11px] tracking-[0.25em] uppercase hover:bg-gold hover:text-ivory transition-colors duration-300"
+                    className="inline-flex items-center justify-center w-full sm:w-auto sm:min-w-[190px] px-8 py-3.5 bg-ivory text-maroon text-[10px] md:text-[11px] tracking-[0.25em] uppercase hover:bg-gold hover:text-ivory transition-colors duration-300"
                   >
                     {s.cta.label}
                   </Link>
                   {s.secondary && (
                     <Link
                       to={s.secondary.to}
-                      className="inline-flex items-center justify-center min-w-[190px] px-8 py-4 border border-ivory/70 text-ivory text-[10px] md:text-[11px] tracking-[0.25em] uppercase hover:bg-ivory hover:text-maroon transition-colors duration-300"
+                      className="inline-flex items-center justify-center w-full sm:w-auto sm:min-w-[190px] px-8 py-3.5 border border-ivory/70 text-ivory text-[10px] md:text-[11px] tracking-[0.25em] uppercase hover:bg-ivory hover:text-maroon transition-colors duration-300"
                     >
                       {s.secondary.label}
                     </Link>
@@ -351,7 +348,7 @@ function FeedDivider() {
 /* ---------------- Dense Product Feed ---------------- */
 type SortKey = "featured" | "newest" | "price-asc" | "price-desc";
 
-function ProductTile({ p }: { p: (typeof PRODUCTS)[number] }) {
+function ProductTile({ p }: { p: Product }) {
   const { wishlist, toggleWishlist } = useWishlist();
   const { addItem } = useCart();
   const isSaved = wishlist.some((w) => w.id === p.id);
@@ -401,6 +398,7 @@ function ProductTile({ p }: { p: (typeof PRODUCTS)[number] }) {
           <Heart className={`h-4 w-4 ${isSaved ? "fill-ivory text-ivory" : ""}`} />
         </button>
 
+        {/* Primary Image */}
         <img
           src={p.img}
           alt={p.name}
@@ -408,8 +406,23 @@ function ProductTile({ p }: { p: (typeof PRODUCTS)[number] }) {
           height={800}
           loading="lazy"
           decoding="async"
-          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+          className={`w-full h-full object-cover transition-all duration-700 ease-out ${
+            p.secondaryImg ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-108"
+          }`}
         />
+
+        {/* Secondary Hover Image */}
+        {p.secondaryImg && (
+          <img
+            src={p.secondaryImg}
+            alt={`${p.name} alternate view`}
+            width={600}
+            height={800}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+          />
+        )}
 
         <div className="absolute inset-x-3 bottom-3 z-10 opacity-100 md:opacity-0 translate-y-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
           <button
@@ -444,16 +457,8 @@ function ProductTile({ p }: { p: (typeof PRODUCTS)[number] }) {
 }
 
 function ImmediateProductShelf() {
-  const [items, setItems] = useState(PRODUCTS.slice(0, 4));
-
-  useEffect(() => {
-    if (!shopifyConfigured) return;
-    fetchShopifyProducts(4)
-      .then((products) => {
-        if (products.length) setItems(products);
-      })
-      .catch(() => undefined);
-  }, []);
+  const { products, loading } = useCatalog();
+  const items = products.slice(0, 4);
 
   return (
     <section className="bg-ivory px-4 py-8 md:px-8 md:py-14" aria-labelledby="shop-best-sellers">
@@ -474,25 +479,33 @@ function ImmediateProductShelf() {
             View all
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-4 md:gap-x-5 md:gap-y-10">
-          {items.map((p) => (
-            <ProductTile key={p.id} p={p} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-4 md:gap-x-5 md:gap-y-10">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="aspect-[3/4] rounded-2xl bg-beige/60 animate-pulse" />
+            ))}
+          </div>
+        ) : items.length > 0 ? (
+          <div className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-4 md:gap-x-5 md:gap-y-10">
+            {items.map((p) => (
+              <ProductTile key={p.id} p={p} />
+            ))}
+          </div>
+        ) : null}
       </div>
     </section>
   );
 }
 
 function ProductFeed() {
+  const { products } = useCatalog();
   const [sort, setSort] = useState<SortKey>("featured");
   const [sortOpen, setSortOpen] = useState(false);
   const [visible, setVisible] = useState(10);
 
-  // Extend product pool by repeating to reach the density feel of a real feed
   const pool = useMemo(() => {
-    const dupes = PRODUCTS.concat(PRODUCTS).map((p, i) => ({ ...p, _k: `${p.id}-${i}` }));
-    const sorted = [...dupes];
+    const indexed = products.map((p, i) => ({ ...p, _k: `${p.id}-${i}` }));
+    const sorted = [...indexed];
     if (sort === "price-asc")
       sorted.sort((a, b) => parsePriceToNumber(a.price) - parsePriceToNumber(b.price));
     else if (sort === "price-desc")
@@ -500,7 +513,7 @@ function ProductFeed() {
     else if (sort === "newest")
       sorted.sort((a, b) => (a.tag === "New" ? -1 : 1) - (b.tag === "New" ? -1 : 1));
     return sorted;
-  }, [sort]);
+  }, [sort, products]);
 
   const sortLabel: Record<SortKey, string> = {
     featured: "Featured",
@@ -530,7 +543,7 @@ function ProductFeed() {
               Sort: {sortLabel[sort]} <ChevronDown className="h-3 w-3" />
             </button>
             {sortOpen && (
-              <div className="absolute right-0 top-full mt-2 z-20 bg-ivory border border-maroon/40 shadow-lg min-w-[200px]">
+              <div className="absolute right-0 top-full mt-2 z-20 bg-ivory border border-maroon/40 shadow-lg min-w-[200px] max-w-[240px]">
                 {(Object.keys(sortLabel) as SortKey[]).map((k) => (
                   <button
                     key={k}
@@ -662,15 +675,17 @@ function Craftsmanship() {
             <div className="absolute inset-0 bg-gradient-to-t from-maroon/70 via-transparent to-transparent" />
           </div>
 
-          {/* Floating store-count badge */}
+          {/* Floating Silk Mark Badge */}
           <div className="absolute -bottom-5 -right-5 md:bottom-6 md:-right-6 bg-ivory text-maroon p-4 md:p-5 rounded-2xl shadow-2xl border border-gold/40 flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-maroon text-gold flex items-center justify-center font-serif text-lg font-bold shrink-0">
               ✓
             </div>
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-maroon">8 Stores</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-maroon">
+                100% Certified
+              </p>
               <p className="text-[10px] text-maroon/70 uppercase tracking-widest">
-                Across the Western Line
+                Pure Silk Mark Certified
               </p>
             </div>
           </div>
@@ -708,9 +723,9 @@ function Craftsmanship() {
               </p>
             </div>
             <div className="border-l border-gold/50 pl-4">
-              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">8</p>
+              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">100%</p>
               <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">
-                Stores Near You
+                Pure Silk Mark
               </p>
             </div>
           </div>
@@ -740,8 +755,8 @@ function Craftsmanship() {
 function TrustBar() {
   const items = [
     { icon: Truck, title: "Complimentary Shipping", copy: "On all India orders above ₹5,000" },
-    { icon: ShieldCheck, title: "See Before You Buy", copy: "Drape any piece in store first" },
-    { icon: Sparkles, title: "Open Every Day", copy: "10 AM – 9 PM, all seven days" },
+    { icon: ShieldCheck, title: "Authenticity Assured", copy: "Silk Mark certified handlooms" },
+    { icon: Sparkles, title: "Handwoven with Care", copy: "Directly from master weavers" },
     { icon: ShoppingBag, title: "Easy 7-Day Returns", copy: "No-questions exchange policy" },
   ];
   return (
@@ -791,12 +806,12 @@ function ShopByOccasion() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
         {OCCASIONS.map((o) => (
           <Link
             key={o.label}
             to={o.to}
-            className="group block relative aspect-[4/5] overflow-hidden rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/40"
+            className="group block relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/40"
           >
             <img
               src={o.img}
@@ -832,12 +847,15 @@ function ShopByOccasion() {
 
 /* ---------------- Trending Now (horizontal scroll with navigation buttons) ---------------- */
 function TrendingNow() {
-  const items = PRODUCTS.slice(0, 8);
+  const { products } = useCatalog();
+  const items = products.slice(0, 8);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const amount = direction === "left" ? -380 : 380;
+      const firstCard = scrollRef.current.querySelector("a");
+      const cardWidth = firstCard ? firstCard.clientWidth + 24 : 320;
+      const amount = direction === "left" ? -cardWidth : cardWidth;
       scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
     }
   };
@@ -880,18 +898,20 @@ function TrendingNow() {
         <div
           ref={scrollRef}
           className="flex gap-4 md:gap-6 overflow-x-auto pb-6 -mx-4 md:-mx-8 px-4 md:px-8 snap-x snap-mandatory scrollbar-hide scroll-smooth"
+          style={{ touchAction: "pan-x" }}
         >
           {items.map((p, i) => (
             <Link
               key={p.id}
               to="/products/$id"
               params={{ id: p.id }}
-              className="group snap-start shrink-0 w-[78%] sm:w-[48%] md:w-[32%] lg:w-[23%] flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+              className="group snap-start shrink-0 w-[78%] sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)] flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
                 <div className="absolute top-3 left-3 z-10 h-7 w-7 rounded-full flex items-center justify-center bg-maroon text-ivory text-[10px] font-bold shadow-md border border-gold/40">
                   {i + 1}
                 </div>
+                {/* Primary Image */}
                 <img
                   src={p.img}
                   alt={p.name}
@@ -899,8 +919,25 @@ function TrendingNow() {
                   height={800}
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                  className={`w-full h-full object-cover transition-all duration-700 ease-out ${
+                    p.secondaryImg
+                      ? "group-hover:opacity-0 group-hover:scale-105"
+                      : "group-hover:scale-108"
+                  }`}
                 />
+
+                {/* Secondary Hover Image */}
+                {p.secondaryImg && (
+                  <img
+                    src={p.secondaryImg}
+                    alt={`${p.name} alternate view`}
+                    width={600}
+                    height={800}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+                  />
+                )}
               </div>
 
               <div className="p-3.5 md:p-4 flex flex-col space-y-1.5 text-left">
@@ -1021,10 +1058,8 @@ function EditorialSplit() {
 
 /* ---------------- Bestsellers ---------------- */
 function Bestsellers() {
-  const items = [...PRODUCTS]
-    .filter((p) => p.tag === "Bestseller")
-    .concat(PRODUCTS)
-    .slice(0, 4);
+  const { products } = useCatalog();
+  const items = products.slice(0, 4);
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-20">
       <div className="flex items-end justify-between mb-8 md:mb-10 border-b border-maroon/40 pb-6">

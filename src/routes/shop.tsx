@@ -1,32 +1,31 @@
 import { useMemo, useState, useEffect } from "react";
-import { seo, jsonLd } from "@/lib/seo";
-import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { PRODUCTS, IMG, type Product } from "@/lib/site-data";
+import { IMG, type Product } from "@/lib/site-data";
 import { ProductCard } from "@/components/site/ProductCard";
 import { Check, X, ChevronDown, SlidersHorizontal, ChevronRight, Filter } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-context";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/shop")({
   head: () => {
     const { meta, links } = seo({
-      title: "Shop All Sarees Online | Silk, Banarasi & Designer — Mumbai Bazar",
+      title: "Shop All Sarees, Lehengas & Dress Material — Mumbai Bazar",
       description:
         "Browse the full Mumbai Bazar range — sarees, dress material and lehengas. Filter by style, occasion and price, then see it in store.",
       path: "/shop",
       keywords: [
         "buy sarees online",
         "saree online shopping",
-        "designer saree",
-        "silk saree collection",
-        "saree shop online India",
+        "lehenga online",
+        "dress material online",
+        "saree shop near me",
       ],
     });
     return {
       meta,
       links,
       scripts: [
-        jsonLd(itemListSchema(PRODUCTS, "All Sarees", "/shop")),
         jsonLd(
           breadcrumbSchema([
             { name: "Home", path: "/" },
@@ -71,7 +70,8 @@ const SORTS: { key: SortKey; label: string }[] = [
   { key: "price-desc", label: "Price: High to Low" },
 ];
 
-const parsePrice = (s: string) => Number(s.replace(/[^\d]/g, "")) || 0;
+const parsePrice = (s?: string | number | null) =>
+  Number(String(s || "").replace(/[^\d]/g, "")) || 0;
 
 function ShopPage() {
   const { products } = useCatalog();
@@ -171,47 +171,8 @@ function ShopPage() {
 
   return (
     <>
-      {/* Header Banner */}
-      <section className="relative border-b border-gold/50 bg-beige/25">
-        <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 py-10 md:py-14">
-          <nav className="mb-4 flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase text-taupe font-medium">
-            <Link to="/" className="hover:text-maroon transition-colors">
-              Home
-            </Link>
-            <span className="text-gold/60">/</span>
-            <span className="text-maroon">Shop Catalog</span>
-          </nav>
-
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-maroon font-medium mb-3">
-                The Boutique Catalog
-              </span>
-              <h1 className="font-serif text-4xl leading-tight text-maroon md:text-6xl">
-                Shop All Sarees
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm md:text-base text-maroon/80 leading-relaxed">
-                Every drape in the house — Banarasi heirlooms, Kanjivaram classics, festive edits
-                and everyday silks. Refine by category, occasion, fabric and price.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-ivory/80 border border-gold/50 shadow-sm shrink-0">
-              <span className="font-serif text-3xl md:text-4xl text-maroon font-medium">
-                {products.length}
-              </span>
-              <span className="uppercase tracking-[0.22em] text-[10px] md:text-[11px] text-maroon/70 font-medium leading-tight">
-                Authentic
-                <br />
-                Pieces In-Store
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Main Grid Section */}
-      <section className="bg-ivory py-8 md:py-14">
+      <section className="bg-ivory pt-6 pb-12 md:pt-8 md:pb-16">
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
           <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-8 md:gap-10 lg:gap-12">
             {/* Left Sidebar with Divider */}

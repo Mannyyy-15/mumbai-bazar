@@ -87,7 +87,11 @@ export const SITE = {
   },
 } as const;
 
-export const OG_IMAGE = `${SITE.url}/logo-main.png`;
+/**
+ * Social share card. A purpose-made 1200x630 JPEG, not the logo — WhatsApp,
+ * Facebook and X all crop to that ratio and a square logo unfurls badly.
+ */
+export const OG_IMAGE = `${SITE.url}/og-share.jpg`;
 
 /** Absolute URL for any site-relative path or already-absolute asset. */
 export function absoluteUrl(path: string): string {

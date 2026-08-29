@@ -32,13 +32,27 @@ export function ProductCard({ p }: { p: Product }) {
       className="group block relative overflow-hidden rounded-2xl border border-gold/45 bg-ivory shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(100,31,42,0.25)] hover:border-gold/70"
     >
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
+        {/* Primary Image */}
         <img
           src={p.img}
           alt={productAltText(p.name, p.weave)}
           loading="lazy"
           decoding="async"
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+          className={`h-full w-full object-cover transition-all duration-700 ease-out ${
+            p.secondaryImg ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-108"
+          }`}
         />
+
+        {/* Secondary Hover Image */}
+        {p.secondaryImg && (
+          <img
+            src={p.secondaryImg}
+            alt={`${p.name} alternate view`}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+          />
+        )}
 
         {/* Tag Badge */}
         {p.tag && (

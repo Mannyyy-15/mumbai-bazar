@@ -1,9 +1,9 @@
 import { useMemo, useState, useEffect } from "react";
-import { PageHero } from "@/components/site/PageHero";
-import { ProductCard } from "@/components/site/ProductCard";
-import { PRODUCTS, type Product } from "@/lib/site-data";
 import { Check, X, ChevronDown, SlidersHorizontal, Sparkles, Filter } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-context";
+import { PageHero } from "@/components/site/PageHero";
+import { ProductCard } from "@/components/site/ProductCard";
+import type { Product } from "@/lib/site-data";
 
 type CatKey = Product["category"][number];
 const CATEGORIES: { key: CatKey; label: string }[] = [
@@ -37,7 +37,8 @@ const SORTS: { key: SortKey; label: string }[] = [
   { key: "price-desc", label: "Price: High to Low" },
 ];
 
-const parsePrice = (s: string) => Number(s.replace(/[^\d]/g, "")) || 0;
+const parsePrice = (s?: string | number | null) =>
+  Number(String(s || "").replace(/[^\d]/g, "")) || 0;
 
 export function CategoryPage({
   eyebrow,

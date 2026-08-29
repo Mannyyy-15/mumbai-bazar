@@ -2,13 +2,14 @@ import { useState, useMemo } from "react";
 import { seo, jsonLd } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { COLLECTIONS, PRODUCTS, type Product } from "@/lib/site-data";
+import { COLLECTIONS, type Product } from "@/lib/site-data";
+import { useCatalog } from "@/lib/catalog-context";
 import { Sparkles, MapPin, ChevronRight, Filter } from "lucide-react";
 
 export const Route = createFileRoute("/collections")({
   head: () => {
     const { meta, links } = seo({
-      title: "Saree Collections | Banarasi, Kanjivaram & Wedding Weaves — Mumbai Bazar",
+      title: "Saree Collections | Banarasi, Kanjivaram & Bridal — Mumbai Bazar",
       description:
         "Browse saree collections by style and occasion — Banarasi, Kanjivaram, party wear, bridal and festive edits, available across our 8 stores.",
       path: "/collections",
@@ -16,8 +17,8 @@ export const Route = createFileRoute("/collections")({
         "saree collections",
         "banarasi collection",
         "kanjivaram collection",
-        "indian handloom weaves",
-        "saree by occasion",
+        "bridal saree collection",
+        "festive saree",
       ],
     });
     return {
@@ -44,6 +45,7 @@ const FILTER_TABS = [
 ];
 
 function CollectionsPage() {
+  const { products } = useCatalog();
   const [activeTab, setActiveTab] = useState("all");
 
   const filteredCollections = useMemo(() => {
@@ -64,43 +66,6 @@ function CollectionsPage() {
 
   return (
     <>
-      {/* Hero Banner */}
-      <section className="relative border-b border-gold/20 bg-beige/25">
-        <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 py-12 md:py-18">
-          <nav className="mb-4 flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase text-taupe font-medium">
-            <Link to="/" className="hover:text-maroon transition-colors">
-              Home
-            </Link>
-            <span className="text-gold/60">/</span>
-            <span className="text-maroon">Collections</span>
-          </nav>
-
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
-              <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/20 bg-maroon/5 text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-maroon font-medium mb-3">
-                Authentic Heritage Looms
-              </span>
-              <h1 className="font-serif text-4xl leading-tight text-maroon md:text-6xl">
-                The Collections
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm md:text-base text-maroon/80 leading-relaxed">
-                Explore our edits — each grouped by weave style, occasion technique, and the
-                occasion it was born to celebrate.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-ivory/80 border border-gold/45 shadow-sm shrink-0">
-              <Sparkles className="h-5 w-5 text-gold" />
-              <span className="uppercase tracking-[0.22em] text-[10px] md:text-[11px] text-maroon font-medium leading-tight">
-                6 Curated Edits
-                <br />
-                100% Handloom Guaranteed
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Filter Tabs */}
       <section className="bg-ivory py-6 border-b border-gold/25 sticky top-20 z-20 backdrop-blur-md bg-ivory/95">
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 flex items-center justify-between gap-4 overflow-x-auto scrollbar-hide">
@@ -134,7 +99,7 @@ function CollectionsPage() {
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 space-y-16 md:space-y-24">
           {filteredCollections.map((c, index) => {
             const isEven = index % 2 === 0;
-            const count = PRODUCTS.filter((p) =>
+            const count = products.filter((p) =>
               p.category.some((cat) => c.slug.includes(cat) || cat.includes(c.slug)),
             ).length;
 
