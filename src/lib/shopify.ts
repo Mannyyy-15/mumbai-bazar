@@ -1,7 +1,7 @@
 import type { Product } from "./site-data";
 
-const domain = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string | undefined;
-const token = import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN as string | undefined;
+const domain = (import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string | undefined) || "mumbai-baazar-store.myshopify.com";
+const token = (import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN as string | undefined) || "ecd6dae011aac9106c8c42c5085d516e";
 const apiVersion = (import.meta.env.VITE_SHOPIFY_API_VERSION as string | undefined) ?? "2024-10";
 
 export const shopifyConfigured = Boolean(domain && token);
