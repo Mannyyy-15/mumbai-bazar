@@ -204,5 +204,5 @@ export function productAltText(
   view?: "front drape" | "palla detail" | "border detail" | "blouse piece" | "styled look",
 ): string {
   const viewPart = view ? `, ${view}` : "";
-  return `${name} - handwoven ${weave} saree${viewPart} | ${SITE.name}`.slice(0, 125);
+  return `${name} - ${weave} saree${viewPart} | ${SITE.name}`.slice(0, 125);
 }

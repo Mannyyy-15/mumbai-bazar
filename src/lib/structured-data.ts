@@ -170,7 +170,7 @@ export function productSchema(p: Product) {
     name: p.name,
     description:
       p.details?.description ??
-      `${p.name} handwoven in ${p.weave}. Silk Mark certified, with a matching unstitched blouse piece.`,
+      `${p.name} in ${p.weave}. Available to see and drape at our stores, with delivery across India.`,
     image: images,
     sku: p.id,
     mpn: p.id,
