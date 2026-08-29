@@ -497,9 +497,9 @@ export function Header() {
                   />
                 </Link>
 
-                {/* Mega Dropdown Menu (Wide 820px, large readable text, instant CSS group-hover & state) */}
+                {/* Mega Dropdown Menu (2-Column clean layout, instant CSS group-hover & state) */}
                 <div
-                  className={`absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50 w-[820px] transition-all duration-200 ${
+                  className={`absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50 w-[540px] transition-all duration-200 ${
                     isDropdownOpen
                       ? "opacity-100 pointer-events-auto translate-y-0"
                       : "opacity-0 pointer-events-none -translate-y-1 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0"
@@ -507,8 +507,8 @@ export function Header() {
                   onMouseEnter={() => handleMouseEnter(cat.label)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <div className="rounded-2xl border border-gold/50 bg-ivory/98 p-7 shadow-[0_20px_50px_rgba(66,23,30,0.18)] backdrop-blur-2xl">
-                    <div className="grid grid-cols-3 gap-8">
+                  <div className="rounded-2xl border border-gold/50 bg-ivory/98 p-6 shadow-[0_20px_50px_rgba(66,23,30,0.18)] backdrop-blur-2xl">
+                    <div className="grid grid-cols-2 gap-8">
                       {/* Subcategory Columns */}
                       {cat.groups.map((group) => (
                         <div key={group.title} className="space-y-4">
@@ -531,29 +531,6 @@ export function Header() {
                           </ul>
                         </div>
                       ))}
-
-                      {/* Featured Spotlight Card */}
-                      {cat.featured && (
-                        <div className="rounded-xl border border-gold/40 bg-gradient-to-br from-beige/50 via-ivory to-beige/30 p-5 flex flex-col justify-between shadow-sm">
-                          <div>
-                            <span className="inline-block rounded-full bg-maroon/10 border border-maroon/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-maroon">
-                              {cat.featured.tag}
-                            </span>
-                            <h5 className="mt-3 font-serif text-base font-bold text-ink leading-snug">
-                              {cat.featured.title}
-                            </h5>
-                            <p className="mt-2 text-xs text-taupe leading-relaxed">
-                              {cat.featured.desc}
-                            </p>
-                          </div>
-                          <Link
-                            to={cat.featured.to}
-                            className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-maroon hover:underline"
-                          >
-                            Explore Now <ChevronRight className="h-3.5 w-3.5" />
-                          </Link>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
