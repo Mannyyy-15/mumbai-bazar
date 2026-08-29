@@ -1,29 +1,73 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Heart, Sparkles, Scissors, MessageCircle, Crown } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
-import { IMG } from "@/lib/site-data";
+import { IMG, PRODUCTS } from "@/lib/site-data";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/wedding-sarees")({
-  head: () => ({
-    meta: [
-      { title: "Wedding Sarees — Bridal Silks & Trousseau | Mumbai Bazar" },
-      { name: "description", content: "Regal Kanjivaram and Banarasi bridal sarees for weddings, sangeet, and reception galas." },
-      { property: "og:title", content: "Wedding Sarees — Mumbai Bazar" },
-      { property: "og:description", content: "Royal drapes for the bride and her trousseau." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Bridal & Wedding Sarees Online | Kanjivaram & Banarasi — Mumbai Bazar",
+      description:
+        "Shop handwoven bridal sarees for weddings, sangeet and reception. Silk Mark certified Kanjivaram and Banarasi trousseau silks with free India shipping and expert styling.",
+      path: "/wedding-sarees",
+      keywords: [
+        "bridal saree online",
+        "wedding saree",
+        "kanjivaram bridal saree",
+        "banarasi wedding saree",
+        "trousseau saree",
+        "bridal saree Mumbai",
+        "wedding saree Vasai Virar",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(
+          itemListSchema(
+            PRODUCTS.filter((p) => p.category.includes("wedding-sarees")),
+            "Wedding & Bridal Sarees",
+            "/wedding-sarees",
+          ),
+        ),
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Wedding Sarees", path: "/wedding-sarees" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: WeddingSareesPage,
 });
 
 const ROLES = [
-  { role: "The Bride", desc: "Heavy gold brocade Kanjivarams & royal crimson Banarasis", icon: Crown },
-  { role: "Mother of the Bride", desc: "Regal Paithani & subtle antique gold tissue drapes", icon: Heart },
-  { role: "Sangeet & Cocktail", desc: "Lightweight metallic tissue & fluid organza silk", icon: Sparkles },
+  {
+    role: "The Bride",
+    desc: "Heavy gold brocade Kanjivarams & royal crimson Banarasis",
+    icon: Crown,
+  },
+  {
+    role: "Mother of the Bride",
+    desc: "Regal Paithani & subtle antique gold tissue drapes",
+    icon: Heart,
+  },
+  {
+    role: "Sangeet & Cocktail",
+    desc: "Lightweight metallic tissue & fluid organza silk",
+    icon: Sparkles,
+  },
   { role: "Bridesmaids", desc: "Coordinated pastel silks & modern zari borders", icon: Scissors },
 ];
 
 function WeddingSareesPage() {
-  const waMsg = encodeURIComponent("Hello Mumbai Bazar Bridal Concierge, I would like to schedule a private trousseau styling session.");
+  const waMsg = encodeURIComponent(
+    "Hello Mumbai Bazar Bridal Concierge, I would like to schedule a private trousseau styling session.",
+  );
 
   return (
     <div className="w-full bg-ivory">
@@ -38,7 +82,8 @@ function WeddingSareesPage() {
               Regal Wedding Silks
             </h1>
             <p className="text-base md:text-lg text-ivory/85 leading-relaxed max-w-xl">
-              Handwoven with pure silver and gold zari to commemorate your grandest celebrations. Curated for brides, trousseau collections, and wedding galas.
+              Handwoven with pure silver and gold zari to commemorate your grandest celebrations.
+              Curated for brides, trousseau collections, and wedding galas.
             </p>
 
             <div className="pt-4 flex flex-wrap gap-4">
@@ -80,4 +125,3 @@ function WeddingSareesPage() {
     </div>
   );
 }
-

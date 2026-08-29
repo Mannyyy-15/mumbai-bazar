@@ -1,11 +1,21 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
-  Heart, Minus, Plus, MessageCircle, ShoppingBag,
-  Truck, ShieldCheck, RotateCcw, ChevronRight, Check,
+  Heart,
+  Minus,
+  Plus,
+  MessageCircle,
+  ShoppingBag,
+  Truck,
+  ShieldCheck,
+  RotateCcw,
+  ChevronRight,
+  Check,
   Scissors,
 } from "lucide-react";
 import { PRODUCTS } from "@/lib/site-data";
+import { seo, jsonLd, SITE, productAltText } from "@/lib/seo";
+import { productSchema, breadcrumbSchema, priceToSchema } from "@/lib/structured-data";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { fetchShopifyProduct } from "@/lib/shopify";
@@ -20,18 +30,47 @@ export const Route = createFileRoute("/products/$id")({
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
-      return { meta: [{ title: "Saree not found — Mumbai Bazar" }, { name: "robots", content: "noindex" }] };
+      return seo({
+        title: "Saree Not Found — Mumbai Bazar",
+        description:
+          "This saree is no longer available. Browse the current collection at Mumbai Bazar.",
+        path: "/shop",
+        noindex: true,
+      });
     }
     const p = loaderData.product;
-    const title = `${p.name} — Mumbai Bazar`;
-    const desc = p.details?.description ?? `${p.name} in ${p.weave}. Shop premium Indian sarees at Mumbai Bazar.`;
+    const desc =
+      p.details?.description ??
+      `${p.name} handwoven in ${p.weave}. Silk Mark certified, with a matching unstitched blouse piece. Free shipping across India.`;
+    const { meta, links } = seo({
+      // Google Shopping title formula: Brand + Colour/Name + Fabric + Product + Occasion.
+      title: `${p.name} | ${p.weave} — Mumbai Bazar`,
+      description: desc.slice(0, 160),
+      path: `/products/${p.id}`,
+      image: p.img,
+      type: "product",
+      keywords: [p.name, p.weave, "buy saree online", "handwoven saree"],
+    });
     return {
       meta: [
-        { title },
-        { name: "description", content: desc },
-        { property: "og:title", content: title },
-        { property: "og:description", content: desc },
-        { property: "og:image", content: p.img },
+        ...meta,
+        // Open Graph product extensions — read by Facebook/Instagram Shopping.
+        { property: "product:price:amount", content: priceToSchema(p.price) },
+        { property: "product:price:currency", content: SITE.currency },
+        { property: "product:availability", content: "in stock" },
+        { property: "product:condition", content: "new" },
+        { property: "product:brand", content: SITE.name },
+      ],
+      links,
+      scripts: [
+        jsonLd(productSchema(p)),
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Shop", path: "/shop" },
+            { name: p.name, path: `/products/${p.id}` },
+          ]),
+        ),
       ],
     };
   },
@@ -41,17 +80,22 @@ export const Route = createFileRoute("/products/$id")({
       <span className="text-[11px] uppercase tracking-[0.3em] text-maroon/60">404</span>
       <h1 className="mt-3 font-serif text-4xl text-ink">Saree not found</h1>
       <p className="mt-3 text-taupe">The piece you were looking for may have found a new home.</p>
-      <Link to="/shop" className="btn-primary mt-8 inline-flex">Browse the Boutique</Link>
+      <Link to="/shop" className="btn-primary mt-8 inline-flex">
+        Browse the Boutique
+      </Link>
     </div>
   ),
 });
 
 const SWATCHES = [
-  { name: "Wine",     hex: "#641F2A" },
+  { name: "Wine", hex: "#641F2A" },
   { name: "Midnight", hex: "#2D1F3F" },
-  { name: "Emerald",  hex: "#1A3E35" },
-  { name: "Antique",  hex: "#B69054" },
+  { name: "Emerald", hex: "#1A3E35" },
+  { name: "Antique", hex: "#B69054" },
 ];
+
+/** Cycled across gallery thumbnails so each image gets distinct alt text. */
+const GALLERY_VIEWS = ["front drape", "palla detail", "border detail", "blouse piece"] as const;
 
 const DRAPE_OPTIONS = ["Standard 5.5 m", "Pre-stitched", "With Fall & Pico"];
 
@@ -82,7 +126,7 @@ function ProductDetail() {
         weave: product.weave,
         shopifyVariantId: product.shopifyVariantId,
       },
-      qty
+      qty,
     );
     setAdded(true);
     setTimeout(() => setAdded(false), 1600);
@@ -90,12 +134,15 @@ function ProductDetail() {
   };
 
   const related = useMemo(
-    () => catalogProducts.filter((p) => p.id !== product.id && p.category.some((c) => product.category.includes(c))).slice(0, 5),
-    [catalogProducts, product]
+    () =>
+      catalogProducts
+        .filter((p) => p.id !== product.id && p.category.some((c) => product.category.includes(c)))
+        .slice(0, 5),
+    [catalogProducts, product],
   );
 
   const waMsg = encodeURIComponent(
-    `Hello Mumbai Bazar, I'd like to enquire about "${product.name}" (${product.price}). Could you share availability and drape details?`
+    `Hello Mumbai Bazar, I'd like to enquire about "${product.name}" (${product.price}). Could you share availability and drape details?`,
   );
   const waHref = `https://wa.me/919999999999?text=${waMsg}`;
 
@@ -104,9 +151,13 @@ function ProductDetail() {
       {/* Breadcrumb */}
       <div className="mx-auto max-w-[1600px] px-4 md:px-8 pt-5 md:pt-6 border-b border-maroon/40 pb-4">
         <nav className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-maroon/60">
-          <Link to="/" className="hover:text-maroon">Home</Link>
+          <Link to="/" className="hover:text-maroon">
+            Home
+          </Link>
           <ChevronRight className="h-3 w-3" />
-          <Link to="/shop" className="hover:text-maroon">Boutique</Link>
+          <Link to="/shop" className="hover:text-maroon">
+            Boutique
+          </Link>
           <ChevronRight className="h-3 w-3" />
           <span className="text-maroon truncate max-w-[60vw]">{product.name}</span>
         </nav>
@@ -126,10 +177,22 @@ function ProductDetail() {
                     onClick={() => setActive(i)}
                     aria-label={`View image ${i + 1}`}
                     className={`aspect-[4/5] overflow-hidden bg-[#F0E9DC] border transition-all ${
-                      active === i ? "border-maroon" : "border-transparent hover:border-maroon/40 opacity-70 hover:opacity-100"
+                      active === i
+                        ? "border-maroon"
+                        : "border-transparent hover:border-maroon/40 opacity-70 hover:opacity-100"
                     }`}
                   >
-                    <img src={g} alt="" className="h-full w-full object-cover" />
+                    <img
+                      src={g}
+                      alt={productAltText(
+                        product.name,
+                        product.weave,
+                        GALLERY_VIEWS[i % GALLERY_VIEWS.length],
+                      )}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -139,7 +202,11 @@ function ProductDetail() {
                 <div className="aspect-[4/5] w-full max-h-[calc(100vh-8rem)]">
                   <img
                     src={d.gallery[active]}
-                    alt={product.name}
+                    alt={productAltText(product.name, product.weave, "front drape")}
+                    // The PDP hero is the LCP element — never lazy-load it.
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -168,7 +235,17 @@ function ProductDetail() {
                   active === i ? "border-maroon" : "border-transparent"
                 }`}
               >
-                <img src={g} alt="" className="h-full w-full object-cover" />
+                <img
+                  src={g}
+                  alt={productAltText(
+                    product.name,
+                    product.weave,
+                    GALLERY_VIEWS[i % GALLERY_VIEWS.length],
+                  )}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                />
               </button>
             ))}
           </div>
@@ -185,10 +262,14 @@ function ProductDetail() {
 
               {/* Price row */}
               <div className="mt-6 flex items-baseline gap-4">
-                <span className="font-sans text-3xl md:text-4xl font-extrabold text-maroon tracking-tight">{product.price}</span>
+                <span className="font-sans text-3xl md:text-4xl font-extrabold text-maroon tracking-tight">
+                  {product.price}
+                </span>
                 {product.original && (
                   <>
-                    <span className="text-sm font-sans text-taupe font-medium line-through">{product.original}</span>
+                    <span className="text-sm font-sans text-taupe font-medium line-through">
+                      {product.original}
+                    </span>
                     <span className="text-[10px] tracking-[0.22em] uppercase bg-maroon text-ivory px-2.5 py-1 font-semibold rounded-md shadow-sm">
                       Save {savePct}%
                     </span>
@@ -218,7 +299,9 @@ function ProductDetail() {
                       onClick={() => setSwatch(i)}
                       aria-label={s.name}
                       className={`relative h-11 w-11 rounded-full border transition-all ${
-                        swatch === i ? "border-maroon ring-1 ring-maroon ring-offset-2 ring-offset-ivory" : "border-maroon/40 hover:border-maroon/50"
+                        swatch === i
+                          ? "border-maroon ring-1 ring-maroon ring-offset-2 ring-offset-ivory"
+                          : "border-maroon/40 hover:border-maroon/50"
                       }`}
                       style={{ backgroundColor: s.hex }}
                     >
@@ -292,9 +375,13 @@ function ProductDetail() {
                   className="flex-1 h-14 bg-maroon text-ivory text-[11px] tracking-[0.28em] uppercase flex items-center justify-center gap-2 hover:bg-maroon/90 transition-colors"
                 >
                   {added ? (
-                    <><Check className="h-4 w-4" /> Added</>
+                    <>
+                      <Check className="h-4 w-4" /> Added
+                    </>
                   ) : (
-                    <><ShoppingBag className="h-4 w-4" /> Add to Shopping Bag</>
+                    <>
+                      <ShoppingBag className="h-4 w-4" /> Add to Shopping Bag
+                    </>
                   )}
                 </button>
               </div>
@@ -314,21 +401,33 @@ function ProductDetail() {
 
               {/* Highlights grid — like hero WEAVE TYPE / ZARI */}
               <div className="mt-8 border-t border-maroon/40 pt-8 grid grid-cols-2 gap-x-6 gap-y-6">
-                <Detail label="Fabric"  value={d.fabric} />
-                <Detail label="Weave"   value={product.weave} />
-                <Detail label="Drape"   value={d.drape} />
-                <Detail label="Border"  value={d.border} />
-                <Detail label="Palla"   value={d.palla} />
-                <Detail label="Length"  value={d.length} />
-                <Detail label="Blouse"  value={d.blousePiece} />
+                <Detail label="Fabric" value={d.fabric} />
+                <Detail label="Weave" value={product.weave} />
+                <Detail label="Drape" value={d.drape} />
+                <Detail label="Border" value={d.border} />
+                <Detail label="Palla" value={d.palla} />
+                <Detail label="Length" value={d.length} />
+                <Detail label="Blouse" value={d.blousePiece} />
                 <Detail label="Delivery" value="7–10 business days" />
               </div>
 
               {/* Trust row */}
               <ul className="mt-8 grid grid-cols-3 gap-3 border-t border-maroon/40 pt-6">
-                <TrustItem icon={<Truck className="h-4 w-4" />} label="Free Shipping" sub="Across India" />
-                <TrustItem icon={<RotateCcw className="h-4 w-4" />} label="Easy Returns" sub="Within 7 days" />
-                <TrustItem icon={<ShieldCheck className="h-4 w-4" />} label="Silk Mark" sub="Certified" />
+                <TrustItem
+                  icon={<Truck className="h-4 w-4" />}
+                  label="Free Shipping"
+                  sub="Across India"
+                />
+                <TrustItem
+                  icon={<RotateCcw className="h-4 w-4" />}
+                  label="Easy Returns"
+                  sub="Within 7 days"
+                />
+                <TrustItem
+                  icon={<ShieldCheck className="h-4 w-4" />}
+                  label="Silk Mark"
+                  sub="Certified"
+                />
               </ul>
 
               {/* Story + Care collapsibles */}
@@ -366,15 +465,24 @@ function ProductDetail() {
         <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 border-t border-maroon/20">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-maroon/60">You may also love</p>
-              <h2 className="mt-2 font-serif text-3xl md:text-4xl text-maroon">Curated with this piece</h2>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-maroon/60">
+                You may also love
+              </p>
+              <h2 className="mt-2 font-serif text-3xl md:text-4xl text-maroon">
+                Curated with this piece
+              </h2>
             </div>
-            <Link to="/shop" className="text-[10px] uppercase tracking-[0.25em] text-maroon border-b border-maroon/40 pb-1 hover:opacity-60 hidden md:inline-block">
+            <Link
+              to="/shop"
+              className="text-[10px] uppercase tracking-[0.25em] text-maroon border-b border-maroon/40 pb-1 hover:opacity-60 hidden md:inline-block"
+            >
               Browse all
             </Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-3 md:gap-x-4 gap-y-10">
-            {related.map((r) => <ProductCard key={r.id} p={r} />)}
+            {related.map((r) => (
+              <ProductCard key={r.id} p={r} />
+            ))}
           </div>
         </section>
       )}
@@ -400,7 +508,9 @@ function Detail({ label, value }: { label: string; value: string }) {
 function TrustItem({ icon, label, sub }: { icon: React.ReactNode; label: string; sub: string }) {
   return (
     <li className="flex flex-col items-center gap-1.5 text-center">
-      <span className="grid h-10 w-10 place-items-center rounded-full bg-maroon/5 text-maroon">{icon}</span>
+      <span className="grid h-10 w-10 place-items-center rounded-full bg-maroon/5 text-maroon">
+        {icon}
+      </span>
       <span className="text-[10px] uppercase tracking-[0.22em] text-maroon">{label}</span>
       <span className="text-[9px] uppercase tracking-[0.18em] text-maroon/50">{sub}</span>
     </li>

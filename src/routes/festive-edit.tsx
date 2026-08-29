@@ -1,17 +1,46 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Sparkles, Gift, Flame, PartyPopper } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
-import { IMG } from "@/lib/site-data";
+import { IMG, PRODUCTS } from "@/lib/site-data";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/festive-edit")({
-  head: () => ({
-    meta: [
-      { title: "Festive Edit — Celebration Sarees | Mumbai Bazar" },
-      { name: "description", content: "Vibrant Banarasi, Kanjivaram and Tissue silks curated for Diwali, Karwa Chauth and festive galas." },
-      { property: "og:title", content: "Festive Edit — Mumbai Bazar" },
-      { property: "og:description", content: "Royal colors and sparkling zari for celebrations." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Festive Sarees Online | Diwali, Ganesh Chaturthi & Navratri — Mumbai Bazar",
+      description:
+        "Shop festive sarees for Diwali, Ganesh Chaturthi, Navratri and Karwa Chauth. Tissue, organza and silk drapes in celebration-ready colours, delivered across India.",
+      path: "/festive-edit",
+      keywords: [
+        "festive saree",
+        "diwali saree",
+        "ganesh chaturthi saree",
+        "navratri saree",
+        "karwa chauth saree",
+        "festival saree online",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(
+          itemListSchema(
+            PRODUCTS.filter((p) => p.category.includes("festive-edit")),
+            "Festive Sarees",
+            "/festive-edit",
+          ),
+        ),
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Festive Edit", path: "/festive-edit" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: FestiveEditPage,
 });
 
@@ -36,7 +65,9 @@ function FestiveEditPage() {
               The Festive Curation
             </h1>
             <p className="mt-4 text-base md:text-lg text-taupe leading-relaxed">
-              Step into the light of celebrations with rich jewel-toned Banarasis, golden Tissue drapes, and intricate kadwa zari motifs. Handloomed to make every puja and evening gathering unforgettable.
+              Step into the light of celebrations with rich jewel-toned Banarasis, golden Tissue
+              drapes, and intricate kadwa zari motifs. Handloomed to make every puja and evening
+              gathering unforgettable.
             </p>
 
             <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -65,4 +96,3 @@ function FestiveEditPage() {
     </div>
   );
 }
-

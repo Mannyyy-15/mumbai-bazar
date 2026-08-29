@@ -17,14 +17,21 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EverydaySareesRouteImport } from './routes/everyday-sarees'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FestiveEditRouteImport } from './routes/festive-edit'
+import { Route as IndexnowKeyDottxtRouteImport } from './routes/indexnow-key[.]txt'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as NewArrivalsRouteImport } from './routes/new-arrivals'
 import { Route as OurStoryRouteImport } from './routes/our-story'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ShippingReturnsRouteImport } from './routes/shipping-returns'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SilkSareesRouteImport } from './routes/silk-sarees'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TrousseauBuilderRouteImport } from './routes/trousseau-builder'
 import { Route as WeddingSareesRouteImport } from './routes/wedding-sarees'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as SareeShopCityRouteImport } from './routes/saree-shop.$city'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -66,6 +73,16 @@ const FestiveEditRoute = FestiveEditRouteImport.update({
   path: '/festive-edit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndexnowKeyDottxtRoute = IndexnowKeyDottxtRouteImport.update({
+  id: '/indexnow-key.txt',
+  path: '/indexnow-key.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewArrivalsRoute = NewArrivalsRouteImport.update({
   id: '/new-arrivals',
   path: '/new-arrivals',
@@ -74,6 +91,11 @@ const NewArrivalsRoute = NewArrivalsRouteImport.update({
 const OurStoryRoute = OurStoryRouteImport.update({
   id: '/our-story',
   path: '/our-story',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShippingReturnsRoute = ShippingReturnsRouteImport.update({
@@ -91,6 +113,11 @@ const SilkSareesRoute = SilkSareesRouteImport.update({
   path: '/silk-sarees',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrousseauBuilderRoute = TrousseauBuilderRouteImport.update({
   id: '/trousseau-builder',
   path: '/trousseau-builder',
@@ -101,9 +128,24 @@ const WeddingSareesRoute = WeddingSareesRouteImport.update({
   path: '/wedding-sarees',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductsIdRoute = ProductsIdRouteImport.update({
   id: '/products/$id',
   path: '/products/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SareeShopCityRoute = SareeShopCityRouteImport.update({
+  id: '/saree-shop/$city',
+  path: '/saree-shop/$city',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -116,14 +158,21 @@ export interface FileRoutesByFullPath {
   '/everyday-sarees': typeof EverydaySareesRoute
   '/faq': typeof FaqRoute
   '/festive-edit': typeof FestiveEditRoute
+  '/indexnow-key.txt': typeof IndexnowKeyDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/new-arrivals': typeof NewArrivalsRoute
   '/our-story': typeof OurStoryRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/shipping-returns': typeof ShippingReturnsRoute
   '/shop': typeof ShopRoute
   '/silk-sarees': typeof SilkSareesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trousseau-builder': typeof TrousseauBuilderRoute
   '/wedding-sarees': typeof WeddingSareesRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/products/$id': typeof ProductsIdRoute
+  '/saree-shop/$city': typeof SareeShopCityRoute
+  '/guides/': typeof GuidesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,14 +183,21 @@ export interface FileRoutesByTo {
   '/everyday-sarees': typeof EverydaySareesRoute
   '/faq': typeof FaqRoute
   '/festive-edit': typeof FestiveEditRoute
+  '/indexnow-key.txt': typeof IndexnowKeyDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/new-arrivals': typeof NewArrivalsRoute
   '/our-story': typeof OurStoryRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/shipping-returns': typeof ShippingReturnsRoute
   '/shop': typeof ShopRoute
   '/silk-sarees': typeof SilkSareesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trousseau-builder': typeof TrousseauBuilderRoute
   '/wedding-sarees': typeof WeddingSareesRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/products/$id': typeof ProductsIdRoute
+  '/saree-shop/$city': typeof SareeShopCityRoute
+  '/guides': typeof GuidesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -153,14 +209,21 @@ export interface FileRoutesById {
   '/everyday-sarees': typeof EverydaySareesRoute
   '/faq': typeof FaqRoute
   '/festive-edit': typeof FestiveEditRoute
+  '/indexnow-key.txt': typeof IndexnowKeyDottxtRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/new-arrivals': typeof NewArrivalsRoute
   '/our-story': typeof OurStoryRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/shipping-returns': typeof ShippingReturnsRoute
   '/shop': typeof ShopRoute
   '/silk-sarees': typeof SilkSareesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/trousseau-builder': typeof TrousseauBuilderRoute
   '/wedding-sarees': typeof WeddingSareesRoute
+  '/guides/$slug': typeof GuidesSlugRoute
   '/products/$id': typeof ProductsIdRoute
+  '/saree-shop/$city': typeof SareeShopCityRoute
+  '/guides/': typeof GuidesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -173,14 +236,21 @@ export interface FileRouteTypes {
     | '/everyday-sarees'
     | '/faq'
     | '/festive-edit'
+    | '/indexnow-key.txt'
+    | '/llms.txt'
     | '/new-arrivals'
     | '/our-story'
+    | '/robots.txt'
     | '/shipping-returns'
     | '/shop'
     | '/silk-sarees'
+    | '/sitemap.xml'
     | '/trousseau-builder'
     | '/wedding-sarees'
+    | '/guides/$slug'
     | '/products/$id'
+    | '/saree-shop/$city'
+    | '/guides/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -191,14 +261,21 @@ export interface FileRouteTypes {
     | '/everyday-sarees'
     | '/faq'
     | '/festive-edit'
+    | '/indexnow-key.txt'
+    | '/llms.txt'
     | '/new-arrivals'
     | '/our-story'
+    | '/robots.txt'
     | '/shipping-returns'
     | '/shop'
     | '/silk-sarees'
+    | '/sitemap.xml'
     | '/trousseau-builder'
     | '/wedding-sarees'
+    | '/guides/$slug'
     | '/products/$id'
+    | '/saree-shop/$city'
+    | '/guides'
   id:
     | '__root__'
     | '/'
@@ -209,14 +286,21 @@ export interface FileRouteTypes {
     | '/everyday-sarees'
     | '/faq'
     | '/festive-edit'
+    | '/indexnow-key.txt'
+    | '/llms.txt'
     | '/new-arrivals'
     | '/our-story'
+    | '/robots.txt'
     | '/shipping-returns'
     | '/shop'
     | '/silk-sarees'
+    | '/sitemap.xml'
     | '/trousseau-builder'
     | '/wedding-sarees'
+    | '/guides/$slug'
     | '/products/$id'
+    | '/saree-shop/$city'
+    | '/guides/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -228,14 +312,21 @@ export interface RootRouteChildren {
   EverydaySareesRoute: typeof EverydaySareesRoute
   FaqRoute: typeof FaqRoute
   FestiveEditRoute: typeof FestiveEditRoute
+  IndexnowKeyDottxtRoute: typeof IndexnowKeyDottxtRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   NewArrivalsRoute: typeof NewArrivalsRoute
   OurStoryRoute: typeof OurStoryRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   ShippingReturnsRoute: typeof ShippingReturnsRoute
   ShopRoute: typeof ShopRoute
   SilkSareesRoute: typeof SilkSareesRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TrousseauBuilderRoute: typeof TrousseauBuilderRoute
   WeddingSareesRoute: typeof WeddingSareesRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
   ProductsIdRoute: typeof ProductsIdRoute
+  SareeShopCityRoute: typeof SareeShopCityRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -296,6 +387,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FestiveEditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/indexnow-key.txt': {
+      id: '/indexnow-key.txt'
+      path: '/indexnow-key.txt'
+      fullPath: '/indexnow-key.txt'
+      preLoaderRoute: typeof IndexnowKeyDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/new-arrivals': {
       id: '/new-arrivals'
       path: '/new-arrivals'
@@ -308,6 +413,13 @@ declare module '@tanstack/react-router' {
       path: '/our-story'
       fullPath: '/our-story'
       preLoaderRoute: typeof OurStoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shipping-returns': {
@@ -331,6 +443,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SilkSareesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trousseau-builder': {
       id: '/trousseau-builder'
       path: '/trousseau-builder'
@@ -345,11 +464,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WeddingSareesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/products/$id': {
       id: '/products/$id'
       path: '/products/$id'
       fullPath: '/products/$id'
       preLoaderRoute: typeof ProductsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saree-shop/$city': {
+      id: '/saree-shop/$city'
+      path: '/saree-shop/$city'
+      fullPath: '/saree-shop/$city'
+      preLoaderRoute: typeof SareeShopCityRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -364,14 +504,21 @@ const rootRouteChildren: RootRouteChildren = {
   EverydaySareesRoute: EverydaySareesRoute,
   FaqRoute: FaqRoute,
   FestiveEditRoute: FestiveEditRoute,
+  IndexnowKeyDottxtRoute: IndexnowKeyDottxtRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   NewArrivalsRoute: NewArrivalsRoute,
   OurStoryRoute: OurStoryRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   ShippingReturnsRoute: ShippingReturnsRoute,
   ShopRoute: ShopRoute,
   SilkSareesRoute: SilkSareesRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TrousseauBuilderRoute: TrousseauBuilderRoute,
   WeddingSareesRoute: WeddingSareesRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
   ProductsIdRoute: ProductsIdRoute,
+  SareeShopCityRoute: SareeShopCityRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

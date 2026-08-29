@@ -1,5 +1,6 @@
 import { Heart, ShoppingBag } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { productAltText } from "@/lib/seo";
 import type { Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
@@ -33,7 +34,7 @@ export function ProductCard({ p }: { p: Product }) {
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
         <img
           src={p.img}
-          alt={p.name}
+          alt={productAltText(p.name, p.weave)}
           loading="lazy"
           decoding="async"
           className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
@@ -55,7 +56,9 @@ export function ProductCard({ p }: { p: Product }) {
             toggleWishlist(p);
           }}
           className={`absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full transition-all shadow-sm ${
-            isSaved ? "bg-maroon text-ivory scale-110" : "bg-ivory/90 text-maroon hover:bg-maroon hover:text-ivory"
+            isSaved
+              ? "bg-maroon text-ivory scale-110"
+              : "bg-ivory/90 text-maroon hover:bg-maroon hover:text-ivory"
           }`}
         >
           <Heart className={`h-4 w-4 ${isSaved ? "fill-ivory text-ivory" : ""}`} />
@@ -81,9 +84,13 @@ export function ProductCard({ p }: { p: Product }) {
           {p.name}
         </h3>
         <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">
-          <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">{p.price}</span>
+          <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">
+            {p.price}
+          </span>
           {p.original && (
-            <span className="text-xs text-taupe font-medium line-through font-sans">{p.original}</span>
+            <span className="text-xs text-taupe font-medium line-through font-sans">
+              {p.original}
+            </span>
           )}
         </div>
       </div>

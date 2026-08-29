@@ -1,4 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PRODUCTS, IMG, type Product } from "@/lib/site-data";
 import { ProductCard } from "@/components/site/ProductCard";
@@ -6,14 +8,34 @@ import { Check, X, ChevronDown, SlidersHorizontal, ChevronRight, Filter } from "
 import { useCatalog } from "@/lib/catalog-context";
 
 export const Route = createFileRoute("/shop")({
-  head: () => ({
-    meta: [
-      { title: "Shop All Sarees — Mumbai Bazar" },
-      { name: "description", content: "Browse the full Mumbai Bazar collection. Filter by category, occasion, fabric and price." },
-      { property: "og:title", content: "Shop All Sarees — Mumbai Bazar" },
-      { property: "og:description", content: "The complete boutique — Banarasi, Kanjivaram, silk, festive and everyday sarees." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Shop All Sarees Online | Silk, Banarasi & Designer — Mumbai Bazar",
+      description:
+        "Browse every handwoven saree at Mumbai Bazar. Filter by weave, occasion, fabric and price across Banarasi, Kanjivaram, tissue and cotton silk sarees.",
+      path: "/shop",
+      keywords: [
+        "buy sarees online",
+        "saree online shopping",
+        "designer saree",
+        "silk saree collection",
+        "saree shop online India",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(itemListSchema(PRODUCTS, "All Sarees", "/shop")),
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Shop", path: "/shop" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: ShopPage,
 });
 
@@ -62,7 +84,10 @@ function ShopPage() {
   const [sortOpen, setSortOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const fabrics = useMemo(() => Array.from(new Set(products.map((p) => p.weave))).sort(), [products]);
+  const fabrics = useMemo(
+    () => Array.from(new Set(products.map((p) => p.weave))).sort(),
+    [products],
+  );
   const tags = ["New", "Bestseller"];
 
   const toggle = <T,>(setter: (v: Set<T>) => void, set: Set<T>, v: T) => {
@@ -74,7 +99,10 @@ function ShopPage() {
   const filtered = useMemo(() => {
     let out = products.slice();
     if (selCat.size) out = out.filter((p) => p.category.some((c) => selCat.has(c)));
-    if (selOcc.size) out = out.filter((p) => Array.from(selOcc).some((k) => OCCASIONS.find((o) => o.key === k)!.match(p)));
+    if (selOcc.size)
+      out = out.filter((p) =>
+        Array.from(selOcc).some((k) => OCCASIONS.find((o) => o.key === k)!.match(p)),
+      );
     if (selFab.size) out = out.filter((p) => selFab.has(p.weave));
     if (selPrice.size) {
       out = out.filter((p) => {
@@ -87,30 +115,46 @@ function ShopPage() {
     }
     if (selTag.size) out = out.filter((p) => p.tag && selTag.has(p.tag));
     switch (sort) {
-      case "new": out.sort((a, b) => Number(b.tag === "New") - Number(a.tag === "New")); break;
-      case "price-asc": out.sort((a, b) => parsePrice(a.price) - parsePrice(b.price)); break;
-      case "price-desc": out.sort((a, b) => parsePrice(b.price) - parsePrice(a.price)); break;
+      case "new":
+        out.sort((a, b) => Number(b.tag === "New") - Number(a.tag === "New"));
+        break;
+      case "price-asc":
+        out.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+        break;
+      case "price-desc":
+        out.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+        break;
     }
     return out;
   }, [products, selCat, selOcc, selFab, selPrice, selTag, sort]);
 
   const activeCount = selCat.size + selOcc.size + selFab.size + selPrice.size + selTag.size;
   const clearAll = () => {
-    setSelCat(new Set()); setSelOcc(new Set()); setSelFab(new Set());
-    setSelPrice(new Set()); setSelTag(new Set());
+    setSelCat(new Set());
+    setSelOcc(new Set());
+    setSelFab(new Set());
+    setSelPrice(new Set());
+    setSelTag(new Set());
   };
 
   useEffect(() => {
     if (!drawerOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [drawerOpen]);
 
   const sidebar = (
     <FilterPanel
-      selCat={selCat} selOcc={selOcc} selFab={selFab} selPrice={selPrice} selTag={selTag}
-      fabrics={fabrics} tags={tags}
+      selCat={selCat}
+      selOcc={selOcc}
+      selFab={selFab}
+      selPrice={selPrice}
+      selTag={selTag}
+      fabrics={fabrics}
+      tags={tags}
       onCat={(k) => toggle(setSelCat, selCat, k)}
       onOcc={(k) => toggle(setSelOcc, selOcc, k)}
       onFab={(k) => toggle(setSelFab, selFab, k)}
@@ -127,7 +171,9 @@ function ShopPage() {
       <section className="relative border-b border-gold/50 bg-beige/25">
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 py-10 md:py-14">
           <nav className="mb-4 flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase text-taupe font-medium">
-            <Link to="/" className="hover:text-maroon transition-colors">Home</Link>
+            <Link to="/" className="hover:text-maroon transition-colors">
+              Home
+            </Link>
             <span className="text-gold/60">/</span>
             <span className="text-maroon">Shop Catalog</span>
           </nav>
@@ -137,16 +183,23 @@ function ShopPage() {
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-maroon font-medium mb-3">
                 The Boutique Catalog
               </span>
-              <h1 className="font-serif text-4xl leading-tight text-maroon md:text-6xl">Shop All Sarees</h1>
+              <h1 className="font-serif text-4xl leading-tight text-maroon md:text-6xl">
+                Shop All Sarees
+              </h1>
               <p className="mt-3 max-w-2xl text-sm md:text-base text-maroon/80 leading-relaxed">
-                Every drape in the house — Banarasi heirlooms, Kanjivaram classics, festive edits and everyday silks. Refine by category, occasion, fabric and price.
+                Every drape in the house — Banarasi heirlooms, Kanjivaram classics, festive edits
+                and everyday silks. Refine by category, occasion, fabric and price.
               </p>
             </div>
-            
+
             <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-ivory/80 border border-gold/50 shadow-sm shrink-0">
-              <span className="font-serif text-3xl md:text-4xl text-maroon font-medium">{products.length}</span>
+              <span className="font-serif text-3xl md:text-4xl text-maroon font-medium">
+                {products.length}
+              </span>
               <span className="uppercase tracking-[0.22em] text-[10px] md:text-[11px] text-maroon/70 font-medium leading-tight">
-                Authentic<br />Pieces In-Store
+                Authentic
+                <br />
+                Pieces In-Store
               </span>
             </div>
           </div>
@@ -157,7 +210,6 @@ function ShopPage() {
       <section className="bg-ivory py-8 md:py-14">
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
           <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-8 md:gap-10 lg:gap-12">
-            
             {/* Left Sidebar with Divider */}
             <aside className="hidden md:block self-start sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar md:border-r md:border-gold/50 md:pr-8 lg:pr-10">
               {sidebar}
@@ -168,7 +220,8 @@ function ShopPage() {
               {/* Toolbar */}
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gold/50 pb-5">
                 <p className="text-sm text-maroon/80">
-                  Showing <span className="text-maroon font-semibold">{filtered.length}</span> of {products.length} heirlooms
+                  Showing <span className="text-maroon font-semibold">{filtered.length}</span> of{" "}
+                  {products.length} heirlooms
                 </p>
 
                 <div className="flex items-center gap-4">
@@ -180,7 +233,9 @@ function ShopPage() {
                     <SlidersHorizontal className="h-4 w-4" />
                     Filter
                     {activeCount > 0 && (
-                      <span className="ml-1 grid h-4 w-4 place-items-center rounded-full bg-maroon text-[10px] text-ivory">{activeCount}</span>
+                      <span className="ml-1 grid h-4 w-4 place-items-center rounded-full bg-maroon text-[10px] text-ivory">
+                        {activeCount}
+                      </span>
                     )}
                   </button>
 
@@ -192,7 +247,9 @@ function ShopPage() {
                       className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/40 bg-beige/30 text-[11px] tracking-[0.2em] uppercase text-maroon hover:border-maroon transition-all"
                     >
                       <span>Sort: {SORTS.find((s) => s.key === sort)!.label}</span>
-                      <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`} />
+                      <ChevronDown
+                        className={`h-3.5 w-3.5 transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`}
+                      />
                     </button>
 
                     {sortOpen && (
@@ -200,9 +257,15 @@ function ShopPage() {
                         {SORTS.map((s) => (
                           <li key={s.key}>
                             <button
-                              onMouseDown={(e) => { e.preventDefault(); setSort(s.key); setSortOpen(false); }}
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setSort(s.key);
+                                setSortOpen(false);
+                              }}
                               className={`flex w-full items-center justify-between px-4 py-2.5 rounded-xl text-left text-xs tracking-wider uppercase transition-colors ${
-                                sort === s.key ? "bg-maroon text-ivory font-medium" : "text-ink hover:bg-beige/40"
+                                sort === s.key
+                                  ? "bg-maroon text-ivory font-medium"
+                                  : "text-ink hover:bg-beige/40"
                               }`}
                             >
                               {s.label}
@@ -219,23 +282,48 @@ function ShopPage() {
               {/* Active Filter Chips */}
               {activeCount > 0 && (
                 <div className="flex flex-wrap items-center gap-2.5 pt-5">
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-maroon/60 font-medium">Active Filters:</span>
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-maroon/60 font-medium">
+                    Active Filters:
+                  </span>
                   {Array.from(selCat).map((k) => (
-                    <ActiveChip key={"c-" + k} label={CATEGORIES.find((c) => c.key === k)!.label} onClear={() => toggle(setSelCat, selCat, k)} />
+                    <ActiveChip
+                      key={"c-" + k}
+                      label={CATEGORIES.find((c) => c.key === k)!.label}
+                      onClear={() => toggle(setSelCat, selCat, k)}
+                    />
                   ))}
                   {Array.from(selOcc).map((k) => (
-                    <ActiveChip key={"o-" + k} label={OCCASIONS.find((o) => o.key === k)!.label} onClear={() => toggle(setSelOcc, selOcc, k)} />
+                    <ActiveChip
+                      key={"o-" + k}
+                      label={OCCASIONS.find((o) => o.key === k)!.label}
+                      onClear={() => toggle(setSelOcc, selOcc, k)}
+                    />
                   ))}
                   {Array.from(selFab).map((k) => (
-                    <ActiveChip key={"f-" + k} label={k} onClear={() => toggle(setSelFab, selFab, k)} />
+                    <ActiveChip
+                      key={"f-" + k}
+                      label={k}
+                      onClear={() => toggle(setSelFab, selFab, k)}
+                    />
                   ))}
                   {Array.from(selPrice).map((k) => (
-                    <ActiveChip key={"p-" + k} label={PRICE_BUCKETS.find((b) => b.key === k)!.label} onClear={() => toggle(setSelPrice, selPrice, k)} />
+                    <ActiveChip
+                      key={"p-" + k}
+                      label={PRICE_BUCKETS.find((b) => b.key === k)!.label}
+                      onClear={() => toggle(setSelPrice, selPrice, k)}
+                    />
                   ))}
                   {Array.from(selTag).map((k) => (
-                    <ActiveChip key={"t-" + k} label={k} onClear={() => toggle(setSelTag, selTag, k)} />
+                    <ActiveChip
+                      key={"t-" + k}
+                      label={k}
+                      onClear={() => toggle(setSelTag, selTag, k)}
+                    />
                   ))}
-                  <button onClick={clearAll} className="ml-auto text-[11px] tracking-[0.22em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold hover:border-gold transition-colors">
+                  <button
+                    onClick={clearAll}
+                    className="ml-auto text-[11px] tracking-[0.22em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold hover:border-gold transition-colors"
+                  >
                     Clear All ({activeCount})
                   </button>
                 </div>
@@ -245,13 +333,24 @@ function ShopPage() {
               <div className="mt-8">
                 {filtered.length === 0 ? (
                   <div className="py-24 text-center rounded-2xl border border-dashed border-gold/50 bg-beige/10 p-8">
-                    <p className="font-serif text-3xl text-maroon">No sarees match your filter selection.</p>
-                    <p className="mt-3 text-sm text-maroon/70 max-w-md mx-auto">Try resetting one of your selected filters or explore our full collection.</p>
-                    <button onClick={clearAll} className="mt-6 px-8 py-3.5 rounded-full bg-maroon text-ivory text-[11px] tracking-[0.25em] uppercase hover:bg-wine transition-all shadow-md">Clear Filters</button>
+                    <p className="font-serif text-3xl text-maroon">
+                      No sarees match your filter selection.
+                    </p>
+                    <p className="mt-3 text-sm text-maroon/70 max-w-md mx-auto">
+                      Try resetting one of your selected filters or explore our full collection.
+                    </p>
+                    <button
+                      onClick={clearAll}
+                      className="mt-6 px-8 py-3.5 rounded-full bg-maroon text-ivory text-[11px] tracking-[0.25em] uppercase hover:bg-wine transition-all shadow-md"
+                    >
+                      Clear Filters
+                    </button>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
-                    {filtered.map((p) => <ProductCard key={p.id} p={p} />)}
+                    {filtered.map((p) => (
+                      <ProductCard key={p.id} p={p} />
+                    ))}
                   </div>
                 )}
               </div>
@@ -262,7 +361,12 @@ function ShopPage() {
 
       {/* Mobile filter drawer */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true" aria-label="Filters">
+        <div
+          className="fixed inset-0 z-50 md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filters"
+        >
           <button
             aria-label="Close filters"
             className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
@@ -274,14 +378,26 @@ function ShopPage() {
                 <Filter className="h-5 w-5 text-maroon" />
                 <h2 className="font-serif text-xl text-maroon">Refine Selection</h2>
               </div>
-              <button onClick={() => setDrawerOpen(false)} className="text-ink hover:text-maroon" aria-label="Close">
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="text-ink hover:text-maroon"
+                aria-label="Close"
+              >
                 <X className="h-5 w-5" />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto px-6 py-6">{sidebar}</div>
             <div className="flex gap-3 border-t border-gold/50 p-5 bg-beige/20">
-              <button onClick={clearAll} className="flex-1 py-3 rounded-xl border border-maroon/30 text-maroon text-xs uppercase tracking-widest hover:bg-maroon/5 transition-colors">Clear All</button>
-              <button onClick={() => setDrawerOpen(false)} className="flex-1 py-3 rounded-xl bg-maroon text-ivory text-xs uppercase tracking-widest hover:bg-wine transition-colors shadow-md">
+              <button
+                onClick={clearAll}
+                className="flex-1 py-3 rounded-xl border border-maroon/30 text-maroon text-xs uppercase tracking-widest hover:bg-maroon/5 transition-colors"
+              >
+                Clear All
+              </button>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="flex-1 py-3 rounded-xl bg-maroon text-ivory text-xs uppercase tracking-widest hover:bg-wine transition-colors shadow-md"
+              >
                 Show {filtered.length}
               </button>
             </div>
@@ -293,23 +409,45 @@ function ShopPage() {
 }
 
 function FilterPanel({
-  selCat, selOcc, selFab, selPrice, selTag,
-  fabrics, tags,
-  onCat, onOcc, onFab, onPrice, onTag,
-  clearAll, activeCount,
+  selCat,
+  selOcc,
+  selFab,
+  selPrice,
+  selTag,
+  fabrics,
+  tags,
+  onCat,
+  onOcc,
+  onFab,
+  onPrice,
+  onTag,
+  clearAll,
+  activeCount,
 }: {
-  selCat: Set<CatKey>; selOcc: Set<Occasion>; selFab: Set<string>; selPrice: Set<string>; selTag: Set<string>;
-  fabrics: string[]; tags: string[];
-  onCat: (k: CatKey) => void; onOcc: (k: Occasion) => void; onFab: (k: string) => void;
-  onPrice: (k: string) => void; onTag: (k: string) => void;
-  clearAll: () => void; activeCount: number;
+  selCat: Set<CatKey>;
+  selOcc: Set<Occasion>;
+  selFab: Set<string>;
+  selPrice: Set<string>;
+  selTag: Set<string>;
+  fabrics: string[];
+  tags: string[];
+  onCat: (k: CatKey) => void;
+  onOcc: (k: Occasion) => void;
+  onFab: (k: string) => void;
+  onPrice: (k: string) => void;
+  onTag: (k: string) => void;
+  clearAll: () => void;
+  activeCount: number;
 }) {
   return (
     <div className="space-y-6 text-sm">
       <div className="flex items-center justify-between border-b border-gold/50 pb-4">
         <h3 className="font-serif text-2xl text-maroon font-normal">Refine Selection</h3>
         {activeCount > 0 && (
-          <button onClick={clearAll} className="text-[11px] tracking-[0.2em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold hover:border-gold transition-colors">
+          <button
+            onClick={clearAll}
+            className="text-[11px] tracking-[0.2em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold hover:border-gold transition-colors"
+          >
             Reset ({activeCount})
           </button>
         )}
@@ -317,13 +455,23 @@ function FilterPanel({
 
       <FilterGroup title="Category">
         {CATEGORIES.map((c) => (
-          <CheckRow key={c.key} label={c.label} active={selCat.has(c.key)} onClick={() => onCat(c.key)} />
+          <CheckRow
+            key={c.key}
+            label={c.label}
+            active={selCat.has(c.key)}
+            onClick={() => onCat(c.key)}
+          />
         ))}
       </FilterGroup>
 
       <FilterGroup title="Occasion">
         {OCCASIONS.map((o) => (
-          <CheckRow key={o.key} label={o.label} active={selOcc.has(o.key)} onClick={() => onOcc(o.key)} />
+          <CheckRow
+            key={o.key}
+            label={o.label}
+            active={selOcc.has(o.key)}
+            onClick={() => onOcc(o.key)}
+          />
         ))}
       </FilterGroup>
 
@@ -335,7 +483,12 @@ function FilterPanel({
 
       <FilterGroup title="Price Range">
         {PRICE_BUCKETS.map((b) => (
-          <CheckRow key={b.key} label={b.label} active={selPrice.has(b.key)} onClick={() => onPrice(b.key)} />
+          <CheckRow
+            key={b.key}
+            label={b.label}
+            active={selPrice.has(b.key)}
+            onClick={() => onPrice(b.key)}
+          />
         ))}
       </FilterGroup>
 
@@ -357,14 +510,24 @@ function FilterGroup({ title, children }: { title: string; children: React.React
         className="flex w-full items-center justify-between text-[11px] uppercase tracking-[0.24em] text-maroon font-medium"
       >
         <span>{title}</span>
-        <ChevronDown className={`h-3.5 w-3.5 text-maroon/70 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown
+          className={`h-3.5 w-3.5 text-maroon/70 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
       </button>
       {open && <div className="mt-4 space-y-3">{children}</div>}
     </div>
   );
 }
 
-function CheckRow({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function CheckRow({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
   return (
     <button
       onClick={onClick}
@@ -373,12 +536,18 @@ function CheckRow({ label, active, onClick }: { label: string; active: boolean; 
     >
       <span
         className={`grid h-4 w-4 shrink-0 place-items-center rounded border transition-all ${
-          active ? "border-maroon bg-maroon text-ivory shadow-sm" : "border-gold/50 bg-ivory group-hover:border-maroon"
+          active
+            ? "border-maroon bg-maroon text-ivory shadow-sm"
+            : "border-gold/50 bg-ivory group-hover:border-maroon"
         }`}
       >
         {active && <Check className="h-3 w-3" strokeWidth={3} />}
       </span>
-      <span className={`text-xs md:text-sm transition-colors ${active ? "text-maroon font-medium" : "text-ink/80 group-hover:text-maroon"}`}>{label}</span>
+      <span
+        className={`text-xs md:text-sm transition-colors ${active ? "text-maroon font-medium" : "text-ink/80 group-hover:text-maroon"}`}
+      >
+        {label}
+      </span>
     </button>
   );
 }
@@ -387,11 +556,13 @@ function ActiveChip({ label, onClear }: { label: string; onClear: () => void }) 
   return (
     <span className="inline-flex items-center gap-2 border border-gold/40 bg-beige/40 px-3 py-1.5 rounded-full text-xs text-maroon font-medium shadow-sm">
       {label}
-      <button onClick={onClear} aria-label={`Remove ${label}`} className="text-maroon/60 hover:text-maroon">
+      <button
+        onClick={onClear}
+        aria-label={`Remove ${label}`}
+        className="text-maroon/60 hover:text-maroon"
+      >
         <X className="h-3.5 w-3.5" />
       </button>
     </span>
   );
 }
-
-

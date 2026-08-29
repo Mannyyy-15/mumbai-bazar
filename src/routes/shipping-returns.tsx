@@ -1,33 +1,97 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Truck, RotateCcw, ShieldCheck, Globe2, Clock, CheckCircle, HelpCircle } from "lucide-react";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
+import {
+  Truck,
+  RotateCcw,
+  ShieldCheck,
+  Globe2,
+  Clock,
+  CheckCircle,
+  HelpCircle,
+} from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { GoldRule } from "@/components/site/Motif";
 import { IMG } from "@/lib/site-data";
 
 export const Route = createFileRoute("/shipping-returns")({
-  head: () => ({
-    meta: [
-      { title: "Shipping & Returns — Mumbai Bazar" },
-      { name: "description", content: "Complimentary India shipping, worldwide delivery, and easy 7-day returns on every saree." },
-      { property: "og:title", content: "Shipping & Returns — Mumbai Bazar" },
-      { property: "og:description", content: "Delivered with care. Exchanged with ease." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Shipping & Returns | Free India Delivery, 7-Day Returns — Mumbai Bazar",
+      description:
+        "Free insured shipping across India, tracked worldwide delivery to 40+ countries, and hassle-free 7-day returns on every saree from Mumbai Bazar.",
+      path: "/shipping-returns",
+      keywords: [
+        "saree shipping India",
+        "international saree delivery",
+        "saree return policy",
+        "free shipping sarees",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Shipping & Returns", path: "/shipping-returns" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: ShippingReturns,
 });
 
 const HIGHLIGHTS = [
-  { icon: Truck, title: "Free India Shipping", copy: "100% complimentary tracked express delivery across all pin codes in India." },
-  { icon: Globe2, title: "Worldwide Express", copy: "Delivering to 40+ countries via DHL Express & FedEx with duty-inclusive checkout." },
-  { icon: RotateCcw, title: "7-Day Easy Returns", copy: "Not completely in love? Return or exchange unused sarees within 7 days of delivery." },
-  { icon: ShieldCheck, title: "Fully Transit-Insured", copy: "Every shipment is 100% insured against loss or damage until it arrives safely in your hands." },
+  {
+    icon: Truck,
+    title: "Free India Shipping",
+    copy: "100% complimentary tracked express delivery across all pin codes in India.",
+  },
+  {
+    icon: Globe2,
+    title: "Worldwide Express",
+    copy: "Delivering to 40+ countries via DHL Express & FedEx with duty-inclusive checkout.",
+  },
+  {
+    icon: RotateCcw,
+    title: "7-Day Easy Returns",
+    copy: "Not completely in love? Return or exchange unused sarees within 7 days of delivery.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Fully Transit-Insured",
+    copy: "Every shipment is 100% insured against loss or damage until it arrives safely in your hands.",
+  },
 ];
 
 const STEPS = [
-  { step: "01", title: "Hand Quality Check", time: "Day 1", copy: "Every weave undergoes a 12-point inspection for fabric strength, fall, and zari purity." },
-  { step: "02", title: "Signature Muslin Wrap", time: "Day 1", copy: "Your saree is folded in organic breathable muslin with natural dried neem & fragrant cloves." },
-  { step: "03", title: "Tracked Express Dispatch", time: "Day 2", copy: "Dispatched from Mumbai with instant SMS, Email, and WhatsApp tracking updates." },
-  { step: "04", title: "Doorstep Delivery", time: "Days 3–5", copy: "Hand-delivered directly to your doorstep in robust weather-sealed packaging." },
+  {
+    step: "01",
+    title: "Hand Quality Check",
+    time: "Day 1",
+    copy: "Every weave undergoes a 12-point inspection for fabric strength, fall, and zari purity.",
+  },
+  {
+    step: "02",
+    title: "Signature Muslin Wrap",
+    time: "Day 1",
+    copy: "Your saree is folded in organic breathable muslin with natural dried neem & fragrant cloves.",
+  },
+  {
+    step: "03",
+    title: "Tracked Express Dispatch",
+    time: "Day 2",
+    copy: "Dispatched from Mumbai with instant SMS, Email, and WhatsApp tracking updates.",
+  },
+  {
+    step: "04",
+    title: "Doorstep Delivery",
+    time: "Days 3–5",
+    copy: "Hand-delivered directly to your doorstep in robust weather-sealed packaging.",
+  },
 ];
 
 function ShippingReturns() {
@@ -65,7 +129,8 @@ function ShippingReturns() {
             <span className="eyebrow text-gold-deep">The Journey</span>
             <h2 className="mt-3 font-serif text-3xl md:text-5xl text-ink">From Loft to Doorstep</h2>
             <p className="mt-4 text-taupe leading-relaxed">
-              We handle every drape with extreme care so it arrives in pristine, ready-to-wear condition.
+              We handle every drape with extreme care so it arrives in pristine, ready-to-wear
+              condition.
             </p>
           </div>
 
@@ -92,15 +157,20 @@ function ShippingReturns() {
         <div className="mx-auto max-w-[900px] px-4 md:px-8 space-y-12">
           <Block title="Domestic India Shipping">
             <p>
-              All orders across India receive complimentary tracked express shipping. Ready-to-ship sarees are dispatched within 24 hours.
+              All orders across India receive complimentary tracked express shipping. Ready-to-ship
+              sarees are dispatched within 24 hours.
             </p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <div className="border border-gold/40 bg-beige/10 p-4">
-                <span className="text-xs uppercase tracking-wider text-maroon font-semibold">Metro Cities</span>
+                <span className="text-xs uppercase tracking-wider text-maroon font-semibold">
+                  Metro Cities
+                </span>
                 <p className="mt-1 font-serif text-lg text-ink">2 to 4 Business Days</p>
               </div>
               <div className="border border-gold/40 bg-beige/10 p-4">
-                <span className="text-xs uppercase tracking-wider text-maroon font-semibold">Rest of India</span>
+                <span className="text-xs uppercase tracking-wider text-maroon font-semibold">
+                  Rest of India
+                </span>
                 <p className="mt-1 font-serif text-lg text-ink">4 to 6 Business Days</p>
               </div>
             </div>
@@ -108,17 +178,25 @@ function ShippingReturns() {
 
           <Block title="International Worldwide Shipping">
             <p>
-              We ship to over 40 countries via DHL Express and FedEx. Duties and taxes are pre-calculated at checkout where available, ensuring no unexpected customs charges upon arrival. International delivery typically takes 5–8 business days.
+              We ship to over 40 countries via DHL Express and FedEx. Duties and taxes are
+              pre-calculated at checkout where available, ensuring no unexpected customs charges
+              upon arrival. International delivery typically takes 5–8 business days.
             </p>
           </Block>
 
           <Block title="7-Day Return & Exchange Guarantee">
             <p>
-              If your saree isn't perfect for your event, you can return or exchange it within 7 days of delivery:
+              If your saree isn't perfect for your event, you can return or exchange it within 7
+              days of delivery:
             </p>
             <ul className="mt-4 space-y-2 text-sm">
-              <CheckItem>Item must be unworn, unwashed, and returned in its original muslin pouch with tags intact.</CheckItem>
-              <CheckItem>Complimentary reverse pickup is available for domestic India orders.</CheckItem>
+              <CheckItem>
+                Item must be unworn, unwashed, and returned in its original muslin pouch with tags
+                intact.
+              </CheckItem>
+              <CheckItem>
+                Complimentary reverse pickup is available for domestic India orders.
+              </CheckItem>
               <CheckItem>Custom blouse-stitched or tailored items are non-returnable.</CheckItem>
               <CheckItem>Refunds are processed within 3 business days of return receipt.</CheckItem>
             </ul>
@@ -127,7 +205,9 @@ function ShippingReturns() {
           <div className="border-t border-gold/50 pt-10 text-center">
             <GoldRule className="mb-6" />
             <h3 className="font-serif text-2xl text-ink">Need assistance with your delivery?</h3>
-            <p className="mt-2 text-taupe text-sm">Our support team is standing by to assist with tracking or returns.</p>
+            <p className="mt-2 text-taupe text-sm">
+              Our support team is standing by to assist with tracking or returns.
+            </p>
             <Link to="/contact" className="btn-primary mt-6 inline-flex">
               Contact Order Support
             </Link>
@@ -155,4 +235,3 @@ function CheckItem({ children }: { children: React.ReactNode }) {
     </li>
   );
 }
-

@@ -1,16 +1,36 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo, jsonLd } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
 import { IMG } from "@/lib/site-data";
 import { ArrowRight, Sparkles, ShieldCheck, HeartHandshake, Award } from "lucide-react";
 
 export const Route = createFileRoute("/our-story")({
-  head: () => ({
-    meta: [
-      { title: "Our Story — Mumbai Bazar" },
-      { name: "description", content: "The story behind Mumbai Bazar — heirloom weaves, personal styling and a modern saree boutique." },
-      { property: "og:title", content: "Our Story — Mumbai Bazar" },
-      { property: "og:description", content: "Tradition in every thread." },
-    ],
-  }),
+  head: () => {
+    const { meta, links } = seo({
+      title: "Our Story | A Vasai-Virar Saree Boutique — Mumbai Bazar",
+      description:
+        "The story behind Mumbai Bazar — direct-from-weaver sourcing across seven Indian clusters, Silk Mark certified handlooms, and personal styling for every drape.",
+      path: "/our-story",
+      keywords: [
+        "Mumbai Bazar story",
+        "saree boutique Vasai Virar",
+        "handloom saree brand India",
+        "direct from weaver sarees",
+      ],
+    });
+    return {
+      meta,
+      links,
+      scripts: [
+        jsonLd(
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Our Story", path: "/our-story" },
+          ]),
+        ),
+      ],
+    };
+  },
   component: StoryPage,
 });
 
@@ -22,7 +42,9 @@ function StoryPage() {
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 grid grid-cols-1 lg:grid-cols-12 items-center gap-10 md:gap-16">
           <div className="lg:col-span-7">
             <nav className="mb-6 flex items-center gap-2 text-[11px] tracking-[0.25em] uppercase text-ivory/70 font-medium">
-              <Link to="/" className="hover:text-gold transition-colors">Home</Link>
+              <Link to="/" className="hover:text-gold transition-colors">
+                Home
+              </Link>
               <span className="text-gold">/</span>
               <span className="text-ivory">Our Story</span>
             </nav>
@@ -31,10 +53,13 @@ function StoryPage() {
               <span>Authentic Heritage</span>
             </span>
             <h1 className="font-serif text-4xl leading-tight text-ivory md:text-6xl lg:text-7xl">
-              A boutique built on <em className="not-italic text-gold italic font-serif">weave and warmth.</em>
+              A boutique built on{" "}
+              <em className="not-italic text-gold italic font-serif">weave and warmth.</em>
             </h1>
             <p className="mt-6 max-w-2xl text-base md:text-lg text-ivory/85 leading-relaxed">
-              Mumbai Bazar was born from a simple idea — that every woman deserves to find her heirloom saree with the same care, authenticity, and personal warmth she would receive from a trusted family atelier.
+              Mumbai Bazar was born from a simple idea — that every woman deserves to find her
+              heirloom saree with the same care, authenticity, and personal warmth she would receive
+              from a trusted family atelier.
             </p>
           </div>
 
@@ -55,7 +80,9 @@ function StoryPage() {
       <section className="bg-ivory py-16 md:py-24">
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 max-w-5xl mx-auto space-y-16">
           <div className="text-center">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-medium">Our Philosophy</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-medium">
+              Our Philosophy
+            </span>
             <h2 className="font-serif text-3xl md:text-5xl text-maroon mt-2">What We Believe</h2>
             <div className="w-16 h-0.5 bg-gold/60 mx-auto mt-4" />
           </div>
@@ -67,7 +94,8 @@ function StoryPage() {
               </div>
               <h3 className="font-serif text-2xl text-maroon mb-3">Weave First</h3>
               <p className="text-sm text-ink/80 leading-relaxed">
-                We choose sarees strictly for the beauty of the weave, purity of the silk thread, and honesty of the craft — never for shortcuts or mass synthetic blends.
+                We choose sarees strictly for the beauty of the weave, purity of the silk thread,
+                and honesty of the craft — never for shortcuts or mass synthetic blends.
               </p>
             </div>
 
@@ -77,7 +105,8 @@ function StoryPage() {
               </div>
               <h3 className="font-serif text-2xl text-maroon mb-3">Artisan Direct</h3>
               <p className="text-sm text-ink/80 leading-relaxed">
-                By partnering directly with weaver families across Banaras, Kanchipuram, and Paithan, we ensure fair compensation for artisans and fair pricing for you.
+                By partnering directly with weaver families across Banaras, Kanchipuram, and
+                Paithan, we ensure fair compensation for artisans and fair pricing for you.
               </p>
             </div>
 
@@ -87,7 +116,8 @@ function StoryPage() {
               </div>
               <h3 className="font-serif text-2xl text-maroon mb-3">Personal Care</h3>
               <p className="text-sm text-ink/80 leading-relaxed">
-                Every order undergoes a multi-point quality inspection, gift-ready packaging, and personal WhatsApp styling assistance whenever you need help.
+                Every order undergoes a multi-point quality inspection, gift-ready packaging, and
+                personal WhatsApp styling assistance whenever you need help.
               </p>
             </div>
           </div>
@@ -99,15 +129,23 @@ function StoryPage() {
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-12">
             <div className="lg:col-span-6 overflow-hidden rounded-3xl border border-gold/40 shadow-xl">
-              <img src={IMG.look2} alt="Woman in an ivory saree in a heritage courtyard" className="w-full aspect-[4/3] md:aspect-[16/10] object-cover" />
+              <img
+                src={IMG.look2}
+                alt="Woman in an ivory saree in a heritage courtyard"
+                className="w-full aspect-[4/3] md:aspect-[16/10] object-cover"
+              />
             </div>
             <div className="lg:col-span-6">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-medium">Made for You</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-medium">
+                Made for You
+              </span>
               <h2 className="font-serif text-3xl md:text-5xl leading-tight text-maroon mt-2">
                 Curated for women who cherish timeless drapes.
               </h2>
               <p className="mt-5 text-sm md:text-base text-ink/80 leading-relaxed">
-                Whether you are choosing your first bridal silk saree, gifting your mother a precious heirloom, or selecting a light festive drape — Mumbai Bazar is your personal boutique for moments that matter.
+                Whether you are choosing your first bridal silk saree, gifting your mother a
+                precious heirloom, or selecting a light festive drape — Mumbai Bazar is your
+                personal boutique for moments that matter.
               </p>
               <div className="mt-8">
                 <Link
