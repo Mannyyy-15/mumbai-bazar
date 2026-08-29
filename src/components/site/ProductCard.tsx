@@ -47,7 +47,7 @@ export function ProductCard({ p }: { p: Product }) {
         {p.secondaryImg && (
           <img
             src={p.secondaryImg}
-            alt={`${p.name} alternate view`}
+            alt={productAltText(p.name, p.weave, "palla detail")}
             loading="lazy"
             decoding="async"
             className="absolute inset-0 h-full w-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
@@ -79,30 +79,30 @@ export function ProductCard({ p }: { p: Product }) {
         </button>
 
         {/* Hover Add to Bag Action */}
-        <div className="absolute inset-x-3 bottom-3 z-10 opacity-100 md:opacity-0 translate-y-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+        <div className="absolute inset-x-2 sm:inset-x-3 bottom-2 sm:bottom-3 z-10 opacity-100 md:opacity-0 translate-y-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
           <button
             onClick={quickAdd}
-            className="w-full py-2.5 rounded-xl bg-maroon text-ivory text-[10px] font-medium tracking-[0.2em] uppercase hover:bg-wine transition-colors flex items-center justify-center gap-2 shadow-lg"
+            className="w-full py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl bg-maroon text-ivory text-[8.5px] sm:text-[10px] font-medium tracking-[0.16em] uppercase hover:bg-wine transition-colors flex items-center justify-center gap-1.5 shadow-lg"
           >
-            <ShoppingBag className="h-3.5 w-3.5" /> Add to Bag
+            <ShoppingBag className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Add to Bag
           </button>
         </div>
       </div>
 
       {/* Card Details — Tight Spacing Between Name & Price */}
-      <div className="p-4 md:p-5 flex flex-col space-y-1.5">
-        <p className="text-[10px] uppercase tracking-[0.22em] text-gold-deep font-semibold">
+      <div className="p-3 sm:p-4 md:p-5 flex flex-col space-y-1 sm:space-y-1.5">
+        <p className="text-[8.5px] sm:text-[10px] uppercase tracking-[0.18em] sm:tracking-[0.22em] text-gold-deep font-semibold truncate">
           {p.weave}
         </p>
-        <h3 className="font-sans text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
+        <h3 className="font-sans text-xs sm:text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
           {p.name}
         </h3>
-        <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">
-          <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">
+        <div className="flex items-baseline gap-1.5 sm:gap-2 pt-1.5 sm:pt-2 border-t border-gold/45 mt-0.5 sm:mt-1">
+          <span className="font-sans text-xs sm:text-base md:text-lg font-bold text-ink tracking-tight">
             {p.price}
           </span>
           {p.original && (
-            <span className="text-xs text-taupe font-medium line-through font-sans">
+            <span className="text-[10px] sm:text-xs text-taupe font-medium line-through font-sans">
               {p.original}
             </span>
           )}
