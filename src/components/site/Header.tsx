@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Search, User, ShoppingBag, Menu, X, Phone, Heart } from "lucide-react";
-import { NAV } from "@/lib/site-data";
+import { Search, User, ShoppingBag, Menu, X, Phone, Heart, ChevronDown, Sparkles, ChevronRight } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
@@ -14,20 +13,200 @@ const PRIMARY_LEFT = [
   { label: "Contact", to: "/contact" },
 ] as const;
 
-const CATEGORY_ROW = NAV.filter((n) =>
-  ["/new-arrivals", "/wedding-sarees", "/silk-sarees", "/festive-edit", "/everyday-sarees"].includes(n.to)
-);
+type SubItem = { label: string; to: string; badge?: string };
+type SubGroup = { title: string; items: SubItem[] };
+type MegaMenu = {
+  label: string;
+  to: string;
+  badge?: string;
+  groups: SubGroup[];
+  featured?: {
+    tag: string;
+    title: string;
+    desc: string;
+    to: string;
+  };
+};
+
+const MEGA_CATEGORIES: MegaMenu[] = [
+  {
+    label: "New Arrivals",
+    to: "/new-arrivals",
+    badge: "Fresh",
+    groups: [
+      {
+        title: "Trending Drops",
+        items: [
+          { label: "1-Minute Ready-to-Wear", to: "/everyday-sarees", badge: "Viral" },
+          { label: "Latest Banarasi Silk Drops", to: "/silk-sarees" },
+          { label: "Fresh Kanjivaram Bridal", to: "/wedding-sarees" },
+          { label: "Celebrity & Reel Trends", to: "/festive-edit" },
+        ],
+      },
+      {
+        title: "Shop By Price",
+        items: [
+          { label: "Under ₹2,999 Best Buys", to: "/shop" },
+          { label: "Festive Luxury (₹3k - ₹10k)", to: "/shop" },
+          { label: "Royal Heirloom (₹10k+)", to: "/shop" },
+          { label: "View All New In", to: "/new-arrivals" },
+        ],
+      },
+    ],
+    featured: {
+      tag: "Fresh From Loom",
+      title: "Royal Festive Drop",
+      desc: "Pure Banarasi & Kanjivaram drapes freshly woven for celebrations.",
+      to: "/new-arrivals",
+    },
+  },
+  {
+    label: "Ready to Wear",
+    to: "/everyday-sarees",
+    badge: "1-Min",
+    groups: [
+      {
+        title: "1-Minute Sarees",
+        items: [
+          { label: "Pre-Stitched with Pocket", to: "/everyday-sarees", badge: "Trending" },
+          { label: "1-Minute Silk Drapes", to: "/everyday-sarees" },
+          { label: "Party & Cocktail Pre-Drapes", to: "/festive-edit" },
+          { label: "Farewell & Event Specials", to: "/everyday-sarees" },
+        ],
+      },
+      {
+        title: "Why Ready-to-Wear?",
+        items: [
+          { label: "Zero Pleating Required", to: "/everyday-sarees" },
+          { label: "Custom Waist Sizing", to: "/everyday-sarees" },
+          { label: "Bespoke Blouse Stitching", to: "/everyday-sarees" },
+          { label: "Explore All Ready-to-Wear", to: "/everyday-sarees" },
+        ],
+      },
+    ],
+    featured: {
+      tag: "No Draping Stress",
+      title: "1-Minute Saree with Pocket",
+      desc: "Slip on, clip the pallu, and step out in 60 seconds flat.",
+      to: "/everyday-sarees",
+    },
+  },
+  {
+    label: "Wedding & Bridal",
+    to: "/wedding-sarees",
+    groups: [
+      {
+        title: "The Wedding Edit",
+        items: [
+          { label: "Bridal Pheras (Crimson & Gold)", to: "/wedding-sarees" },
+          { label: "Royal Reception Statements", to: "/wedding-sarees" },
+          { label: "Sangeet & Cocktail Silks", to: "/festive-edit" },
+          { label: "Haldi & Mehendi Yellows", to: "/wedding-sarees" },
+        ],
+      },
+      {
+        title: "Trousseau Curation",
+        items: [
+          { label: "Custom Bridal Trousseau Box", to: "/wedding-sarees" },
+          { label: "Mother of the Bride Edits", to: "/wedding-sarees" },
+          { label: "Bridesmaid Silk Coordinates", to: "/wedding-sarees" },
+          { label: "Book Personal Stylist Call", to: "/contact" },
+        ],
+      },
+    ],
+    featured: {
+      tag: "Couture Bridal",
+      title: "Handwoven Royal Trousseau",
+      desc: "Pure zari brocades made to be cherished across generations.",
+      to: "/wedding-sarees",
+    },
+  },
+  {
+    label: "Heritage Silks",
+    to: "/silk-sarees",
+    groups: [
+      {
+        title: "Iconic Weaves",
+        items: [
+          { label: "Pure Katan Banarasi", to: "/silk-sarees" },
+          { label: "Kanjivaram Temple Borders", to: "/silk-sarees" },
+          { label: "Paithani & Maharashtra Weaves", to: "/silk-sarees" },
+          { label: "Chanderi & Handloom Tissue", to: "/silk-sarees" },
+        ],
+      },
+      {
+        title: "Purity & Craft",
+        items: [
+          { label: "100% Silk Mark Certified", to: "/silk-sarees" },
+          { label: "Handloom Master Weavers", to: "/our-story" },
+          { label: "Care & Preservation Guide", to: "/care-guide" },
+          { label: "View Complete Silk Archive", to: "/silk-sarees" },
+        ],
+      },
+    ],
+    featured: {
+      tag: "Varanasi & Kanchipuram",
+      title: "Master Artisan Weaves",
+      desc: "Each authentic drape takes up to 40 days on wooden pit looms.",
+      to: "/silk-sarees",
+    },
+  },
+  {
+    label: "Festive Edit",
+    to: "/festive-edit",
+    groups: [
+      {
+        title: "Occasions",
+        items: [
+          { label: "Diwali & Karwa Chauth Special", to: "/festive-edit", badge: "Festive" },
+          { label: "Temple & Puja Silks", to: "/festive-edit" },
+          { label: "Metallic Tissue & Organza", to: "/festive-edit" },
+          { label: "Evening Gala & Cocktail Drapes", to: "/festive-edit" },
+        ],
+      },
+      {
+        title: "Gifting & Heirlooms",
+        items: [
+          { label: "Luxury Saree Gift Sets", to: "/festive-edit" },
+          { label: "Complimentary Festive Packaging", to: "/festive-edit" },
+          { label: "Express 48-Hour Dispatch", to: "/shipping-returns" },
+          { label: "Browse All Festive Drapes", to: "/festive-edit" },
+        ],
+      },
+    ],
+    featured: {
+      tag: "Celebration Ready",
+      title: "Jewel Toned Silks",
+      desc: "Radiant rubies, emeralds, and liquid gold metallic drapes.",
+      to: "/festive-edit",
+    },
+  },
+];
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [mobileExpandedCat, setMobileExpandedCat] = useState<string | null>("New Arrivals");
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { count: cartCount, openCart } = useCart();
   const { wishlist, openWishlist } = useWishlist();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const drawerRef = useFocusTrap<HTMLDivElement>(open);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const handleMouseEnter = (label: string) => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setActiveDropdown(label);
+  };
+
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 180);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -36,6 +215,7 @@ export function Header() {
   useEffect(() => {
     setOpen(false);
     setSearchOpen(false);
+    setActiveDropdown(null);
   }, [pathname]);
 
   useEffect(() => {
@@ -83,7 +263,7 @@ export function Header() {
   return (
     <header
       data-scrolled={scrolled ? "true" : "false"}
-      className={`sticky top-0 z-40 border-b border-gold/50 bg-ivory/85 backdrop-blur-md transition-[box-shadow,background-color,padding] duration-300 ease-out ${
+      className={`sticky top-0 z-40 border-b border-gold/50 bg-ivory/95 backdrop-blur-md transition-[box-shadow,background-color] duration-300 ease-out ${
         scrolled
           ? "shadow-[0_8px_24px_-14px_rgba(100,31,42,0.22)]"
           : "shadow-none"
@@ -112,7 +292,7 @@ export function Header() {
         {/* Mobile menu toggle */}
         <div className="flex items-center gap-2 lg:hidden">
           <button
-            className="-ml-1 grid h-8 w-8 place-items-center text-ink transition-colors hover:text-maroon"
+            className="-ml-1 grid h-9 w-9 place-items-center text-ink transition-colors hover:text-maroon"
             aria-label="Open menu"
             aria-expanded={open}
             aria-controls="mobile-drawer"
@@ -122,19 +302,22 @@ export function Header() {
           </button>
         </div>
 
-        {/* Center: logo (compact luxury sizing) */}
+        {/* Center: logo with brand subtitle */}
         <Link
           to="/"
           aria-label="Mumbai Bazar — home"
-          className="group flex items-center justify-center py-0.5"
+          className="group flex flex-col items-center justify-center py-0.5"
         >
           <img
             src="/logo.png"
             alt="Mumbai Bazar"
             className={`transition-all duration-300 ease-out object-contain ${
-              scrolled ? "h-8 md:h-9" : "h-9 sm:h-10 md:h-11"
+              scrolled ? "h-9 md:h-10" : "h-11 sm:h-12 md:h-12"
             }`}
           />
+          <span className="mt-0.5 text-[8.5px] sm:text-[9px] font-medium uppercase tracking-[0.32em] text-taupe/90 transition-colors duration-300 group-hover:text-maroon">
+            Mumbai Bazar
+          </span>
         </Link>
 
         {/* Right: search + actions */}
@@ -158,7 +341,7 @@ export function Header() {
               <input
                 ref={searchInputRef}
                 type="search"
-                placeholder="Search sarees, weaves, occasionsâ€¦"
+                placeholder="Search sarees, weaves, occasions…"
                 className={`h-9 flex-1 bg-transparent text-sm text-ink placeholder:text-taupe/60 focus:outline-none ${
                   searchOpen ? "w-full pr-3 opacity-100" : "w-0 opacity-0"
                 }`}
@@ -223,26 +406,108 @@ export function Header() {
         </div>
       </div>
 
-      {/* Category row (desktop only) */}
-      <div className="hidden border-t border-gold/40 lg:block">
+      {/* Category Row with Interactive Mega Dropdowns (Desktop) */}
+      <div className="hidden border-t border-gold/40 lg:block relative">
         <nav
-          className="mx-auto flex max-w-[1400px] items-center justify-center gap-10 overflow-x-auto px-4 py-1.5"
+          className="mx-auto flex max-w-[1400px] items-center justify-center gap-9 px-4 py-1.5"
           aria-label="Categories"
         >
-          {CATEGORY_ROW.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              activeOptions={{ exact: false }}
-              className={`whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.16em] text-ink/70 transition-colors hover:text-maroon ${
-                pathname === item.to || pathname.startsWith(item.to)
-                  ? "text-maroon"
-                  : ""
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {MEGA_CATEGORIES.map((cat) => {
+            const isDropdownOpen = activeDropdown === cat.label;
+            const isCurrentPage = pathname === cat.to || pathname.startsWith(cat.to);
+
+            return (
+              <div
+                key={cat.label}
+                className="relative py-1"
+                onMouseEnter={() => handleMouseEnter(cat.label)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <Link
+                  to={cat.to}
+                  className={`inline-flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium uppercase tracking-[0.16em] transition-colors ${
+                    isCurrentPage ? "text-maroon font-bold" : "text-ink/75 hover:text-maroon"
+                  }`}
+                >
+                  <span>{cat.label}</span>
+                  {cat.badge && (
+                    <span className="rounded-full bg-maroon/90 px-1.5 py-0.5 text-[8px] font-bold tracking-wider text-ivory">
+                      {cat.badge}
+                    </span>
+                  )}
+                  <ChevronDown
+                    className={`h-3 w-3 text-taupe/70 transition-transform duration-200 ${
+                      isDropdownOpen ? "rotate-180 text-maroon" : ""
+                    }`}
+                  />
+                </Link>
+
+                {/* Mega Dropdown Menu */}
+                {isDropdownOpen && (
+                  <div
+                    className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50 w-[620px] transition-all duration-200"
+                    onMouseEnter={() => handleMouseEnter(cat.label)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <div className="rounded-2xl border border-gold/45 bg-ivory/95 p-6 shadow-2xl backdrop-blur-xl">
+                      <div className="grid grid-cols-3 gap-6">
+                        {/* Subcategory Columns */}
+                        {cat.groups.map((group) => (
+                          <div key={group.title} className="space-y-3">
+                            <h4 className="border-b border-gold/30 pb-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-maroon">
+                              {group.title}
+                            </h4>
+                            <ul className="space-y-2">
+                              {group.items.map((sub) => (
+                                <li key={sub.label}>
+                                  <Link
+                                    to={sub.to}
+                                    className="group/item flex items-center justify-between text-xs text-ink/80 transition-colors hover:text-maroon"
+                                  >
+                                    <span className="group-hover/item:translate-x-0.5 transition-transform duration-150">
+                                      {sub.label}
+                                    </span>
+                                    {sub.badge && (
+                                      <span className="rounded bg-gold/30 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-maroon">
+                                        {sub.badge}
+                                      </span>
+                                    )}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+
+                        {/* Featured Spotlight Card */}
+                        {cat.featured && (
+                          <div className="rounded-xl border border-gold/30 bg-gradient-to-br from-beige/40 to-ivory p-4 flex flex-col justify-between shadow-sm">
+                            <div>
+                              <span className="inline-block rounded-full bg-maroon/10 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-maroon">
+                                {cat.featured.tag}
+                              </span>
+                              <h5 className="mt-2 font-serif text-sm font-bold text-ink leading-snug">
+                                {cat.featured.title}
+                              </h5>
+                              <p className="mt-1.5 text-[11px] text-taupe leading-relaxed">
+                                {cat.featured.desc}
+                              </p>
+                            </div>
+                            <Link
+                              to={cat.featured.to}
+                              className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-maroon hover:underline"
+                            >
+                              Explore Now <ChevronRight className="h-3 w-3" />
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </nav>
       </div>
 
@@ -350,26 +615,74 @@ export function Header() {
 
                 <div>
                   <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.25em] text-maroon border-b border-gold/40 pb-1">
-                    Shop by Weave & Category
+                    Collections & Categories
                   </p>
-                  <ul className="flex flex-col space-y-1">
-                    {CATEGORY_ROW.map((item) => (
-                      <li key={item.to}>
-                        <Link
-                          to={item.to}
-                          onClick={() => setOpen(false)}
-                          activeOptions={{ exact: false }}
-                          className={`block py-2.5 px-4 rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors ${
-                            pathname === item.to || pathname.startsWith(item.to)
-                              ? "text-maroon font-bold bg-gold/20 border border-gold/50"
-                              : "text-ink/80 hover:text-maroon hover:bg-gold/10"
-                          }`}
-                        >
-                          {item.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="flex flex-col space-y-2">
+                    {MEGA_CATEGORIES.map((cat) => {
+                      const isExpanded = mobileExpandedCat === cat.label;
+                      return (
+                        <div key={cat.label} className="rounded-xl border border-gold/30 bg-ivory/60 overflow-hidden">
+                          <button
+                            onClick={() => setMobileExpandedCat(isExpanded ? null : cat.label)}
+                            className="w-full flex items-center justify-between py-2.5 px-3.5 text-xs font-bold uppercase tracking-wider text-ink hover:text-maroon transition-colors"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span>{cat.label}</span>
+                              {cat.badge && (
+                                <span className="rounded-full bg-maroon/90 px-1.5 py-0.5 text-[8px] font-bold text-ivory">
+                                  {cat.badge}
+                                </span>
+                              )}
+                            </div>
+                            <ChevronDown
+                              className={`h-3.5 w-3.5 text-taupe transition-transform duration-200 ${
+                                isExpanded ? "rotate-180 text-maroon" : ""
+                              }`}
+                            />
+                          </button>
+
+                          {isExpanded && (
+                            <div className="border-t border-gold/20 bg-ivory/90 px-3.5 py-2.5 space-y-3">
+                              {cat.groups.map((group) => (
+                                <div key={group.title} className="space-y-1.5">
+                                  <p className="text-[9px] font-bold uppercase tracking-widest text-maroon/80">
+                                    {group.title}
+                                  </p>
+                                  <ul className="space-y-1 pl-2">
+                                    {group.items.map((sub) => (
+                                      <li key={sub.label}>
+                                        <Link
+                                          to={sub.to}
+                                          onClick={() => setOpen(false)}
+                                          className="flex items-center justify-between py-1 text-xs text-ink/80 hover:text-maroon"
+                                        >
+                                          <span>{sub.label}</span>
+                                          {sub.badge && (
+                                            <span className="rounded bg-gold/30 px-1 py-0.5 text-[8px] font-bold text-maroon">
+                                              {sub.badge}
+                                            </span>
+                                          )}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ))}
+                              <div className="pt-1 border-t border-gold/20">
+                                <Link
+                                  to={cat.to}
+                                  onClick={() => setOpen(false)}
+                                  className="text-[10px] font-bold uppercase tracking-widest text-maroon hover:underline flex items-center gap-1"
+                                >
+                                  View All {cat.label} <ChevronRight className="h-3 w-3" />
+                                </Link>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className="border-t border-gold/40 pt-5 space-y-3">
