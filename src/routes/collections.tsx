@@ -155,75 +155,8 @@ function CollectionsPage() {
         </div>
       </div>
 
-      {/* 2. Top Editorial Showcase Banner (Inspired by Pinterest top section) */}
-      <section className="py-8 md:py-12 px-4 md:px-8 lg:px-12 xl:px-16">
-        <div className="relative rounded-3xl overflow-hidden border border-gold/45 bg-gradient-to-br from-[#F5DEB3]/35 via-[#FDF8F2] to-ivory shadow-sm">
-          {/* Subtle Ambient Decorative Circles */}
-          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-gradient-to-br from-gold/15 to-transparent blur-2xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-maroon/5 blur-2xl pointer-events-none" />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center p-6 sm:p-10 md:p-14 relative z-10">
-            {/* Left Content */}
-            <div className="lg:col-span-6 space-y-4 sm:space-y-6">
-              <div>
-                <p className="font-serif italic text-lg sm:text-xl md:text-2xl text-gold-deep">
-                  Whisper of
-                </p>
-                <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl text-maroon font-semibold leading-[1.08] mt-1">
-                  Heirloom Drapes
-                </h1>
-              </div>
-
-              <p className="text-sm md:text-base text-ink/80 leading-relaxed max-w-xl font-normal">
-                Mumbai Bazar brings you authentic ethnic-wear collections inspired by the timeless
-                splendor of India’s artisanal weaving clusters. Each drape embodies centuries of
-                sacred craftsmanship, pure mulberry silk, and intricate tested zari.
-              </p>
-
-              <div className="pt-2 flex flex-wrap items-center gap-4">
-                <a
-                  href="#shop-by-collection"
-                  className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-maroon text-ivory text-xs font-bold uppercase tracking-[0.16em] hover:bg-wine transition-all shadow-md group"
-                >
-                  <span>Explore Collections</span>
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-                <Link
-                  to="/shop"
-                  className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full border border-maroon/30 text-maroon text-xs font-bold uppercase tracking-[0.16em] hover:bg-maroon/5 transition-colors"
-                >
-                  View All Products
-                </Link>
-              </div>
-            </div>
-
-            {/* Right Visual Composition */}
-            <div className="lg:col-span-6 relative flex items-center justify-center">
-              <div className="relative w-full max-w-md aspect-[4/3] sm:aspect-[16/11] rounded-2xl overflow-hidden border border-gold/50 shadow-lg bg-beige/40">
-                <img
-                  src="/hero/slide-1-horizonal.png"
-                  alt="Heirloom Saree Showcase"
-                  className="w-full h-full object-cover object-top"
-                  loading="eager"
-                />
-                {/* Delicate internal border overlay */}
-                <div className="absolute inset-2 sm:inset-3 rounded-xl border border-white/60 pointer-events-none" />
-                <div className="absolute bottom-4 left-4 right-4 bg-ivory/95 backdrop-blur-md p-3.5 rounded-xl border border-gold/40 shadow-md">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-gold-deep block">
-                    Spotlight Series
-                  </span>
-                  <p className="font-serif text-sm sm:text-base font-semibold text-maroon truncate">
-                    Royal Crimson & Gold Brocade Kanjivaram
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Centerpiece: Staggered Editorial Showcase with Giant Vertical Watermark `C O L L E C T I O N` */}
-      <section className="py-12 md:py-20 px-4 md:px-8 lg:px-12 xl:px-16 border-t border-gold/30">
+      {/* Centerpiece: Staggered Editorial Showcase with Giant Vertical Watermark `C O L L E C T I O N` */}
+      <section className="py-8 md:py-16 px-4 md:px-8 lg:px-12 xl:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center relative">
           {/* Left Staggered Card */}
           <div className="lg:col-span-5 flex flex-col justify-center">
