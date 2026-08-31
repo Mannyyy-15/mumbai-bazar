@@ -1,45 +1,26 @@
 import { useMemo, useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { Check, X, ChevronDown, SlidersHorizontal, Sparkles, Filter } from "lucide-react";
+import { Check, X, ChevronDown, SlidersHorizontal, Sparkles, Filter, IndianRupee, RotateCcw } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-context";
 import { PageHero } from "@/components/site/PageHero";
 import { ProductCard } from "@/components/site/ProductCard";
 import type { Product } from "@/lib/site-data";
-
-type CatKey = Product["category"][number];
-const CATEGORIES: { key: CatKey; label: string }[] = [
-  { key: "new-arrivals", label: "New Arrivals" },
-  { key: "wedding-sarees", label: "Wedding Sarees" },
-  { key: "silk-sarees", label: "Silk Sarees" },
-  { key: "festive-edit", label: "Festive Edit" },
-  { key: "everyday-sarees", label: "Everyday" },
-];
-
-type Occasion = "wedding" | "festive" | "everyday" | "new";
-const OCCASIONS: { key: Occasion; label: string; match: (p: Product) => boolean }[] = [
-  { key: "wedding", label: "Wedding", match: (p) => p.category.includes("wedding-sarees") },
-  { key: "festive", label: "Festive", match: (p) => p.category.includes("festive-edit") },
-  { key: "everyday", label: "Everyday", match: (p) => p.category.includes("everyday-sarees") },
-  { key: "new", label: "New Arrivals", match: (p) => p.category.includes("new-arrivals") },
-];
-
-const PRICE_BUCKETS: { key: string; label: string; min: number; max: number }[] = [
-  { key: "u10", label: "Under ₹ 10,000", min: 0, max: 9999 },
-  { key: "10-20", label: "₹ 10,000 – ₹ 20,000", min: 10000, max: 20000 },
-  { key: "20-30", label: "₹ 20,000 – ₹ 30,000", min: 20000, max: 30000 },
-  { key: "30p", label: "Above ₹ 30,000", min: 30000, max: Infinity },
-];
+import {
+  COLOR_OPTIONS,
+  TYPE_OPTIONS,
+  FABRIC_OPTIONS,
+  PRICE_PRESETS,
+  matchesColor,
+  parsePriceNumber,
+} from "@/lib/filters";
 
 type SortKey = "featured" | "new" | "price-asc" | "price-desc";
 const SORTS: { key: SortKey; label: string }[] = [
   { key: "featured", label: "Featured" },
-  { key: "new", label: "Newest" },
+  { key: "new", label: "Newest Arrivals" },
   { key: "price-asc", label: "Price: Low to High" },
   { key: "price-desc", label: "Price: High to Low" },
 ];
-
-const parsePrice = (s?: string | number | null) =>
-  Number(String(s || "").replace(/[^\d]/g, "")) || 0;
 
 export function CategoryPage({
   eyebrow,
@@ -65,73 +46,119 @@ export function CategoryPage({
     [category, products],
   );
 
-  const fabrics = useMemo(
-    () => Array.from(new Set(products.map((p) => p.weave))).sort(),
-    [products],
+  // Filter States
+  const [selColors, setSelColors] = useState<Set<string>>(new Set());
+  const [selTypes, setSelTypes] = useState<Set<string>>(new Set());
+  const [selFabrics, setSelFabrics] = useState<Set<string>>(new Set());
+  const [selPricePreset, setSelPricePreset] = useState<string | null>(null);
+  const [customPriceMin, setCustomPriceMin] = useState<string>("");
+  const [customPriceMax, setCustomPriceMax] = useState<string>("");
+  const [appliedPriceRange, setAppliedPriceRange] = useState<{ min: number; max: number } | null>(
+    null,
   );
 
-  const tags = ["New", "Bestseller"];
-
-  const [selCat, setSelCat] = useState<Set<CatKey>>(new Set());
-  const [selOcc, setSelOcc] = useState<Set<Occasion>>(new Set());
-  const [selFab, setSelFab] = useState<Set<string>>(new Set());
-  const [selPrice, setSelPrice] = useState<Set<string>>(new Set());
-  const [selTag, setSelTag] = useState<Set<string>>(new Set());
   const [sort, setSort] = useState<SortKey>("featured");
   const [sortOpen, setSortOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const toggle = <T,>(setter: (v: Set<T>) => void, set: Set<T>, v: T) => {
+  const toggle = <T,>(setter: React.Dispatch<React.SetStateAction<Set<T>>>, set: Set<T>, v: T) => {
     const next = new Set(set);
     if (next.has(v)) next.delete(v);
     else next.add(v);
     setter(next);
   };
 
+  const applyPricePreset = (presetKey: string) => {
+    if (selPricePreset === presetKey) {
+      setSelPricePreset(null);
+      setAppliedPriceRange(null);
+      setCustomPriceMin("");
+      setCustomPriceMax("");
+    } else {
+      setSelPricePreset(presetKey);
+      const preset = PRICE_PRESETS.find((p) => p.key === presetKey);
+      if (preset) {
+        setAppliedPriceRange({ min: preset.min, max: preset.max });
+        setCustomPriceMin(preset.min > 0 ? String(preset.min) : "");
+        setCustomPriceMax(preset.max < Infinity ? String(preset.max) : "");
+      }
+    }
+  };
+
+  const applyCustomPrice = () => {
+    const min = customPriceMin ? Number(customPriceMin) : 0;
+    const max = customPriceMax ? Number(customPriceMax) : Infinity;
+    setAppliedPriceRange({ min, max });
+    setSelPricePreset(null);
+  };
+
+  const clearAll = () => {
+    setSelColors(new Set());
+    setSelTypes(new Set());
+    setSelFabrics(new Set());
+    setSelPricePreset(null);
+    setAppliedPriceRange(null);
+    setCustomPriceMin("");
+    setCustomPriceMax("");
+  };
+
+  const activeCount =
+    selColors.size +
+    selTypes.size +
+    selFabrics.size +
+    (appliedPriceRange || selPricePreset ? 1 : 0);
+
   const filtered = useMemo(() => {
-    let out = inCategory.slice();
-    if (selCat.size) out = out.filter((p) => p.category.some((c) => selCat.has(c)));
-    if (selOcc.size) {
-      out = out.filter((p) =>
-        Array.from(selOcc).some((k) => OCCASIONS.find((o) => o.key === k)!.match(p)),
+    let list = inCategory.slice();
+
+    // 1. Color filter
+    if (selColors.size > 0) {
+      list = list.filter((p) => Array.from(selColors).some((cKey) => matchesColor(p, cKey)));
+    }
+
+    // 2. Type filter
+    if (selTypes.size > 0) {
+      list = list.filter((p) =>
+        Array.from(selTypes).some((tKey) => {
+          const opt = TYPE_OPTIONS.find((t) => t.key === tKey);
+          return opt ? opt.match(p) : false;
+        }),
       );
     }
-    if (selFab.size) {
-      out = out.filter((p) => selFab.has(p.weave));
+
+    // 3. Fabric filter
+    if (selFabrics.size > 0) {
+      list = list.filter((p) =>
+        Array.from(selFabrics).some((fKey) => {
+          const opt = FABRIC_OPTIONS.find((f) => f.key === fKey);
+          return opt ? opt.match(p) : false;
+        }),
+      );
     }
-    if (selPrice.size) {
-      out = out.filter((p) => {
-        const v = parsePrice(p.price);
-        return Array.from(selPrice).some((k) => {
-          const b = PRICE_BUCKETS.find((x) => x.key === k)!;
-          return v >= b.min && v <= b.max;
-        });
+
+    // 4. Price range filter
+    if (appliedPriceRange) {
+      list = list.filter((p) => {
+        const val = parsePriceNumber(p.price);
+        return val >= appliedPriceRange.min && val <= appliedPriceRange.max;
       });
     }
-    if (selTag.size) out = out.filter((p) => p.tag && selTag.has(p.tag));
 
+    // 5. Sorting
     switch (sort) {
       case "new":
-        out.sort((a, b) => Number(b.tag === "New") - Number(a.tag === "New"));
+        list.sort((a, b) => Number(b.tag === "New") - Number(a.tag === "New"));
         break;
       case "price-asc":
-        out.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+        list.sort((a, b) => parsePriceNumber(a.price) - parsePriceNumber(b.price));
         break;
       case "price-desc":
-        out.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+        list.sort((a, b) => parsePriceNumber(b.price) - parsePriceNumber(a.price));
         break;
     }
-    return out;
-  }, [inCategory, selCat, selOcc, selFab, selPrice, selTag, sort]);
 
-  const activeCount = selCat.size + selOcc.size + selFab.size + selPrice.size + selTag.size;
-  const clearAll = () => {
-    setSelCat(new Set());
-    setSelOcc(new Set());
-    setSelFab(new Set());
-    setSelPrice(new Set());
-    setSelTag(new Set());
-  };
+    return list;
+  }, [inCategory, selColors, selTypes, selFabrics, appliedPriceRange, sort]);
 
   useEffect(() => {
     if (!drawerOpen) return;
@@ -142,40 +169,184 @@ export function CategoryPage({
     };
   }, [drawerOpen]);
 
-  const sidebar = (
-    <CategoryFilterPanel
-      selCat={selCat}
-      selOcc={selOcc}
-      selFab={selFab}
-      selPrice={selPrice}
-      selTag={selTag}
-      fabrics={fabrics}
-      tags={tags}
-      onCat={(k) => toggle(setSelCat, selCat, k)}
-      onOcc={(k) => toggle(setSelOcc, selOcc, k)}
-      onFab={(k) => toggle(setSelFab, selFab, k)}
-      onPrice={(k) => toggle(setSelPrice, selPrice, k)}
-      onTag={(k) => toggle(setSelTag, selTag, k)}
-      clearAll={clearAll}
-      activeCount={activeCount}
-    />
+  const sidebarContent = (
+    <div className="space-y-6 text-sm">
+      <div className="flex items-center justify-between border-b border-gold/40 pb-4">
+        <h3 className="font-serif text-xl font-bold text-maroon">Refine Collection</h3>
+        {activeCount > 0 && (
+          <button
+            onClick={clearAll}
+            className="text-xs uppercase tracking-wider text-maroon font-bold hover:text-gold-deep transition-colors underline"
+          >
+            Reset ({activeCount})
+          </button>
+        )}
+      </div>
+
+      {/* 1. Price Range */}
+      <FilterGroup title="Price Range" defaultOpen={true}>
+        <div className="space-y-3 pt-1">
+          <div className="grid grid-cols-1 gap-2">
+            {PRICE_PRESETS.map((preset) => {
+              const active = selPricePreset === preset.key;
+              return (
+                <button
+                  key={preset.key}
+                  onClick={() => applyPricePreset(preset.key)}
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl border text-xs font-semibold tracking-wide transition-all text-left ${
+                    active
+                      ? "border-maroon bg-maroon text-white shadow-sm"
+                      : "border-gold/40 bg-[#FAF7F2] text-ink hover:border-maroon"
+                  }`}
+                >
+                  <span>{preset.label}</span>
+                  {active && <Check className="h-3.5 w-3.5 text-white" />}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="pt-2 border-t border-gold/30">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-maroon block mb-2">
+              Custom Range (₹)
+            </span>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                placeholder="Min"
+                value={customPriceMin}
+                onChange={(e) => setCustomPriceMin(e.target.value)}
+                className="w-1/2 px-3 py-2 text-xs font-medium border border-gold/50 rounded-lg bg-[#FAF8F5] text-ink focus:border-maroon focus:outline-none"
+              />
+              <span className="text-xs text-taupe font-bold">–</span>
+              <input
+                type="number"
+                placeholder="Max"
+                value={customPriceMax}
+                onChange={(e) => setCustomPriceMax(e.target.value)}
+                className="w-1/2 px-3 py-2 text-xs font-medium border border-gold/50 rounded-lg bg-[#FAF8F5] text-ink focus:border-maroon focus:outline-none"
+              />
+            </div>
+            <button
+              onClick={applyCustomPrice}
+              className="mt-2.5 w-full py-2 rounded-lg bg-maroon text-white text-[11px] font-bold uppercase tracking-wider hover:bg-wine transition-colors"
+            >
+              Apply Price
+            </button>
+          </div>
+        </div>
+      </FilterGroup>
+
+      {/* 2. Color Palette Swatches */}
+      <FilterGroup title="Color Palette" defaultOpen={true}>
+        <div className="grid grid-cols-2 gap-2.5 pt-1">
+          {COLOR_OPTIONS.map((col) => {
+            const active = selColors.has(col.key);
+            return (
+              <button
+                key={col.key}
+                onClick={() => toggle(setSelColors, selColors, col.key)}
+                className={`flex items-center gap-2.5 p-2 rounded-xl border text-xs font-semibold transition-all text-left ${
+                  active
+                    ? "border-maroon bg-maroon/10 text-maroon shadow-sm"
+                    : "border-gold/40 bg-[#FAF7F2] text-ink hover:border-maroon"
+                }`}
+              >
+                <span
+                  className="w-5 h-5 rounded-full border shrink-0 relative grid place-items-center"
+                  style={{
+                    backgroundColor: col.hex,
+                    borderColor: col.border || "rgba(0,0,0,0.15)",
+                  }}
+                >
+                  {active && <Check className="h-3 w-3 text-white drop-shadow-sm" />}
+                </span>
+                <span className="truncate text-xs font-medium">{col.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </FilterGroup>
+
+      {/* 3. Saree Type */}
+      <FilterGroup title="Saree Type" defaultOpen={true}>
+        <div className="space-y-2 pt-1">
+          {TYPE_OPTIONS.map((t) => {
+            const active = selTypes.has(t.key);
+            return (
+              <button
+                key={t.key}
+                onClick={() => toggle(setSelTypes, selTypes, t.key)}
+                className={`group flex w-full items-center justify-between p-2 rounded-xl text-left transition-colors border ${
+                  active
+                    ? "border-maroon bg-maroon/10 text-maroon font-bold"
+                    : "border-transparent text-ink hover:bg-[#FAF7F2] font-medium"
+                }`}
+              >
+                <span className="text-xs">{t.label}</span>
+                <span
+                  className={`grid h-4 w-4 shrink-0 place-items-center rounded border transition-all ${
+                    active
+                      ? "border-maroon bg-maroon text-white"
+                      : "border-gold/60 bg-white group-hover:border-maroon"
+                  }`}
+                >
+                  {active && <Check className="h-3 w-3" strokeWidth={3} />}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </FilterGroup>
+
+      {/* 4. Fabric & Craft Weave */}
+      <FilterGroup title="Fabric & Weave" defaultOpen={true}>
+        <div className="space-y-2 pt-1">
+          {FABRIC_OPTIONS.map((f) => {
+            const active = selFabrics.has(f.key);
+            return (
+              <button
+                key={f.key}
+                onClick={() => toggle(setSelFabrics, selFabrics, f.key)}
+                className={`group flex w-full items-center justify-between p-2 rounded-xl text-left transition-colors border ${
+                  active
+                    ? "border-maroon bg-maroon/10 text-maroon font-bold"
+                    : "border-transparent text-ink hover:bg-[#FAF7F2] font-medium"
+                }`}
+              >
+                <span className="text-xs">{f.label}</span>
+                <span
+                  className={`grid h-4 w-4 shrink-0 place-items-center rounded border transition-all ${
+                    active
+                      ? "border-maroon bg-maroon text-white"
+                      : "border-gold/60 bg-white group-hover:border-maroon"
+                  }`}
+                >
+                  {active && <Check className="h-3 w-3" strokeWidth={3} />}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </FilterGroup>
+    </div>
   );
 
   return (
-    <div className="w-full bg-ivory">
+    <div className="w-full bg-[#FAF7F2] text-ink min-h-screen">
       {showHero ? (
         <PageHero eyebrow={eyebrow} title={title} copy={copy} img={heroImg} crumb={crumb} />
       ) : (
-        <div className="border-b border-gold/30 bg-beige/15 py-4 md:py-6">
-          <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
-            <nav className="text-xs tracking-[0.14em] uppercase text-maroon font-bold">
-              <Link to="/" className="hover:text-gold-deep">
+        <div className="border-b border-gold/30 bg-white/70 backdrop-blur-sm py-4 px-4 md:px-8 lg:px-12 xl:px-16">
+          <div className="w-full">
+            <nav className="text-xs tracking-[0.14em] uppercase text-maroon font-bold flex items-center gap-2">
+              <Link to="/" className="hover:text-gold-deep transition-colors">
                 Home
               </Link>
-              <span className="mx-2 text-gold-deep">/</span>
+              <span className="text-gold-deep font-normal">/</span>
               <span className="text-ink">{crumb}</span>
             </nav>
-            <h1 className="mt-1 font-serif text-2xl sm:text-3xl md:text-4xl text-maroon font-semibold leading-tight">
+            <h1 className="mt-1 font-serif text-2xl sm:text-3xl md:text-4xl text-maroon font-bold">
               {title}
             </h1>
           </div>
@@ -183,38 +354,38 @@ export function CategoryPage({
       )}
 
       {/* Main Grid & Sticky Left Sidebar Section */}
-      <section className="py-8 md:py-14">
+      <section className="pt-6 pb-16 md:pt-8 md:pb-24">
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
-          <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] lg:grid-cols-[280px_1fr] xl:grid-cols-[300px_1fr] gap-8 md:gap-10 lg:gap-12">
-            {/* Left Sidebar: Sticky Scroll */}
-            <aside className="hidden md:block self-start sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto no-scrollbar md:border-r md:border-gold/50 md:pr-8 lg:pr-10">
-              {sidebar}
+          <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[300px_1fr] xl:grid-cols-[320px_1fr] gap-8 md:gap-10 lg:gap-12 items-start">
+            {/* Left Sidebar */}
+            <aside className="hidden md:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar rounded-2xl border border-gold/40 bg-white p-6 shadow-sm">
+              {sidebarContent}
             </aside>
 
             {/* Main Content Area */}
-            <div>
+            <div className="min-w-0">
               {/* Toolbar */}
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gold/50 pb-5">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gold/40 pb-5">
                 <div className="flex items-center gap-3">
-                  <span className="inline-flex items-center gap-1.5 bg-maroon/10 px-2.5 py-1 text-[11px] font-semibold text-maroon uppercase tracking-wider">
+                  <span className="inline-flex items-center gap-1.5 bg-maroon/10 px-3 py-1 rounded-full text-xs font-bold text-maroon uppercase tracking-wider">
                     <Sparkles className="h-3 w-3 text-gold-deep" /> Handwoven
                   </span>
-                  <p className="text-sm text-maroon/80">
-                    Showing <span className="text-maroon font-semibold">{filtered.length}</span> of{" "}
-                    {inCategory.length} pieces
+                  <p className="text-xs sm:text-sm text-ink/80 font-medium">
+                    Showing <strong className="text-maroon font-bold">{filtered.length}</strong> of{" "}
+                    {inCategory.length} drapes
                   </p>
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   {/* Mobile Filter Button */}
                   <button
                     onClick={() => setDrawerOpen(true)}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-maroon/30 text-[11px] tracking-[0.2em] uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all md:hidden"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border-2 border-maroon bg-white text-xs tracking-wider uppercase text-maroon font-bold hover:bg-maroon hover:text-white transition-all md:hidden shadow-sm"
                   >
                     <SlidersHorizontal className="h-4 w-4" />
-                    Filter
+                    Filters
                     {activeCount > 0 && (
-                      <span className="ml-1 grid h-4 w-4 place-items-center rounded-full bg-maroon text-[10px] text-ivory">
+                      <span className="ml-1 grid h-5 w-5 place-items-center rounded-full bg-maroon text-white text-[10px] font-bold">
                         {activeCount}
                       </span>
                     )}
@@ -224,8 +395,8 @@ export function CategoryPage({
                   <div className="relative">
                     <button
                       onClick={() => setSortOpen((v) => !v)}
-                      onBlur={() => setTimeout(() => setSortOpen(false), 150)}
-                      className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/40 bg-beige/30 text-[11px] tracking-[0.2em] uppercase text-maroon hover:border-maroon transition-all"
+                      onBlur={() => setTimeout(() => setSortOpen(false), 200)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-gold-deep/50 bg-white text-xs tracking-wider uppercase text-maroon font-bold hover:border-maroon transition-all shadow-sm"
                     >
                       <span>Sort: {SORTS.find((s) => s.key === sort)!.label}</span>
                       <ChevronDown
@@ -234,7 +405,7 @@ export function CategoryPage({
                     </button>
 
                     {sortOpen && (
-                      <ul className="absolute right-0 top-full z-30 mt-2 w-56 rounded-2xl border border-gold/50 bg-ivory p-2 shadow-2xl">
+                      <ul className="absolute right-0 top-full z-30 mt-2 w-56 rounded-2xl border border-gold-deep/40 bg-white p-2 shadow-2xl">
                         {SORTS.map((s) => (
                           <li key={s.key}>
                             <button
@@ -245,12 +416,12 @@ export function CategoryPage({
                               }}
                               className={`flex w-full items-center justify-between px-4 py-2.5 rounded-xl text-left text-xs tracking-wider uppercase transition-colors ${
                                 sort === s.key
-                                  ? "bg-maroon text-ivory font-medium"
-                                  : "text-ink hover:bg-beige/40"
+                                  ? "bg-maroon text-white font-bold"
+                                  : "text-ink hover:bg-[#FAF7F2] font-medium"
                               }`}
                             >
                               {s.label}
-                              {sort === s.key && <Check className="h-4 w-4 text-ivory" />}
+                              {sort === s.key && <Check className="h-4 w-4 text-white" />}
                             </button>
                           </li>
                         ))}
@@ -262,73 +433,119 @@ export function CategoryPage({
 
               {/* Active Filter Chips */}
               {activeCount > 0 && (
-                <div className="flex flex-wrap items-center gap-2.5 pt-5">
-                  <span className="text-[10px] uppercase tracking-[0.25em] text-maroon/60 font-medium">
+                <div className="flex flex-wrap items-center gap-2.5 pt-4 pb-2">
+                  <span className="text-[11px] uppercase tracking-wider text-maroon font-bold mr-1">
                     Active Filters:
                   </span>
-                  {Array.from(selCat).map((k) => (
-                    <ActiveChip
-                      key={"c-" + k}
-                      label={CATEGORIES.find((c) => c.key === k)!.label}
-                      onClear={() => toggle(setSelCat, selCat, k)}
-                    />
-                  ))}
-                  {Array.from(selOcc).map((k) => (
-                    <ActiveChip
-                      key={"o-" + k}
-                      label={OCCASIONS.find((o) => o.key === k)!.label}
-                      onClear={() => toggle(setSelOcc, selOcc, k)}
-                    />
-                  ))}
-                  {Array.from(selFab).map((k) => (
-                    <ActiveChip
-                      key={"f-" + k}
-                      label={k}
-                      onClear={() => toggle(setSelFab, selFab, k)}
-                    />
-                  ))}
-                  {Array.from(selPrice).map((k) => (
-                    <ActiveChip
-                      key={"p-" + k}
-                      label={PRICE_BUCKETS.find((b) => b.key === k)!.label}
-                      onClear={() => toggle(setSelPrice, selPrice, k)}
-                    />
-                  ))}
-                  {Array.from(selTag).map((k) => (
-                    <ActiveChip
-                      key={"t-" + k}
-                      label={k}
-                      onClear={() => toggle(setSelTag, selTag, k)}
-                    />
-                  ))}
+
+                  {(appliedPriceRange || selPricePreset) && (
+                    <span className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm">
+                      <IndianRupee className="h-3 w-3 text-gold-deep" />
+                      {selPricePreset
+                        ? PRICE_PRESETS.find((p) => p.key === selPricePreset)!.label
+                        : `₹ ${appliedPriceRange?.min.toLocaleString("en-IN")} – ${appliedPriceRange?.max === Infinity ? "Above" : "₹ " + appliedPriceRange?.max.toLocaleString("en-IN")}`}
+                      <button
+                        onClick={() => {
+                          setSelPricePreset(null);
+                          setAppliedPriceRange(null);
+                          setCustomPriceMin("");
+                          setCustomPriceMax("");
+                        }}
+                        className="text-maroon/60 hover:text-maroon ml-0.5"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </span>
+                  )}
+
+                  {Array.from(selColors).map((cKey) => {
+                    const cOpt = COLOR_OPTIONS.find((c) => c.key === cKey);
+                    return (
+                      <span
+                        key={cKey}
+                        className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
+                      >
+                        <span
+                          className="w-3 h-3 rounded-full border border-black/20"
+                          style={{ backgroundColor: cOpt?.hex }}
+                        />
+                        {cOpt?.label}
+                        <button
+                          onClick={() => toggle(setSelColors, selColors, cKey)}
+                          className="text-maroon/60 hover:text-maroon ml-0.5"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </span>
+                    );
+                  })}
+
+                  {Array.from(selTypes).map((tKey) => {
+                    const tOpt = TYPE_OPTIONS.find((t) => t.key === tKey);
+                    return (
+                      <span
+                        key={tKey}
+                        className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
+                      >
+                        {tOpt?.label}
+                        <button
+                          onClick={() => toggle(setSelTypes, selTypes, tKey)}
+                          className="text-maroon/60 hover:text-maroon ml-0.5"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </span>
+                    );
+                  })}
+
+                  {Array.from(selFabrics).map((fKey) => {
+                    const fOpt = FABRIC_OPTIONS.find((f) => f.key === fKey);
+                    return (
+                      <span
+                        key={fKey}
+                        className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
+                      >
+                        {fOpt?.label}
+                        <button
+                          onClick={() => toggle(setSelFabrics, selFabrics, fKey)}
+                          className="text-maroon/60 hover:text-maroon ml-0.5"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </span>
+                    );
+                  })}
+
                   <button
                     onClick={clearAll}
-                    className="ml-auto text-[11px] tracking-[0.22em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold hover:border-gold transition-colors"
+                    className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-maroon hover:text-gold-deep transition-colors ml-auto underline underline-offset-4"
                   >
-                    Clear All ({activeCount})
+                    <RotateCcw className="h-3 w-3" /> Reset All ({activeCount})
                   </button>
                 </div>
               )}
 
               {/* Product Grid: 4 Cards per row on desktop */}
-              <div className="mt-8">
+              <div className="mt-6">
                 {filtered.length === 0 ? (
-                  <div className="py-24 text-center rounded-2xl border border-dashed border-gold/50 bg-beige/10 p-8">
-                    <p className="font-serif text-3xl text-maroon">
-                      No sarees match your filter selection.
-                    </p>
-                    <p className="mt-3 text-sm text-maroon/70 max-w-md mx-auto">
-                      Try resetting one of your selected filters or explore our full collection.
+                  <div className="py-20 text-center rounded-3xl border-2 border-dashed border-gold/60 bg-white p-8">
+                    <Sparkles className="h-10 w-10 text-gold-deep mx-auto mb-3" />
+                    <h3 className="font-serif text-2xl md:text-3xl text-maroon font-bold">
+                      No Sarees Match Your Selected Filters
+                    </h3>
+                    <p className="mt-2 text-sm text-ink/75 max-w-md mx-auto">
+                      Try widening your price range, selecting alternative colors or fabrics, or
+                      reset all filters.
                     </p>
                     <button
                       onClick={clearAll}
-                      className="mt-6 px-8 py-3.5 rounded-full bg-maroon text-ivory text-[11px] tracking-[0.25em] uppercase hover:bg-wine transition-all shadow-md"
+                      className="mt-6 px-8 py-3 rounded-full bg-maroon text-white text-xs font-bold uppercase tracking-widest hover:bg-wine transition-all shadow-md"
                     >
-                      Clear Filters
+                      Reset All Filters
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 xl:grid-cols-4 lg:gap-8">
+                  <div className="grid grid-cols-2 gap-3.5 sm:gap-6 md:grid-cols-3 xl:grid-cols-4 lg:gap-8">
                     {filtered.map((p) => (
                       <ProductCard key={p.id} p={p} />
                     ))}
@@ -342,33 +559,48 @@ export function CategoryPage({
 
       {/* Mobile Drawer Filter */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div
-            className="absolute inset-0 bg-ink/40 backdrop-blur-sm"
+        <div
+          className="fixed inset-0 z-50 md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filter Sarees"
+        >
+          <button
+            aria-label="Close filters"
+            className="absolute inset-0 bg-ink/70 backdrop-blur-sm transition-opacity"
             onClick={() => setDrawerOpen(false)}
           />
-          <div className="absolute right-0 top-0 h-full w-[88%] max-w-xs bg-ivory p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
-            <div>
-              <div className="flex items-center justify-between border-b border-gold/50 pb-4 mb-6">
-                <div className="flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-maroon" />
-                  <h3 className="font-serif text-lg text-maroon">Filter Sarees</h3>
-                </div>
-                <button
-                  onClick={() => setDrawerOpen(false)}
-                  className="text-taupe hover:text-maroon"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+          <div className="absolute inset-y-0 left-0 flex w-[90%] max-w-md flex-col bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-gold/40 px-6 py-5 bg-[#FAF7F2]">
+              <div className="flex items-center gap-2.5">
+                <Filter className="h-5 w-5 text-maroon" />
+                <h2 className="font-serif text-xl font-bold text-maroon">Filter Catalog</h2>
               </div>
-              {sidebar}
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="text-ink hover:text-maroon p-1.5 rounded-lg border border-gold/40"
+                aria-label="Close"
+              >
+                <X className="h-5 w-5" />
+              </button>
             </div>
-            <button
-              onClick={() => setDrawerOpen(false)}
-              className="mt-8 w-full py-3.5 rounded-xl bg-maroon text-ivory text-xs uppercase tracking-[0.2em] font-medium"
-            >
-              Show {filtered.length} Results
-            </button>
+
+            <div className="flex-1 overflow-y-auto px-6 py-6">{sidebarContent}</div>
+
+            <div className="flex gap-3 border-t border-gold/40 p-5 bg-[#FAF7F2]">
+              <button
+                onClick={clearAll}
+                className="flex-1 py-3 rounded-xl border border-maroon text-maroon text-xs font-bold uppercase tracking-wider hover:bg-maroon/5 transition-colors"
+              >
+                Clear All
+              </button>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="flex-1 py-3 rounded-xl bg-maroon text-white text-xs font-bold uppercase tracking-wider hover:bg-wine transition-colors shadow-md"
+              >
+                Show {filtered.length} Sarees
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -376,161 +608,28 @@ export function CategoryPage({
   );
 }
 
-function CategoryFilterPanel({
-  selCat,
-  selOcc,
-  selFab,
-  selPrice,
-  selTag,
-  fabrics,
-  tags,
-  onCat,
-  onOcc,
-  onFab,
-  onPrice,
-  onTag,
-  clearAll,
-  activeCount,
+function FilterGroup({
+  title,
+  defaultOpen = true,
+  children,
 }: {
-  selCat: Set<CatKey>;
-  selOcc: Set<Occasion>;
-  selFab: Set<string>;
-  selPrice: Set<string>;
-  selTag: Set<string>;
-  fabrics: string[];
-  tags: string[];
-  onCat: (k: CatKey) => void;
-  onOcc: (k: Occasion) => void;
-  onFab: (k: string) => void;
-  onPrice: (k: string) => void;
-  onTag: (k: string) => void;
-  clearAll: () => void;
-  activeCount: number;
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
 }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="space-y-6 text-sm">
-      <div className="flex items-center justify-between border-b border-gold/50 pb-4">
-        <h3 className="font-serif text-2xl text-maroon font-normal">Refine Selection</h3>
-        {activeCount > 0 && (
-          <button
-            onClick={clearAll}
-            className="text-[11px] tracking-[0.2em] uppercase text-maroon font-medium border-b border-maroon/40 hover:text-gold transition-colors"
-          >
-            Reset ({activeCount})
-          </button>
-        )}
-      </div>
-
-      <FilterGroup title="Category">
-        {CATEGORIES.map((c) => (
-          <CheckRow
-            key={c.key}
-            label={c.label}
-            active={selCat.has(c.key)}
-            onClick={() => onCat(c.key)}
-          />
-        ))}
-      </FilterGroup>
-
-      <FilterGroup title="Occasion">
-        {OCCASIONS.map((o) => (
-          <CheckRow
-            key={o.key}
-            label={o.label}
-            active={selOcc.has(o.key)}
-            onClick={() => onOcc(o.key)}
-          />
-        ))}
-      </FilterGroup>
-
-      <FilterGroup title="Fabric & Weave">
-        {fabrics.map((f) => (
-          <CheckRow key={f} label={f} active={selFab.has(f)} onClick={() => onFab(f)} />
-        ))}
-      </FilterGroup>
-
-      <FilterGroup title="Price Range">
-        {PRICE_BUCKETS.map((b) => (
-          <CheckRow
-            key={b.key}
-            label={b.label}
-            active={selPrice.has(b.key)}
-            onClick={() => onPrice(b.key)}
-          />
-        ))}
-      </FilterGroup>
-
-      <FilterGroup title="Highlights">
-        {tags.map((t) => (
-          <CheckRow key={t} label={t} active={selTag.has(t)} onClick={() => onTag(t)} />
-        ))}
-      </FilterGroup>
-    </div>
-  );
-}
-
-function FilterGroup({ title, children }: { title: string; children: React.ReactNode }) {
-  const [open, setOpen] = useState(true);
-  return (
-    <div className="border-b border-gold/50 pb-5">
+    <div className="border-b border-gold/40 pb-5">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between text-[11px] uppercase tracking-[0.24em] text-maroon font-semibold"
+        className="flex w-full items-center justify-between text-xs uppercase tracking-wider text-maroon font-bold"
       >
         <span>{title}</span>
         <ChevronDown
-          className={`h-3.5 w-3.5 text-maroon/70 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`h-4 w-4 text-maroon transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
-      {open && <div className="mt-4 space-y-3">{children}</div>}
+      {open && <div className="mt-3.5">{children}</div>}
     </div>
-  );
-}
-
-function CheckRow({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      aria-pressed={active}
-      className="group flex w-full items-center gap-3 text-left transition-colors cursor-pointer py-0.5"
-    >
-      <span
-        className={`grid h-4 w-4 shrink-0 place-items-center rounded border transition-all ${
-          active
-            ? "border-maroon bg-maroon text-ivory shadow-sm"
-            : "border-gold/50 bg-ivory group-hover:border-maroon"
-        }`}
-      >
-        {active && <Check className="h-3 w-3" strokeWidth={3} />}
-      </span>
-      <span
-        className={`text-xs md:text-sm transition-colors ${active ? "text-maroon font-semibold" : "text-ink/80 group-hover:text-maroon font-medium"}`}
-      >
-        {label}
-      </span>
-    </button>
-  );
-}
-
-function ActiveChip({ label, onClear }: { label: string; onClear: () => void }) {
-  return (
-    <span className="inline-flex items-center gap-2 border border-gold/40 bg-beige/40 px-3 py-1.5 rounded-full text-xs text-maroon font-medium shadow-sm">
-      {label}
-      <button
-        onClick={onClear}
-        aria-label={`Remove ${label}`}
-        className="text-maroon/60 hover:text-maroon"
-      >
-        <X className="h-3.5 w-3.5" />
-      </button>
-    </span>
   );
 }
