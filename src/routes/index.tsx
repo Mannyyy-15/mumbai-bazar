@@ -687,8 +687,13 @@ function CollectionStrip() {
 
             {/* Card Content */}
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 text-ivory flex flex-col justify-end">
+              {/*
+                Was "Authentic Loom" on every weave card — an origin claim the
+                catalogue cannot support. "Shop the weave" is a call to action,
+                not an assertion about provenance.
+              */}
               <span className="text-xs uppercase tracking-[0.16em] text-amber-300 font-bold mb-1 drop-shadow-sm">
-                Authentic Loom
+                Shop the weave
               </span>
               <p className="font-serif text-3xl md:text-4xl font-normal drop-shadow-md leading-tight">
                 {c.name}

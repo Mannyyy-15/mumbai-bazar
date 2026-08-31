@@ -4,7 +4,12 @@ export function AnnouncementBar() {
   return (
     <div className="bg-maroon text-ivory">
       <div className="mx-auto flex max-w-[1360px] items-center justify-center gap-4 px-4 py-2 text-[11px] font-medium tracking-[0.22em] uppercase sm:justify-between">
-        <span className="hidden sm:block text-ivory/95 font-semibold">Assured Authenticity</span>
+        {/*
+          Was "Assured Authenticity" — a guarantee the business has no
+          certification process behind. "8 stores since 2009" is a fact, and a
+          better one: it is the thing competitors on the western line cannot say.
+        */}
+        <span className="hidden sm:block text-ivory/95 font-semibold">8 Stores Since 2009</span>
         <span className="text-center text-ivory font-semibold">
           Festive Edit Now Live · Complimentary Shipping Across India
         </span>
