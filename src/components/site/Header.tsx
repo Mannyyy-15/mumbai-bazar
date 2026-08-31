@@ -385,7 +385,7 @@ export function Header() {
               scrolled ? "h-9 md:h-10" : "h-11 sm:h-12 md:h-12"
             }`}
           />
-          <span className="mt-0.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-maroon transition-colors duration-300 group-hover:text-gold-deep">
+          <span className="hidden md:inline-block mt-0.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-maroon transition-colors duration-300 group-hover:text-gold-deep">
             Mumbai Bazar
           </span>
         </Link>
