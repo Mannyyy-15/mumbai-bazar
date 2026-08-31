@@ -60,8 +60,15 @@ const RULES = [
   },
   {
     id: "hardcoded-hours",
-    // Any clock time written as literal text outside the single source of truth.
-    pattern: /\d{1,2}:\d{2}\s*(AM|PM)|Mon\s*[-–]\s*Sat/i,
+    /*
+     * Any clock time written as literal text outside the single source of truth.
+     *
+     * The colon-less form ("10 AM - 9 PM") is matched explicitly: the original
+     * pattern required HH:MM and so missed nine hardcoded strings, including a
+     * /contact page still advertising 8 PM after the rest of the site had moved
+     * to 9 PM. That is exactly the inconsistency this rule exists to prevent.
+     */
+    pattern: /\d{1,2}:\d{2}\s*(AM|PM)|\d{1,2}\s*(AM|PM)\s*[-–—]|Mon\w*\s*[-–—]\s*Sat|open (?:daily|every day)[^.]{0,20}\d/i,
     allow: ["src/lib/seo.ts", "src/lib/guides.ts"],
     why:
       "Hours must derive from SITE.hours. The site once stated three different sets at once, so an AI assistant asked 'are you open Sunday?' had even odds of sending a customer to a shut shop.",

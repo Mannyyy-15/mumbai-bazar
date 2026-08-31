@@ -28,7 +28,7 @@ export const Route = createFileRoute("/stores/")({
   head: () => {
     const { meta, links } = seo({
       title: "Saree Shops in Nalasopara, Virar & Mumbai | Mumbai Bazar",
-      description: `Find your nearest Mumbai Bazar store. ${OUTLET_COUNT} saree and lehenga shops across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. Open daily 10 AM–9 PM.`,
+      description: `Find your nearest Mumbai Bazar store. ${OUTLET_COUNT} saree and lehenga shops across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
       path: "/stores",
       keywords: [
         "saree shop near me",
@@ -76,7 +76,7 @@ function StoreLocator() {
             </h1>
             <p className="answer-first mt-4 text-sm leading-relaxed text-ink/80 md:text-base">
               Mumbai Bazar has {OUTLET_COUNT} stores across Nalasopara, Virar, Vasai, Bhayandar and
-              Goregaon, open every day from 10 AM to 9 PM. Every saree, lehenga and dress material
+              Goregaon, {SITE.hours.shortDaily.toLowerCase()}. Every saree, lehenga and dress material
               can be seen and draped in store before you buy.
             </p>
           </div>
@@ -114,7 +114,7 @@ function StoreLocator() {
                   </address>
 
                   <p className="mt-3 flex items-center gap-2 text-sm text-ink/75">
-                    <Clock className="h-4 w-4 shrink-0 text-gold" /> 10 AM – 9 PM, daily
+                    <Clock className="h-4 w-4 shrink-0 text-gold" /> {SITE.hours.short}, daily
                   </p>
                   {o.phone && (
                     <p className="mt-1.5 flex items-center gap-2 text-sm text-ink/75">

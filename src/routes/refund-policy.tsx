@@ -8,7 +8,7 @@ import { SITE } from "@/lib/seo";
 export const Route = createFileRoute("/refund-policy")({
   head: () => {
     const { meta, links } = seo({
-      title: "Return & Refund Policy | 7-Day Easy Returns — Mumbai Bazar",
+      title: "Return & Refund Policy | Mumbai Bazar",
       description:
         "Transparent 7-day return and exchange policy for sarees and ethnic wear. Hassle-free reverse pick-ups, simple refund process, and prompt customer support.",
       path: "/refund-policy",

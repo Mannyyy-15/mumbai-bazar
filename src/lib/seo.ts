@@ -86,6 +86,10 @@ export const SITE = {
     label: "Open daily: 10:00 AM – 9:00 PM",
     /** Sentence-form, for llms.txt and other running prose. */
     sentence: "All stores open daily, 10:00 AM to 9:00 PM",
+    /** Compact form for meta descriptions and inline chips. */
+    short: "10 AM – 9 PM",
+    /** Compact form including the days, for prose. */
+    shortDaily: "Open daily 10 AM – 9 PM",
     /** Compact schema.org / GBP form. */
     spec: "Mo-Su 10:00-21:00",
   },

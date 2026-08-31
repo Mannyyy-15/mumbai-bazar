@@ -84,6 +84,9 @@ export function BlouseCustomizationModal({
               <img
                 src={product.img}
                 alt={product.name}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
                 className="h-16 w-14 object-cover rounded-lg"
               />
               <div>

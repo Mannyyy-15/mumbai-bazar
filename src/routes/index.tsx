@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
-import { seo, jsonLd } from "@/lib/seo";
+import { seo, jsonLd, SITE } from "@/lib/seo";
 import { breadcrumbSchema, outletSchema } from "@/lib/structured-data";
 import { FLAGSHIP } from "@/lib/locations";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/")({
     const { meta, links } = seo({
       title: "Saree & Bridal Wear Shops in Nalasopara | Mumbai Bazar",
       description:
-        "Sarees, dress material, designer lehengas and dulhan wear at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. Open daily 10 AM-9 PM.",
+        `Sarees, dress material, designer lehengas and dulhan wear at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
       path: "/",
       keywords: [
         "saree shop near me",
@@ -728,7 +728,7 @@ function TrustBar() {
   const items = [
     { icon: Truck, title: "Complimentary Shipping", copy: "On all India orders above ₹5,000" },
     { icon: ShieldCheck, title: "See Before You Buy", copy: "Drape any piece in store first" },
-    { icon: Sparkles, title: "Open Every Day", copy: "10 AM – 9 PM, all seven days" },
+    { icon: Sparkles, title: "Open Every Day", copy: `${SITE.hours.short}, all seven days` },
     { icon: ShoppingBag, title: "Easy 7-Day Returns", copy: "No-questions exchange policy" },
   ];
   return (

@@ -27,7 +27,7 @@ export const Route = createFileRoute("/contact")({
     const { meta, links } = seo({
       title: "Contact Us | WhatsApp & Store Network | Mumbai Bazar",
       description:
-        "Call or WhatsApp Mumbai Bazar at +91 89566 64631, or visit our flagship boutique in Nalasopara East and outlets in Virar, Bhayandar and Goregaon. Open daily 10 AM–8 PM.",
+        `Call or WhatsApp Mumbai Bazar at +91 89566 64631, or visit our flagship boutique in Nalasopara East and outlets in Virar, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
       path: "/contact",
       keywords: [
         "mumbai bazar contact number",
@@ -429,7 +429,7 @@ function ContactPage() {
                 <div className="flex items-start gap-3">
                   <Clock className="h-5 w-5 text-maroon shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-maroon">Monday – Saturday: 10 AM – 8 PM</p>
+                    <p className="font-semibold text-maroon">{SITE.hours.label}</p>
                     <p className="text-xs text-ink/80 mt-0.5">
                       Sunday: Open for Walk-ins & Bridal Consultations
                     </p>

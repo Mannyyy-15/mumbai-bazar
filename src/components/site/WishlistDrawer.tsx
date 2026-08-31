@@ -85,7 +85,14 @@ export function WishlistDrawer() {
                     onClick={closeWishlist}
                     className="h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-beige/30"
                   >
-                    <img src={p.img} alt={p.name} className="h-full w-full object-cover" />
+                    <img
+                        src={p.img}
+                        alt={p.name}
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
+                        className="h-full w-full object-cover"
+                      />
                   </Link>
 
                   <div className="flex flex-1 flex-col justify-between">

@@ -23,10 +23,12 @@ export const Route = createFileRoute("/stores/$slug")({
       });
     }
     const o = loaderData.outlet;
-    const title = `Saree Shop in ${o.area} | Lehengas & Bridal Wear — Mumbai Bazar`;
+    // Kept under ~60 chars so it is not truncated in results; "Nalasopara East"
+    // is the longest area name and lands at 44.
+    const title = `Saree Shop in ${o.area} | Mumbai Bazar`;
     const description =
       `Mumbai Bazar ${o.area} — sarees, dress material, designer lehengas and dulhan wear. ` +
-      `${o.landmark}. Open daily 10 AM–9 PM, serving ${o.nearby.slice(0, 3).join(", ")}.`;
+      `${o.landmark}. ${SITE.hours.shortDaily}, serving ${o.nearby.slice(0, 3).join(", ")}.`;
 
     const { meta, links } = seo({
       title,
@@ -70,7 +72,7 @@ function outletFaqs(o: Outlet) {
   return [
     {
       q: `Where is the Mumbai Bazar store in ${o.area}?`,
-      a: `We are at ${o.street}, ${o.landmark}, ${o.area} ${o.postalCode}. The store is open every day from 10 AM to 9 PM. Call ${phone} if you would like us to keep something aside before you arrive.`,
+      a: `We are at ${o.street}, ${o.landmark}, ${o.area} ${o.postalCode}. ${SITE.hours.shortDaily}. Call ${phone} if you would like us to keep something aside before you arrive.`,
     },
     {
       q: `What does the ${o.area} store sell?`,
@@ -174,7 +176,9 @@ function StorePage() {
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-maroon/10 text-maroon">
                 <Clock className="h-5 w-5" />
               </span>
-              <h2 className="mt-4 font-serif text-xl text-maroon">Open daily</h2>
+              <h2 className="mt-4 font-serif text-xl text-maroon">
+                {SITE.hours.days.length === 7 ? "Open daily" : "Opening hours"}
+              </h2>
               <p className="mt-2 text-sm leading-relaxed text-ink/80">
                 {SITE.hours.label.replace("Open daily: ", "")}, all{" "}
                 {SITE.hours.days.length === 7 ? "seven" : SITE.hours.days.length} days.

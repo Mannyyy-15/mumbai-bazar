@@ -244,7 +244,14 @@ function CartRow({
         onClick={onCloseCart}
         className="block h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F0E9DC] border border-gold/30"
       >
-        <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+        <img
+                        src={item.image}
+                        alt={item.name}
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
+                        className="h-full w-full object-cover"
+                      />
       </Link>
 
       <div className="flex flex-1 flex-col justify-between min-w-0">

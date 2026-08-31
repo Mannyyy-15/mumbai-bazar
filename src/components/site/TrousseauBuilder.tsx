@@ -70,7 +70,14 @@ export function TrousseauBuilder() {
                     }`}
                   >
                     {item ? (
-                      <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
+                      <img
+                        src={item.img}
+                        alt={item.name}
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
                       <span className="text-sm font-sans font-bold text-[#744D1E]">{idx + 1}</span>
                     )}
@@ -121,6 +128,9 @@ export function TrousseauBuilder() {
                   <img
                     src={p.img}
                     alt={p.name}
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
                     className={`h-full w-full object-cover transition-all duration-700 ease-out ${
                       p.secondaryImg
                         ? "group-hover:opacity-0 group-hover:scale-105"
@@ -133,6 +143,9 @@ export function TrousseauBuilder() {
                     <img
                       src={p.secondaryImg}
                       alt={`${p.name} alternate view`}
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
                       className="absolute inset-0 h-full w-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
                     />
                   )}
