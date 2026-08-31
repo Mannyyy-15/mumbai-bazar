@@ -132,7 +132,7 @@ function ProductDetail() {
   const waMsg = encodeURIComponent(
     `Hello Mumbai Bazar, I'd like to enquire about "${product.name}" (${product.price}). Could you share availability and drape details?`,
   );
-  const waHref = `https://wa.me/919999999999?text=${waMsg}`;
+  const waHref = `https://wa.me/${SITE.whatsapp}?text=${waMsg}`;
 
   return (
     <div className="bg-ivory text-ink">
@@ -156,17 +156,17 @@ function ProductDetail() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10">
           {/* LEFT — Thumbnail rail + Main image (sticky) */}
           <div className="md:col-span-7">
-            <div className="md:sticky md:top-24 flex gap-3 md:gap-4">
-              {/* Vertical thumbnail rail */}
+            <div className="md:sticky md:top-24 flex flex-col md:flex-row gap-3 md:gap-4">
+              {/* Vertical thumbnail rail for Desktop */}
               <div className="hidden md:flex flex-col gap-3 w-20 shrink-0 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide">
                 {d.gallery.map((g: string, i: number) => (
                   <button
                     key={i}
                     onClick={() => setActive(i)}
                     aria-label={`View image ${i + 1}`}
-                    className={`aspect-[4/5] overflow-hidden bg-[#F0E9DC] border transition-all ${
+                    className={`aspect-[4/5] overflow-hidden rounded-lg bg-[#F0E9DC] border transition-all ${
                       active === i
-                        ? "border-maroon"
+                        ? "border-maroon shadow-sm"
                         : "border-transparent hover:border-maroon/40 opacity-70 hover:opacity-100"
                     }`}
                   >
@@ -176,7 +176,7 @@ function ProductDetail() {
               </div>
 
               {/* Main image */}
-              <div className="flex-1 relative overflow-hidden bg-[#F0E9DC]">
+              <div className="flex-1 relative overflow-hidden rounded-2xl md:rounded-none bg-[#F0E9DC] shadow-sm md:shadow-none">
                 <div className="aspect-[4/5] w-full max-h-[calc(100vh-8rem)]">
                   <img
                     src={d.gallery[active]}
@@ -185,33 +185,36 @@ function ProductDetail() {
                   />
                 </div>
                 {product.tag && (
-                  <span className="absolute left-4 top-4 bg-maroon text-ivory px-3 py-1.5 text-[9px] tracking-[0.25em] uppercase">
+                  <span className="absolute left-4 top-4 bg-maroon text-ivory px-3 py-1.5 text-[9px] tracking-[0.25em] uppercase rounded-sm shadow-sm">
                     {product.tag === "New" ? "Limited Edition" : product.tag}
                   </span>
                 )}
                 <button
                   aria-label="Add to wishlist"
-                  className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-ivory/95 text-maroon hover:bg-ivory transition-colors"
+                  className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-ivory/95 text-maroon hover:bg-ivory transition-colors shadow-sm"
                 >
                   <Heart className="h-4 w-4" />
                 </button>
               </div>
-            </div>
-          </div>
 
-          {/* Mobile thumbnail strip */}
-          <div className="md:hidden grid grid-cols-4 gap-2 -mt-4">
-            {d.gallery.map((g: string, i: number) => (
-              <button
-                key={i}
-                onClick={() => setActive(i)}
-                className={`aspect-[4/5] overflow-hidden bg-[#F0E9DC] border ${
-                  active === i ? "border-maroon" : "border-transparent"
-                }`}
-              >
-                <img src={g} alt="" className="h-full w-full object-cover" />
-              </button>
-            ))}
+              {/* Mobile thumbnail strip: clean 1-line horizontal scrollable rail */}
+              <div className="md:hidden flex items-center gap-2 overflow-x-auto no-scrollbar py-1 px-0.5">
+                {d.gallery.map((g: string, i: number) => (
+                  <button
+                    key={i}
+                    onClick={() => setActive(i)}
+                    aria-label={`Select photo ${i + 1}`}
+                    className={`w-14 h-16 sm:w-16 sm:h-20 shrink-0 rounded-xl overflow-hidden bg-[#F0E9DC] border-2 transition-all ${
+                      active === i
+                        ? "border-maroon shadow-sm scale-105"
+                        : "border-gold/40 opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={g} alt="" className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* RIGHT — Commerce panel */}

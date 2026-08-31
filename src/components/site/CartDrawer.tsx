@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   X,
@@ -9,38 +9,41 @@ import {
   MessageCircle,
   ShieldCheck,
   Truck,
+  RotateCcw,
+  Sparkles,
+  Lock,
+  ArrowRight,
 } from "lucide-react";
 import { useCart, formatINR, type CartItem } from "@/lib/cart-context";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { useCountUp } from "@/hooks/use-count-up";
-
-const WHATSAPP_NUMBER = "919999999999";
+import { SITE } from "@/lib/seo";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, setQty, removeItem, subtotal, count, checkoutUrl } = useCart();
   const panelRef = useFocusTrap<HTMLElement>(isOpen);
 
   const waMsg = encodeURIComponent(
-    `Hello Mumbai Bazar, I'd like to place an order:\n\n${items
+    `Hello Mumbai Bazar, I would like to place an order from my shopping bag:\n\n${items
       .map((i) => `• ${i.name} × ${i.qty} — ${i.priceLabel}`)
-      .join("\n")}\n\nSubtotal: ${formatINR(subtotal)}`,
+      .join("\n")}\n\nTotal Subtotal: ${formatINR(subtotal)}\n\nPlease share payment link or delivery confirmation.`,
   );
-  const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMsg}`;
+  const waHref = `https://wa.me/${SITE.whatsapp}?text=${waMsg}`;
 
   return (
     <div
-      className={`fixed inset-0 z-[60] overflow-hidden ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+      className={`fixed inset-0 z-[70] overflow-hidden ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
       aria-hidden={!isOpen}
     >
-      {/* Scrim */}
+      {/* Dark backdrop */}
       <div
-        className={`absolute inset-0 bg-ink/50 transition-opacity duration-300 ${
+        className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0"
         }`}
         onClick={closeCart}
       />
 
-      {/* Panel */}
+      {/* Drawer Panel */}
       <aside
         ref={panelRef}
         data-lenis-prevent
@@ -48,55 +51,74 @@ export function CartDrawer() {
         aria-modal="true"
         aria-labelledby="cart-drawer-title"
         tabIndex={-1}
-        className={`absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-ivory shadow-2xl transition-transform duration-300 ease-out focus:outline-none ${
+        className={`absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-[#FAF7F2] shadow-2xl transition-transform duration-300 ease-out focus:outline-none ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gold/50 px-5 py-4">
-          <div className="flex items-center gap-2">
-            <ShoppingBag className="h-5 w-5 text-maroon" />
-            <h2 id="cart-drawer-title" className="font-serif text-xl text-maroon">
-              Your Bag
-              <span className="ml-2 text-sm text-taupe">
-                ({count} {count === 1 ? "item" : "items"})
-              </span>
-            </h2>
+        <div className="flex items-center justify-between border-b border-gold/40 bg-white px-5 py-4 shadow-sm">
+          <div className="flex items-center gap-2.5">
+            <div className="grid h-9 w-9 place-items-center rounded-full bg-maroon/10 text-maroon">
+              <ShoppingBag className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 id="cart-drawer-title" className="font-serif text-xl font-bold text-maroon">
+                Your Shopping Bag
+              </h2>
+              <p className="text-xs font-semibold text-ink/70">
+                {count} {count === 1 ? "handwoven drape" : "handwoven drapes"}
+              </p>
+            </div>
           </div>
 
           <button
             aria-label="Close bag"
             onClick={closeCart}
-            className="grid h-9 w-9 place-items-center text-ink hover:text-maroon transition-colors"
+            className="grid h-9 w-9 place-items-center rounded-full border border-gold/40 text-ink/80 hover:bg-maroon hover:text-white hover:border-maroon transition-all"
           >
-            <X className="h-6 w-6" />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Items */}
+        {/* Free Shipping Assurance Banner */}
+        <div className="border-b border-gold/30 bg-gold/10 px-5 py-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-bold text-maroon">
+            <Truck className="h-4 w-4 text-gold-deep shrink-0" />
+            <span>100% Free Express Insured Shipping Across India</span>
+          </div>
+          <Sparkles className="h-3.5 w-3.5 text-gold-deep shrink-0" />
+        </div>
+
+        {/* Items Container */}
         {items.length === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-            <div className="grid h-16 w-16 place-items-center rounded-full bg-beige/60">
-              <ShoppingBag className="h-7 w-7 text-maroon" />
+          <div className="flex flex-1 flex-col items-center justify-center px-6 py-12 text-center">
+            <div className="grid h-20 w-20 place-items-center rounded-3xl border border-gold/40 bg-white shadow-sm">
+              <ShoppingBag className="h-9 w-9 text-maroon/70" />
             </div>
-            <h3 className="mt-5 font-serif text-2xl text-ink">Your bag is empty</h3>
-            <p className="mt-2 max-w-xs text-sm text-taupe">
-              Discover heirloom weaves and festive edits curated for you.
+            <h3 className="mt-5 font-serif text-2xl font-bold text-maroon">Your bag is empty</h3>
+            <p className="mt-2 max-w-xs text-xs sm:text-sm text-ink/75 font-medium leading-relaxed">
+              Explore our bridal heirlooms, Banarasi katan silks, and festive drapes.
             </p>
-            <Link to="/new-arrivals" onClick={closeCart} className="btn-primary mt-6 inline-flex">
-              Shop New Arrivals
-            </Link>
-            <Link
-              to="/collections"
-              onClick={closeCart}
-              className="mt-3 text-xs uppercase tracking-[0.22em] text-gold-deep hover:text-maroon"
-            >
-              Browse Collections
-            </Link>
+            <div className="mt-6 flex flex-col gap-2.5 w-full max-w-xs">
+              <Link
+                to="/shop"
+                onClick={closeCart}
+                className="w-full py-3.5 rounded-full bg-maroon text-white text-xs font-bold uppercase tracking-wider hover:bg-wine transition-all shadow-md text-center"
+              >
+                Browse All Sarees
+              </Link>
+              <Link
+                to="/collections"
+                onClick={closeCart}
+                className="w-full py-3 rounded-full border border-maroon/30 text-maroon text-xs font-bold uppercase tracking-wider hover:bg-maroon/5 transition-all text-center"
+              >
+                Explore Collections
+              </Link>
+            </div>
           </div>
         ) : (
           <>
-            <ul className="flex-1 divide-y divide-gold/15 overflow-y-auto">
+            <ul className="flex-1 divide-y divide-gold/25 overflow-y-auto px-4 py-3 space-y-3">
               {items.map((item) => (
                 <CartRow
                   key={item.id}
@@ -108,47 +130,59 @@ export function CartDrawer() {
               ))}
             </ul>
 
-            {/* Footer */}
-            <div className="border-t border-gold/50 bg-ivory px-5 pb-5 pt-4">
+            {/* Bottom Checkout Section */}
+            <div className="border-t border-gold/40 bg-white px-5 pb-6 pt-4 shadow-lg">
               <SubtotalRow subtotal={subtotal} />
-              <p className="mt-1 text-[11px] text-taupe">
-                Shipping & taxes calculated at checkout.
+
+              <p className="mt-1.5 text-xs text-ink/70 font-medium">
+                Inclusive of all taxes. Free insured doorstep delivery.
               </p>
 
-              <div className="mt-4 grid gap-2">
+              {/* Action Buttons */}
+              <div className="mt-4 grid gap-2.5">
                 {checkoutUrl ? (
                   <a
                     href={checkoutUrl}
-                    className="btn-primary inline-flex w-full items-center justify-center gap-2"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-wine transition-all shadow-md"
                   >
-                    Proceed to Checkout
+                    <Lock className="h-4 w-4" />
+                    <span>Proceed to Secure Checkout</span>
+                    <ArrowRight className="h-4 w-4" />
                   </a>
                 ) : (
                   <button
                     disabled
-                    className="btn-primary inline-flex w-full items-center justify-center gap-2 opacity-50"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon/60 py-3.5 text-xs font-bold uppercase tracking-wider text-white cursor-not-allowed"
                   >
-                    Preparing Checkout
+                    <span>Preparing Secure Checkout...</span>
                   </button>
                 )}
+
                 <a
                   href={waHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 border border-maroon/40 bg-[#25D366]/10 px-6 py-3 text-[11px] uppercase tracking-[0.22em] text-maroon hover:bg-[#25D366]/20 transition-colors"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#25D366] bg-[#25D366]/10 py-3 text-xs font-bold uppercase tracking-wider text-[#128C7E] hover:bg-[#25D366] hover:text-white transition-all shadow-sm"
                 >
                   <MessageCircle className="h-4 w-4" />
-                  Order on WhatsApp
+                  <span>Order Directly on WhatsApp</span>
                 </a>
               </div>
 
-              <div className="mt-4 flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-taupe">
-                <span className="inline-flex items-center gap-1.5">
-                  <Truck className="h-3.5 w-3.5" /> Free Shipping
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <ShieldCheck className="h-3.5 w-3.5" /> Authentic
-                </span>
+              {/* Trust Badges */}
+              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-gold/30 pt-3.5 text-center text-[10px] uppercase font-bold tracking-wider text-ink/75">
+                <div className="flex flex-col items-center gap-1">
+                  <Truck className="h-4 w-4 text-gold-deep" />
+                  <span>Free Shipping</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <ShieldCheck className="h-4 w-4 text-gold-deep" />
+                  <span>Silk Mark Pure</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <RotateCcw className="h-4 w-4 text-gold-deep" />
+                  <span>7-Day Returns</span>
+                </div>
               </div>
             </div>
           </>
@@ -158,11 +192,6 @@ export function CartDrawer() {
   );
 }
 
-/**
- * Cart row with optimistic, debounced qty edits.
- * Local `qty` state updates instantly for snappy +/- clicks; the cart context
- * is updated 350ms after the last click to avoid thrashing storage/subtotal.
- */
 function CartRow({
   item,
   onChange,
@@ -178,7 +207,6 @@ function CartRow({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [pulse, setPulse] = useState(false);
 
-  // Sync when the source of truth changes from elsewhere (add-to-cart, etc.)
   useEffect(() => {
     setLocalQty(item.qty);
   }, [item.qty]);
@@ -192,12 +220,10 @@ function CartRow({
     const next = Math.max(0, qty + delta);
     setLocalQty(next);
     setPulse(true);
-    // reset pulse quickly so consecutive clicks re-trigger it
     window.setTimeout(() => setPulse(false), 220);
     commit(next);
   };
 
-  // Flush on unmount so pending edits don't get lost
   useEffect(
     () => () => {
       if (timerRef.current) {
@@ -211,63 +237,69 @@ function CartRow({
   const lineTotal = useCountUp(item.price * qty, 300);
 
   return (
-    <li className="flex gap-4 px-5 py-4">
+    <li className="flex gap-3.5 rounded-2xl border border-gold/35 bg-white p-3.5 shadow-sm">
       <Link
         to="/products/$id"
         params={{ id: item.id }}
         onClick={onCloseCart}
-        className="block h-24 w-20 flex-shrink-0 overflow-hidden bg-beige/40"
+        className="block h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F0E9DC] border border-gold/30"
       >
         <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
       </Link>
-      <div className="flex flex-1 flex-col">
-        <div className="flex items-start justify-between gap-2">
-          <div>
+
+      <div className="flex flex-1 flex-col justify-between min-w-0">
+        <div>
+          <div className="flex items-start justify-between gap-2">
             <Link
               to="/products/$id"
               params={{ id: item.id }}
               onClick={onCloseCart}
-              className="font-serif text-base leading-snug text-ink hover:text-maroon"
+              className="font-serif text-sm sm:text-base font-bold text-ink hover:text-maroon transition-colors line-clamp-2 leading-snug"
             >
               {item.name}
             </Link>
-            {item.weave && (
-              <p className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-gold-deep">
-                {item.weave}
-              </p>
-            )}
+
+            <button
+              aria-label={`Remove ${item.name}`}
+              onClick={onRemove}
+              className="p-1 text-ink/40 hover:text-maroon transition-colors shrink-0"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
           </div>
-          <button
-            aria-label={`Remove ${item.name}`}
-            onClick={onRemove}
-            className="grid h-8 w-8 place-items-center text-taupe hover:text-maroon"
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
+
+          {item.weave && (
+            <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-gold/15 text-[10px] font-bold uppercase tracking-wider text-maroon">
+              {item.weave}
+            </span>
+          )}
         </div>
 
-        <div className="mt-auto flex items-end justify-between pt-2">
-          <div className="inline-flex items-center border border-gold/50">
+        <div className="flex items-center justify-between pt-2 border-t border-gold/20 mt-2">
+          {/* Quantity Controls */}
+          <div className="inline-flex items-center rounded-full border border-maroon/30 bg-[#FAF7F2] p-0.5">
             <button
-              aria-label="Decrease"
+              aria-label="Decrease quantity"
               onClick={() => step(-1)}
-              className="grid h-8 w-8 place-items-center text-ink transition-colors hover:bg-beige/60 active:bg-beige"
+              className="grid h-6 w-6 place-items-center rounded-full text-maroon hover:bg-maroon hover:text-white transition-colors"
             >
-              <Minus className="h-3.5 w-3.5" />
+              <Minus className="h-3 w-3" />
             </button>
-            <span key={qty} className="inline-block w-8 text-center text-sm animate-scale-in">
+            <span key={qty} className="inline-block w-7 text-center text-xs font-bold text-ink">
               {qty}
             </span>
             <button
-              aria-label="Increase"
+              aria-label="Increase quantity"
               onClick={() => step(1)}
-              className="grid h-8 w-8 place-items-center text-ink transition-colors hover:bg-beige/60 active:bg-beige"
+              className="grid h-6 w-6 place-items-center rounded-full text-maroon hover:bg-maroon hover:text-white transition-colors"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-3 w-3" />
             </button>
           </div>
+
+          {/* Price */}
           <p
-            className={`font-serif text-base text-maroon transition-transform duration-200 tabular-nums ${
+            className={`font-serif text-base font-bold text-maroon tabular-nums transition-transform duration-200 ${
               pulse ? "scale-110" : "scale-100"
             }`}
           >
@@ -279,11 +311,11 @@ function CartRow({
   );
 }
 
-/** Animated subtotal with count-up and a subtle flash on change. */
 function SubtotalRow({ subtotal }: { subtotal: number }) {
   const display = useCountUp(subtotal, 450);
   const [flash, setFlash] = useState(false);
   const prevRef = useRef(subtotal);
+
   useEffect(() => {
     if (prevRef.current !== subtotal) {
       setFlash(true);
@@ -295,10 +327,10 @@ function SubtotalRow({ subtotal }: { subtotal: number }) {
 
   return (
     <div className="flex items-center justify-between">
-      <span className="text-xs uppercase tracking-[0.22em] text-taupe">Subtotal</span>
+      <span className="text-xs uppercase tracking-wider font-bold text-ink/70">Subtotal</span>
       <span
-        className={`font-serif text-2xl text-maroon tabular-nums transition-all duration-300 ${
-          flash ? "scale-[1.06] drop-shadow-[0_0_12px_rgba(100,31,42,0.35)]" : "scale-100"
+        className={`font-serif text-2xl font-bold text-maroon tabular-nums transition-all duration-300 ${
+          flash ? "scale-105" : "scale-100"
         }`}
       >
         {formatINR(display)}
