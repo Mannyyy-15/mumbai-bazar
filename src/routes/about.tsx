@@ -22,7 +22,7 @@ import { GUIDES } from "@/lib/guides";
 export const Route = createFileRoute("/about")({
   head: () => {
     const { meta, links } = seo({
-      title: "About Mumbai Bazar | 8 Saree & Lehenga Stores Across Mumbai Since 2009",
+      title: "About Mumbai Bazar | 8 Saree Stores Since 2009",
       description:
         "Learn about Mumbai Bazar — 8 bridal and ethnic wear boutiques across Nalasopara, Virar, Vasai, Bhayandar, and Goregaon. Direct artisan sourcing, Silk Mark purity, and transparent pricing.",
       path: "/about",
@@ -471,7 +471,7 @@ function AboutPage() {
           </h2>
           <p className="mt-4 text-base sm:text-lg text-white/85 max-w-2xl mx-auto font-medium leading-relaxed">
             Conveniently located within 5 minutes of Western Railway stations in Nalasopara, Virar,
-            Vasai, Bhayandar, and Goregaon. Open 7 days a week, 10:00 AM – 9:00 PM.
+            Vasai, Bhayandar, and Goregaon. {SITE.hours.label}.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">

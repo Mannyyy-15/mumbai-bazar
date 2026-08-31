@@ -8,7 +8,7 @@ import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 export const Route = createFileRoute("/wedding-sarees")({
   head: () => {
     const { meta, links } = seo({
-      title: "Dulhan Sarees & Bridal Lehengas | Nalasopara, Virar & Bhayandar — Mumbai Bazar",
+      title: "Dulhan Sarees & Bridal Lehengas | Mumbai Bazar",
       description:
         "Dulhan sarees, designer lehengas and bridal wear for weddings, sangeet and reception. Visit our Nalasopara East store for the widest bridal range, or shop online.",
       path: "/wedding-sarees",
@@ -75,6 +75,7 @@ function WeddingSareesPage() {
         heroImg={IMG.colFestive}
         category="wedding-sarees"
         showHero={false}
+        contentKey="wedding-sarees"
       />
     </div>
   );

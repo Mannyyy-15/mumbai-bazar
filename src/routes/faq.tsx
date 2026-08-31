@@ -20,7 +20,7 @@ import { faqSchema, breadcrumbSchema } from "@/lib/structured-data";
 export const Route = createFileRoute("/faq")({
   head: () => {
     const { meta, links } = seo({
-      title: "Saree FAQs | Silk, Blouse Stitching, Shipping & Returns — Mumbai Bazar",
+      title: "Saree FAQs: Stitching, Shipping & Returns | Mumbai Bazar",
       description:
         "Answers on our saree and lehenga range, store timings and locations, blouse stitching, exchanges and delivery across India.",
       path: "/faq",

@@ -16,7 +16,7 @@ const LOCATOR_FAQS = [
   },
   {
     q: "What are your store timings?",
-    a: "All stores are open every day from 10:00 AM to 9:00 PM, including Sundays. During Diwali and the wedding season we often stay open later — call the store to check.",
+    a: `${SITE.hours.sentence}, including Sundays. During Diwali and the wedding season we often stay open later — call the store to check.`,
   },
   {
     q: "Do all stores stock the same range?",
@@ -27,7 +27,7 @@ const LOCATOR_FAQS = [
 export const Route = createFileRoute("/stores/")({
   head: () => {
     const { meta, links } = seo({
-      title: "Our Stores | Saree Shops in Nalasopara, Virar, Bhayandar & Goregaon — Mumbai Bazar",
+      title: "Saree Shops in Nalasopara, Virar & Mumbai | Mumbai Bazar",
       description: `Find your nearest Mumbai Bazar store. ${OUTLET_COUNT} saree and lehenga shops across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. Open daily 10 AM–9 PM.`,
       path: "/stores",
       keywords: [

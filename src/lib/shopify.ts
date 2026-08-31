@@ -23,6 +23,7 @@ type ProductNode = {
   vendor?: string;
   productType?: string;
   description?: string;
+  tags?: string[];
   featuredImage?: { url: string; altText?: string | null };
   images?: { nodes: Array<{ url: string; altText?: string | null }> };
   priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
@@ -33,7 +34,7 @@ type ProductNode = {
 type ShopifyResponse<T> = { data?: T; errors?: Array<{ message: string }> };
 
 const PRODUCT_FIELDS = `
-  id handle title vendor productType description
+  id handle title vendor productType description tags
   featuredImage { url altText }
   images(first: 8) { nodes { url altText } }
   priceRange { minVariantPrice { amount currencyCode } }
@@ -62,7 +63,7 @@ export const FLIPKART_PRODUCTS: ShopifyProduct[] = [
     category: ["new-arrivals", "silk-sarees", "festive-edit"],
     img: "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/m/t/z/free-saree-mumbaibazar-unstitched-original-imahqnqzjdynhab6.jpeg?q=80",
     details: {
-      fabric: "Breathable Handloom Cotton Silk with Gold Tested Zari",
+      fabric: "Cotton silk blend with woven zari",
       drape: "Crisp, neat, structured pleats that hold form effortlessly",
       blousePiece: "0.80 m unstitched matching magenta cotton silk piece",
       length: "5.5 m saree + 0.8 m blouse",
@@ -132,15 +133,19 @@ function getWeaveFromProduct(node: ProductNode): string {
   if (title.includes("banarasi")) return "Banarasi Silk";
   if (title.includes("kanjivaram")) return "Kanjivaram Silk";
   if (title.includes("paithani")) return "Paithani Weave";
-  if (title.includes("chanderi")) return "Chanderi Handloom";
-  if (title.includes("kalamkari")) return "Kalamkari Handloom";
-  if (title.includes("tissue")) return "Metallic Tissue Silk";
-  if (title.includes("organza")) return "Pure Silk Organza";
-  if (title.includes("tussar")) return "Tussar Silk";
-  if (title.includes("georgette")) return "Pure Silk Georgette";
-  if (title.includes("chiffon")) return "Pure Silk Chiffon";
-  if (title.includes("saree") || title.includes("silk")) return "Heritage Pure Silk";
-  return "Handwoven Heritage Silk";
+  if (title.includes("chanderi")) return "Chanderi Weave";
+  if (title.includes("kalamkari")) return "Kalamkari Print";
+  if (title.includes("tissue")) return "Tissue Weave";
+  if (title.includes("organza")) return "Organza";
+  if (title.includes("tussar")) return "Tussar";
+  if (title.includes("georgette")) return "Georgette";
+  if (title.includes("chiffon")) return "Chiffon";
+  // Final fallbacks describe the garment, not its provenance or purity. These
+  // are applied to ANY untitled-match product, so "Handwoven Heritage Silk" and
+  // "Heritage Pure Silk" were asserting fibre content and loom type about stock
+  // nobody had inspected.
+  if (title.includes("saree") || title.includes("silk")) return "Silk-Blend Saree";
+  return "Saree";
 }
 
 const FLIPKART_GALLERIES: Record<string, { gallery: string[]; name?: string; weave?: string }> = {
@@ -218,16 +223,39 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
   if (!image || !variant) return null;
   const price = Number(node.priceRange.minVariantPrice.amount);
   const text = `${node.title} ${node.productType || ""} ${node.vendor || ""}`.toLowerCase();
+  const tags = new Set((node.tags ?? []).map((t) => t.trim().toLowerCase()));
+
+  /*
+   * Category assignment reads Shopify TAGS first, falling back to title text.
+   *
+   * The tags are already maintained as exact category slugs ("wedding-sarees",
+   * "everyday-sarees", "festive-edit", "silk-sarees"), but they were not even
+   * being fetched — categories were inferred purely from the title, product type
+   * and vendor. That guessed wrong in both directions: /wedding-sarees and
+   * /everyday-sarees rendered EMPTY despite four and three tagged products
+   * respectively, because no title happens to contain the word "wedding" or
+   * "everyday". Meanwhile every product was force-added to "new-arrivals".
+   *
+   * Tags are the merchandiser's explicit intent, so they win. Text matching is
+   * kept only as a fallback for products that have not been tagged yet.
+   */
+  const inCat = (slug: string, ...textHints: string[]) =>
+    tags.has(slug) || textHints.some((h) => text.includes(h));
+
   // Each spread is annotated so TypeScript keeps the literal union rather than
   // widening the branches to string[].
   const category: Product["category"] = [
-    "new-arrivals",
-    ...(text.includes("wedding") || text.includes("bridal") ? (["wedding-sarees"] as const) : []),
-    ...(text.includes("silk") || text.includes("banarasi") || text.includes("kanjivaram")
+    ...(inCat("new-arrivals") || tags.size === 0 ? (["new-arrivals"] as const) : []),
+    ...(inCat("wedding-sarees", "wedding", "bridal", "dulhan")
+      ? (["wedding-sarees"] as const)
+      : []),
+    ...(inCat("silk-sarees", "silk", "banarasi", "kanjivaram", "paithani")
       ? (["silk-sarees"] as const)
       : []),
-    ...(text.includes("festive") ? (["festive-edit"] as const) : []),
-    ...(text.includes("everyday") ? (["everyday-sarees"] as const) : []),
+    ...(inCat("festive-edit", "festive") ? (["festive-edit"] as const) : []),
+    ...(inCat("everyday-sarees", "everyday", "daily wear", "office")
+      ? (["everyday-sarees"] as const)
+      : []),
   ];
   const fkData = FLIPKART_GALLERIES[node.handle];
   const gallery = fkData?.gallery && fkData.gallery.length > 0

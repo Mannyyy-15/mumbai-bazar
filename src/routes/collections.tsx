@@ -9,7 +9,7 @@ import { useCatalog } from "@/lib/catalog-context";
 export const Route = createFileRoute("/collections")({
   head: () => {
     const { meta, links } = seo({
-      title: "Saree Collections | Bridal, Banarasi, Kanjivaram & Festive — Mumbai Bazar",
+      title: "Saree Collections: Bridal & Banarasi | Mumbai Bazar",
       description:
         "Explore curated Indian saree collections — Bridal heirlooms, Banarasi katan silks, Kanjivaram classics, festive edits, and effortless everyday drapes.",
       path: "/collections",

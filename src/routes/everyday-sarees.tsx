@@ -8,7 +8,7 @@ import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 export const Route = createFileRoute("/everyday-sarees")({
   head: () => {
     const { meta, links } = seo({
-      title: "Everyday & Office Wear Sarees Online | Soft Silk & Cotton — Mumbai Bazar",
+      title: "Everyday & Office Wear Sarees | Mumbai Bazar",
       description:
         "Lightweight everyday sarees for office wear, family functions and daily drapes. Soft silks, cotton blends and easy-care fabrics with free shipping across India.",
       path: "/everyday-sarees",
@@ -73,6 +73,7 @@ function EverydaySareesPage() {
         heroImg={IMG.colPuresilk}
         category="everyday-sarees"
         showHero={false}
+        contentKey="everyday-sarees"
       />
     </div>
   );

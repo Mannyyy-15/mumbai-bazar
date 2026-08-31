@@ -17,7 +17,7 @@ import { IMG } from "@/lib/site-data";
 export const Route = createFileRoute("/care-guide")({
   head: () => {
     const { meta, links } = seo({
-      title: "How to Care for Silk Sarees | Washing & Storage Guide — Mumbai Bazar",
+      title: "How to Care for Silk Sarees | Mumbai Bazar",
       description:
         "How to wash, store, iron and protect silk sarees — practical care advice for zari, natural dyes and Mumbai humidity.",
       path: "/care-guide",

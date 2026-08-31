@@ -8,7 +8,7 @@ import { SITE } from "@/lib/seo";
 export const Route = createFileRoute("/legal-notice")({
   head: () => {
     const { meta, links } = seo({
-      title: "Legal Notice & Imprint | Statutory Disclosures — Mumbai Bazar",
+      title: "Legal Notice & Imprint | Mumbai Bazar",
       description:
         "Official statutory disclosures and legal imprint of Mumbai Bazar pursuant to the Consumer Protection (E-Commerce) Rules, 2020 and Information Technology Act.",
       path: "/legal-notice",
