@@ -39,63 +39,63 @@ export function TrousseauBuilder() {
   };
 
   return (
-    <section className="bg-beige/20 py-16 md:py-24 border-y border-gold/40">
+    <section className="bg-[#FAF7F2] py-16 md:py-24 border-y border-[#A27633]/40">
       <div className="mx-auto max-w-[1360px] px-4 md:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs uppercase tracking-[0.16em] text-maroon font-bold mb-3">
-            <Gift className="h-3.5 w-3.5 text-gold-deep" /> Luxury Bridal Offer
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-maroon/20 bg-white text-xs uppercase tracking-[0.16em] text-maroon font-bold mb-3 shadow-sm">
+            <Gift className="h-3.5 w-3.5 text-maroon" /> Luxury Bridal Offer
           </span>
-          <h2 className="font-serif text-3xl md:text-5xl text-maroon font-medium leading-tight">
+          <h2 className="font-serif text-3xl md:text-5xl text-maroon font-semibold leading-tight">
             Build Your 3-Piece Trousseau Box
           </h2>
-          <p className="mt-3 text-sm md:text-base text-ink/85 font-medium leading-relaxed">
+          <p className="mt-3 text-sm md:text-base text-ink/80 font-normal leading-relaxed">
             Select 3 sarees for your wedding functions to receive our complimentary gold-embossed
             Velvet Trousseau Chest + 15% bundle savings.
           </p>
         </div>
 
         {/* Selected Progress Bar */}
-        <div className="max-w-xl mx-auto mb-10 p-4 rounded-2xl bg-ivory border border-gold/50 shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex -space-x-3">
+        <div className="max-w-xl mx-auto mb-10 p-5 rounded-2xl bg-white border border-[#A27633]/60 shadow-md flex items-center justify-between">
+          <div className="flex items-center gap-3.5">
+            <div className="flex -space-x-2">
               {[0, 1, 2].map((idx) => {
                 const item = selected[idx];
                 return (
                   <div
                     key={idx}
-                    className={`h-12 w-10 rounded-lg border-2 overflow-hidden flex items-center justify-center ${
+                    className={`h-12 w-11 rounded-lg border-2 overflow-hidden flex items-center justify-center shadow-sm ${
                       item
-                        ? "border-maroon bg-white"
-                        : "border-dashed border-gold/50 bg-beige/30 text-gold-deep"
+                        ? "border-maroon bg-white ring-1 ring-maroon"
+                        : "border-dashed border-[#A27633]/70 bg-[#FAF7F2] text-[#744D1E]"
                     }`}
                   >
                     {item ? (
                       <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
                     ) : (
-                      <span className="text-xs font-serif font-bold">{idx + 1}</span>
+                      <span className="text-sm font-sans font-bold text-[#744D1E]">{idx + 1}</span>
                     )}
                   </div>
                 );
               })}
             </div>
             <div>
-              <p className="text-xs font-semibold text-maroon uppercase tracking-wider">
+              <p className="text-xs font-bold text-maroon uppercase tracking-wider">
                 {selected.length} of 3 Sarees Selected
               </p>
-              <p className="text-[11px] text-taupe">
+              <p className="text-xs text-ink/80 font-medium mt-0.5">
                 {selected.length === 3
                   ? "Trousseau unlocked! 15% discount applied."
-                  : `Add ${3 - selected.length} more pieces.`}
+                  : `Add ${3 - selected.length} more piece${3 - selected.length > 1 ? "s" : ""} to unlock.`}
               </p>
             </div>
           </div>
 
           {selected.length === 3 && (
             <div className="text-right">
-              <span className="text-[10px] uppercase tracking-widest text-taupe block line-through">
+              <span className="text-xs uppercase tracking-wider text-taupe block line-through font-medium">
                 ₹ {rawTotal.toLocaleString("en-IN")}
               </span>
-              <span className="font-serif text-xl font-bold text-maroon">
+              <span className="font-sans text-xl font-bold text-maroon">
                 ₹ {finalTotal.toLocaleString("en-IN")}
               </span>
             </div>
@@ -113,7 +113,7 @@ export function TrousseauBuilder() {
                 className={`relative group cursor-pointer rounded-2xl overflow-hidden border transition-all duration-300 ${
                   isSelected
                     ? "border-maroon ring-2 ring-maroon shadow-lg"
-                    : "border-gold/40 bg-ivory hover:border-gold hover:-translate-y-1"
+                    : "border-[#A27633]/60 bg-white hover:border-[#A27633] shadow-sm hover:shadow-md hover:-translate-y-1"
                 }`}
               >
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
@@ -138,20 +138,31 @@ export function TrousseauBuilder() {
                   )}
 
                   {isSelected && (
-                    <div className="absolute inset-0 z-10 bg-maroon/20 backdrop-blur-[1px] flex items-center justify-center">
-                      <span className="h-10 w-10 rounded-full bg-maroon text-ivory flex items-center justify-center shadow-lg">
+                    <div className="absolute inset-0 z-10 bg-maroon/30 backdrop-blur-[1px] flex items-center justify-center">
+                      <span className="h-10 w-10 rounded-full bg-maroon text-ivory flex items-center justify-center shadow-lg border border-ivory">
                         <Check className="h-6 w-6" />
                       </span>
                     </div>
                   )}
                 </div>
 
-                <div className="p-3">
-                  <span className="text-[9px] uppercase tracking-widest text-gold-deep font-semibold block">
+                <div className="p-3.5 sm:p-4 bg-white flex flex-col space-y-1">
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-[#744D1E] font-bold truncate block">
                     {p.weave}
                   </span>
-                  <h4 className="font-serif text-sm text-maroon font-medium truncate">{p.name}</h4>
-                  <p className="font-sans text-base text-ink font-bold mt-1">{p.price}</p>
+                  <h4 className="font-sans text-sm sm:text-base text-maroon font-bold truncate group-hover:text-[#744D1E] transition-colors">
+                    {p.name}
+                  </h4>
+                  <div className="flex items-baseline gap-2 pt-1 border-t border-[#A27633]/30 mt-0.5">
+                    <span className="font-sans text-base sm:text-lg text-ink font-bold tracking-tight">
+                      {p.price}
+                    </span>
+                    {p.original && (
+                      <span className="text-xs text-taupe font-medium line-through font-sans">
+                        {p.original}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             );
@@ -163,10 +174,10 @@ export function TrousseauBuilder() {
           <button
             disabled={selected.length < 3}
             onClick={handleAddTrousseauToCart}
-            className={`px-10 py-4 rounded-full text-xs uppercase tracking-[0.25em] font-medium transition-all shadow-xl inline-flex items-center gap-3 ${
+            className={`px-10 py-4 rounded-full text-xs uppercase tracking-[0.25em] font-bold transition-all shadow-xl inline-flex items-center gap-3 ${
               selected.length === 3
-                ? "bg-maroon text-ivory hover:bg-wine cursor-pointer"
-                : "bg-taupe/30 text-taupe cursor-not-allowed"
+                ? "bg-maroon text-ivory hover:bg-wine cursor-pointer scale-105"
+                : "bg-maroon/20 text-maroon/60 cursor-not-allowed border border-maroon/20"
             }`}
           >
             <ShoppingBag className="h-4 w-4" /> Add 3-Piece Trousseau Chest to Bag

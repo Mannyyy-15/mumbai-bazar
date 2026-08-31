@@ -23,8 +23,6 @@ import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useCatalog } from "@/lib/catalog-context";
 import { TrousseauBuilder } from "@/components/site/TrousseauBuilder";
-import { WeavesOfIndiaMap } from "@/components/site/WeavesOfIndiaMap";
-import { RealBridesGallery } from "@/components/site/RealBridesGallery";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -658,105 +656,7 @@ function CollectionStrip() {
   );
 }
 
-/* ---------------- Craftsmanship (The Art of the Handloom) ---------------- */
-function Craftsmanship() {
-  return (
-    <section className="w-full bg-maroon text-ivory py-20 md:py-28 relative overflow-hidden border-y border-gold/50">
-      {/* Decorative background glow */}
-      <div className="absolute -top-32 -left-32 w-96 h-96 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="mx-auto max-w-[1600px] px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center relative z-10">
-        {/* Left Column: Image with Luxury Frame & Badge */}
-        <div className="order-2 md:order-1 relative group">
-          <div className="relative overflow-hidden rounded-2xl border border-gold/50 shadow-2xl">
-            <img
-              src={IMG.craft}
-              alt="Handloom weaver at work"
-              width={800}
-              height={1000}
-              loading="lazy"
-              decoding="async"
-              className="w-full aspect-[4/5] object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-maroon/70 via-transparent to-transparent" />
-          </div>
-
-          {/* Floating store-count badge */}
-          <div className="absolute -bottom-5 -right-5 md:bottom-6 md:-right-6 bg-ivory text-maroon p-4 md:p-5 rounded-2xl shadow-2xl border border-gold/40 flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-maroon text-gold flex items-center justify-center font-serif text-lg font-bold shrink-0">
-              ✓
-            </div>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-maroon">
-                100% Certified
-              </p>
-              <p className="text-[10px] text-maroon/70 uppercase tracking-widest">
-                Across the Western Line
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column: Copy & Stats */}
-        <div className="order-1 md:order-2 max-w-xl">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold/40 bg-gold/10 text-xs tracking-[0.16em] uppercase text-amber-300 font-bold mb-6">
-            <Sparkles className="h-3 w-3" />
-            <span>Eight Stores Near You</span>
-          </div>
-
-          <h3 className="font-serif text-4xl md:text-6xl font-normal leading-tight mb-6">
-            The Art of the <span className="italic font-serif text-gold">Handloom</span>
-          </h3>
-
-          <p className="text-sm md:text-base leading-relaxed mb-8 text-ivory/85">
-            Behind every Mumbai Bazar saree lies the meticulous craftsmanship of master weavers who
-            have preserved ancestral weaving techniques across generations. From raw silk extraction
-            to hand-spun Zari, each drape represents weeks of dedicated artistry.
-          </p>
-
-          {/* Stats Bar */}
-          <div className="grid grid-cols-3 gap-4 p-5 rounded-2xl bg-ivory/5 border border-gold/50 backdrop-blur-sm mb-10">
-            <div>
-              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">2009</p>
-              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">
-                Serving Since
-              </p>
-            </div>
-            <div className="border-l border-gold/50 pl-4">
-              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">10–9</p>
-              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">
-                Open Every Day
-              </p>
-            </div>
-            <div className="border-l border-gold/50 pl-4">
-              <p className="font-serif text-2xl md:text-3xl text-gold font-medium">100%</p>
-              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-ivory/70 mt-1">
-                Stores Near You
-              </p>
-            </div>
-          </div>
-
-          {/* CTAs */}
-          <div className="flex flex-wrap items-center gap-4">
-            <Link
-              to="/our-story"
-              className="px-8 py-3.5 rounded-full bg-gold text-maroon font-bold text-[11px] tracking-[0.25em] uppercase hover:bg-ivory hover:text-maroon transition-all duration-300 shadow-lg hover:shadow-gold/20"
-            >
-              Meet the Weavers
-            </Link>
-            <Link
-              to="/care-guide"
-              className="px-8 py-3.5 rounded-full border border-ivory/40 text-ivory font-medium text-[11px] tracking-[0.25em] uppercase hover:bg-ivory/10 hover:border-ivory transition-all duration-300"
-            >
-              Saree Care Guide
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ---------------- Trust / USP bar ---------------- */
 function TrustBar() {
@@ -1377,10 +1277,7 @@ function Home() {
       <TrousseauBuilder />
       <Bestsellers />
       <ShopByOccasion />
-      <WeavesOfIndiaMap />
       <CollectionStrip />
-      <RealBridesGallery />
-      <Craftsmanship />
       <Testimonials />
       <InstagramGrid />
       <Newsletter />
