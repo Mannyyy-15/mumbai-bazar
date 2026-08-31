@@ -77,18 +77,18 @@ export function Footer() {
 
           <Col title="Customer Care">
             <li>
-              <Link to="/contact" className="hover:text-gold transition-colors">
-                Contact Us
+              <Link to="/contact-information" className="hover:text-gold transition-colors">
+                Contact &amp; Stores
               </Link>
             </li>
             <li>
-              <Link to="/shipping-returns" className="hover:text-gold transition-colors">
-                Shipping Information
+              <Link to="/shipping-policy" className="hover:text-gold transition-colors">
+                Shipping &amp; Delivery
               </Link>
             </li>
             <li>
-              <Link to="/shipping-returns" className="hover:text-gold transition-colors">
-                Returns & Exchanges
+              <Link to="/refund-policy" className="hover:text-gold transition-colors">
+                Returns &amp; Refunds
               </Link>
             </li>
             <li>
@@ -169,15 +169,21 @@ export function Footer() {
               </a>
             </span>
           </p>
-          <div className="flex flex-wrap gap-6">
-            <Link to="/shipping-returns" className="hover:text-gold transition-colors">
+          <div className="flex flex-wrap gap-4 sm:gap-6 text-[11px] sm:text-xs">
+            <Link to="/privacy-policy" className="hover:text-gold transition-colors">
               Privacy Policy
             </Link>
-            <Link to="/shipping-returns" className="hover:text-gold transition-colors">
-              Terms & Conditions
+            <Link to="/terms-of-service" className="hover:text-gold transition-colors">
+              Terms of Service
             </Link>
-            <Link to="/faq" className="hover:text-gold transition-colors">
-              Secure Payments
+            <Link to="/refund-policy" className="hover:text-gold transition-colors">
+              Refund Policy
+            </Link>
+            <Link to="/shipping-policy" className="hover:text-gold transition-colors">
+              Shipping Policy
+            </Link>
+            <Link to="/legal-notice" className="hover:text-gold transition-colors">
+              Legal Notice
             </Link>
           </div>
         </div>

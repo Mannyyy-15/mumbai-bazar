@@ -26,7 +26,13 @@ const STATIC_ENTRIES: Entry[] = [
   { path: "/guides", changefreq: "weekly", priority: "0.7" },
   { path: "/faq", changefreq: "monthly", priority: "0.6" },
   { path: "/contact", changefreq: "monthly", priority: "0.5" },
-  { path: "/shipping-returns", changefreq: "yearly", priority: "0.4" },
+  { path: "/contact-information", changefreq: "monthly", priority: "0.5" },
+  { path: "/shipping-policy", changefreq: "monthly", priority: "0.5" },
+  { path: "/refund-policy", changefreq: "monthly", priority: "0.5" },
+  { path: "/privacy-policy", changefreq: "monthly", priority: "0.5" },
+  { path: "/terms-of-service", changefreq: "monthly", priority: "0.5" },
+  { path: "/legal-notice", changefreq: "monthly", priority: "0.5" },
+  { path: "/shipping-returns", changefreq: "monthly", priority: "0.4" },
 ];
 
 function escapeXml(value: string): string {

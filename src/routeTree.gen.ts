@@ -15,22 +15,29 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as CareGuideRouteImport } from './routes/care-guide'
 import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ContactInformationRouteImport } from './routes/contact-information'
 import { Route as EverydaySareesRouteImport } from './routes/everyday-sarees'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FestiveEditRouteImport } from './routes/festive-edit'
 import { Route as IndexnowKeyDottxtRouteImport } from './routes/indexnow-key[.]txt'
+import { Route as LegalNoticeRouteImport } from './routes/legal-notice'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as NewArrivalsRouteImport } from './routes/new-arrivals'
 import { Route as OurStoryRouteImport } from './routes/our-story'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as ShippingPolicyRouteImport } from './routes/shipping-policy'
 import { Route as ShippingReturnsRouteImport } from './routes/shipping-returns'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SilkSareesRouteImport } from './routes/silk-sarees'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as TrousseauBuilderRouteImport } from './routes/trousseau-builder'
 import { Route as WeddingSareesRouteImport } from './routes/wedding-sarees'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
+import { Route as PoliciesPolicyRouteImport } from './routes/policies.$policy'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
 import { Route as StoresIndexRouteImport } from './routes/stores.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
@@ -65,6 +72,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactInformationRoute = ContactInformationRouteImport.update({
+  id: '/contact-information',
+  path: '/contact-information',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EverydaySareesRoute = EverydaySareesRouteImport.update({
   id: '/everyday-sarees',
   path: '/everyday-sarees',
@@ -85,6 +97,11 @@ const IndexnowKeyDottxtRoute = IndexnowKeyDottxtRouteImport.update({
   path: '/indexnow-key.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LegalNoticeRoute = LegalNoticeRouteImport.update({
+  id: '/legal-notice',
+  path: '/legal-notice',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   id: '/llms.txt',
   path: '/llms.txt',
@@ -100,9 +117,24 @@ const OurStoryRoute = OurStoryRouteImport.update({
   path: '/our-story',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundPolicyRoute = RefundPolicyRouteImport.update({
+  id: '/refund-policy',
+  path: '/refund-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
   id: '/robots.txt',
   path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShippingPolicyRoute = ShippingPolicyRouteImport.update({
+  id: '/shipping-policy',
+  path: '/shipping-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShippingReturnsRoute = ShippingReturnsRouteImport.update({
@@ -125,6 +157,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
+  id: '/terms-of-service',
+  path: '/terms-of-service',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrousseauBuilderRoute = TrousseauBuilderRouteImport.update({
   id: '/trousseau-builder',
   path: '/trousseau-builder',
@@ -143,6 +180,11 @@ const GuidesIndexRoute = GuidesIndexRouteImport.update({
 const GuidesSlugRoute = GuidesSlugRouteImport.update({
   id: '/guides/$slug',
   path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliciesPolicyRoute = PoliciesPolicyRouteImport.update({
+  id: '/policies/$policy',
+  path: '/policies/$policy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProductsIdRoute = ProductsIdRouteImport.update({
@@ -168,21 +210,28 @@ export interface FileRoutesByFullPath {
   '/care-guide': typeof CareGuideRoute
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
+  '/contact-information': typeof ContactInformationRoute
   '/everyday-sarees': typeof EverydaySareesRoute
   '/faq': typeof FaqRoute
   '/festive-edit': typeof FestiveEditRoute
   '/indexnow-key.txt': typeof IndexnowKeyDottxtRoute
+  '/legal-notice': typeof LegalNoticeRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/new-arrivals': typeof NewArrivalsRoute
   '/our-story': typeof OurStoryRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/shipping-policy': typeof ShippingPolicyRoute
   '/shipping-returns': typeof ShippingReturnsRoute
   '/shop': typeof ShopRoute
   '/silk-sarees': typeof SilkSareesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
   '/trousseau-builder': typeof TrousseauBuilderRoute
   '/wedding-sarees': typeof WeddingSareesRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/policies/$policy': typeof PoliciesPolicyRoute
   '/products/$id': typeof ProductsIdRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/guides/': typeof GuidesIndexRoute
@@ -195,21 +244,28 @@ export interface FileRoutesByTo {
   '/care-guide': typeof CareGuideRoute
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
+  '/contact-information': typeof ContactInformationRoute
   '/everyday-sarees': typeof EverydaySareesRoute
   '/faq': typeof FaqRoute
   '/festive-edit': typeof FestiveEditRoute
   '/indexnow-key.txt': typeof IndexnowKeyDottxtRoute
+  '/legal-notice': typeof LegalNoticeRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/new-arrivals': typeof NewArrivalsRoute
   '/our-story': typeof OurStoryRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/shipping-policy': typeof ShippingPolicyRoute
   '/shipping-returns': typeof ShippingReturnsRoute
   '/shop': typeof ShopRoute
   '/silk-sarees': typeof SilkSareesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
   '/trousseau-builder': typeof TrousseauBuilderRoute
   '/wedding-sarees': typeof WeddingSareesRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/policies/$policy': typeof PoliciesPolicyRoute
   '/products/$id': typeof ProductsIdRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/guides': typeof GuidesIndexRoute
@@ -223,21 +279,28 @@ export interface FileRoutesById {
   '/care-guide': typeof CareGuideRoute
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
+  '/contact-information': typeof ContactInformationRoute
   '/everyday-sarees': typeof EverydaySareesRoute
   '/faq': typeof FaqRoute
   '/festive-edit': typeof FestiveEditRoute
   '/indexnow-key.txt': typeof IndexnowKeyDottxtRoute
+  '/legal-notice': typeof LegalNoticeRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/new-arrivals': typeof NewArrivalsRoute
   '/our-story': typeof OurStoryRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/refund-policy': typeof RefundPolicyRoute
   '/robots.txt': typeof RobotsDottxtRoute
+  '/shipping-policy': typeof ShippingPolicyRoute
   '/shipping-returns': typeof ShippingReturnsRoute
   '/shop': typeof ShopRoute
   '/silk-sarees': typeof SilkSareesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
   '/trousseau-builder': typeof TrousseauBuilderRoute
   '/wedding-sarees': typeof WeddingSareesRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/policies/$policy': typeof PoliciesPolicyRoute
   '/products/$id': typeof ProductsIdRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/guides/': typeof GuidesIndexRoute
@@ -252,21 +315,28 @@ export interface FileRouteTypes {
     | '/care-guide'
     | '/collections'
     | '/contact'
+    | '/contact-information'
     | '/everyday-sarees'
     | '/faq'
     | '/festive-edit'
     | '/indexnow-key.txt'
+    | '/legal-notice'
     | '/llms.txt'
     | '/new-arrivals'
     | '/our-story'
+    | '/privacy-policy'
+    | '/refund-policy'
     | '/robots.txt'
+    | '/shipping-policy'
     | '/shipping-returns'
     | '/shop'
     | '/silk-sarees'
     | '/sitemap.xml'
+    | '/terms-of-service'
     | '/trousseau-builder'
     | '/wedding-sarees'
     | '/guides/$slug'
+    | '/policies/$policy'
     | '/products/$id'
     | '/stores/$slug'
     | '/guides/'
@@ -279,21 +349,28 @@ export interface FileRouteTypes {
     | '/care-guide'
     | '/collections'
     | '/contact'
+    | '/contact-information'
     | '/everyday-sarees'
     | '/faq'
     | '/festive-edit'
     | '/indexnow-key.txt'
+    | '/legal-notice'
     | '/llms.txt'
     | '/new-arrivals'
     | '/our-story'
+    | '/privacy-policy'
+    | '/refund-policy'
     | '/robots.txt'
+    | '/shipping-policy'
     | '/shipping-returns'
     | '/shop'
     | '/silk-sarees'
     | '/sitemap.xml'
+    | '/terms-of-service'
     | '/trousseau-builder'
     | '/wedding-sarees'
     | '/guides/$slug'
+    | '/policies/$policy'
     | '/products/$id'
     | '/stores/$slug'
     | '/guides'
@@ -306,21 +383,28 @@ export interface FileRouteTypes {
     | '/care-guide'
     | '/collections'
     | '/contact'
+    | '/contact-information'
     | '/everyday-sarees'
     | '/faq'
     | '/festive-edit'
     | '/indexnow-key.txt'
+    | '/legal-notice'
     | '/llms.txt'
     | '/new-arrivals'
     | '/our-story'
+    | '/privacy-policy'
+    | '/refund-policy'
     | '/robots.txt'
+    | '/shipping-policy'
     | '/shipping-returns'
     | '/shop'
     | '/silk-sarees'
     | '/sitemap.xml'
+    | '/terms-of-service'
     | '/trousseau-builder'
     | '/wedding-sarees'
     | '/guides/$slug'
+    | '/policies/$policy'
     | '/products/$id'
     | '/stores/$slug'
     | '/guides/'
@@ -334,21 +418,28 @@ export interface RootRouteChildren {
   CareGuideRoute: typeof CareGuideRoute
   CollectionsRoute: typeof CollectionsRoute
   ContactRoute: typeof ContactRoute
+  ContactInformationRoute: typeof ContactInformationRoute
   EverydaySareesRoute: typeof EverydaySareesRoute
   FaqRoute: typeof FaqRoute
   FestiveEditRoute: typeof FestiveEditRoute
   IndexnowKeyDottxtRoute: typeof IndexnowKeyDottxtRoute
+  LegalNoticeRoute: typeof LegalNoticeRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   NewArrivalsRoute: typeof NewArrivalsRoute
   OurStoryRoute: typeof OurStoryRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  RefundPolicyRoute: typeof RefundPolicyRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
+  ShippingPolicyRoute: typeof ShippingPolicyRoute
   ShippingReturnsRoute: typeof ShippingReturnsRoute
   ShopRoute: typeof ShopRoute
   SilkSareesRoute: typeof SilkSareesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsOfServiceRoute: typeof TermsOfServiceRoute
   TrousseauBuilderRoute: typeof TrousseauBuilderRoute
   WeddingSareesRoute: typeof WeddingSareesRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
+  PoliciesPolicyRoute: typeof PoliciesPolicyRoute
   ProductsIdRoute: typeof ProductsIdRoute
   StoresSlugRoute: typeof StoresSlugRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
@@ -399,6 +490,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact-information': {
+      id: '/contact-information'
+      path: '/contact-information'
+      fullPath: '/contact-information'
+      preLoaderRoute: typeof ContactInformationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/everyday-sarees': {
       id: '/everyday-sarees'
       path: '/everyday-sarees'
@@ -427,6 +525,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexnowKeyDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/legal-notice': {
+      id: '/legal-notice'
+      path: '/legal-notice'
+      fullPath: '/legal-notice'
+      preLoaderRoute: typeof LegalNoticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/llms.txt': {
       id: '/llms.txt'
       path: '/llms.txt'
@@ -448,11 +553,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OurStoryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund-policy': {
+      id: '/refund-policy'
+      path: '/refund-policy'
+      fullPath: '/refund-policy'
+      preLoaderRoute: typeof RefundPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/robots.txt': {
       id: '/robots.txt'
       path: '/robots.txt'
       fullPath: '/robots.txt'
       preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shipping-policy': {
+      id: '/shipping-policy'
+      path: '/shipping-policy'
+      fullPath: '/shipping-policy'
+      preLoaderRoute: typeof ShippingPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shipping-returns': {
@@ -483,6 +609,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terms-of-service': {
+      id: '/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof TermsOfServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trousseau-builder': {
       id: '/trousseau-builder'
       path: '/trousseau-builder'
@@ -509,6 +642,13 @@ declare module '@tanstack/react-router' {
       path: '/guides/$slug'
       fullPath: '/guides/$slug'
       preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/policies/$policy': {
+      id: '/policies/$policy'
+      path: '/policies/$policy'
+      fullPath: '/policies/$policy'
+      preLoaderRoute: typeof PoliciesPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/products/$id': {
@@ -542,21 +682,28 @@ const rootRouteChildren: RootRouteChildren = {
   CareGuideRoute: CareGuideRoute,
   CollectionsRoute: CollectionsRoute,
   ContactRoute: ContactRoute,
+  ContactInformationRoute: ContactInformationRoute,
   EverydaySareesRoute: EverydaySareesRoute,
   FaqRoute: FaqRoute,
   FestiveEditRoute: FestiveEditRoute,
   IndexnowKeyDottxtRoute: IndexnowKeyDottxtRoute,
+  LegalNoticeRoute: LegalNoticeRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   NewArrivalsRoute: NewArrivalsRoute,
   OurStoryRoute: OurStoryRoute,
+  PrivacyPolicyRoute: PrivacyPolicyRoute,
+  RefundPolicyRoute: RefundPolicyRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
+  ShippingPolicyRoute: ShippingPolicyRoute,
   ShippingReturnsRoute: ShippingReturnsRoute,
   ShopRoute: ShopRoute,
   SilkSareesRoute: SilkSareesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsOfServiceRoute: TermsOfServiceRoute,
   TrousseauBuilderRoute: TrousseauBuilderRoute,
   WeddingSareesRoute: WeddingSareesRoute,
   GuidesSlugRoute: GuidesSlugRoute,
+  PoliciesPolicyRoute: PoliciesPolicyRoute,
   ProductsIdRoute: ProductsIdRoute,
   StoresSlugRoute: StoresSlugRoute,
   GuidesIndexRoute: GuidesIndexRoute,
