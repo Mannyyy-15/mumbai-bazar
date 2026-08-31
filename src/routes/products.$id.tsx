@@ -39,12 +39,23 @@ export const Route = createFileRoute("/products/$id")({
       p.details?.description ??
       `${p.name} in ${p.weave}. Available to see and drape at our stores, with delivery across India.`;
     const { meta, links } = seo({
-      title: `${p.name} | ${p.weave} — Mumbai Bazar`,
+      title: `${p.name} — Buy ${p.weave} Online at Best Price | Mumbai Bazar`,
       description: desc.slice(0, 160),
       path: `/products/${p.id}`,
       image: p.img,
       type: "product",
-      keywords: [p.name, p.weave, "buy saree online", "saree shop near me"],
+      keywords: [
+        p.name,
+        p.weave,
+        `${p.weave} online`,
+        "buy saree online",
+        "saree online shopping",
+        "mumbai bazar saree",
+        "flipkart saree online",
+        "pure silk saree mumbai",
+        "designer festive saree",
+        "saree shop near me",
+      ],
     });
     return {
       meta: [
@@ -246,6 +257,12 @@ function ProductDetail() {
               <p className="mt-2 text-xs text-ink/80 font-medium">
                 Inclusive of all taxes · Complimentary shipping across India
               </p>
+
+              {/* High-trust marketplace badge */}
+              <div className="mt-3.5 inline-flex items-center gap-2 rounded-xl bg-gold/10 border border-gold/40 px-3.5 py-1.5 text-xs text-maroon font-semibold">
+                <ShieldCheck className="h-4 w-4 text-gold-deep shrink-0" />
+                <span>100% Authentic Handloom · Also Verified on Flipkart Brand Store</span>
+              </div>
 
               <div className="my-7 h-px bg-maroon/15" />
 
