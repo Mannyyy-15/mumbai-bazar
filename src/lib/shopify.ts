@@ -50,33 +50,6 @@ const commonCare = [
 
 export const FLIPKART_PRODUCTS: ShopifyProduct[] = [
   {
-    id: "bollywood-striped-embroidered-silk-saree",
-    handle: "bollywood-striped-embroidered-silk-saree",
-    shopifyProductId: "mb-flipkart-SARHQZXQXYRG6CZY",
-    shopifyVariantId: "mb-var-SARHQZXQXYRG6CZY",
-    name: "Striped Embroidered Bollywood Silk Blend Saree (Crimson Red)",
-    weave: "Bollywood Silk Blend",
-    price: "₹ 1,999",
-    original: "₹ 3,999",
-    tag: "Bestseller",
-    category: ["new-arrivals", "festive-edit", "wedding-sarees"],
-    img: "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/l/z/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqf95asq9w.jpeg?q=80",
-    details: {
-      fabric: "Premium Silk Blend with Detailed Zari & Sequin Embroidery",
-      drape: "Celebrity-style fluid drape with sculpted pallu pleats",
-      blousePiece: "0.80 m unstitched designer matching blouse piece",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Intricate embroidered zari border with scalloped edges",
-      palla: "Rich striped sequin embroidered pallu",
-      care: commonCare,
-      description:
-        "Turn heads with this Crimson Red Striped Embroidered Bollywood Silk Blend Saree by Mumbai Bazar. Featuring contemporary vertical stripe embellishments and delicate threadwork embroidery, this piece effortlessly blends high-fashion celebrity glam with traditional artisanal elegance. Ideal for wedding receptions, sangeet nights, and festive soirées.",
-      gallery: [
-        "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/l/z/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqf95asq9w.jpeg?q=80",
-      ],
-    },
-  },
-  {
     id: "woven-banarasi-cotton-silk-saree-magenta",
     handle: "woven-banarasi-cotton-silk-saree-magenta",
     shopifyProductId: "mb-flipkart-SARHQNQZUFTXMKP6",
@@ -100,141 +73,7 @@ export const FLIPKART_PRODUCTS: ShopifyProduct[] = [
         "Crafted for comfort without compromising grandeur, this Vibrant Magenta Banarasi Cotton Silk Saree combines the regal luster of Banaras with breathable cotton silk. Perfect for morning pujas, temple visits, and family celebrations in Mumbai's tropical climate.",
       gallery: [
         "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/m/t/z/free-saree-mumbaibazar-unstitched-original-imahqnqzjdynhab6.jpeg?q=80",
-      ],
-    },
-  },
-  {
-    id: "woven-bollywood-satin-saree-beige",
-    handle: "woven-bollywood-satin-saree-beige",
-    shopifyProductId: "mb-flipkart-SARHQG2FPHHGDQTV",
-    shopifyVariantId: "mb-var-SARHQG2FPHHGDQTV",
-    name: "Woven Bollywood Satin Silk Saree (Champagne Beige)",
-    weave: "Bollywood Satin Weave",
-    price: "₹ 820",
-    original: "₹ 1,499",
-    tag: "Bestseller",
-    category: ["new-arrivals", "festive-edit", "everyday-sarees"],
-    img: "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/l/u/j/free-saare002-mumbai-bazar-unstitched-original-imahqg2feysfeyex.jpeg?q=80",
-    details: {
-      fabric: "Ultra-Smooth Glossy Satin Silk Blend",
-      drape: "Ultra-fluid liquid silk drape that hugs curves elegantly",
-      blousePiece: "0.80 m unstitched contrast designer blouse piece",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Woven contrast dual-tone border",
-      palla: "Clean minimalist glossy satin pallu with woven edging",
-      care: commonCare,
-      description:
-        "Sleek, fluid, and effortlessly chic, this Champagne Beige Bollywood Satin Saree captures red-carpet minimalism. The satin finish reflects ambient lighting with a liquid sheen, making it an essential pick for cocktail hours, farewells, and evening dinner gatherings.",
-      gallery: [
-        "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/l/u/j/free-saare002-mumbai-bazar-unstitched-original-imahqg2feysfeyex.jpeg?q=80",
-      ],
-    },
-  },
-  {
-    id: "cream-floral-paisley-jacquard-saree",
-    handle: "cream-floral-paisley-jacquard-saree",
-    shopifyProductId: "mb-flipkart-SARHQNM3HEKU9AKU",
-    shopifyVariantId: "mb-var-SARHQNM3HEKU9AKU",
-    name: "Cream Jacquard Woven Daily Wear Saree (Floral Paisley)",
-    weave: "Jacquard Woven Silk",
-    price: "₹ 898",
-    original: "₹ 1,899",
-    tag: "Bestseller",
-    category: ["new-arrivals", "everyday-sarees", "silk-sarees"],
-    img: "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/u/j/free-saree-mumbaibazar-unstitched-original-imahqnm372fe3mhk.jpeg?q=80",
-    details: {
-      fabric: "Soft Jacquard Weave Cotton Silk",
-      drape: "Lightweight, breathable, and zero-fuss daily drape",
-      blousePiece: "0.80 m unstitched matching jacquard blouse",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Geometric jacquard border",
-      palla: "Traditional paisley floral printed jacquard pallu",
-      care: commonCare,
-      description:
-        "An everyday luxury essential: Cream Jacquard Woven Saree adorned with delicate geometric and paisley motifs. Woven with soft touch threads for pleasant all-day wear at the office, festive get-togethers, or casual social outings.",
-      gallery: [
-        "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/u/j/free-saree-mumbaibazar-unstitched-original-imahqnm372fe3mhk.jpeg?q=80",
-      ],
-    },
-  },
-  {
-    id: "pearl-white-floral-jacquard-saree",
-    handle: "pearl-white-floral-jacquard-saree",
-    shopifyProductId: "mb-flipkart-SARHQNM3NGNVF5DZ",
-    shopifyVariantId: "mb-var-SARHQNM3NGNVF5DZ",
-    name: "Pearl White Floral Jacquard Daily Wear Saree",
-    weave: "Jacquard Woven Silk",
-    price: "₹ 898",
-    original: "₹ 1,899",
-    tag: "New",
-    category: ["new-arrivals", "everyday-sarees", "silk-sarees"],
-    img: "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/a/6/b/free-saree-mumbaibazar-unstitched-original-imahqnm3rpfehfcj.jpeg?q=80",
-    details: {
-      fabric: "Premium Jacquard Cotton Silk Blend",
-      drape: "Crisp, graceful fall with easy pin-up pleating",
-      blousePiece: "0.80 m unstitched matching white jacquard piece",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Woven dual-tone jacquard border",
-      palla: "Heritage floral motifs on pearl white base",
-      care: commonCare,
-      description:
-        "Serene Pearl White Jacquard Saree engineered with soft-finish yarn. Features botanical floral motifs and subtle self-textured jacquard weaves, ideal for daylight ceremonies, poojas, and office elegance.",
-      gallery: [
-        "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/a/6/b/free-saree-mumbaibazar-unstitched-original-imahqnm3rpfehfcj.jpeg?q=80",
-      ],
-    },
-  },
-  {
-    id: "crimson-red-paisley-jacquard-saree",
-    handle: "crimson-red-paisley-jacquard-saree",
-    shopifyProductId: "mb-flipkart-SARHQNM3EBNEA22W",
-    shopifyVariantId: "mb-var-SARHQNM3EBNEA22W",
-    name: "Crimson Red Paisley Jacquard Festive Saree",
-    weave: "Jacquard Woven Silk",
-    price: "₹ 898",
-    original: "₹ 1,899",
-    tag: "Bestseller",
-    category: ["new-arrivals", "festive-edit", "wedding-sarees"],
-    img: "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/g/o/free-saree-mumbaibazar-unstitched-original-imahqnm3y5zmhhfc.jpeg?q=80",
-    details: {
-      fabric: "Festive Jacquard Art Silk with Zari Accents",
-      drape: "Rich, structured pleats with radiant festive sheen",
-      blousePiece: "0.80 m unstitched matching crimson blouse piece",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Traditional gold-touched jacquard border",
-      palla: "Elaborate paisley and mandala motifs",
-      care: commonCare,
-      description:
-        "Celebration-ready Crimson Red Jacquard Saree with vibrant festive paisley motifs. Blends festive warmth with lightweight comfort, making it a standout choice for Karwa Chauth, Diwali, and family gatherings.",
-      gallery: [
-        "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/g/o/free-saree-mumbaibazar-unstitched-original-imahqnm3y5zmhhfc.jpeg?q=80",
-      ],
-    },
-  },
-  {
-    id: "peacock-blue-floral-jacquard-saree",
-    handle: "peacock-blue-floral-jacquard-saree",
-    shopifyProductId: "mb-flipkart-SARHQNM3YTA2HT4S",
-    shopifyVariantId: "mb-var-SARHQNM3YTA2HT4S",
-    name: "Royal Peacock Blue Floral Jacquard Celebration Saree",
-    weave: "Jacquard Woven Silk",
-    price: "₹ 898",
-    original: "₹ 1,899",
-    tag: "New",
-    category: ["new-arrivals", "festive-edit", "everyday-sarees"],
-    img: "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/n/d/q/free-saree-mumbaibazar-unstitched-original-imahqnm3yg9tbb8y.jpeg?q=80",
-    details: {
-      fabric: "Lustrous Jacquard Cotton Silk",
-      drape: "Fluid, featherlight, stays in place all day",
-      blousePiece: "0.80 m unstitched matching peacock blue blouse",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Contrasting geometric jacquard weave border",
-      palla: "Intricate peacock and floral jaal pallu",
-      care: commonCare,
-      description:
-        "Royal Peacock Blue Jacquard Saree radiating deep jewel-toned sophistication. Designed with intricate all-over floral weaving, ideal for evening receptions, festival dinners, and celebratory events.",
-      gallery: [
-        "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/n/d/q/free-saree-mumbaibazar-unstitched-original-imahqnm3yg9tbb8y.jpeg?q=80",
+        "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/m/o/q/free-saree-mumbaibazar-unstitched-original-imahqnqzyuyqgtnz.jpeg?q=80",
       ],
     },
   },
@@ -304,6 +143,75 @@ function getWeaveFromProduct(node: ProductNode): string {
   return "Handwoven Heritage Silk";
 }
 
+const FLIPKART_GALLERIES: Record<string, { gallery: string[]; name?: string; weave?: string }> = {
+  "meher-wine-banarasi-silk-saree": {
+    name: "Champagne Beige Woven Saree with Embroidered Blouse",
+    weave: "Bollywood Woven Satin",
+    gallery: [
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/l/u/j/free-saare002-mumbai-bazar-unstitched-original-imahqg2feysfeyex.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/c/1/m/free-saare002-mumbai-bazar-unstitched-original-imahqg2frzqbkndr.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/c/i/d/free-saare002-mumbai-bazar-unstitched-original-imahqg2fvghk8sve.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/v/x/p/free-saare002-mumbai-bazar-unstitched-original-imahqhbcjcvnzybc.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/l/2/u/free-saare002-mumbai-bazar-unstitched-original-imahqg2frrv4np9h.jpeg?q=80",
+    ],
+  },
+  "gulabi-shringar-saree": {
+    name: "Gulabi Shringar Striped Embroidered Saree",
+    weave: "Bollywood Silk Blend",
+    gallery: [
+      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/f/l/z/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqf95asq9w.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/e/o/l/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqhvkbu8wu.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/l/u/k/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqnbtgyaja.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/y/d/i/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqrubyay2t.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/t/9/x/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqwvyszsth.jpeg?q=80",
+    ],
+  },
+  "rangrez-royale-saree": {
+    name: "Rangrez Royale Crimson Paisley Jacquard Saree",
+    weave: "Jacquard Woven Silk",
+    gallery: [
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/g/o/free-saree-mumbaibazar-unstitched-original-imahqnm3y5zmhhfc.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/h/y/9/free-saree-mumbaibazar-unstitched-original-imahqnm3gb7gwsdk.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/o/m/v/free-saree-mumbaibazar-unstitched-original-imahqnm3hzmphghf.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/7/y/y/free-saree-mumbaibazar-unstitched-original-imahqnm3r4djts9v.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/t/i/8/free-saree-mumbaibazar-unstitched-original-imahqnm3hqsxmfhd.jpeg?q=80",
+    ],
+  },
+  "neelam-rangoli-saree": {
+    name: "Neelam Rangoli Peacock Diamond Jacquard Saree",
+    weave: "Jacquard Woven Silk",
+    gallery: [
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/n/d/q/free-saree-mumbaibazar-unstitched-original-imahqnm3yg9tbb8y.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/g/d/w/free-saree-mumbaibazar-unstitched-original-imahqnm3ezryyxs7.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/j/u/x/free-saree-mumbaibazar-unstitched-original-imahqnm3dufy4uga.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/7/y/t/free-saree-mumbaibazar-unstitched-original-imahqnm3dygegzt4.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/o/g/n/free-saree-mumbaibazar-unstitched-original-imahqnm32z3awawb.jpeg?q=80",
+    ],
+  },
+  "rangrez-heritage-saree": {
+    name: "Rangrez Heritage Floral Jacquard Saree",
+    weave: "Jacquard Woven Silk",
+    gallery: [
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/a/6/b/free-saree-mumbaibazar-unstitched-original-imahqnm3rpfehfcj.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/w/x/x/free-saree-mumbaibazar-unstitched-original-imahqnm3ruj5gcnz.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/i/j/b/free-saree-mumbaibazar-unstitched-original-imahqnm336jcnbks.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/0/m/g/free-saree-mumbaibazar-unstitched-original-imahqnm34d6guzqz.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/k/1/f/free-saree-mumbaibazar-unstitched-original-imahqnm3z7k9hqth.jpeg?q=80",
+    ],
+  },
+  "heritage-canvas-saree": {
+    name: "Heritage Canvas Pichwai Block Mosaic Saree",
+    weave: "Jacquard Cotton Silk",
+    gallery: [
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/u/j/free-saree-mumbaibazar-unstitched-original-imahqnm372fe3mhk.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/b/w/e/free-saree-mumbaibazar-unstitched-original-imahqnm3ysjzrbgu.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/1/0/a/free-saree-mumbaibazar-unstitched-original-imahqnm3zq4jse8d.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/y/i/5/free-saree-mumbaibazar-unstitched-original-imahqnm34qjbuxza.jpeg?q=80",
+      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/x/7/8/free-saree-mumbaibazar-unstitched-original-imahqnm36ay2amtb.jpeg?q=80",
+    ],
+  },
+};
+
 function toProduct(node: ProductNode): ShopifyProduct | null {
   const image = node.featuredImage ?? node.images?.nodes[0];
   const variant = node.variants.nodes[0];
@@ -321,9 +229,13 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
     ...(text.includes("festive") ? (["festive-edit"] as const) : []),
     ...(text.includes("everyday") ? (["everyday-sarees"] as const) : []),
   ];
-  const gallery = (node.images?.nodes ?? [image]).map((item) => item.url);
+  const fkData = FLIPKART_GALLERIES[node.handle];
+  const gallery = fkData?.gallery && fkData.gallery.length > 0
+    ? [image.url, ...fkData.gallery.filter((u) => u !== image.url)]
+    : (node.images?.nodes ?? [image]).map((item) => item.url);
   const secondaryImage = gallery.length > 1 ? gallery[1] : undefined;
-  const weave = getWeaveFromProduct(node);
+  const weave = fkData?.weave || getWeaveFromProduct(node);
+  const name = fkData?.name || node.title;
   return {
     id: node.handle,
     handle: node.handle,
@@ -331,7 +243,7 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
     shopifyVariantId: variant.id,
     img: image.url,
     secondaryImg: secondaryImage,
-    name: node.title,
+    name,
     weave,
     price: formatShopifyPrice(
       node.priceRange.minVariantPrice.amount,
@@ -357,7 +269,7 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
         "Store folded in soft muslin",
         "Avoid direct sunlight and perfume contact",
       ],
-      description: node.description || `${node.title}, curated by Mumbai Bazar.`,
+      description: node.description || `${name}, curated by Mumbai Bazar.`,
       gallery,
     },
   };

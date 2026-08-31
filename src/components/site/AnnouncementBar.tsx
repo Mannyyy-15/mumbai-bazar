@@ -9,7 +9,7 @@ export function AnnouncementBar() {
           Festive Edit Now Live · Complimentary Shipping Across India
         </span>
         <a
-          href="https://wa.me/919999999999?text=Hi%20Mumbai%20Bazar"
+          href="https://wa.me/918956664631?text=Hi%20Mumbai%20Bazar"
           target="_blank"
           rel="noreferrer"
           className="hidden items-center gap-2 text-ivory font-semibold hover:underline sm:inline-flex"

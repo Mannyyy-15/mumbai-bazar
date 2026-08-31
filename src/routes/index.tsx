@@ -13,6 +13,7 @@ import {
   Star,
   Quote,
   Heart,
+  Play,
 } from "lucide-react";
 
 import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
@@ -1167,41 +1168,151 @@ function Testimonials() {
 }
 
 /* ---------------- Instagram Lookbook ---------------- */
+const INSTAGRAM_POSTS = [
+  {
+    id: "reel-1",
+    type: "reel" as const,
+    views: "18.4K",
+    likes: "231",
+    title: "Trending Pastel Striped Saree Draping",
+    tag: "Most Viral",
+    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/DcpqIcIsMzP/",
+    img: "/instagram/reel_1_viral_saree.jpg",
+  },
+  {
+    id: "reel-2",
+    type: "reel" as const,
+    views: "9.2K",
+    likes: "91",
+    title: "Tested Zari Bridal Saree Unboxing",
+    tag: "Bridal Edit",
+    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/DcsO6clRZYC/",
+    img: "/instagram/reel_2_trending_nalasopara.jpg",
+  },
+  {
+    id: "reel-3",
+    type: "reel" as const,
+    views: "7.8K",
+    likes: "61",
+    title: "Live from Nalasopara East Boutique",
+    tag: "Boutique Tour",
+    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/DcqiMflsz__/",
+    img: "/instagram/reel_3_trending_shop.jpg",
+  },
+  {
+    id: "reel-4",
+    type: "reel" as const,
+    views: "6.5K",
+    likes: "48",
+    title: "Festive Drapes & Designer Silks",
+    tag: "Festive Edit",
+    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/Dcb8SQoNeDN/",
+    img: "/instagram/reel_4_rakhi_special.jpg",
+  },
+  {
+    id: "reel-5",
+    type: "reel" as const,
+    views: "5.9K",
+    likes: "43",
+    title: "Red Zari Dulhan Drape Showcase",
+    tag: "Wedding",
+    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/DcdhObltQ8l/",
+    img: "/instagram/reel_5_viral_saree_shop.jpg",
+  },
+  {
+    id: "post-6",
+    type: "post" as const,
+    views: "4.1K",
+    likes: "56",
+    title: "Bridal Collection & New Varieties",
+    tag: "New Arrivals",
+    href: "https://www.instagram.com/mumbai__bazar__nalasopara/",
+    img: "/instagram/post_6_collection_look.webp",
+  },
+];
+
 function InstagramGrid() {
-  const shots = LOOKS.slice(0, 6);
   return (
-    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-20">
-      <div className="text-center mb-10 md:mb-12">
-        <span className="text-[10px] tracking-[0.4em] uppercase text-maroon/60">@mumbaiBazar</span>
-        <h3 className="mt-3 font-serif text-3xl md:text-4xl lg:text-5xl text-maroon">
-          Drape Diaries
+    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24 border-t border-maroon/10">
+      <div className="text-center mb-10 md:mb-14">
+        <div className="inline-flex items-center gap-2 rounded-full bg-maroon/5 border border-maroon/15 px-4 py-1.5 text-xs text-maroon font-semibold tracking-wide mb-3">
+          <Instagram className="h-3.5 w-3.5 text-maroon" />
+          <span>@mumbai__bazar__nalasopara · 19K+ Community</span>
+        </div>
+        <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-maroon font-semibold">
+          Trending Reels &amp; Boutique Diaries
         </h3>
-        <p className="mt-3 text-sm text-maroon/70">
-          Tag <span className="italic">#DrapedInMumbaiBazar</span> to be featured
+        <p className="mt-3 text-sm md:text-base text-ink/75 max-w-2xl mx-auto">
+          Watch our viral saree draping sessions, bridal unboxings, and fresh stock arrivals straight from our flagship Nalasopara boutique.
         </p>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-3">
-        {shots.map((src, i) => (
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+        {INSTAGRAM_POSTS.map((item) => (
           <a
-            key={i}
-            href="https://instagram.com"
+            key={item.id}
+            href={item.href}
             target="_blank"
             rel="noreferrer"
-            className="group relative block aspect-square overflow-hidden bg-beige/40"
+            className="group relative block aspect-[9/16] sm:aspect-[3/4] lg:aspect-[9/16] overflow-hidden rounded-xl bg-beige/30 border border-maroon/15 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
           >
             <img
-              src={src}
-              alt="Instagram look"
+              src={item.img}
+              alt={item.title}
               width={400}
-              height={400}
+              height={700}
               loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-[1000ms] group-hover:scale-110"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
-            <div className="absolute inset-0 bg-maroon/0 group-hover:bg-maroon/40 transition-colors flex items-center justify-center">
-              <Instagram className="h-6 w-6 text-ivory opacity-0 group-hover:opacity-100 transition-opacity" />
+
+            {/* Gradient Shadow Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30 group-hover:from-black/90 transition-opacity" />
+
+            {/* Top Pill Tag */}
+            <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
+              <span className="bg-maroon/90 backdrop-blur-md text-ivory text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md shadow-sm border border-gold/30">
+                {item.tag}
+              </span>
+              <span className="flex items-center gap-1 bg-black/60 backdrop-blur-md text-ivory text-[10px] font-medium px-2 py-0.5 rounded-full">
+                <Heart className="h-3 w-3 text-red-500 fill-red-500" />
+                {item.likes}
+              </span>
+            </div>
+
+            {/* Center Play Icon on Hover */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all pointer-events-none">
+              <div className="w-11 h-11 rounded-full bg-maroon/90 border border-gold/60 flex items-center justify-center shadow-lg text-ivory">
+                <Play className="h-5 w-5 fill-ivory ml-0.5" />
+              </div>
+            </div>
+
+            {/* Bottom Caption & Stats */}
+            <div className="absolute bottom-0 inset-x-0 p-3 text-ivory pointer-events-none">
+              <p className="text-xs font-semibold leading-snug line-clamp-2 drop-shadow-sm text-white/95">
+                {item.title}
+              </p>
+              <div className="mt-2 flex items-center justify-between text-[10px] text-white/80 font-medium border-t border-white/20 pt-1.5">
+                <span className="flex items-center gap-1">
+                  <Instagram className="h-3 w-3 text-gold" />
+                  Watch Reel
+                </span>
+                <span>{item.views} views</span>
+              </div>
             </div>
           </a>
         ))}
+      </div>
+
+      <div className="mt-10 text-center">
+        <a
+          href="https://www.instagram.com/mumbai__bazar__nalasopara/"
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-2.5 rounded-full bg-maroon text-ivory px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] shadow-md hover:bg-maroon/90 hover:scale-[1.02] transition-all"
+        >
+          <Instagram className="h-4 w-4 text-gold" />
+          Follow @mumbai__bazar__nalasopara on Instagram
+        </a>
       </div>
     </section>
   );
