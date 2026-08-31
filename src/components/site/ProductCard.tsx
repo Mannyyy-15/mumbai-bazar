@@ -91,7 +91,7 @@ export function ProductCard({ p }: { p: Product }) {
 
       {/* Card Details — Tight Spacing Between Name & Price */}
       <div className="p-3 sm:p-4 md:p-5 flex flex-col space-y-1 sm:space-y-1.5">
-        <p className="text-[8.5px] sm:text-[10px] uppercase tracking-[0.18em] sm:tracking-[0.22em] text-gold-deep font-semibold truncate">
+        <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.14em] text-gold-deep font-bold truncate">
           {p.weave}
         </p>
         <h3 className="font-sans text-xs sm:text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">

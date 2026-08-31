@@ -11,13 +11,11 @@ import {
   RotateCcw,
   ChevronRight,
   Check,
-  Scissors,
 } from "lucide-react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { fetchShopifyProduct } from "@/lib/shopify";
 import { useCatalog } from "@/lib/catalog-context";
-import { BlouseCustomizationModal } from "@/components/site/BlouseCustomizationModal";
 import { seo, jsonLd, SITE } from "@/lib/seo";
 import { productSchema, breadcrumbSchema, priceToSchema } from "@/lib/structured-data";
 
@@ -91,8 +89,6 @@ const SWATCHES = [
   { name: "Antique", hex: "#B69054" },
 ];
 
-const DRAPE_OPTIONS = ["Standard 5.5 m", "Pre-stitched", "With Fall & Pico"];
-
 function ProductDetail() {
   const { product } = Route.useLoaderData();
   const { products: catalogProducts } = useCatalog();
@@ -100,9 +96,7 @@ function ProductDetail() {
   const [active, setActive] = useState(0);
   const [qty, setQty] = useState(1);
   const [swatch, setSwatch] = useState(0);
-  const [drape, setDrape] = useState(0);
   const [added, setAdded] = useState(false);
-  const [showBlouseModal, setShowBlouseModal] = useState(false);
   const { addItem, openCart } = useCart();
 
   const priceNum = parsePriceToNumber(product.price);
@@ -223,7 +217,7 @@ function ProductDetail() {
           {/* RIGHT — Commerce panel */}
           <div className="md:col-span-5">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-maroon/60">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-maroon">
                 Collection / {product.weave}
               </p>
               <h1 className="mt-3 font-serif text-4xl md:text-5xl font-semibold leading-[1.05] text-maroon">
@@ -246,7 +240,7 @@ function ProductDetail() {
                   </>
                 )}
               </div>
-              <p className="mt-2 text-xs text-taupe">
+              <p className="mt-2 text-xs text-ink/80 font-medium">
                 Inclusive of all taxes · Complimentary shipping across India
               </p>
 
@@ -255,10 +249,10 @@ function ProductDetail() {
               {/* Colour swatches — like the hero */}
               <div>
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] uppercase tracking-[0.28em] text-maroon">
+                  <p className="text-xs uppercase tracking-[0.16em] text-maroon font-bold">
                     Select Weave Colour
                   </p>
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-maroon/60">
+                  <span className="text-xs uppercase tracking-[0.14em] text-maroon font-semibold">
                     {SWATCHES[swatch].name}
                   </span>
                 </div>
@@ -281,44 +275,6 @@ function ProductDetail() {
                     </button>
                   ))}
                 </div>
-              </div>
-
-              {/* Drape / stitching options */}
-              <div className="mt-7">
-                <div className="flex items-center justify-between">
-                  <p className="text-[10px] uppercase tracking-[0.28em] text-maroon font-semibold">
-                    Drape & Stitching
-                  </p>
-                  <button
-                    onClick={() => setShowBlouseModal(true)}
-                    className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.22em] text-maroon font-bold border-b border-maroon hover:text-gold-deep"
-                  >
-                    <Scissors className="h-3 w-3" /> Customize Blouse Fit →
-                  </button>
-                </div>
-                <div className="mt-4 grid grid-cols-3 gap-2">
-                  {DRAPE_OPTIONS.map((opt, i) => (
-                    <button
-                      key={opt}
-                      onClick={() => setDrape(i)}
-                      className={`px-2 py-3 text-[10px] uppercase tracking-[0.18em] border transition-colors ${
-                        drape === i
-                          ? "border-maroon bg-maroon text-ivory"
-                          : "border-maroon/40 text-maroon hover:border-maroon"
-                      }`}
-                    >
-                      {opt}
-                    </button>
-                  ))}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setShowBlouseModal(true)}
-                  className="mt-3 w-full py-2.5 rounded-xl border border-gold/60 bg-beige/30 text-maroon text-[11px] font-semibold tracking-[0.2em] uppercase hover:bg-maroon hover:text-ivory transition-all flex items-center justify-center gap-2"
-                >
-                  <Scissors className="h-4 w-4" /> Add Custom Blouse & Fall Edging (+ ₹1,200)
-                </button>
               </div>
 
               {/* Quantity + Add */}
@@ -435,7 +391,7 @@ function ProductDetail() {
         <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 border-t border-maroon/20">
           <div className="flex items-end justify-between mb-8">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-maroon/60">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-maroon">
                 You may also love
               </p>
               <h2 className="mt-2 font-serif text-3xl md:text-4xl text-maroon">
@@ -444,9 +400,9 @@ function ProductDetail() {
             </div>
             <Link
               to="/shop"
-              className="text-[10px] uppercase tracking-[0.25em] text-maroon border-b border-maroon/40 pb-1 hover:opacity-60 hidden md:inline-block"
+              className="text-xs font-bold uppercase tracking-[0.16em] text-maroon border-b border-maroon/40 pb-0.5 hover:text-gold-deep hidden md:inline-block"
             >
-              Browse all
+              Browse all →
             </Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-3 md:gap-x-4 gap-y-10">
@@ -456,12 +412,6 @@ function ProductDetail() {
           </div>
         </section>
       )}
-
-      <BlouseCustomizationModal
-        product={product}
-        isOpen={showBlouseModal}
-        onClose={() => setShowBlouseModal(false)}
-      />
     </div>
   );
 }
@@ -469,8 +419,8 @@ function ProductDetail() {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-[9px] uppercase tracking-[0.28em] text-maroon/60">{label}</dt>
-      <dd className="mt-1.5 text-sm text-maroon leading-snug">{value}</dd>
+      <dt className="text-[11px] font-bold uppercase tracking-[0.14em] text-maroon">{label}</dt>
+      <dd className="mt-1 text-sm text-ink font-medium leading-snug">{value}</dd>
     </div>
   );
 }
@@ -478,11 +428,11 @@ function Detail({ label, value }: { label: string; value: string }) {
 function TrustItem({ icon, label, sub }: { icon: React.ReactNode; label: string; sub: string }) {
   return (
     <li className="flex flex-col items-center gap-1.5 text-center">
-      <span className="grid h-10 w-10 place-items-center rounded-full bg-maroon/5 text-maroon">
+      <span className="grid h-10 w-10 place-items-center rounded-full bg-maroon/10 text-maroon">
         {icon}
       </span>
-      <span className="text-[10px] uppercase tracking-[0.22em] text-maroon">{label}</span>
-      <span className="text-[9px] uppercase tracking-[0.18em] text-maroon/50">{sub}</span>
+      <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-maroon">{label}</span>
+      <span className="text-[10px] uppercase tracking-[0.12em] text-ink/80 font-medium">{sub}</span>
     </li>
   );
 }

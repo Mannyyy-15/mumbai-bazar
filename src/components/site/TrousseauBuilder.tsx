@@ -42,13 +42,13 @@ export function TrousseauBuilder() {
     <section className="bg-beige/20 py-16 md:py-24 border-y border-gold/40">
       <div className="mx-auto max-w-[1360px] px-4 md:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-[10px] uppercase tracking-[0.3em] text-maroon font-semibold mb-3">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs uppercase tracking-[0.16em] text-maroon font-bold mb-3">
             <Gift className="h-3.5 w-3.5 text-gold-deep" /> Luxury Bridal Offer
           </span>
           <h2 className="font-serif text-3xl md:text-5xl text-maroon font-medium leading-tight">
             Build Your 3-Piece Trousseau Box
           </h2>
-          <p className="mt-3 text-sm md:text-base text-maroon/80 leading-relaxed">
+          <p className="mt-3 text-sm md:text-base text-ink/85 font-medium leading-relaxed">
             Select 3 sarees for your wedding functions to receive our complimentary gold-embossed
             Velvet Trousseau Chest + 15% bundle savings.
           </p>

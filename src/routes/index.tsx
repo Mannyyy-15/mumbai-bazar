@@ -339,7 +339,7 @@ function FeedDivider() {
         <div className="flex items-center gap-6 md:gap-10 py-10 md:py-14">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-maroon/25 to-transparent" />
           <div className="flex flex-col items-center gap-2.5">
-            <span className="text-[10px] tracking-[0.35em] uppercase text-maroon/60">
+            <span className="text-xs font-bold tracking-[0.18em] uppercase text-maroon">
               The Boutique
             </span>
             <div className="w-1.5 h-1.5 rotate-45 bg-gold" />
@@ -600,12 +600,12 @@ function CollectionStrip() {
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24">
       <div className="text-center mb-12 md:mb-16">
-        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-maroon font-medium mb-3">
+        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs md:text-[13px] tracking-[0.16em] uppercase text-maroon font-bold mb-3">
           Heritage Loom Clusters
         </span>
         <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl text-maroon">Shop by Weave</h3>
         <div className="w-16 h-0.5 bg-gold/60 mx-auto mt-4 mb-3" />
-        <p className="text-sm md:text-base text-maroon/75 max-w-xl mx-auto">
+        <p className="text-sm md:text-base text-ink/85 font-medium max-w-xl mx-auto">
           Handpicked weaves from India's legendary artisan clusters — Banarasi, Kanjivaram, Paithani
           & Pure Silks.
         </p>
@@ -634,7 +634,7 @@ function CollectionStrip() {
 
             {/* Card Content */}
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 text-ivory flex flex-col justify-end">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-medium mb-1 drop-shadow-sm">
+              <span className="text-xs uppercase tracking-[0.16em] text-amber-300 font-bold mb-1 drop-shadow-sm">
                 Authentic Loom
               </span>
               <p className="font-serif text-3xl md:text-4xl font-normal drop-shadow-md leading-tight">
@@ -699,7 +699,7 @@ function Craftsmanship() {
 
         {/* Right Column: Copy & Stats */}
         <div className="order-1 md:order-2 max-w-xl">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold/40 bg-gold/10 text-[10px] tracking-[0.3em] uppercase text-gold font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold/40 bg-gold/10 text-xs tracking-[0.16em] uppercase text-amber-300 font-bold mb-6">
             <Sparkles className="h-3 w-3" />
             <span>Eight Stores Near You</span>
           </div>
@@ -800,14 +800,14 @@ function ShopByOccasion() {
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24">
       <div className="text-center mb-12 md:mb-16">
-        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-maroon font-medium mb-3">
+        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs md:text-[13px] tracking-[0.16em] uppercase text-maroon font-bold mb-3">
           The Boutique Collection
         </span>
         <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl text-maroon">
           Shop by Occasion
         </h3>
         <div className="w-16 h-0.5 bg-gold/60 mx-auto mt-4 mb-3" />
-        <p className="text-sm md:text-base text-maroon/75 max-w-xl mx-auto">
+        <p className="text-sm md:text-base text-ink/85 font-medium max-w-xl mx-auto">
           A drape for every moment — from sacred bridal vows to everyday grace.
         </p>
       </div>
@@ -832,7 +832,7 @@ function ShopByOccasion() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 via-50% to-transparent opacity-85 transition-opacity duration-300 group-hover:opacity-100" />
 
             <div className="absolute inset-x-0 bottom-0 p-3.5 sm:p-5 md:p-8 text-ivory flex flex-col justify-end">
-              <p className="text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-gold font-medium drop-shadow-sm">
+              <p className="text-[11px] sm:text-xs tracking-[0.16em] uppercase text-amber-300 font-bold drop-shadow-sm">
                 {o.sub}
               </p>
               <p className="font-serif text-xl sm:text-2xl md:text-4xl mt-0.5 sm:mt-1 font-normal drop-shadow-md leading-tight">
@@ -872,7 +872,7 @@ function TrendingNow() {
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
         <div className="flex items-end justify-between mb-8 md:mb-12">
           <div>
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-maroon font-medium mb-2">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs md:text-[13px] tracking-[0.16em] uppercase text-maroon font-bold mb-2">
               Loved This Week
             </span>
             <h3 className="font-serif text-3xl md:text-5xl text-maroon">Trending Now</h3>
@@ -1120,7 +1120,7 @@ function Testimonials() {
     <section className="w-full bg-beige/25 py-16 md:py-24 border-y border-gold/50">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
         <div className="text-center mb-12 md:mb-16">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-[10px] md:text-[11px] tracking-[0.3em] uppercase text-maroon font-medium mb-3">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs md:text-[13px] tracking-[0.16em] uppercase text-maroon font-bold mb-3">
             Loved By Our Patrons
           </span>
           <h3 className="font-serif text-3xl md:text-5xl text-maroon">Words from Our Women</h3>

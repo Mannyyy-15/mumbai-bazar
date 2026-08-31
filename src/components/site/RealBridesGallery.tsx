@@ -85,13 +85,13 @@ export function RealBridesGallery() {
     <section className="bg-ivory py-16 md:py-24 border-b border-gold/40">
       <div className="mx-auto max-w-[1360px] px-4 md:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold/40 bg-gold/10 text-[10px] uppercase tracking-[0.3em] text-gold-deep font-semibold mb-3">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold/40 bg-gold/10 text-xs uppercase tracking-[0.16em] text-gold-deep font-bold mb-3">
             <Camera className="h-3.5 w-3.5 text-gold-deep" /> Real Bride Portraits
           </span>
           <h2 className="font-serif text-3xl md:text-5xl text-maroon font-medium leading-tight">
             As Seen On Our Brides
           </h2>
-          <p className="mt-3 text-sm md:text-base text-taupe leading-relaxed">
+          <p className="mt-3 text-sm md:text-base text-ink/80 font-medium leading-relaxed">
             Real celebrations, real heirloom drapes. Discover how women across the world celebrate
             their special moments in Mumbai Bazar sarees.
           </p>
