@@ -29,7 +29,7 @@ export function ProductCard({ p }: { p: Product }) {
     <Link
       to="/products/$id"
       params={{ id: p.id }}
-      className="group block relative overflow-hidden rounded-2xl border border-gold/45 bg-ivory shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(100,31,42,0.25)] hover:border-gold/70"
+      className="group block relative overflow-hidden rounded-2xl border border-[#A27633]/60 bg-ivory shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(100,31,42,0.25)] hover:border-[#A27633]"
     >
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
         {/* Primary Image */}
@@ -56,7 +56,7 @@ export function ProductCard({ p }: { p: Product }) {
 
         {/* Tag Badge */}
         {p.tag && (
-          <span className="absolute left-3 top-3 z-10 rounded-full bg-maroon text-ivory px-3 py-1 text-[9px] font-medium tracking-[0.2em] uppercase shadow-md border border-gold/50">
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-maroon text-ivory px-3 py-1 text-[9px] font-medium tracking-[0.2em] uppercase shadow-md border border-[#A27633]/60">
             {p.tag}
           </span>
         )}
@@ -97,7 +97,7 @@ export function ProductCard({ p }: { p: Product }) {
         <h3 className="font-sans text-xs sm:text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
           {p.name}
         </h3>
-        <div className="flex items-baseline gap-2 pt-1.5 sm:pt-2 border-t border-gold/45 mt-0.5 sm:mt-1">
+        <div className="flex items-baseline gap-2 pt-1.5 sm:pt-2 border-t border-[#A27633]/40 mt-0.5 sm:mt-1">
           <span className="font-sans text-base sm:text-lg md:text-xl font-bold text-maroon tracking-tight">{p.price}</span>
           {p.original && (
             <span className="text-xs sm:text-sm text-taupe font-medium line-through font-sans">{p.original}</span>

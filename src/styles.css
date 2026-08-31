@@ -55,6 +55,7 @@
   --color-beige: var(--beige);
   --color-gold: var(--gold);
   --color-gold-deep: var(--gold-deep);
+  --color-border-gold: var(--border-gold);
   --color-ink: var(--ink);
   --color-taupe: var(--taupe);
 }
@@ -70,6 +71,7 @@
   --beige: #EADBC8;
   --gold: #F5CE7A;
   --gold-deep: #D4A342;
+  --border-gold: #A27633;
   --ink: #191313;
   --taupe: #4A3D37;
 
@@ -90,8 +92,8 @@
   --accent-foreground: var(--wine);
   --destructive: oklch(0.55 0.2 27);
   --destructive-foreground: var(--ivory);
-  --border: rgba(140, 106, 63, 0.5);
-  --input: rgba(140, 106, 63, 0.28);
+  --border: rgba(162, 118, 51, 0.5);
+  --input: rgba(162, 118, 51, 0.35);
   --ring: var(--gold-deep);
 }
 

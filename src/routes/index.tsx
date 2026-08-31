@@ -380,11 +380,11 @@ function ProductTile({ p }: { p: Product }) {
     <Link
       to="/products/$id"
       params={{ id: p.id }}
-      className="group relative flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+      className="group relative flex flex-col bg-ivory rounded-2xl border border-[#A27633]/60 shadow-sm hover:shadow-xl hover:border-[#A27633] transition-all duration-300 overflow-hidden"
     >
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F5EFEB]">
         {p.tag && (
-          <span className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-maroon/95 text-ivory text-[9px] font-bold tracking-[0.2em] uppercase shadow-md backdrop-blur-sm border border-gold/30">
+          <span className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-maroon/95 text-ivory text-[9px] font-bold tracking-[0.2em] uppercase shadow-md backdrop-blur-sm border border-[#A27633]/50">
             {p.tag}
           </span>
         )}
@@ -448,7 +448,7 @@ function ProductTile({ p }: { p: Product }) {
         <h4 className="font-sans text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
           {p.name}
         </h4>
-        <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">
+        <div className="flex items-baseline gap-2 pt-2 border-t border-[#A27633]/40 mt-1">
           <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">
             {p.price}
           </span>
