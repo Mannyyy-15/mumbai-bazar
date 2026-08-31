@@ -162,8 +162,23 @@ export function CategoryPage({
 
   return (
     <div className="w-full bg-ivory">
-      {showHero && (
+      {showHero ? (
         <PageHero eyebrow={eyebrow} title={title} copy={copy} img={heroImg} crumb={crumb} />
+      ) : (
+        <div className="border-b border-gold/30 bg-beige/15 py-4 md:py-6">
+          <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
+            <nav className="text-xs tracking-[0.14em] uppercase text-maroon font-bold">
+              <Link to="/" className="hover:text-gold-deep">
+                Home
+              </Link>
+              <span className="mx-2 text-gold-deep">/</span>
+              <span className="text-ink">{crumb}</span>
+            </nav>
+            <h1 className="mt-1 font-serif text-2xl sm:text-3xl md:text-4xl text-maroon font-semibold leading-tight">
+              {title}
+            </h1>
+          </div>
+        </div>
       )}
 
       {/* Main Grid & Sticky Left Sidebar Section */}
