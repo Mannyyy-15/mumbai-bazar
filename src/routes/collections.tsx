@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, MessageCircle } from "lucide-react";
-import { seo, jsonLd } from "@/lib/seo";
+import { seo, jsonLd, SITE } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import { IMG } from "@/lib/site-data";
 import { useCatalog } from "@/lib/catalog-context";
@@ -9,7 +9,7 @@ import { useCatalog } from "@/lib/catalog-context";
 export const Route = createFileRoute("/collections")({
   head: () => {
     const { meta, links } = seo({
-      title: "Saree Collections | Banarasi, Kanjivaram & Bridal — Mumbai Bazar",
+      title: "Saree Collections | Bridal, Banarasi, Kanjivaram & Festive — Mumbai Bazar",
       description:
         "Explore curated Indian saree collections — Bridal heirlooms, Banarasi katan silks, Kanjivaram classics, festive edits, and effortless everyday drapes.",
       path: "/collections",
@@ -50,80 +50,74 @@ const CURATED_CARDS = [
   {
     id: "bridal",
     category: "wedding",
-    tag: "Bridal",
-    title: "Bridal",
-    script: "Collection",
-    desc: "Heirloom crimson Banarasis and gold brocade Kanjivarams woven for wedding vows.",
+    eyebrow: "Collection",
+    title: "Bridal Sarees",
+    desc: "Heirloom crimson Banarasis and gold brocade Kanjivarams woven for sacred wedding vows.",
     to: "/wedding-sarees",
     img: IMG.colWedding,
     badge: "Bridal Trousseau",
-    bgClass: "bg-[#E8C5B0]/30 hover:bg-[#E8C5B0]/45 border-[#D4A38B]/60",
-    textClass: "text-[#641F2A]",
+    bgClass: "bg-[#FAF1EB] hover:bg-[#F5E7DD] border-[#E8D1C5]",
+    textClass: "text-[#58111A]",
   },
   {
     id: "banarasi",
     category: "artisan",
-    tag: "Banarasi",
-    title: "Banarasi",
-    script: "Collection",
+    eyebrow: "Collection",
+    title: "Banarasi Silk",
     desc: "Handcrafted in Varanasi with tested gold zari and pure mulberry katan silk.",
     to: "/silk-sarees",
     img: IMG.colBanarasi,
     badge: "100% Pure Silk",
-    bgClass: "bg-[#D5D2BE]/35 hover:bg-[#D5D2BE]/50 border-[#B8B49B]/60",
+    bgClass: "bg-[#F5F2E9] hover:bg-[#EDE8DA] border-[#DED7C5]",
     textClass: "text-[#4A3E25]",
   },
   {
     id: "festive",
     category: "festive",
-    tag: "Festive",
-    title: "Festive",
-    script: "Collection",
+    eyebrow: "Collection",
+    title: "Festive Edit",
     desc: "Celebration-ready jewel tones and shimmering zari tissue drapes for pujas & soirées.",
     to: "/festive-edit",
     img: IMG.colFestive,
     badge: "Evening Shimmer",
-    bgClass: "bg-[#E5BFC6]/35 hover:bg-[#E5BFC6]/50 border-[#CFA1AB]/60",
+    bgClass: "bg-[#F9EFF2] hover:bg-[#F3E3E7] border-[#E8CCD5]",
     textClass: "text-[#680910]",
   },
   {
     id: "ready-to-wear",
     category: "everyday",
-    tag: "Everyday",
+    eyebrow: "Collection",
     title: "Ready to Wear",
-    script: "Collection",
-    desc: "Featherlight breathable silks and fluid drapes crafted for effortless elegance.",
+    desc: "Featherlight breathable silks and fluid drapes crafted for effortless everyday elegance.",
     to: "/everyday-sarees",
     img: IMG.colPuresilk,
     badge: "Lightweight Drapes",
-    bgClass: "bg-[#EAD4AC]/35 hover:bg-[#EAD4AC]/50 border-[#D5BA8D]/60",
+    bgClass: "bg-[#F8F4EA] hover:bg-[#F1EAD8] border-[#E6D9C2]",
     textClass: "text-[#5C3E1B]",
   },
   {
     id: "new-arrivals",
     category: "all",
-    tag: "Fresh Drop",
+    eyebrow: "Collection",
     title: "New Arrivals",
-    script: "Collection",
     desc: "Limited edition pieces fresh from the loom corridors with zero repeat weaves.",
     to: "/new-arrivals",
     img: IMG.colKanjivaram,
     badge: "Fresh From Loom",
-    bgClass: "bg-[#F0E6D2]/45 hover:bg-[#F0E6D2]/65 border-[#DAC9A8]/60",
+    bgClass: "bg-[#F9F6F0] hover:bg-[#F2ECE0] border-[#E5DDCB]",
     textClass: "text-[#4F3C28]",
   },
   {
     id: "all-shop",
     category: "all",
-    tag: "Full Catalog",
-    title: "The Boutique",
-    script: "Collection",
-    desc: "Explore every curated drape in the house — filter by weave, occasion, and color.",
+    eyebrow: "Collection",
+    title: "All Products",
+    desc: "Explore every curated drape in the house — filter by weave, occasion, price, and color.",
     to: "/shop",
     img: IMG.craft,
     badge: "All Sarees",
-    bgClass: "bg-maroon text-ivory border-gold/60 shadow-xl",
-    textClass: "text-ivory",
+    bgClass: "bg-maroon text-white border-gold/60 shadow-xl",
+    textClass: "text-white",
     isDark: true,
   },
 ];
@@ -138,15 +132,15 @@ function CollectionsPage() {
   }, [activeTab]);
 
   return (
-    <div className="w-full bg-ivory text-ink min-h-screen">
+    <div className="w-full bg-[#FAF7F2] text-ink min-h-screen">
       {/* 1. Minimal Breadcrumb Navigation Bar */}
-      <div className="border-b border-gold/30 bg-beige/15 py-3 md:py-4">
-        <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16 flex items-center justify-between">
-          <nav className="text-xs tracking-[0.14em] uppercase text-maroon font-bold">
+      <div className="border-b border-gold/30 bg-white/70 backdrop-blur-sm py-4 px-4 md:px-8 lg:px-12 xl:px-16">
+        <div className="w-full flex flex-wrap items-center justify-between gap-3">
+          <nav className="text-xs tracking-[0.14em] uppercase text-maroon font-bold flex items-center gap-2">
             <Link to="/" className="hover:text-gold-deep transition-colors">
               Home
             </Link>
-            <span className="mx-2 text-gold-deep">/</span>
+            <span className="text-gold-deep font-normal">/</span>
             <span className="text-ink">Collections</span>
           </nav>
           <span className="text-xs text-taupe font-medium hidden sm:inline-block">
@@ -155,100 +149,17 @@ function CollectionsPage() {
         </div>
       </div>
 
-      {/* Centerpiece: Staggered Editorial Showcase with Giant Vertical Watermark `C O L L E C T I O N` */}
-      <section className="py-8 md:py-16 px-4 md:px-8 lg:px-12 xl:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center relative">
-          {/* Left Staggered Card */}
-          <div className="lg:col-span-5 flex flex-col justify-center">
-            <Link to="/silk-sarees" className="group block">
-              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-gold/50 bg-beige/30 shadow-md">
-                <img
-                  src={IMG.colBanarasi}
-                  alt="Pure Banarasi Katan Silk"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-                {/* Delicate inner hairline frame (from Pinterest ref) */}
-                <div className="absolute inset-3 sm:inset-4 rounded-xl border border-white/70 pointer-events-none" />
-                <span className="absolute top-6 left-6 px-3 py-1 rounded-full bg-ivory/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-[0.16em] text-maroon shadow-sm">
-                  Varanasi Handloom
-                </span>
-              </div>
-
-              <div className="mt-5 space-y-2">
-                <h3 className="font-serif text-2xl md:text-3xl font-semibold text-maroon group-hover:text-gold-deep transition-colors">
-                  Pure Banarasi Katan Silk
-                </h3>
-                <p className="text-sm text-ink/80 leading-relaxed max-w-md font-normal">
-                  Intricate kadwa floral jaal woven with pure tested gold zari on natural katan
-                  mulberry silk for sacred vows and timeless heirloom wardrobes.
-                </p>
-                <div className="pt-1">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-maroon group-hover:text-gold-deep transition-colors">
-                    <span>Shop now</span>
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          {/* Center Column: Giant Vertical Luxury Watermark `COLLECTION` */}
-          <div className="hidden lg:flex lg:col-span-2 flex-col items-center justify-center h-full select-none pointer-events-none">
-            <span className="text-[70px] xl:text-[92px] font-serif font-black tracking-[0.32em] text-maroon/10 uppercase [writing-mode:vertical-lr] rotate-180">
-              COLLECTION
-            </span>
-          </div>
-
-          {/* Right Staggered Card (Offset vertically) */}
-          <div className="lg:col-span-5 flex flex-col justify-center lg:mt-16">
-            <Link to="/wedding-sarees" className="group block">
-              <div className="mb-5 space-y-2">
-                <h3 className="font-serif text-2xl md:text-3xl font-semibold text-maroon group-hover:text-gold-deep transition-colors">
-                  Kanjivaram Gold Brocade
-                </h3>
-                <p className="text-sm text-ink/80 leading-relaxed max-w-md font-normal">
-                  Woven with heavy three-ply silk and authentic temple korvai borders from the master
-                  looms of Tamil Nadu. Handcrafted for brides and grand occasions.
-                </p>
-                <div className="pt-1">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-maroon group-hover:text-gold-deep transition-colors">
-                    <span>Shop now</span>
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </div>
-              </div>
-
-              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-gold/50 bg-beige/30 shadow-md">
-                <img
-                  src={IMG.colWedding}
-                  alt="Kanjivaram Gold Brocade Saree"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-                {/* Delicate inner hairline frame */}
-                <div className="absolute inset-3 sm:inset-4 rounded-xl border border-white/70 pointer-events-none" />
-                <span className="absolute top-6 left-6 px-3 py-1 rounded-full bg-ivory/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-[0.16em] text-maroon shadow-sm">
-                  Kanchipuram Heritage
-                </span>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. "SHOP BY COLLECTION" Section (The Exact Pinterest Visual Cards with Script Accent & Circle Arrow Buttons) */}
-      <section
-        id="shop-by-collection"
-        className="py-16 md:py-24 px-4 md:px-8 lg:px-12 xl:px-16 border-t border-gold/30 bg-beige/10"
-      >
+      {/* 2. "SHOP BY COLLECTION" Section */}
+      <section id="shop-by-collection" className="py-10 md:py-16 px-4 md:px-8 lg:px-12 xl:px-16">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 md:mb-14">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] font-bold text-maroon">SHOP BY</p>
-            <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl text-maroon font-semibold tracking-tight mt-1">
-              COLLECTION
-            </h2>
+            <span className="inline-flex items-center gap-1.5 bg-maroon/10 px-3 py-1 rounded-full text-xs font-bold text-maroon uppercase tracking-wider mb-2">
+              <Sparkles className="h-3 w-3 text-gold-deep" /> Handcrafted Heritage
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-maroon font-bold tracking-tight">
+              Shop by Collection
+            </h1>
           </div>
 
           {/* Interactive Filter Pills */}
@@ -257,10 +168,10 @@ function CollectionsPage() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`px-4 py-2 rounded-full text-xs uppercase tracking-[0.14em] font-bold transition-all whitespace-nowrap ${
+                className={`px-4 py-2.5 rounded-full text-xs uppercase tracking-[0.14em] font-bold transition-all whitespace-nowrap ${
                   activeTab === tab.key
-                    ? "bg-maroon text-ivory shadow-md"
-                    : "border border-gold/45 text-maroon hover:bg-beige/40"
+                    ? "bg-maroon text-white shadow-md"
+                    : "border border-gold/50 bg-white text-maroon hover:bg-beige/40 shadow-sm"
                 }`}
               >
                 {tab.label}
@@ -277,58 +188,58 @@ function CollectionsPage() {
               to={card.to}
               className={`group block relative rounded-3xl p-6 sm:p-7 border shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden ${card.bgClass}`}
             >
-              {/* Inner delicate decorative framing line (Direct from Pinterest inspiration!) */}
+              {/* Inner delicate decorative framing line */}
               <div
-                className={`absolute inset-3 rounded-2xl border pointer-events-none transition-opacity ${
-                  card.isDark ? "border-gold/40" : "border-white/60"
+                className={`absolute inset-3.5 rounded-2xl border pointer-events-none transition-opacity ${
+                  card.isDark ? "border-gold/30" : "border-white/70"
                 }`}
               />
 
-              <div className="relative z-10 flex flex-col justify-between h-full min-h-[380px]">
-                {/* Top Row: Category Title + Cursive Accent */}
-                <div className="space-y-1">
+              <div className="relative z-10 flex flex-col justify-between h-full min-h-[400px]">
+                {/* Top Row: Eyebrow "COLLECTION" in small uppercase + Title in BIG serif font */}
+                <div className="space-y-1.5 pt-1">
                   <span
-                    className={`text-[11px] uppercase tracking-[0.18em] font-bold block ${
-                      card.isDark ? "text-gold" : "text-maroon"
+                    className={`text-[11px] uppercase tracking-[0.24em] font-bold block ${
+                      card.isDark ? "text-gold" : "text-maroon/70"
                     }`}
                   >
-                    {card.title}
+                    {card.eyebrow}
                   </span>
-                  <h3
-                    className={`font-serif italic text-3xl sm:text-4xl font-normal leading-tight ${card.textClass}`}
+                  <h2
+                    className={`font-serif text-3xl sm:text-4xl font-bold leading-tight ${card.textClass}`}
                   >
-                    {card.script}
-                  </h3>
+                    {card.title}
+                  </h2>
                 </div>
 
                 {/* Center Image Container */}
-                <div className="my-4 relative w-full aspect-[4/3] rounded-xl overflow-hidden border border-white/50 shadow-inner bg-black/5">
+                <div className="my-5 relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-white/60 shadow-md bg-black/5">
                   <img
                     src={card.img}
-                    alt={`${card.title} ${card.script}`}
+                    alt={`${card.title} Collection`}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
                     loading="lazy"
                   />
-                  <div className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-ivory/90 text-[9.5px] font-bold uppercase tracking-[0.14em] text-maroon shadow-sm">
+                  <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-[0.14em] text-maroon shadow-sm">
                     {card.badge}
                   </div>
                 </div>
 
                 {/* Bottom Row: Description + Circular Arrow Button */}
-                <div className="flex items-end justify-between gap-4 pt-2">
+                <div className="flex items-end justify-between gap-4 pt-1">
                   <p
-                    className={`text-xs leading-relaxed max-w-[200px] line-clamp-2 ${
-                      card.isDark ? "text-ivory/80" : "text-ink/80"
-                    } font-normal`}
+                    className={`text-xs leading-relaxed max-w-[220px] line-clamp-2 ${
+                      card.isDark ? "text-white/85" : "text-ink/80"
+                    } font-medium`}
                   >
                     {card.desc}
                   </p>
 
-                  {/* Circular Arrow Button (matching Pinterest reference) */}
+                  {/* Circular Arrow Button */}
                   <div
                     className={`h-11 w-11 shrink-0 rounded-full flex items-center justify-center shadow-md transition-all duration-300 transform group-hover:scale-110 ${
                       card.isDark
-                        ? "bg-gold text-maroon group-hover:bg-ivory"
+                        ? "bg-gold text-maroon group-hover:bg-white"
                         : "bg-white text-maroon group-hover:bg-maroon group-hover:text-white"
                     }`}
                   >
@@ -341,28 +252,28 @@ function CollectionsPage() {
         </div>
       </section>
 
-      {/* 5. High-Converting VIP Styling Assistance Strip */}
-      <section className="py-14 md:py-20 px-4 md:px-8 border-t border-gold/30 bg-ivory">
+      {/* 3. VIP Styling Assistance Strip */}
+      <section className="py-14 md:py-20 px-4 md:px-8 border-t border-gold/40 bg-white">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/30 bg-maroon/5 text-xs uppercase tracking-[0.16em] text-maroon font-bold">
             <Sparkles className="h-3.5 w-3.5 text-gold-deep" /> Bespoke Styling Concierge
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-maroon font-semibold">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-maroon font-bold">
             Can’t Decide on the Perfect Drape?
           </h2>
-          <p className="text-sm md:text-base text-ink/80 leading-relaxed font-normal">
+          <p className="text-sm md:text-base text-ink/80 leading-relaxed font-medium">
             Whether preparing your wedding trousseau or looking for an authentic festival drape, our
             saree curators are available directly on WhatsApp for video consultations and fabric
             guidance.
           </p>
           <div className="pt-4">
             <a
-              href="https://wa.me/919999999999?text=Hello%20Mumbai%20Bazar%20Stylist%2C%20I%20would%20like%20guidance%20on%20choosing%20a%20saree%20collection."
+              href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hello Mumbai Bazar Stylist, I would like guidance on choosing a saree collection.")}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-gold text-maroon font-bold text-xs uppercase tracking-[0.18em] hover:bg-maroon hover:text-ivory transition-all shadow-md"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-maroon text-white font-bold text-xs uppercase tracking-[0.18em] hover:bg-wine transition-all shadow-md"
             >
-              <MessageCircle className="h-4 w-4" />
+              <MessageCircle className="h-4 w-4 text-[#25D366]" />
               <span>Chat with a Saree Stylist on WhatsApp</span>
             </a>
           </div>
