@@ -120,7 +120,7 @@ export const PRODUCTS: Product[] = [
     tag: "New",
     category: ["new-arrivals", "wedding-sarees", "silk-sarees"],
     details: {
-      fabric: "Pure Mulberry Silk with tested zari",
+      fabric: "Silk with woven zari",
       drape: "Regal, holds its own pleats",
       blousePiece: "0.85 m contrast maroon brocade",
       length: "5.5 m saree + 0.85 m blouse",
@@ -183,7 +183,7 @@ export const PRODUCTS: Product[] = [
     tag: "Bestseller",
     category: ["silk-sarees", "everyday-sarees"],
     details: {
-      fabric: "Pure Mulberry Silk",
+      fabric: "Silk",
       drape: "Refined, medium-weight fall",
       blousePiece: "0.80 m self silk",
       length: "5.5 m saree + 0.8 m blouse",
@@ -244,7 +244,7 @@ export const PRODUCTS: Product[] = [
     price: "₹ 24,600",
     category: ["wedding-sarees", "silk-sarees", "festive-edit"],
     details: {
-      fabric: "Pure Mulberry Silk",
+      fabric: "Silk",
       drape: "Firm, structured pleats",
       blousePiece: "0.85 m contrast brocade",
       length: "5.5 m saree + 0.85 m blouse",

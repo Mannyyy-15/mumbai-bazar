@@ -87,52 +87,19 @@ export function websiteSchema() {
   };
 }
 
-/** Physical boutique — powers local-pack and "saree shop near me" visibility. */
-export function localBusinessSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "ClothingStore",
-    "@id": `${SITE.url}/#store`,
-    name: `${SITE.name} — Nalasopara East`,
-    branchCode: "nalasopara",
-    image: OG_IMAGE,
-    url: SITE.url,
-    telephone: SITE.phone,
-    email: SITE.email,
-    priceRange: "₹₹₹",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: SITE.address.street,
-      addressLocality: SITE.address.city,
-      addressRegion: SITE.address.region,
-      postalCode: SITE.address.postalCode,
-      addressCountry: SITE.address.country,
-    },
-    geo: { "@type": "GeoCoordinates", latitude: SITE.geo.lat, longitude: SITE.geo.lng },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        // Derived from SITE.hours so schema can never drift from the footer,
-        // the store pages or llms.txt again.
-        dayOfWeek: [...SITE.hours.days],
-        opens: SITE.hours.opens,
-        closes: SITE.hours.closes,
-      },
-    ],
-    // Phase 1 (Vasai-Virar) through Phase 2 (Mumbai metro) catchment. Each named
-    // city is a City entity so Google can match "saree shop in <city>" intent.
-    areaServed: SITE.serviceAreas.map((city) => ({
-      "@type": "City",
-      name: city,
-      containedInPlace: { "@type": "State", name: SITE.address.region },
-    })),
-    hasMap: `https://www.google.com/maps/search/?api=1&query=${SITE.geo.lat},${SITE.geo.lng}`,
-    currenciesAccepted: SITE.currency,
-    paymentAccepted: "Cash, UPI, Credit Card, Debit Card, Net Banking",
-    parentOrganization: { "@id": ORG_ID },
-    sameAs: [...SITE.social],
-  };
-}
+/*
+ * `localBusinessSchema()` was removed deliberately.
+ *
+ * It described the Nalasopara flagship under the sitewide @id "<site>/#store"
+ * and was emitted from __root on all 36 pages. That produced two ClothingStore
+ * entities for the same physical shop — this one and the store page's own
+ * "/stores/nalasopara#store" — and asserted a storefront on every unrelated
+ * page, the privacy policy included.
+ *
+ * There is now exactly one entity per shop: outletSchema(), emitted by each
+ * store page and, for the flagship, by the homepage. Do not reintroduce a
+ * second flagship node.
+ */
 
 export type Crumb = { name: string; path: string };
 
@@ -309,6 +276,16 @@ export function outletSchema(o: Outlet) {
       "@type": "Offer",
       itemOffered: { "@type": "Product", name: item },
     })),
+    currenciesAccepted: SITE.currency,
+    paymentAccepted: "Cash, UPI, Credit Card, Debit Card, Net Banking",
+    // Only emitted where coordinates have actually been confirmed — a guessed
+    // pin that disagrees with the Google Business Profile is worse than none.
+    ...(o.geo
+      ? {
+          geo: { "@type": "GeoCoordinates", latitude: o.geo.lat, longitude: o.geo.lng },
+          hasMap: `https://www.google.com/maps/search/?api=1&query=${o.geo.lat},${o.geo.lng}`,
+        }
+      : {}),
     // Ties every branch back to the single brand entity.
     parentOrganization: { "@id": ORG_ID },
     sameAs: o.instagram ? [o.instagram] : [],

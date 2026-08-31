@@ -177,7 +177,7 @@ export function CartDrawer() {
                 </div>
                 <div className="flex flex-col items-center gap-1">
                   <ShieldCheck className="h-4 w-4 text-gold-deep" />
-                  <span>Silk Mark Pure</span>
+                  <span>See in store</span>
                 </div>
                 <div className="flex flex-col items-center gap-1">
                   <RotateCcw className="h-4 w-4 text-gold-deep" />

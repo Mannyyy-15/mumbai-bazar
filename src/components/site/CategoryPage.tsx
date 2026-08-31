@@ -596,6 +596,27 @@ export function CategoryPage({
                   </p>
                 </div>
               ))}
+
+              {editorial.relatedGuides && editorial.relatedGuides.length > 0 && (
+                <div className="border-t border-gold/30 pt-8">
+                  <h2 className="font-serif text-xl md:text-2xl text-maroon font-bold">
+                    Read before you buy
+                  </h2>
+                  <ul className="mt-3.5 space-y-2">
+                    {editorial.relatedGuides.map((g) => (
+                      <li key={g.slug}>
+                        <Link
+                          to="/guides/$slug"
+                          params={{ slug: g.slug }}
+                          className="text-sm md:text-[15px] font-semibold text-maroon underline decoration-gold/60 underline-offset-4 hover:text-gold-deep transition-colors"
+                        >
+                          {g.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </section>

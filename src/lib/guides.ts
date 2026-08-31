@@ -619,7 +619,7 @@ export const GUIDES: Guide[] = [
     author: AUTHOR_CURATOR,
     readMinutes: 8,
     relatedPath: "/silk-sarees",
-    relatedLabel: "Shop certified pure silk sarees",
+    relatedLabel: "Shop silk & silk-blend sarees",
     keywords: [
       "pure silk vs art silk",
       "how to test pure silk saree at home",

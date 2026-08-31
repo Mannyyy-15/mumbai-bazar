@@ -11,7 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { SITE, OG_IMAGE, jsonLd, verificationMeta } from "@/lib/seo";
-import { organizationSchema, websiteSchema, localBusinessSchema } from "@/lib/structured-data";
+import { organizationSchema, websiteSchema } from "@/lib/structured-data";
 import { AnnouncementBar } from "@/components/site/AnnouncementBar";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
@@ -180,7 +180,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { src: "https://news.google.com/swg/js/v1/publisher.js", async: true },
       jsonLd(organizationSchema()),
       jsonLd(websiteSchema()),
-      jsonLd(localBusinessSchema()),
+      // The flagship ClothingStore is deliberately NOT emitted here. It used to
+      // ship on all 36 pages, which meant /stores/nalasopara carried two
+      // ClothingStore entities for the same physical shop under different @ids
+      // (sitewide "#store" and the page's own), and every unrelated page — the
+      // privacy policy included — asserted a storefront it is not about.
+      // Each store page emits its own outletSchema; the homepage emits the
+      // flagship's. One entity per shop, one @id, consistently.
     ],
   }),
   shellComponent: RootShell,

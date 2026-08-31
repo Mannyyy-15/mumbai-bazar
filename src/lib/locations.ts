@@ -45,6 +45,8 @@ export type Outlet = {
   occasions: string[];
   /** What this outlet is actually known for locally. */
   specialities: string[];
+  /** Map coordinates. Only set where they have been confirmed from a live listing. */
+  geo?: { lat: number; lng: number };
   intro: string;
 };
 
@@ -73,6 +75,7 @@ export const OUTLETS: Outlet[] = [
       "Party wear sarees",
       "Dress material",
     ],
+    geo: { lat: 19.4162, lng: 72.8619 },
     intro:
       "Our flagship store sits on Tulinj Road by the Nalasopara flyover, opposite Seema Complex. It carries the widest range in the group — bridal and dulhan sarees, designer lehengas, party wear and dress material — and it is where most customers come to compare pieces side by side before a wedding.",
   },

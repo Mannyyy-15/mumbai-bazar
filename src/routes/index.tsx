@@ -18,7 +18,8 @@ import {
 
 import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
 import { seo, jsonLd } from "@/lib/seo";
-import { breadcrumbSchema } from "@/lib/structured-data";
+import { breadcrumbSchema, outletSchema } from "@/lib/structured-data";
+import { FLAGSHIP } from "@/lib/locations";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useCatalog } from "@/lib/catalog-context";
@@ -78,7 +79,12 @@ export const Route = createFileRoute("/")({
           fetchPriority: "high",
         },
       ],
-      scripts: [jsonLd(breadcrumbSchema([{ name: "Home", path: "/" }]))],
+      scripts: [
+        jsonLd(breadcrumbSchema([{ name: "Home", path: "/" }])),
+        // The flagship storefront entity lives here rather than sitewide, so
+        // there is exactly one ClothingStore node per physical shop.
+        jsonLd(outletSchema(FLAGSHIP)),
+      ],
     };
   },
 });

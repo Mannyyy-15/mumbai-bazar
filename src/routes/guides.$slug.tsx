@@ -52,7 +52,14 @@ export const Route = createFileRoute("/guides/$slug")({
       ),
     ];
 
-    // Procedural guides also emit HowTo, which wins the step carousel.
+    // Procedural guides also emit HowTo.
+    //
+    // To be clear about what this does and does not buy: Google retired HowTo
+    // rich results in September 2023, so this wins no step carousel and no SERP
+    // feature. It is kept because it is still valid schema.org and gives AI
+    // answer engines cleanly enumerated steps to quote — the same reason the
+    // FAQPage markup stays after Google retired FAQ rich results in May 2026.
+    // Do not invest further in it expecting a Google SERP feature.
     if (g.howTo) {
       scripts.splice(
         1,
