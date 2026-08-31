@@ -27,6 +27,16 @@ export type CategoryCopy = {
   intro: string;
   /** Buying guide below the grid. 3-5 blocks, ~250-350 words total. */
   guide: { heading: string; body: string }[];
+  /**
+   * Links from this category into the editorial guides.
+   *
+   * The guides already link OUT to their category via `relatedPath`, but
+   * nothing linked back, so the site had zero contextual in-content links in
+   * either direction between its best content and its money pages. These close
+   * that loop: the guides are the strongest thing on the site and the most
+   * natural place to send someone who is still deciding.
+   */
+  relatedGuides?: { slug: string; label: string }[];
 };
 
 export const CATEGORY_COPY: Record<string, CategoryCopy> = {
@@ -46,6 +56,11 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
         heading: "Living with a silk saree",
         body: "Dry clean before the first wash. Store folded in soft muslin rather than plastic, which traps humidity — a real consideration on the western line during monsoon. Refold along different lines two or three times a year so the creases do not set into permanent weak points, and keep zari away from perfume and direct sunlight. Our care guide covers this in more detail, and the staff at any store will walk you through it when you buy.",
       },
+    ],
+    relatedGuides: [
+      { slug: "banarasi-saree-guide", label: "The Banarasi Saree Guide" },
+      { slug: "pure-silk-vs-art-silk-test", label: "How to Test Pure Silk vs Art Silk" },
+      { slug: "silk-saree-care", label: "Caring for Silk Sarees" },
     ],
   },
 
@@ -70,6 +85,11 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
         body: "Every piece can be draped in store. For bridal, this matters more than for anything else we sell: fall, weight and how a border sits at the shoulder are all things you cannot judge from a folded stack. Our flagship in Nalasopara East carries the widest bridal range, and the Virar, Bhayandar and Goregaon stores can have a piece brought across if you have seen something you like.",
       },
     ],
+    relatedGuides: [
+      { slug: "bridal-trousseau-guide", label: "The Bridal Trousseau Guide" },
+      { slug: "kanjivaram-saree-guide", label: "The Kanjivaram Saree Guide" },
+      { slug: "wedding-saree-trends-2026", label: "Top 2026 Wedding Saree Trends" },
+    ],
   },
 
   "festive-edit": {
@@ -88,6 +108,10 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
         heading: "Buy ahead of the rush",
         body: "The four weeks before Diwali are the busiest of our year, and the best of any collection moves early. Stitching turnaround also stretches in that window. Coming in three or four weeks ahead means a fuller range and a blouse finished without pressure. If you cannot get to a store, message us on WhatsApp and we will send photos and video of what has just come in.",
       },
+    ],
+    relatedGuides: [
+      { slug: "paithani-saree-guide", label: "The Paithani Saree Guide" },
+      { slug: "silk-saree-care", label: "Caring for Silk Sarees" },
     ],
   },
 
@@ -108,6 +132,10 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
         body: "Most of our regular customers buy two or three at a time in colours that share a blouse, which makes daily dressing considerably easier and stretches the wear of each piece. It is a practical way to shop rather than an upsell, and the staff will happily help you pick a set that works together.",
       },
     ],
+    relatedGuides: [
+      { slug: "kalamkari-saree-styling-guide", label: "The Kalamkari Saree Guide" },
+      { slug: "silk-saree-care", label: "Caring for Silk Sarees" },
+    ],
   },
 
   "new-arrivals": {
@@ -127,6 +155,10 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
         body: "Everything here can be unfolded and draped in store. Colour in particular rarely survives a photograph intact — screens shift reds and golds more than any other shades, which is precisely the range most of this stock sits in. If you order online instead, our seven-day return window covers you.",
       },
     ],
+    relatedGuides: [
+      { slug: "wedding-saree-trends-2026", label: "Top 2026 Wedding Saree Trends" },
+      { slug: "mumbai-saree-shopping-guide", label: "The Mumbai Saree Shopping Guide" },
+    ],
   },
 
   shop: {
@@ -145,6 +177,11 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
         heading: "If you would rather ask than browse",
         body: "Message us on WhatsApp with an occasion, a budget and a colour, and we will send back photos and video of what fits. It is usually faster than filtering, and it is how a good part of our business already runs. Blouse stitching, fall-and-pico and custom sizing are all handled in store.",
       },
+    ],
+    relatedGuides: [
+      { slug: "mumbai-saree-shopping-guide", label: "The Mumbai Saree Shopping Guide" },
+      { slug: "pure-silk-vs-art-silk-test", label: "How to Test Pure Silk vs Art Silk" },
+      { slug: "bridal-trousseau-guide", label: "The Bridal Trousseau Guide" },
     ],
   },
 };

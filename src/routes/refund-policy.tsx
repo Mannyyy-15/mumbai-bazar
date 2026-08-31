@@ -101,8 +101,8 @@ export function RefundPolicyContent() {
             deodorant, makeup marks, or personal scents.
           </li>
           <li>
-            All original brand tags, security ribbons, purity authenticity cards (e.g., Silk Mark
-            tags), and original protective packaging must remain intact.
+            All original brand tags, security ribbons, any card or tag supplied with the piece,
+            and the original protective packaging must remain intact.
           </li>
           <li>
             The unstitched blouse piece attached to the saree must <strong>not be cut or detached</strong>.

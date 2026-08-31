@@ -18,7 +18,8 @@ import {
   Navigation,
 } from "lucide-react";
 import { seo, jsonLd, SITE } from "@/lib/seo";
-import { localBusinessSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-data";
+import { outletSchema, faqSchema, breadcrumbSchema } from "@/lib/structured-data";
+import { FLAGSHIP } from "@/lib/locations";
 import { PUBLISHED_OUTLETS } from "@/lib/locations";
 
 export const Route = createFileRoute("/contact")({
@@ -40,7 +41,9 @@ export const Route = createFileRoute("/contact")({
       meta,
       links,
       scripts: [
-        jsonLd(localBusinessSchema()),
+        // Same flagship entity as the homepage and /stores/nalasopara — one
+        // @id per shop rather than a second, competing node.
+        jsonLd(outletSchema(FLAGSHIP)),
         jsonLd(faqSchema(CONTACT_FAQS)),
         jsonLd(
           breadcrumbSchema([
@@ -469,9 +472,9 @@ function ContactPage() {
                 <div className="text-center p-3 rounded-2xl bg-white/80 border border-gold/30">
                   <ShieldCheck className="h-6 w-6 text-maroon mx-auto mb-1.5" />
                   <span className="text-[11px] font-bold text-maroon uppercase tracking-wider block">
-                    Pure Silk
+                    See Before You Buy
                   </span>
-                  <span className="text-[10px] text-ink block mt-0.5">Silk Mark Certified</span>
+                  <span className="text-[10px] text-ink block mt-0.5">Drape it in store</span>
                 </div>
                 <div className="text-center p-3 rounded-2xl bg-white/80 border border-gold/30">
                   <Truck className="h-6 w-6 text-maroon mx-auto mb-1.5" />
