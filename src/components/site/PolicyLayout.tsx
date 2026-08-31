@@ -171,7 +171,7 @@ export function PolicyLayout({
                   <strong>Email:</strong> {SITE.email}
                 </p>
                 <p>
-                  <strong>Hours:</strong> Mon – Sat, 10:00 AM – 8:00 PM
+                  <strong>Hours:</strong> {SITE.hours.label.replace("Open daily: ", "Daily, ")}
                 </p>
               </div>
               <a

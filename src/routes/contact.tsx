@@ -24,7 +24,7 @@ import { PUBLISHED_OUTLETS } from "@/lib/locations";
 export const Route = createFileRoute("/contact")({
   head: () => {
     const { meta, links } = seo({
-      title: "Contact Us | WhatsApp Saree Concierge & Store Network — Mumbai Bazar",
+      title: "Contact Us | WhatsApp & Store Network | Mumbai Bazar",
       description:
         "Call or WhatsApp Mumbai Bazar at +91 89566 64631, or visit our flagship boutique in Nalasopara East and outlets in Virar, Bhayandar and Goregaon. Open daily 10 AM–8 PM.",
       path: "/contact",

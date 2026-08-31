@@ -37,7 +37,7 @@ export const Route = createFileRoute("/")({
   component: Home,
   head: () => {
     const { meta, links } = seo({
-      title: "Mumbai Bazar | Saree, Lehenga & Bridal Wear Shops in Nalasopara & Virar",
+      title: "Saree & Bridal Wear Shops in Nalasopara | Mumbai Bazar",
       description:
         "Sarees, dress material, designer lehengas and dulhan wear at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. Open daily 10 AM-9 PM.",
       path: "/",

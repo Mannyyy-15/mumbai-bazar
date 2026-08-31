@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { type Product } from "@/lib/site-data";
 import { ProductCard } from "@/components/site/ProductCard";
+import { CATEGORY_COPY } from "@/lib/category-content";
 import {
   Check,
   X,
@@ -231,13 +232,21 @@ function ShopPage() {
               <span className="text-gold-deep font-normal">/</span>
               <span className="text-ink">Shop All Sarees</span>
             </nav>
+            {/*
+              Was "The Artisan Handloom Catalog" — a provenance claim across a
+              catalogue that includes cotton, blends and ready-to-wear, and a
+              weak H1 besides: it matched none of the terms this page targets.
+            */}
             <h1 className="mt-1 font-serif text-2xl sm:text-3xl text-maroon font-bold">
-              The Artisan Handloom Catalog
+              Shop All Sarees, Lehengas &amp; Ethnic Wear
             </h1>
+            <p className="mt-2.5 max-w-3xl text-sm leading-relaxed text-ink/80">
+              {CATEGORY_COPY.shop.intro}
+            </p>
           </div>
           <span className="text-xs text-taupe font-medium hidden sm:inline-block">
             Showing <strong className="text-maroon font-bold">{filtered.length}</strong> of{" "}
-            {products.length} heirlooms
+            {products.length} pieces
           </span>
         </div>
       </div>
@@ -446,6 +455,24 @@ function ShopPage() {
                 )}
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Buying guide — below the grid so products stay above it. */}
+      <section className="border-t border-gold/30 bg-white/60">
+        <div className="mx-auto w-full max-w-4xl px-4 py-14 md:px-8 md:py-20">
+          <div className="space-y-9">
+            {CATEGORY_COPY.shop.guide.map((block) => (
+              <div key={block.heading}>
+                <h2 className="font-serif text-xl md:text-2xl text-maroon font-bold">
+                  {block.heading}
+                </h2>
+                <p className="mt-2.5 text-sm md:text-[15px] leading-relaxed text-ink/85">
+                  {block.body}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

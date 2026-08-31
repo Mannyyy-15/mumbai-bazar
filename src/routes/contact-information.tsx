@@ -9,7 +9,7 @@ import { PUBLISHED_OUTLETS } from "@/lib/locations";
 export const Route = createFileRoute("/contact-information")({
   head: () => {
     const { meta, links } = seo({
-      title: "Contact Information | Customer Support & Stores — Mumbai Bazar",
+      title: "Contact Information & Stores | Mumbai Bazar",
       description:
         "Official contact information for Mumbai Bazar. Reach our customer care team via phone, WhatsApp, or email, or visit any of our 8 retail stores in Mumbai.",
       path: "/contact-information",
@@ -59,7 +59,7 @@ export function ContactInformationContent() {
               <span>Customer Helpline</span>
             </div>
             <p className="text-lg font-semibold text-ink">{SITE.phone}</p>
-            <p className="text-xs text-taupe">Mon – Sat, 10:00 AM – 8:00 PM IST</p>
+            <p className="text-xs text-taupe">{SITE.hours.label} IST</p>
           </div>
 
           {/* Card 2: WhatsApp */}

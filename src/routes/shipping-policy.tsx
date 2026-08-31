@@ -8,7 +8,7 @@ import { SITE } from "@/lib/seo";
 export const Route = createFileRoute("/shipping-policy")({
   head: () => {
     const { meta, links } = seo({
-      title: "Shipping & Delivery Policy | Free India Shipping — Mumbai Bazar",
+      title: "Shipping & Delivery Policy | Mumbai Bazar",
       description:
         "Free insured delivery across all Indian pin codes, express dispatch within 24-48 hours, tracked courier updates, and international shipping guidelines.",
       path: "/shipping-policy",

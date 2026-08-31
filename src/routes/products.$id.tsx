@@ -38,8 +38,21 @@ export const Route = createFileRoute("/products/$id")({
     const desc =
       p.details?.description ??
       `${p.name} in ${p.weave}. Available to see and drape at our stores, with delivery across India.`;
+    // Titles are truncated by Google at roughly 60 characters. The old template
+    // — `${name} — Buy ${weave} Online at Best Price | Mumbai Bazar` — ran
+    // 82-115 characters on every product, so the brand and half the value
+    // proposition never rendered in a result. "Buy ... Online at Best Price"
+    // added no ranking value and consumed the entire visible budget.
+    // Long product names are trimmed on a word boundary rather than mid-word.
+    const BRAND_SUFFIX = " | Mumbai Bazar";
+    const nameBudget = 60 - BRAND_SUFFIX.length;
+    const shortName =
+      p.name.length <= nameBudget
+        ? p.name
+        : p.name.slice(0, p.name.lastIndexOf(" ", nameBudget)).replace(/[\s,–—-]+$/, "");
+
     const { meta, links } = seo({
-      title: `${p.name} — Buy ${p.weave} Online at Best Price | Mumbai Bazar`,
+      title: `${shortName}${BRAND_SUFFIX}`,
       description: desc.slice(0, 160),
       path: `/products/${p.id}`,
       image: p.img,

@@ -8,7 +8,7 @@ import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 export const Route = createFileRoute("/festive-edit")({
   head: () => {
     const { meta, links } = seo({
-      title: "Festive Sarees Online | Diwali, Ganesh Chaturthi & Navratri — Mumbai Bazar",
+      title: "Festive Sarees for Diwali & Navratri | Mumbai Bazar",
       description:
         "Shop festive sarees for Diwali, Ganesh Chaturthi, Navratri and Karwa Chauth. Tissue, organza and silk drapes in celebration-ready colours, delivered across India.",
       path: "/festive-edit",
@@ -62,6 +62,7 @@ function FestiveEditPage() {
         heroImg={IMG.colFestive}
         category="festive-edit"
         showHero={false}
+        contentKey="festive-edit"
       />
     </div>
   );

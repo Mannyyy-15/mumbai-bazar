@@ -8,7 +8,7 @@ import { IMG } from "@/lib/site-data";
 export const Route = createFileRoute("/trousseau-builder")({
   head: () => {
     const { meta, links } = seo({
-      title: "Bridal Trousseau Builder | Custom 3-Saree Wedding Set — Mumbai Bazar",
+      title: "Bridal Trousseau Builder: 3-Saree Set | Mumbai Bazar",
       description:
         "Build a custom three-saree bridal trousseau and receive a gold-embossed keepsake chest plus 15% bundle savings. Personal styling for Mumbai brides.",
       path: "/trousseau-builder",

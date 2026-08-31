@@ -17,7 +17,7 @@ import { IMG } from "@/lib/site-data";
 export const Route = createFileRoute("/shipping-returns")({
   head: () => {
     const { meta, links } = seo({
-      title: "Shipping & Returns | Free India Delivery, 7-Day Returns — Mumbai Bazar",
+      title: "Shipping & Returns: 7-Day Policy | Mumbai Bazar",
       description:
         "Free insured shipping across India, tracked worldwide delivery to 40+ countries, and hassle-free 7-day returns on every saree from Mumbai Bazar.",
       path: "/shipping-returns",

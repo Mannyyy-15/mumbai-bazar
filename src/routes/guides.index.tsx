@@ -9,7 +9,7 @@ import { PreferredSourceButton } from "@/components/site/PreferredSourceButton";
 export const Route = createFileRoute("/guides/")({
   head: () => {
     const { meta, links } = seo({
-      title: "Saree Guides | Weaves, Care, Draping & Bridal Advice — Mumbai Bazar",
+      title: "Saree Guides: Weaves, Care & Draping | Mumbai Bazar",
       description:
         "Expert guides to Indian sarees — how to identify a real Banarasi, what korvai means, Paithani motifs, Nauvari draping, silk care and bridal trousseau planning.",
       path: "/guides",

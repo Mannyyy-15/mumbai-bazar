@@ -20,6 +20,7 @@ import { CartDrawer } from "@/components/site/CartDrawer";
 import { CartProvider } from "@/lib/cart-context";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { CatalogProvider } from "@/lib/catalog-context";
+import { fetchShopifyProducts } from "@/lib/shopify";
 import { WishlistProvider } from "@/lib/wishlist-context";
 import { WishlistDrawer } from "@/components/site/WishlistDrawer";
 import { PageTransition } from "@/components/site/PageTransition";
@@ -96,6 +97,19 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  /**
+   * Fetch the catalogue on the server so product grids are in the initial HTML.
+   *
+   * Without this the grids rendered client-side only, so /shop and every
+   * category page shipped zero `/products/*` links — product pages had no
+   * internal links at all and were reachable only through sitemap.xml.
+   *
+   * fetchShopifyProducts already degrades gracefully (it falls back rather than
+   * throwing), and staleTime keeps navigation from refetching on every route
+   * change.
+   */
+  loader: async () => ({ products: await fetchShopifyProducts(50).catch(() => []) }),
+  staleTime: 5 * 60 * 1000,
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -193,11 +207,12 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { products } = Route.useLoaderData();
 
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <CatalogProvider>
+        <CatalogProvider initialProducts={products}>
           <WishlistProvider>
             <SmoothScroll />
             <ScrollReveal />

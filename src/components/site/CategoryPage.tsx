@@ -13,6 +13,7 @@ import {
   matchesColor,
   parsePriceNumber,
 } from "@/lib/filters";
+import { CATEGORY_COPY } from "@/lib/category-content";
 
 type SortKey = "featured" | "new" | "price-asc" | "price-desc";
 const SORTS: { key: SortKey; label: string }[] = [
@@ -30,6 +31,7 @@ export function CategoryPage({
   heroImg,
   category,
   showHero = true,
+  contentKey,
 }: {
   eyebrow: string;
   title: string;
@@ -38,7 +40,14 @@ export function CategoryPage({
   heroImg: string;
   category?: Product["category"][number];
   showHero?: boolean;
+  /**
+   * Key into CATEGORY_COPY. Supplies the lead paragraph above the grid and the
+   * buying guide below it. Without this, every category page is identical
+   * boilerplate — see the note at the top of category-content.ts.
+   */
+  contentKey?: string;
 }) {
+  const editorial = contentKey ? CATEGORY_COPY[contentKey] : undefined;
   const { products } = useCatalog();
 
   const inCategory = useMemo(
@@ -349,6 +358,11 @@ export function CategoryPage({
             <h1 className="mt-1 font-serif text-2xl sm:text-3xl md:text-4xl text-maroon font-bold">
               {title}
             </h1>
+            {editorial && (
+              <p className="mt-2.5 max-w-3xl text-sm leading-relaxed text-ink/80">
+                {editorial.intro}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -367,8 +381,13 @@ export function CategoryPage({
               {/* Toolbar */}
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gold/40 pb-5">
                 <div className="flex items-center gap-3">
+                  {/*
+                    Was "Handwoven" on every category page, including cotton and
+                    ready-to-wear. Another blanket claim the catalogue does not
+                    support. "In store" is true of everything we list.
+                  */}
                   <span className="inline-flex items-center gap-1.5 bg-maroon/10 px-3 py-1 rounded-full text-xs font-bold text-maroon uppercase tracking-wider">
-                    <Sparkles className="h-3 w-3 text-gold-deep" /> Handwoven
+                    <Sparkles className="h-3 w-3 text-gold-deep" /> In store
                   </span>
                   <p className="text-xs sm:text-sm text-ink/80 font-medium">
                     Showing <strong className="text-maroon font-bold">{filtered.length}</strong> of{" "}
@@ -556,6 +575,31 @@ export function CategoryPage({
           </div>
         </div>
       </section>
+
+      {/*
+        Buying guide. Sits below the grid so it never pushes products down, which
+        is the standard e-commerce pattern: shoppers get the grid immediately,
+        and the page still carries content worth ranking. Before this, these
+        pages had no unique body copy at all.
+      */}
+      {editorial && (
+        <section className="border-t border-gold/30 bg-white/60">
+          <div className="mx-auto w-full max-w-4xl px-4 py-14 md:px-8 md:py-20">
+            <div className="space-y-9">
+              {editorial.guide.map((block) => (
+                <div key={block.heading}>
+                  <h2 className="font-serif text-xl md:text-2xl text-maroon font-bold">
+                    {block.heading}
+                  </h2>
+                  <p className="mt-2.5 text-sm md:text-[15px] leading-relaxed text-ink/85">
+                    {block.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Mobile Drawer Filter */}
       {drawerOpen && (

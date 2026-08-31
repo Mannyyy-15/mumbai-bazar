@@ -9,7 +9,7 @@ import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 export const Route = createFileRoute("/new-arrivals")({
   head: () => {
     const { meta, links } = seo({
-      title: "New Arrival Sarees | Latest Handwoven Silks — Mumbai Bazar",
+      title: "New Arrival Sarees | Latest Drops | Mumbai Bazar",
       description:
         "New saree, lehenga and dress material arrivals, added weekly across our 8 stores. Latest Banarasi, Kanjivaram and party wear styles.",
       path: "/new-arrivals",
@@ -55,6 +55,7 @@ function NewArrivalsPage() {
         heroImg={IMG.colKanjivaram}
         category="new-arrivals"
         showHero={false}
+        contentKey="new-arrivals"
       />
     </div>
   );

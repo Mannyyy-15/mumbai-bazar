@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ShieldCheck, Award, MapPin, Sparkles } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
 import { IMG, PRODUCTS } from "@/lib/site-data";
 import { seo, jsonLd } from "@/lib/seo";
@@ -8,7 +7,7 @@ import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 export const Route = createFileRoute("/silk-sarees")({
   head: () => {
     const { meta, links } = seo({
-      title: "Silk Sarees | Banarasi, Kanjivaram & Paithani Styles — Mumbai Bazar",
+      title: "Silk Sarees: Banarasi & Kanjivaram | Mumbai Bazar",
       description:
         "Silk and silk-blend sarees in Banarasi, Kanjivaram and Paithani styles. See and drape every piece in store across Nalasopara, Virar, Bhayandar and Goregaon.",
       path: "/silk-sarees",
@@ -17,8 +16,8 @@ export const Route = createFileRoute("/silk-sarees")({
         "banarasi silk saree",
         "kanjivaram silk saree",
         "paithani saree",
-        "silk mark certified saree",
-        "handloom silk saree online",
+        "silk saree shop nalasopara",
+        "silk saree virar",
       ],
     });
     return {
@@ -44,13 +43,6 @@ export const Route = createFileRoute("/silk-sarees")({
   component: SilkSareesPage,
 });
 
-const CLUSTERS = [
-  { name: "Varanasi", weave: "Banarasi Katantan Silk", img: IMG.colBanarasi },
-  { name: "Kanchipuram", weave: "Pure Mulberry Kanjivaram", img: IMG.colKanjivaram },
-  { name: "Chanderi", weave: "Tissue & Silk Cotton", img: IMG.colPuresilk },
-  { name: "Paithan", weave: "Real Gold Zari Paithani", img: IMG.colFestive },
-];
-
 function SilkSareesPage() {
   return (
     <div className="w-full bg-ivory">
@@ -62,6 +54,7 @@ function SilkSareesPage() {
         heroImg={IMG.colBanarasi}
         category="silk-sarees"
         showHero={false}
+        contentKey="silk-sarees"
       />
     </div>
   );

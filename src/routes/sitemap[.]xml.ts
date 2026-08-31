@@ -1,38 +1,37 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { SITE } from "@/lib/seo";
-import { COLLECTIONS } from "@/lib/site-data";
 import { fetchShopifyProducts } from "@/lib/shopify";
 import { PUBLISHED_OUTLETS } from "@/lib/locations";
 import { GUIDES } from "@/lib/guides";
 
-type Entry = { path: string; changefreq: string; priority: string };
+type Entry = { path: string };
 
-/** Static, indexable routes. Utility pages sit lower in priority. */
+/** Static, indexable routes. */
 const STATIC_ENTRIES: Entry[] = [
-  { path: "/", changefreq: "daily", priority: "1.0" },
-  { path: "/shop", changefreq: "daily", priority: "0.9" },
-  { path: "/wedding-sarees", changefreq: "weekly", priority: "0.9" },
-  { path: "/silk-sarees", changefreq: "weekly", priority: "0.9" },
-  { path: "/new-arrivals", changefreq: "daily", priority: "0.8" },
-  { path: "/festive-edit", changefreq: "weekly", priority: "0.8" },
-  { path: "/everyday-sarees", changefreq: "weekly", priority: "0.8" },
-  { path: "/collections", changefreq: "weekly", priority: "0.8" },
-  { path: "/trousseau-builder", changefreq: "monthly", priority: "0.7" },
-  { path: "/our-story", changefreq: "monthly", priority: "0.6" },
-  { path: "/about", changefreq: "monthly", priority: "0.6" },
-  { path: "/care-guide", changefreq: "monthly", priority: "0.6" },
-  { path: "/stores", changefreq: "monthly", priority: "0.9" },
-  { path: "/guides", changefreq: "weekly", priority: "0.7" },
-  { path: "/faq", changefreq: "monthly", priority: "0.6" },
-  { path: "/contact", changefreq: "monthly", priority: "0.5" },
-  { path: "/contact-information", changefreq: "monthly", priority: "0.5" },
-  { path: "/shipping-policy", changefreq: "monthly", priority: "0.5" },
-  { path: "/refund-policy", changefreq: "monthly", priority: "0.5" },
-  { path: "/privacy-policy", changefreq: "monthly", priority: "0.5" },
-  { path: "/terms-of-service", changefreq: "monthly", priority: "0.5" },
-  { path: "/legal-notice", changefreq: "monthly", priority: "0.5" },
-  { path: "/shipping-returns", changefreq: "monthly", priority: "0.4" },
+  { path: "/" },
+  { path: "/shop" },
+  { path: "/wedding-sarees" },
+  { path: "/silk-sarees" },
+  { path: "/new-arrivals" },
+  { path: "/festive-edit" },
+  { path: "/everyday-sarees" },
+  { path: "/collections" },
+  { path: "/trousseau-builder" },
+  { path: "/our-story" },
+  { path: "/about" },
+  { path: "/care-guide" },
+  { path: "/stores" },
+  { path: "/guides" },
+  { path: "/faq" },
+  { path: "/contact" },
+  { path: "/contact-information" },
+  { path: "/shipping-policy" },
+  { path: "/refund-policy" },
+  { path: "/privacy-policy" },
+  { path: "/terms-of-service" },
+  { path: "/legal-notice" },
+  { path: "/shipping-returns" },
 ];
 
 function escapeXml(value: string): string {
@@ -44,45 +43,51 @@ function escapeXml(value: string): string {
     .replace(/'/g, "&apos;");
 }
 
-function urlEntry(path: string, lastmod: string, changefreq: string, priority: string): string {
+/**
+ * A sitemap entry.
+ *
+ * Deliberately emits neither `changefreq` nor `priority`: Google ignores both
+ * outright and has said so for years.
+ *
+ * `lastmod` is emitted ONLY where a real content-modified date exists — which
+ * today means the guides. Previously every URL carried the build date, so all
+ * 41 entries claimed to have changed on every deploy. A `lastmod` that moves
+ * without the content moving is treated as untrustworthy and then discarded
+ * wholesale, which costs the signal on the pages where the date is genuine.
+ */
+function urlEntry(path: string, lastmod?: string): string {
   return [
     "  <url>",
     `    <loc>${escapeXml(SITE.url + path)}</loc>`,
-    `    <lastmod>${lastmod}</lastmod>`,
-    `    <changefreq>${changefreq}</changefreq>`,
-    `    <priority>${priority}</priority>`,
+    ...(lastmod ? [`    <lastmod>${lastmod}</lastmod>`] : []),
     "  </url>",
   ].join("\n");
 }
 
 async function buildSitemap(): Promise<string> {
-  const lastmod = new Date().toISOString().slice(0, 10);
-
-  const staticUrls = STATIC_ENTRIES.map((e) => urlEntry(e.path, lastmod, e.changefreq, e.priority));
+  const staticUrls = STATIC_ENTRIES.map((e) => urlEntry(e.path));
 
   // Product URLs come from the live Shopify catalogue, not the local seed data —
   // the PDP loader only resolves Shopify handles, so anything else would be a
   // 404 handed straight to Google. On a fetch failure we emit no product URLs
   // rather than stale ones.
   const products = await fetchShopifyProducts(250).catch(() => []);
-  const productUrls = products.map((p) =>
-    urlEntry(`/products/${p.handle}`, lastmod, "weekly", "0.8"),
-  );
+  const productUrls = products.map((p) => urlEntry(`/products/${p.handle}`));
 
-  // Collection landing pages are rendered by /collections; list them so the
-  // weave-specific URLs are discoverable rather than orphaned.
-  const collectionUrls = COLLECTIONS.map((c) =>
-    urlEntry(`/collections#${c.slug}`, lastmod, "monthly", "0.6"),
-  );
+  // NOTE: the weave collections are deliberately NOT listed. They were emitted
+  // as `/collections#banarasi`-style fragment URLs, and Google discards
+  // everything after the "#", so those were five duplicate submissions of
+  // /collections — inflating the sitemap and misreporting coverage in Search
+  // Console. To make these rank they need to become real URLs
+  // (/collections/banarasi) with their own content, not fragments.
 
   // Store pages. These carry the branch NAP, so they rank for "saree shop near
   // me" in each locality and back the Google Business Profile listings.
-  const outletUrls = PUBLISHED_OUTLETS.map((o) =>
-    urlEntry(`/stores/${o.slug}`, lastmod, "monthly", o.flagship ? "0.9" : "0.8"),
-  );
+  const outletUrls = PUBLISHED_OUTLETS.map((o) => urlEntry(`/stores/${o.slug}`));
 
-  // Editorial guides — the topical-authority cluster.
-  const guideUrls = GUIDES.map((g) => urlEntry(`/guides/${g.slug}`, g.modified, "monthly", "0.7"));
+  // Editorial guides — the topical-authority cluster, and the only URLs with a
+  // real modified date.
+  const guideUrls = GUIDES.map((g) => urlEntry(`/guides/${g.slug}`, g.modified));
 
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -91,7 +96,6 @@ async function buildSitemap(): Promise<string> {
     ...productUrls,
     ...outletUrls,
     ...guideUrls,
-    ...collectionUrls,
     "</urlset>",
   ].join("\n");
 }
