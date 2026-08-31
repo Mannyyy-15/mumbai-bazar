@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import { Link } from "@tanstack/react-router";
 import { Check, X, ChevronDown, SlidersHorizontal, Sparkles, Filter } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-context";
 import { PageHero } from "@/components/site/PageHero";
