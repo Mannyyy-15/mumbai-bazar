@@ -38,7 +38,7 @@ async function buildLlmsTxt(): Promise<string> {
     "",
     `- ${OUTLET_COUNT} stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon`,
     `- Flagship: ${SITE.address.street}, ${SITE.address.city} ${SITE.address.postalCode}`,
-    "- All stores open daily, 10:00 AM to 9:00 PM",
+    `- ${SITE.hours.sentence}`,
     "- WhatsApp photos and videos of any piece before you visit",
     "- Delivery across India",
     `- Contact: ${SITE.phone}`,

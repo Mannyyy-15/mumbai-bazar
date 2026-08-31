@@ -24,6 +24,15 @@ import { useWishlist } from "@/lib/wishlist-context";
 import { useCatalog } from "@/lib/catalog-context";
 import { TrousseauBuilder } from "@/components/site/TrousseauBuilder";
 
+/**
+ * Hero slide asset base paths — extension omitted so each <picture> can offer
+ * AVIF and WebP and let the browser pick. The source PNGs were 2.0-2.5 MB each
+ * (12.9 MB across the six); the AVIF set totals 0.56 MB for the same pixels.
+ */
+const HERO_SLIDE_1 = "/hero/slide-1";
+const HERO_SLIDE_2 = "/hero/slide-2";
+const HERO_SLIDE_3 = "/hero/slide-3";
+
 export const Route = createFileRoute("/")({
   component: Home,
   head: () => {
@@ -46,7 +55,28 @@ export const Route = createFileRoute("/")({
       meta,
       links: [
         ...links,
-        { rel: "preload", as: "image", href: IMG.heroSaree, fetchPriority: "high" },
+        // Preload the actual LCP image — the first hero slide. This previously
+        // preloaded a hero JPEG that was not rendered anywhere on the page:
+        // 323 KB fetched at high priority and never shown, competing with the
+        // real LCP. Scoped by viewport so phones fetch only the portrait crop,
+        // and typed so browsers without AVIF skip it and take the WebP from the
+        // <picture> below instead of double-downloading.
+        {
+          rel: "preload",
+          as: "image",
+          type: "image/avif",
+          href: `${HERO_SLIDE_1}-horizontal.avif`,
+          media: "(min-width: 768px)",
+          fetchPriority: "high",
+        },
+        {
+          rel: "preload",
+          as: "image",
+          type: "image/avif",
+          href: `${HERO_SLIDE_1}-vertical.avif`,
+          media: "(max-width: 767px)",
+          fetchPriority: "high",
+        },
       ],
       scripts: [jsonLd(breadcrumbSchema([{ name: "Home", path: "/" }]))],
     };
@@ -61,8 +91,8 @@ type Slide = {
   copy: string;
   cta: { label: string; to: string };
   secondary?: { label: string; to: string };
+  /** Asset base path without size suffix or extension, e.g. "/hero/slide-1". */
   img: string;
-  imgMobile?: string;
   align: "left" | "right" | "center";
   accent: string; // small tag e.g. "01 / 03"
 };
@@ -75,8 +105,7 @@ const SLIDES: Slide[] = [
     copy: "Bridal and dulhan sarees, designer lehengas and tissue drapes for the bride and her celebrations.",
     cta: { label: "Shop Bridal Sarees", to: "/wedding-sarees" },
     secondary: { label: "View Collections", to: "/collections" },
-    img: "/hero/slide-1-horizontal.png",
-    imgMobile: "/hero/slide-1-vertical.png",
+    img: HERO_SLIDE_1,
     align: "left",
     accent: "Volume I",
   },
@@ -87,8 +116,7 @@ const SLIDES: Slide[] = [
     copy: "Banarasi, Kanjivaram and Paithani styles, in store across Nalasopara, Virar, Bhayandar and Goregaon.",
     cta: { label: "Shop Heritage Silks", to: "/silk-sarees" },
     secondary: { label: "Explore The Craft", to: "/our-story" },
-    img: "/hero/slide-2-horizontal.png",
-    imgMobile: "/hero/slide-2-vertical.png",
+    img: HERO_SLIDE_2,
     align: "left",
     accent: "Volume II",
   },
@@ -99,8 +127,7 @@ const SLIDES: Slide[] = [
     copy: "Featherlight organza, fluid tissue, and modern pastel silks spun for Sangeet, Diwali, and festive soirées.",
     cta: { label: "Shop Festive Edit", to: "/festive-edit" },
     secondary: { label: "New Arrivals", to: "/new-arrivals" },
-    img: "/hero/slide-3-horizontal.png",
-    imgMobile: "/hero/slide-3-vertical.png",
+    img: HERO_SLIDE_3,
     align: "left",
     accent: "Volume III",
   },
@@ -181,6 +208,16 @@ function HeroCarousel() {
       aria-roledescription="carousel"
       aria-label="Featured collections"
     >
+      {/*
+        The page's single H1. The carousel headings rotate, so they cannot serve
+        as the H1 — this states the page subject once, stably, for crawlers and
+        screen readers. Visually hidden because the hero is a full-bleed image
+        with no room for it; the text is accurate and matches the page content.
+      */}
+      <h1 className="sr-only">
+        Mumbai Bazar — Sarees, Lehengas &amp; Bridal Wear across 8 stores in Nalasopara,
+        Virar, Vasai, Bhayandar and Goregaon
+      </h1>
       <div
         ref={trackRef}
         onTouchStart={onTouchStart}
@@ -224,12 +261,29 @@ function HeroCarousel() {
               aria-hidden={!active}
             >
               <picture className="absolute inset-0 h-full w-full">
-                {s.imgMobile && <source media="(max-width: 767px)" srcSet={s.imgMobile} />}
+                {/*
+                  Order matters: the browser takes the first <source> it both
+                  matches and supports. Portrait crops for phones first, then
+                  landscape, each offered as AVIF then WebP. The <img> src is the
+                  WebP landscape, which is the universal fallback.
+                */}
+                <source
+                  media="(max-width: 767px)"
+                  type="image/avif"
+                  srcSet={`${s.img}-vertical.avif`}
+                />
+                <source
+                  media="(max-width: 767px)"
+                  type="image/webp"
+                  srcSet={`${s.img}-vertical.webp`}
+                />
+                <source type="image/avif" srcSet={`${s.img}-horizontal.avif`} />
+                <source type="image/webp" srcSet={`${s.img}-horizontal.webp`} />
                 <img
-                  src={s.img}
+                  src={`${s.img}-horizontal.webp`}
                   alt={`${s.title} ${s.italic ?? ""}`.trim()}
-                  width={1920}
-                  height={1080}
+                  width={1672}
+                  height={941}
                   fetchPriority={i === 0 ? "high" : "low"}
                   loading={i === 0 ? "eager" : "lazy"}
                   decoding="async"

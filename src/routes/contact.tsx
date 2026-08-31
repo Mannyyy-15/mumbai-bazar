@@ -73,7 +73,7 @@ const CONTACT_FAQS = [
   },
   {
     q: "Can I visit your physical stores to try sarees in person?",
-    a: "Yes! You are warmly invited to visit our flagship boutique at Tiwari Nagar, Tulinj Road, Nalasopara East, or any of our sister stores in Virar, Bhayandar, and Goregaon. Open Monday to Saturday 10:00 AM – 8:00 PM.",
+    a: `Yes! You are warmly invited to visit our flagship boutique at Tiwari Nagar, Tulinj Road, Nalasopara East, or any of our sister stores in Virar, Bhayandar, and Goregaon. ${SITE.hours.label}.`,
   },
   {
     q: "What is your return or exchange policy?",
@@ -122,7 +122,7 @@ function ContactPage() {
           </nav>
           <span className="text-xs text-maroon font-semibold hidden sm:inline-flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5 text-gold-deep" />
-            Mon – Sat: 10:00 AM – 8:00 PM IST
+            {SITE.hours.label} IST
           </span>
         </div>
       </div>
@@ -293,7 +293,7 @@ function ContactPage() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Ananya Deshmukh"
+                      placeholder="e.g. Priya Sharma"
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       className="w-full px-4 py-3 rounded-xl border border-gold/60 bg-[#FAF8F5] text-sm text-ink placeholder:text-ink/40 font-medium focus:border-maroon focus:bg-white focus:outline-none transition-colors"

@@ -1,4 +1,3 @@
-import heroSaree from "@/assets/hero-saree.jpg";
 import colBanarasi from "@/assets/col-banarasi.jpg";
 import colKanjivaram from "@/assets/col-kanjivaram.jpg";
 import colWedding from "@/assets/col-wedding.jpg";
@@ -18,7 +17,6 @@ import t2 from "@/assets/t2.jpg";
 import t3 from "@/assets/t3.jpg";
 
 export const IMG = {
-  heroSaree,
   colBanarasi,
   colKanjivaram,
   colWedding,

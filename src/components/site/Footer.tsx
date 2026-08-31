@@ -135,7 +135,12 @@ export function Footer() {
               </span>
               {SITE.address.street}, {SITE.address.city}, MH {SITE.address.postalCode}
               <br />
-              Mon – Sat: 10:00 AM – 8:00 PM
+              {/*
+                Was hardcoded "Mon – Sat: 10:00 AM – 8:00 PM", which contradicted
+                the store pages and llms.txt on every one of the 36 pages this
+                footer renders on. Now derived from SITE.hours.
+              */}
+              {SITE.hours.label}
             </li>
           </Col>
         </div>

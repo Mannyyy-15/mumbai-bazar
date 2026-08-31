@@ -112,9 +112,11 @@ export function localBusinessSchema() {
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        opens: "10:00",
-        closes: "20:00",
+        // Derived from SITE.hours so schema can never drift from the footer,
+        // the store pages or llms.txt again.
+        dayOfWeek: [...SITE.hours.days],
+        opens: SITE.hours.opens,
+        closes: SITE.hours.closes,
       },
     ],
     // Phase 1 (Vasai-Virar) through Phase 2 (Mumbai metro) catchment. Each named
@@ -173,7 +175,9 @@ export function productSchema(p: Product) {
       `${p.name} in ${p.weave}. Available to see and drape at our stores, with delivery across India.`,
     image: images,
     sku: p.id,
-    mpn: p.id,
+    // No `mpn`: it means the manufacturer's part number, and setting it to the
+    // URL slug is false data that degrades Merchant Center matching. Add a real
+    // `gtin13` here when barcodes are available.
     url,
     brand: { "@type": "Brand", name: SITE.name },
     material: p.details?.fabric ?? p.weave,
@@ -192,23 +196,14 @@ export function productSchema(p: Product) {
     ]
       .filter((a): a is { name: string; value: string } => Boolean(a.value))
       .map((a) => ({ "@type": "PropertyValue", name: a.name, value: a.value })),
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: "148",
-      bestRating: "5",
-      worstRating: "1",
-    },
-    review: [
-      {
-        "@type": "Review",
-        author: { "@type": "Person", name: "Ananya Deshmukh" },
-        datePublished: "2026-02-18",
-        reviewBody:
-          "Exceptional drape, genuine silk luster, and tested zari borders. Delivered promptly with authentic boutique packaging in Mumbai.",
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-      },
-    ],
+    // NO aggregateRating / review here. Ratings must be backed by real,
+    // verifiable reviews that are rendered on the page. A hardcoded rating
+    // repeated across every product — invisible to users — violates Google's
+    // structured data policy on two counts (marked-up content not visible to
+    // readers, and reviews not written by customers) and risks a manual action
+    // that would strip rich results across the whole domain, including the
+    // legitimate Product, Organization and Breadcrumb markup below.
+    // Use withReviews() once server-rendered reviews exist.
     offers: {
       "@type": "Offer",
       url,
@@ -305,9 +300,9 @@ export function outletSchema(o: Outlet) {
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        opens: "10:00",
-        closes: "21:00",
+        dayOfWeek: [...SITE.hours.days],
+        opens: SITE.hours.opens,
+        closes: SITE.hours.closes,
       },
     ],
     makesOffer: o.specialities.map((item) => ({

@@ -176,7 +176,8 @@ function StorePage() {
               </span>
               <h2 className="mt-4 font-serif text-xl text-maroon">Open daily</h2>
               <p className="mt-2 text-sm leading-relaxed text-ink/80">
-                10:00 AM – 9:00 PM, all seven days.
+                {SITE.hours.label.replace("Open daily: ", "")}, all{" "}
+                {SITE.hours.days.length === 7 ? "seven" : SITE.hours.days.length} days.
                 <br />
                 Walk in any time, or call ahead during festival weeks.
               </p>

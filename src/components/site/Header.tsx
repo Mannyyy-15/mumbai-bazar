@@ -542,10 +542,22 @@ export function Header() {
                       {/* Subcategory Columns */}
                       {cat.groups.map((group) => (
                         <div key={group.title} className="space-y-4">
-                          <h4 className="border-b border-gold/40 pb-2 text-xs font-bold uppercase tracking-[0.2em] text-maroon">
+                          {/*
+                            Navigation labels, not document headings. These used to be
+                            <h4>, which made every page's outline open ten levels deep
+                            before its real content. Kept as a styled div with the list
+                            labelled via aria-label for accessibility.
+                          */}
+                          <div
+                            id={`meganav-${group.title.replace(/\W+/g, "-").toLowerCase()}`}
+                            className="border-b border-gold/40 pb-2 text-xs font-bold uppercase tracking-[0.2em] text-maroon"
+                          >
                             {group.title}
-                          </h4>
-                          <ul className="space-y-2.5">
+                          </div>
+                          <ul
+                            className="space-y-2.5"
+                            aria-labelledby={`meganav-${group.title.replace(/\W+/g, "-").toLowerCase()}`}
+                          >
                             {group.items.map((sub) => (
                               <li key={sub.label}>
                                 <Link

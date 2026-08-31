@@ -162,8 +162,14 @@ export function ContactInformationContent() {
             >
               <Store className="h-4 w-4 text-maroon shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-semibold text-xs text-maroon">{store.name}</h4>
-                <p className="text-[11px] text-taupe mt-0.5 line-clamp-1">{store.address}</p>
+                {/*
+                  Outlet has no `name`/`address` fields — it exposes `area`,
+                  `street` and `postalCode`. Matches how /stores renders them.
+                */}
+                <h4 className="font-semibold text-xs text-maroon">{store.area}</h4>
+                <p className="text-[11px] text-taupe mt-0.5 line-clamp-1">
+                  {store.street}, {store.area} {store.postalCode}
+                </p>
                 <Link
                   to="/stores/$slug"
                   params={{ slug: store.slug }}

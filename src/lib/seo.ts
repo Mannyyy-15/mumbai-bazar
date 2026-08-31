@@ -51,7 +51,44 @@ export const SITE = {
     "Thane",
     "Navi Mumbai",
   ],
-  openingHours: "Mo-Sa 10:00-20:00",
+  /**
+   * SINGLE SOURCE OF TRUTH for opening hours. Everything that states hours —
+   * the footer, store pages, `openingHoursSpecification` in JSON-LD, llms.txt
+   * and the homepage meta description — must derive from this and nothing else.
+   *
+   * Before this existed the site stated three different sets of hours at once:
+   * the footer and Organization schema said Mon-Sat to 8 PM, while the store
+   * pages, llms.txt and the homepage meta description said daily to 9 PM. Hours
+   * are core NAP data: Google cross-references them against Google Business
+   * Profile, inconsistency suppresses map-pack confidence, and an AI assistant
+   * asked "are you open on Sunday?" had a 50/50 chance of sending a customer to
+   * a closed shop.
+   *
+   * The values below follow the majority of the site (store pages + llms.txt +
+   * homepage meta) and normal Indian saree-retail trading patterns.
+   * >>> CONFIRM AGAINST THE ACTUAL STORES, then make Google Business Profile
+   * >>> match exactly. Change it here only — never in a component.
+   */
+  hours: {
+    opens: "10:00",
+    closes: "21:00",
+    /** All seven days. Set to the trading days if any store closes weekly. */
+    days: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ] as const,
+    /** Human-readable, for the footer and any prose that states hours. */
+    label: "Open daily: 10:00 AM – 9:00 PM",
+    /** Sentence-form, for llms.txt and other running prose. */
+    sentence: "All stores open daily, 10:00 AM to 9:00 PM",
+    /** Compact schema.org / GBP form. */
+    spec: "Mo-Su 10:00-21:00",
+  },
   social: [
     "https://www.instagram.com/mumbai__bazar__nalasopara/",
     "https://www.instagram.com/mumbai_bazar__bhayandar_/",
