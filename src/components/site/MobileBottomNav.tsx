@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Sparkles, LayoutGrid, ShoppingBag } from "lucide-react";
+import { Store, Home, LayoutGrid, ShoppingBag } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 
 export function MobileBottomNav() {
@@ -64,7 +64,7 @@ export function MobileBottomNav() {
             isShop ? "text-maroon font-bold" : "text-ink/65 hover:text-maroon"
           }`}
         >
-          <Sparkles className="h-5 w-5" />
+          <Store className="h-5 w-5" />
           <span className="mt-1 text-[10px] font-semibold tracking-wider uppercase">Shop</span>
         </Link>
 
@@ -76,7 +76,9 @@ export function MobileBottomNav() {
           }`}
         >
           <LayoutGrid className="h-5 w-5" />
-          <span className="mt-1 text-[10px] font-semibold tracking-wider uppercase">Categories</span>
+          <span className="mt-1 text-[10px] font-semibold tracking-wider uppercase">
+            Categories
+          </span>
         </Link>
 
         {/* 4. Cart */}

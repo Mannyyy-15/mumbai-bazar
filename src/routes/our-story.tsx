@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo, jsonLd } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import { IMG } from "@/lib/site-data";
-import { ArrowRight, Sparkles, ShieldCheck, HeartHandshake, Award } from "lucide-react";
+import { ArrowRight, ShieldCheck, HeartHandshake, Award } from "lucide-react";
 
 export const Route = createFileRoute("/our-story")({
   head: () => {
@@ -49,7 +49,6 @@ function StoryPage() {
               <span className="text-ivory">Our Story</span>
             </nav>
             <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold/40 bg-gold/10 text-[10px] tracking-[0.3em] uppercase text-gold font-medium mb-4">
-              <Sparkles className="h-3 w-3" />
               <span>Authentic Heritage</span>
             </span>
             <h1 className="font-serif text-4xl leading-tight text-ivory md:text-6xl lg:text-7xl">

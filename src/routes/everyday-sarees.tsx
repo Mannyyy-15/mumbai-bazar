@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Feather, Sun, ShieldCheck, Sparkles, Heart } from "lucide-react";
+import { Feather, Sun, ShieldCheck, Heart } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
 import { IMG, PRODUCTS } from "@/lib/site-data";
 import { seo, jsonLd } from "@/lib/seo";

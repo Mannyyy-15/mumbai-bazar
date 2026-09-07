@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Sparkles, Gift, Flame, PartyPopper } from "lucide-react";
+import { Gift, Flame, PartyPopper } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
 import { IMG, PRODUCTS } from "@/lib/site-data";
 import { seo, jsonLd } from "@/lib/seo";

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Sparkles, Clock, ArrowUpRight, Flame, ShieldCheck } from "lucide-react";
+import { Clock, ArrowUpRight, Flame, ShieldCheck } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
 import { GoldRule } from "@/components/site/Motif";
 import { IMG, PRODUCTS } from "@/lib/site-data";

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Heart, Sparkles, Scissors, MessageCircle, Crown } from "lucide-react";
+import { Heart, Music, Scissors, MessageCircle, Crown } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
 import { IMG, PRODUCTS } from "@/lib/site-data";
 import { seo, jsonLd } from "@/lib/seo";
@@ -59,7 +59,7 @@ const ROLES = [
   {
     role: "Sangeet & Cocktail",
     desc: "Lightweight metallic tissue & fluid organza silk",
-    icon: Sparkles,
+    icon: Music,
   },
   { role: "Bridesmaids", desc: "Coordinated pastel silks & modern zari borders", icon: Scissors },
 ];

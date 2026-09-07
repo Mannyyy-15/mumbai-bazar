@@ -12,7 +12,6 @@ import {
   Palette,
   IndianRupee,
   Layers,
-  Sparkles,
   RotateCcw,
 } from "lucide-react";
 import { useCatalog } from "@/lib/catalog-context";
@@ -266,7 +265,7 @@ function ShopPage() {
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gold/40 pb-5">
                 <div className="flex items-center gap-3">
                   <span className="inline-flex items-center gap-1.5 bg-maroon/10 px-3 py-1 rounded-full text-xs font-bold text-maroon uppercase tracking-wider">
-                    <Sparkles className="h-3 w-3 text-gold-deep" /> Authentic Weaves
+                    Authentic Weaves
                   </span>
                   <p className="text-xs sm:text-sm text-ink/80 font-medium">
                     <strong className="text-maroon font-bold">{filtered.length}</strong> drapes
@@ -431,7 +430,7 @@ function ShopPage() {
               <div className="mt-6">
                 {filtered.length === 0 ? (
                   <div className="py-20 text-center rounded-3xl border-2 border-dashed border-gold/60 bg-white p-8">
-                    <Sparkles className="h-10 w-10 text-gold-deep mx-auto mb-3" />
+                    <Filter className="h-10 w-10 text-gold-deep mx-auto mb-3" />
                     <h3 className="font-serif text-2xl md:text-3xl text-maroon font-bold">
                       No Sarees Match Your Selected Filters
                     </h3>

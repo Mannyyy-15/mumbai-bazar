@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { seo, jsonLd, SITE } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import { IMG } from "@/lib/site-data";
@@ -155,7 +155,7 @@ function CollectionsPage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 md:mb-14">
           <div>
             <span className="inline-flex items-center gap-1.5 bg-maroon/10 px-3 py-1 rounded-full text-xs font-bold text-maroon uppercase tracking-wider mb-2">
-              <Sparkles className="h-3 w-3 text-gold-deep" /> Handcrafted Heritage
+              Handcrafted Heritage
             </span>
             <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-maroon font-bold tracking-tight">
               Shop by Collection
@@ -256,7 +256,7 @@ function CollectionsPage() {
       <section className="py-14 md:py-20 px-4 md:px-8 border-t border-gold/40 bg-white">
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/30 bg-maroon/5 text-xs uppercase tracking-[0.16em] text-maroon font-bold">
-            <Sparkles className="h-3.5 w-3.5 text-gold-deep" /> Bespoke Styling Concierge
+            Bespoke Styling Concierge
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-maroon font-bold">
             Can’t Decide on the Perfect Drape?

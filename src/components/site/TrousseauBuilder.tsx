@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Product } from "@/lib/site-data";
-import { Check, Sparkles, ShoppingBag, Gift, ArrowRight } from "lucide-react";
+import { Check, ShoppingBag, Gift, ArrowRight } from "lucide-react";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useCatalog } from "@/lib/catalog-context";
 

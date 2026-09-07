@@ -9,7 +9,6 @@ import {
   Send,
   CheckCircle2,
   ChevronDown,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   Truck,
@@ -26,8 +25,7 @@ export const Route = createFileRoute("/contact")({
   head: () => {
     const { meta, links } = seo({
       title: "Contact Us | WhatsApp & Store Network | Mumbai Bazar",
-      description:
-        `Call or WhatsApp Mumbai Bazar at +91 89566 64631, or visit our flagship boutique in Nalasopara East and outlets in Virar, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
+      description: `Call or WhatsApp Mumbai Bazar at +91 89566 64631, or visit our flagship boutique in Nalasopara East and outlets in Virar, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
       path: "/contact",
       keywords: [
         "mumbai bazar contact number",
@@ -134,7 +132,6 @@ function ContactPage() {
       <section className="py-10 md:py-16 px-4 md:px-8 lg:px-12 xl:px-16 border-b border-gold/25 bg-gradient-to-b from-[#FDFBF7] to-[#FAF7F2]">
         <div className="max-w-4xl mx-auto text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gold-deep/30 bg-gold-deep/10 text-xs font-bold uppercase tracking-[0.2em] text-maroon mb-4">
-            <Sparkles className="h-3.5 w-3.5 text-gold-deep" />
             Atelier & Customer Concierge
           </span>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-maroon leading-[1.12]">
@@ -224,9 +221,7 @@ function ContactPage() {
                   24h Response
                 </span>
               </div>
-              <h3 className="mt-5 font-serif text-xl font-bold text-maroon">
-                Atelier Email Desk
-              </h3>
+              <h3 className="mt-5 font-serif text-xl font-bold text-maroon">Atelier Email Desk</h3>
               <p className="mt-2 text-sm text-ink leading-relaxed">
                 For order status updates, corporate gifting, wholesale inquiries, or press
                 collaboration requests.
@@ -256,7 +251,8 @@ function ContactPage() {
               Send a Styling Inquiry
             </h2>
             <p className="text-sm text-ink mt-2 leading-relaxed">
-              Fill out your details below and a senior drape consultant will review your preferences.
+              Fill out your details below and a senior drape consultant will review your
+              preferences.
             </p>
 
             {sent ? (
@@ -268,8 +264,8 @@ function ContactPage() {
                       Inquiry Received!
                     </h4>
                     <p className="text-sm text-emerald-800 mt-1 leading-relaxed">
-                      Thank you. A senior saree stylist has received your request and will contact you
-                      within 2–4 hours.
+                      Thank you. A senior saree stylist has received your request and will contact
+                      you within 2–4 hours.
                     </p>
                   </div>
                 </div>
@@ -354,7 +350,9 @@ function ContactPage() {
                       <option value="Bulk Family Wedding Shopping">
                         Bulk Family Wedding Shopping
                       </option>
-                      <option value="General Store Visit Inquiry">General Store Visit Inquiry</option>
+                      <option value="General Store Visit Inquiry">
+                        General Store Visit Inquiry
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -403,9 +401,7 @@ function ContactPage() {
                   <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-deep block">
                     Main Showroom
                   </span>
-                  <h3 className="font-serif text-2xl font-bold text-maroon">
-                    Nalasopara Flagship
-                  </h3>
+                  <h3 className="font-serif text-2xl font-bold text-maroon">Nalasopara Flagship</h3>
                 </div>
                 <span className="px-3 py-1 rounded-full bg-maroon text-ivory text-[10px] font-bold uppercase tracking-wider">
                   Flagship Store
@@ -529,9 +525,7 @@ function ContactPage() {
                       </span>
                     )}
                   </div>
-                  <h3 className="mt-3 font-serif text-lg font-bold text-maroon">
-                    {outlet.area}
-                  </h3>
+                  <h3 className="mt-3 font-serif text-lg font-bold text-maroon">{outlet.area}</h3>
                   <p className="mt-2 text-xs text-ink/90 leading-relaxed">
                     <strong>{outlet.street}</strong>
                     <br />
@@ -609,9 +603,7 @@ function ContactPage() {
           </div>
 
           <div className="mt-10 text-center">
-            <p className="text-xs text-ink font-medium">
-              Have another question not listed here?
-            </p>
+            <p className="text-xs text-ink font-medium">Have another question not listed here?</p>
             <a
               href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("Hello Mumbai Bazar team, I have a question.")}`}
               target="_blank"

@@ -10,7 +10,6 @@ import {
   ShieldCheck,
   Truck,
   RotateCcw,
-  Sparkles,
   Lock,
   ArrowRight,
 } from "lucide-react";
@@ -93,7 +92,6 @@ export function CartDrawer() {
             <Truck className="h-4 w-4 text-gold-deep shrink-0" />
             <span>100% Free Express Insured Shipping Across India</span>
           </div>
-          <Sparkles className="h-3.5 w-3.5 text-gold-deep shrink-0" />
         </div>
 
         {/* Items Container */}
@@ -276,7 +274,7 @@ function CartRow({
               to="/products/$id"
               params={{ id: item.id }}
               onClick={onCloseCart}
-              className="font-serif text-sm sm:text-base font-bold text-ink hover:text-maroon transition-colors line-clamp-2 leading-snug"
+              className="font-sans text-sm sm:text-base font-bold text-ink hover:text-maroon transition-colors line-clamp-2 leading-snug"
             >
               {item.name}
             </Link>
@@ -321,7 +319,7 @@ function CartRow({
 
           {/* Price */}
           <p
-            className={`font-serif text-base font-bold text-maroon tabular-nums transition-transform duration-200 ${
+            className={`font-sans text-base font-bold text-maroon tabular-nums tracking-tight transition-transform duration-200 ${
               pulse ? "scale-110" : "scale-100"
             }`}
           >
@@ -351,7 +349,7 @@ function SubtotalRow({ subtotal }: { subtotal: number }) {
     <div className="flex items-center justify-between">
       <span className="text-xs uppercase tracking-wider font-bold text-ink/70">Subtotal</span>
       <span
-        className={`font-serif text-2xl font-bold text-maroon tabular-nums transition-all duration-300 ${
+        className={`font-sans text-2xl font-bold text-maroon tabular-nums tracking-tight transition-all duration-300 ${
           flash ? "scale-105" : "scale-100"
         }`}
       >

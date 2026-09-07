@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Scissors, Check, Sparkles } from "lucide-react";
+import { X, Scissors, Check } from "lucide-react";
 import type { Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 
@@ -257,7 +257,7 @@ export function BlouseCustomizationModal({
             {/* Saree Fall & Picot Addon */}
             <div className="flex items-center justify-between rounded-2xl border border-gold/40 bg-white p-4">
               <div className="flex items-center gap-3">
-                <Sparkles className="h-5 w-5 text-gold-deep" />
+                <Scissors className="h-5 w-5 text-gold-deep" />
                 <div>
                   <p className="text-xs font-semibold text-maroon uppercase tracking-wider">
                     Saree Fall & Picot Edging

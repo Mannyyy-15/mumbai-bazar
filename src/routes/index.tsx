@@ -6,10 +6,10 @@ import {
   ChevronRight,
   SlidersHorizontal,
   Check,
+  Clock,
   ShoppingBag,
   Truck,
   ShieldCheck,
-  Sparkles,
   Instagram,
   Star,
   Quote,
@@ -755,7 +755,7 @@ function TrustBar() {
   const items = [
     { icon: Truck, title: "Complimentary Shipping", copy: "On all India orders above ₹5,000" },
     { icon: ShieldCheck, title: "See Before You Buy", copy: "Drape any piece in store first" },
-    { icon: Sparkles, title: "Open Every Day", copy: `${SITE.hours.short}, all seven days` },
+    { icon: Clock, title: "Open Every Day", copy: `${SITE.hours.short}, all seven days` },
     { icon: ShoppingBag, title: "Easy 7-Day Returns", copy: "No-questions exchange policy" },
   ];
   return (

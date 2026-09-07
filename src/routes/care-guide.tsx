@@ -5,7 +5,7 @@ import {
   Droplets,
   Sun,
   Wind,
-  Sparkles,
+  Droplet,
   ShieldCheck,
   HeartHandshake,
   CheckCircle2,
@@ -69,7 +69,7 @@ const RITUALS = [
   },
   {
     step: "04",
-    icon: Sparkles,
+    icon: Droplet,
     title: "Stain & Fragrance Care",
     subtitle: "Safeguarding Pure Silk",
     copy: "Apply perfume, body oil, and hairspray before draping. Never spray directly onto zari. Blot liquid spills immediately—never rub.",

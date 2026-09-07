@@ -6,7 +6,6 @@ import {
   ShieldCheck,
   Award,
   MapPin,
-  Sparkles,
   Users,
   CheckCircle2,
   Phone,
@@ -184,8 +183,7 @@ function AboutPage() {
           </nav>
 
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-gold-deep/50 bg-beige/40 text-xs font-bold uppercase tracking-wider text-maroon mb-6 shadow-sm">
-            <Sparkles className="h-3.5 w-3.5 text-gold-deep" /> Established 2009 · Western Mumbai
-            Heritage
+            Established 2009 · Western Mumbai Heritage
           </div>
 
           <h1 className="font-serif text-3xl sm:text-4xl md:text-6xl font-bold text-maroon leading-tight max-w-4xl mx-auto">
