@@ -32,7 +32,7 @@ export const Route = createFileRoute("/about")({
         "ethnic wear store mumbai",
         "saree shop Mumbai western line",
         "pure silk saree manufacturer",
-        "silk mark saree mumbai",
+        "saree shop mumbai",
       ],
     });
     return {
@@ -75,9 +75,9 @@ export const Route = createFileRoute("/about")({
 
 const STATS = [
   { value: `${OUTLET_COUNT}`, label: "Retail Boutiques Across Mumbai" },
-  { value: "400+", label: "Master Loom Families Supported" },
-  { value: "100%", label: "Silk Mark Certified Pure Silk" },
-  { value: "1,20,000+", label: "Happy Brides & Families Dressed" },
+  { value: "2009", label: "Serving Mumbai Since" },
+  { value: "10–9", label: "Open Every Day" },
+  { value: "1,720+", label: "Customer Reviews" },
 ];
 
 const PILLARS = [
@@ -89,9 +89,9 @@ const PILLARS = [
   },
   {
     icon: Award,
-    title: "Silk Mark Certified Purity",
+    title: "Honest About Fabric",
     description:
-      "Every pure silk saree carries an authenticated Silk Mark label issued by the Central Silk Board (Ministry of Textiles, Govt. of India). We provide full chemical and burn-test transparency before you buy.",
+      "Our staff will tell you plainly what any piece is made of before you buy, and you are welcome to handle and drape it in store first. If a saree carries a Silk Mark tag, we will show it to you.",
   },
   {
     icon: Store,
@@ -116,7 +116,7 @@ const CLUSTERS = [
   },
   {
     region: "Kanchipuram, Tamil Nadu",
-    name: "Pure Mulberry Korvai Silk",
+    name: "Kanjivaram Silk",
     detail: "Three-shuttle interlocked temple borders and heavy 700g+ sculpted pleating.",
     bestFor: "South Indian muhurthams, heirloom trousseaus",
   },
@@ -280,7 +280,7 @@ function AboutPage() {
               <div className="mt-8 space-y-3">
                 {[
                   "100% Transparent Fabric Disclosure on every price tag",
-                  "Silk Mark certified pure mulberry, katan, and tussar silks",
+                  "Staff who tell you what a fabric is, before you buy",
                   "In-house master tailors for blouse stitching and custom fall-pico",
                   "Dedicated WhatsApp video consultation before you visit",
                 ].map((point) => (
@@ -303,7 +303,7 @@ function AboutPage() {
               Our Core Standards
             </span>
             <h2 className="mt-2 font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-maroon">
-              Why 1,20,000+ Families Choose Mumbai Bazar
+              Why Families Choose Mumbai Bazar
             </h2>
             <p className="mt-3 text-sm text-ink/75 font-medium">
               We uphold the sacred relationship between the loom artisan and the family that wears
