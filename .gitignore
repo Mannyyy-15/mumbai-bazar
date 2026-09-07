@@ -40,3 +40,6 @@ catalogue/
 # SEO tooling + audit output (local working artefacts, not app code)
 claude-seo/
 *-audit/
+
+# Personal Claude Code settings (not shared)
+.claude/settings.local.json
