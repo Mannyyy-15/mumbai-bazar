@@ -279,25 +279,6 @@ function ProductDetail() {
                 Inclusive of all taxes · Complimentary shipping across India
               </p>
 
-              {/*
-                Trust badge. This used to read "100% Authentic Handloom · Also
-                Verified on Flipkart Brand Store" on every product, including
-                ₹820 pieces whose own spec table says the weave is "Bollywood
-                Woven Satin" — a power-loom finish, not handloom. An
-                unsubstantiated "100% Authentic" claim about goods being sold is
-                a misleading-advertisement exposure under the Consumer
-                Protection Act, and it fails the price sanity check that Google's
-                quality raters are told to apply.
-
-                What replaces it is stronger because every word is verifiable:
-                the stores are real, the returns window is real, and seeing the
-                piece before you buy is the actual differentiator.
-              */}
-              <div className="mt-3.5 inline-flex items-center gap-2 rounded-xl bg-gold/10 border border-gold/40 px-3.5 py-1.5 text-xs text-maroon font-semibold">
-                <ShieldCheck className="h-4 w-4 text-gold-deep shrink-0" />
-                <span>See it in store before you buy · 7-day returns</span>
-              </div>
-
               <div className="my-7 h-px bg-maroon/15" />
 
               {/* Colour swatches — like the hero */}
