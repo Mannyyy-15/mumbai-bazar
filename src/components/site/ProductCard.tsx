@@ -1,14 +1,24 @@
-import { Heart, ShoppingBag } from "lucide-react";
+import { Check, Heart, ShoppingBag } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
 import { productAltText } from "@/lib/seo";
 import type { Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 
 export function ProductCard({ p }: { p: Product }) {
-  const { addItem, openCart } = useCart();
+  const { addItem } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const isSaved = isInWishlist(p.id);
+  const [added, setAdded] = useState(false);
+  const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (addedTimer.current) clearTimeout(addedTimer.current);
+    },
+    [],
+  );
 
   const quickAdd = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -22,7 +32,12 @@ export function ProductCard({ p }: { p: Product }) {
       weave: p.weave,
       shopifyVariantId: p.shopifyVariantId,
     });
-    openCart();
+
+    // Confirm on the button itself rather than yanking the drawer open, which
+    // interrupted browsing after every add.
+    setAdded(true);
+    if (addedTimer.current) clearTimeout(addedTimer.current);
+    addedTimer.current = setTimeout(() => setAdded(false), 1800);
   };
 
   return (
@@ -82,9 +97,20 @@ export function ProductCard({ p }: { p: Product }) {
         <div className="hidden md:block absolute inset-x-3 bottom-3 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
           <button
             onClick={quickAdd}
-            className="w-full py-2.5 rounded-xl bg-maroon text-ivory text-[10px] font-medium tracking-[0.16em] uppercase hover:bg-wine transition-colors flex items-center justify-center gap-1.5 shadow-lg"
+            aria-live="polite"
+            className={`w-full py-2.5 rounded-xl text-[10px] font-medium tracking-[0.16em] uppercase transition-colors flex items-center justify-center gap-1.5 shadow-lg ${
+              added ? "bg-green-700 text-white" : "bg-maroon text-ivory hover:bg-wine"
+            }`}
           >
-            <ShoppingBag className="h-3.5 w-3.5" /> Add to Bag
+            {added ? (
+              <>
+                <Check className="h-3.5 w-3.5" /> Added to Bag
+              </>
+            ) : (
+              <>
+                <ShoppingBag className="h-3.5 w-3.5" /> Add to Bag
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -98,9 +124,13 @@ export function ProductCard({ p }: { p: Product }) {
           {p.name}
         </h3>
         <div className="flex items-baseline gap-2 pt-1.5 sm:pt-2 border-t border-[#A27633]/40 mt-0.5 sm:mt-1">
-          <span className="font-sans text-base sm:text-lg md:text-xl font-bold text-maroon tracking-tight">{p.price}</span>
+          <span className="font-sans text-base sm:text-lg md:text-xl font-bold text-maroon tracking-tight">
+            {p.price}
+          </span>
           {p.original && (
-            <span className="text-xs sm:text-sm text-taupe font-medium line-through font-sans">{p.original}</span>
+            <span className="text-xs sm:text-sm text-taupe font-medium line-through font-sans">
+              {p.original}
+            </span>
           )}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Heart,
   Minus,
@@ -121,6 +121,13 @@ function ProductDetail() {
   const [qty, setQty] = useState(1);
   const [swatch, setSwatch] = useState(0);
   const [added, setAdded] = useState(false);
+  const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (addedTimer.current) clearTimeout(addedTimer.current);
+    },
+    [],
+  );
   const { addItem, openCart } = useCart();
 
   const priceNum = parsePriceToNumber(product.price);
@@ -141,7 +148,8 @@ function ProductDetail() {
       qty,
     );
     setAdded(true);
-    setTimeout(() => setAdded(false), 1600);
+    if (addedTimer.current) clearTimeout(addedTimer.current);
+    addedTimer.current = setTimeout(() => setAdded(false), 1800);
     openCart();
   };
 

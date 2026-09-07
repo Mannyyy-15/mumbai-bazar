@@ -26,18 +26,25 @@ export function CartDrawer() {
   const waMsg = encodeURIComponent(
     `Hello Mumbai Bazar, I would like to place an order from my shopping bag:\n\n${items
       .map((i) => `• ${i.name} × ${i.qty} — ${i.priceLabel}`)
-      .join("\n")}\n\nTotal Subtotal: ${formatINR(subtotal)}\n\nPlease share payment link or delivery confirmation.`,
+      .join(
+        "\n",
+      )}\n\nTotal Subtotal: ${formatINR(subtotal)}\n\nPlease share payment link or delivery confirmation.`,
   );
   const waHref = `https://wa.me/${SITE.whatsapp}?text=${waMsg}`;
 
   return (
     <div
-      className={`fixed inset-0 z-[70] overflow-hidden ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+      // `visibility` is what makes the close animation work: without it the
+      // panel is display:none the instant isOpen flips and the slide-out is
+      // never seen. The delay lets the transform finish before it hides.
+      className={`fixed inset-0 z-[70] overflow-hidden transition-[visibility] duration-300 ${
+        isOpen ? "visible pointer-events-auto" : "invisible delay-300 pointer-events-none"
+      }`}
       aria-hidden={!isOpen}
     >
       {/* Dark backdrop */}
       <div
-        className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ease-out ${
           isOpen ? "opacity-100" : "opacity-0"
         }`}
         onClick={closeCart}
@@ -51,7 +58,7 @@ export function CartDrawer() {
         aria-modal="true"
         aria-labelledby="cart-drawer-title"
         tabIndex={-1}
-        className={`absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-[#FAF7F2] shadow-2xl transition-transform duration-300 ease-out focus:outline-none ${
+        className={`absolute right-0 top-0 flex h-full w-full max-w-md flex-col bg-[#FAF7F2] shadow-2xl will-change-transform transition-transform duration-[400ms] ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none focus:outline-none ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -150,12 +157,20 @@ export function CartDrawer() {
                     <ArrowRight className="h-4 w-4" />
                   </a>
                 ) : (
-                  <button
-                    disabled
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon/60 py-3.5 text-xs font-bold uppercase tracking-wider text-white cursor-not-allowed"
-                  >
-                    <span>Preparing Secure Checkout...</span>
-                  </button>
+                  <>
+                    <button
+                      disabled
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon/60 py-3.5 text-xs font-bold uppercase tracking-wider text-white cursor-not-allowed"
+                    >
+                      <span>Preparing Secure Checkout...</span>
+                    </button>
+                    {/* If Shopify never returns a checkout URL the button above
+                        stays disabled forever, so say plainly that WhatsApp
+                        below still works rather than leaving a dead end. */}
+                    <p className="text-center text-[11px] font-medium text-ink/60">
+                      Taking a moment? You can order on WhatsApp below.
+                    </p>
+                  </>
                 )}
 
                 <a
@@ -245,13 +260,13 @@ function CartRow({
         className="block h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F0E9DC] border border-gold/30"
       >
         <img
-                        src={item.image}
-                        alt={item.name}
-                        loading="lazy"
-                        decoding="async"
-                        fetchPriority="low"
-                        className="h-full w-full object-cover"
-                      />
+          src={item.image}
+          alt={item.name}
+          loading="lazy"
+          decoding="async"
+          fetchPriority="low"
+          className="h-full w-full object-cover"
+        />
       </Link>
 
       <div className="flex flex-1 flex-col justify-between min-w-0">

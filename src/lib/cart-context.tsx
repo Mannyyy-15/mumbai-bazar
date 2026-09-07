@@ -1,10 +1,19 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   addToShopifyCart,
   createShopifyCart,
   removeFromShopifyCart,
   shopifyConfigured,
   updateShopifyCartLine,
+  type ShopifyCart,
 } from "./shopify";
 
 export type CartItem = {
@@ -25,6 +34,8 @@ type CartContextValue = {
   count: number;
   subtotal: number;
   checkoutUrl?: string;
+  /** Id of the item most recently added, so a card can confirm the click. */
+  lastAddedId: string | null;
   openCart: () => void;
   closeCart: () => void;
   toggleCart: () => void;
@@ -43,6 +54,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
   const [shopifyCartId, setShopifyCartId] = useState<string | undefined>();
   const [checkoutUrl, setCheckoutUrl] = useState<string | undefined>();
+  /**
+   * The cart id as of *now*, not as of the last render. `addItem` is captured in
+   * a useMemo, so two clicks in the same tick both see `shopifyCartId === undefined`
+   * and each call createShopifyCart — creating two carts and losing the first
+   * line. The ref is written synchronously, so the second click sees the first
+   * cart. `cartCreation` holds the in-flight promise for the same reason.
+   */
+  const cartIdRef = useRef<string | undefined>(undefined);
+  const cartCreationRef = useRef<Promise<ShopifyCart> | null>(null);
+  /** Signals a successful add so the UI can confirm it. */
+  const [lastAddedId, setLastAddedId] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -53,6 +75,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         else {
           setItems(stored.items ?? []);
           setShopifyCartId(stored.shopifyCartId);
+          cartIdRef.current = stored.shopifyCartId;
           setCheckoutUrl(stored.checkoutUrl);
         }
       }
@@ -96,6 +119,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       count,
       subtotal,
       checkoutUrl,
+      lastAddedId,
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
       toggleCart: () => setIsOpen((v) => !v),
@@ -105,29 +129,62 @@ export function CartProvider({ children }: { children: ReactNode }) {
           if (found) return prev.map((p) => (p.id === item.id ? { ...p, qty: p.qty + qty } : p));
           return [...prev, { ...item, qty }];
         });
-        if (shopifyConfigured && item.shopifyVariantId) {
-          const sync = shopifyCartId
-            ? addToShopifyCart(shopifyCartId, item.shopifyVariantId, qty)
-            : createShopifyCart(item.shopifyVariantId, qty);
-          sync
-            .then((cart) => {
-              setShopifyCartId(cart.id);
-              setCheckoutUrl(cart.checkoutUrl);
-              setItems((prev) =>
-                prev.map((line) => {
-                  const remote = cart.lines.find((r) => r.merchandiseId === line.shopifyVariantId);
-                  return remote ? { ...line, lineId: remote.id, qty: remote.quantity } : line;
-                }),
-              );
-            })
+
+        // Confirm optimistically. The local cart is the source of truth for the
+        // UI; a Shopify failure must not make a successful add look broken.
+        setLastAddedId(item.id);
+
+        if (!shopifyConfigured || !item.shopifyVariantId) return;
+        const variantId = item.shopifyVariantId;
+
+        const applyCart = (cart: ShopifyCart) => {
+          cartIdRef.current = cart.id;
+          setShopifyCartId(cart.id);
+          setCheckoutUrl(cart.checkoutUrl);
+          setItems((prev) =>
+            prev.map((line) => {
+              const remote = cart.lines.find((r) => r.merchandiseId === line.shopifyVariantId);
+              // Only reconcile lines Shopify actually knows about. Rewriting
+              // every line from a partial response wiped quantities for items
+              // whose sync had not landed yet.
+              return remote ? { ...line, lineId: remote.id, qty: remote.quantity } : line;
+            }),
+          );
+        };
+
+        const existingId = cartIdRef.current;
+        if (existingId) {
+          addToShopifyCart(existingId, variantId, qty)
+            .then(applyCart)
             .catch(() => undefined);
+          return;
         }
+
+        // No cart yet. Queue behind any creation already in flight so two quick
+        // clicks share one cart instead of racing to create two.
+        if (cartCreationRef.current) {
+          cartCreationRef.current = cartCreationRef.current
+            .then((cart) => addToShopifyCart(cart.id, variantId, qty))
+            .then((cart) => {
+              applyCart(cart);
+              return cart;
+            });
+        } else {
+          cartCreationRef.current = createShopifyCart(variantId, qty).then((cart) => {
+            applyCart(cart);
+            return cart;
+          });
+        }
+        cartCreationRef.current.catch(() => {
+          cartCreationRef.current = null;
+        });
       },
       removeItem: (id) => {
         const existing = items.find((item) => item.id === id);
         setItems((prev) => prev.filter((p) => p.id !== id));
-        if (shopifyCartId && existing?.lineId)
-          removeFromShopifyCart(shopifyCartId, existing.lineId).catch(() => undefined);
+        const cartId = cartIdRef.current ?? shopifyCartId;
+        if (cartId && existing?.lineId)
+          removeFromShopifyCart(cartId, existing.lineId).catch(() => undefined);
       },
       setQty: (id, qty) => {
         const existing = items.find((item) => item.id === id);
@@ -136,15 +193,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
             ? prev.filter((p) => p.id !== id)
             : prev.map((p) => (p.id === id ? { ...p, qty } : p)),
         );
-        if (shopifyCartId && existing?.lineId) {
-          if (qty <= 0)
-            removeFromShopifyCart(shopifyCartId, existing.lineId).catch(() => undefined);
-          else updateShopifyCartLine(shopifyCartId, existing.lineId, qty).catch(() => undefined);
+        const cartId = cartIdRef.current ?? shopifyCartId;
+        if (cartId && existing?.lineId) {
+          if (qty <= 0) removeFromShopifyCart(cartId, existing.lineId).catch(() => undefined);
+          else updateShopifyCartLine(cartId, existing.lineId, qty).catch(() => undefined);
         }
       },
-      clear: () => setItems([]),
+      clear: () => {
+        setItems([]);
+        cartIdRef.current = undefined;
+        cartCreationRef.current = null;
+        setShopifyCartId(undefined);
+        setCheckoutUrl(undefined);
+      },
     };
-  }, [items, isOpen, checkoutUrl, shopifyCartId]);
+  }, [items, isOpen, checkoutUrl, shopifyCartId, lastAddedId]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
