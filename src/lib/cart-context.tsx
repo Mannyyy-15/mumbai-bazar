@@ -46,7 +46,7 @@ type CartContextValue = {
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
-const STORAGE_KEY = "mb_cart_v1";
+const STORAGE_KEY = "mb_cart_v2";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -68,15 +68,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
+      // Clean up legacy storage key from pre-subdomain migration
+      localStorage.removeItem("mb_cart_v1");
+
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const stored = JSON.parse(raw);
-        if (Array.isArray(stored)) setItems(stored);
-        else {
+        if (Array.isArray(stored)) {
+          setItems(stored);
+        } else {
           setItems(stored.items ?? []);
-          setShopifyCartId(stored.shopifyCartId);
-          cartIdRef.current = stored.shopifyCartId;
-          setCheckoutUrl(stored.checkoutUrl);
+          // Only keep checkout URL if it doesn't point to old www domain
+          if (stored.checkoutUrl && !stored.checkoutUrl.includes("www.mumbaibazar.com")) {
+            setShopifyCartId(stored.shopifyCartId);
+            cartIdRef.current = stored.shopifyCartId;
+            setCheckoutUrl(stored.checkoutUrl);
+          }
         }
       }
     } catch {
@@ -156,7 +163,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         if (existingId) {
           addToShopifyCart(existingId, variantId, qty)
             .then(applyCart)
-            .catch(() => undefined);
+            .catch(() => {
+              // If the existing cart was invalid or expired, gracefully create a fresh one
+              createShopifyCart(variantId, qty)
+                .then(applyCart)
+                .catch(() => undefined);
+            });
           return;
         }
 
@@ -168,7 +180,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
             .then((cart) => {
               applyCart(cart);
               return cart;
-            });
+            })
+            .catch(() =>
+              createShopifyCart(variantId, qty).then((cart) => {
+                applyCart(cart);
+                return cart;
+              }),
+            );
         } else {
           cartCreationRef.current = createShopifyCart(variantId, qty).then((cart) => {
             applyCart(cart);
@@ -181,22 +199,37 @@ export function CartProvider({ children }: { children: ReactNode }) {
       },
       removeItem: (id) => {
         const existing = items.find((item) => item.id === id);
-        setItems((prev) => prev.filter((p) => p.id !== id));
+        const remaining = items.filter((p) => p.id !== id);
+        setItems(remaining);
         const cartId = cartIdRef.current ?? shopifyCartId;
-        if (cartId && existing?.lineId)
+        if (remaining.length === 0) {
+          cartIdRef.current = undefined;
+          cartCreationRef.current = null;
+          setShopifyCartId(undefined);
+          setCheckoutUrl(undefined);
+        } else if (cartId && existing?.lineId) {
           removeFromShopifyCart(cartId, existing.lineId).catch(() => undefined);
+        }
       },
       setQty: (id, qty) => {
         const existing = items.find((item) => item.id === id);
-        setItems((prev) =>
-          qty <= 0
-            ? prev.filter((p) => p.id !== id)
-            : prev.map((p) => (p.id === id ? { ...p, qty } : p)),
-        );
         const cartId = cartIdRef.current ?? shopifyCartId;
-        if (cartId && existing?.lineId) {
-          if (qty <= 0) removeFromShopifyCart(cartId, existing.lineId).catch(() => undefined);
-          else updateShopifyCartLine(cartId, existing.lineId, qty).catch(() => undefined);
+        if (qty <= 0) {
+          const remaining = items.filter((p) => p.id !== id);
+          setItems(remaining);
+          if (remaining.length === 0) {
+            cartIdRef.current = undefined;
+            cartCreationRef.current = null;
+            setShopifyCartId(undefined);
+            setCheckoutUrl(undefined);
+          } else if (cartId && existing?.lineId) {
+            removeFromShopifyCart(cartId, existing.lineId).catch(() => undefined);
+          }
+        } else {
+          setItems((prev) => prev.map((p) => (p.id === id ? { ...p, qty } : p)));
+          if (cartId && existing?.lineId) {
+            updateShopifyCartLine(cartId, existing.lineId, qty).catch(() => undefined);
+          }
         }
       },
       clear: () => {
