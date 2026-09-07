@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   ChevronRight,
   SlidersHorizontal,
+  Check,
   ShoppingBag,
   Truck,
   ShieldCheck,
@@ -39,8 +40,7 @@ export const Route = createFileRoute("/")({
   head: () => {
     const { meta, links } = seo({
       title: "Saree & Bridal Wear Shops in Nalasopara | Mumbai Bazar",
-      description:
-        `Sarees, dress material, designer lehengas and dulhan wear at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
+      description: `Sarees, dress material, designer lehengas and dulhan wear at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
       path: "/",
       keywords: [
         "saree shop near me",
@@ -221,8 +221,8 @@ function HeroCarousel() {
         with no room for it; the text is accurate and matches the page content.
       */}
       <h1 className="sr-only">
-        Mumbai Bazar — Sarees, Lehengas &amp; Bridal Wear across 8 stores in Nalasopara,
-        Virar, Vasai, Bhayandar and Goregaon
+        Mumbai Bazar — Sarees, Lehengas &amp; Bridal Wear across 8 stores in Nalasopara, Virar,
+        Vasai, Bhayandar and Goregaon
       </h1>
       <div
         ref={trackRef}
@@ -417,6 +417,15 @@ function ProductTile({ p }: { p: Product }) {
   const { wishlist, toggleWishlist } = useWishlist();
   const { addItem } = useCart();
   const isSaved = wishlist.some((w) => w.id === p.id);
+  const [added, setAdded] = useState(false);
+  const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (addedTimer.current) clearTimeout(addedTimer.current);
+    },
+    [],
+  );
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -432,6 +441,12 @@ function ProductTile({ p }: { p: Product }) {
       weave: p.weave,
       shopifyVariantId: p.shopifyVariantId,
     });
+
+    // Without this the click looks like nothing happened: only the small cart
+    // badge changes, which is easy to miss.
+    setAdded(true);
+    if (addedTimer.current) clearTimeout(addedTimer.current);
+    addedTimer.current = setTimeout(() => setAdded(false), 1800);
   };
 
   return (
@@ -489,12 +504,26 @@ function ProductTile({ p }: { p: Product }) {
           />
         )}
 
-        <div className="absolute inset-x-3 bottom-3 z-10 opacity-100 md:opacity-0 translate-y-0 md:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+        <div // Desktop hover only. On mobile the overlay sat permanently over the
+          // saree; the product page has its own Add to Bag button.
+          className="hidden md:block absolute inset-x-3 bottom-3 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+        >
           <button
             onClick={handleQuickAdd}
-            className="w-full py-2.5 rounded-xl bg-maroon text-ivory text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-wine transition-colors flex items-center justify-center gap-2 shadow-lg"
+            aria-live="polite"
+            className={`w-full py-2.5 rounded-xl text-[10px] font-bold tracking-[0.2em] uppercase transition-colors flex items-center justify-center gap-2 shadow-lg ${
+              added ? "bg-green-700 text-white" : "bg-maroon text-ivory hover:bg-wine"
+            }`}
           >
-            <ShoppingBag className="h-3.5 w-3.5" /> Add to Bag
+            {added ? (
+              <>
+                <Check className="h-3.5 w-3.5" /> Added to Bag
+              </>
+            ) : (
+              <>
+                <ShoppingBag className="h-3.5 w-3.5" /> Add to Bag
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -721,8 +750,6 @@ function CollectionStrip() {
   );
 }
 
-
-
 /* ---------------- Trust / USP bar ---------------- */
 function TrustBar() {
   const items = [
@@ -921,9 +948,13 @@ function TrendingNow() {
                   {p.name}
                 </h4>
                 <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">
-                  <span className="font-sans text-lg sm:text-xl md:text-2xl font-bold text-maroon tracking-tight">{p.price}</span>
+                  <span className="font-sans text-lg sm:text-xl md:text-2xl font-bold text-maroon tracking-tight">
+                    {p.price}
+                  </span>
                   {p.original && (
-                    <span className="text-xs sm:text-sm text-taupe font-medium line-through font-sans">{p.original}</span>
+                    <span className="text-xs sm:text-sm text-taupe font-medium line-through font-sans">
+                      {p.original}
+                    </span>
                   )}
                 </div>
               </div>
@@ -1208,7 +1239,8 @@ function InstagramGrid() {
           Trending Reels &amp; Boutique Diaries
         </h3>
         <p className="mt-3 text-sm md:text-base text-ink/75 max-w-2xl mx-auto">
-          Watch our viral saree draping sessions, bridal unboxings, and fresh stock arrivals straight from our flagship Nalasopara boutique.
+          Watch our viral saree draping sessions, bridal unboxings, and fresh stock arrivals
+          straight from our flagship Nalasopara boutique.
         </p>
       </div>
 
