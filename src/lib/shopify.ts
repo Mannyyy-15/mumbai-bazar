@@ -61,7 +61,7 @@ export const FLIPKART_PRODUCTS: ShopifyProduct[] = [
     original: "₹ 1,799",
     tag: "New",
     category: ["new-arrivals", "silk-sarees", "festive-edit"],
-    img: "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/m/t/z/free-saree-mumbaibazar-unstitched-original-imahqnqzjdynhab6.jpeg?q=80",
+    img: "/products/woven-magenta-1.jpeg",
     details: {
       fabric: "Cotton silk blend with woven zari",
       drape: "Crisp, neat, structured pleats that hold form effortlessly",
@@ -73,8 +73,8 @@ export const FLIPKART_PRODUCTS: ShopifyProduct[] = [
       description:
         "Crafted for comfort without compromising grandeur, this Vibrant Magenta Banarasi Cotton Silk Saree combines the regal luster of Banaras with breathable cotton silk. Perfect for morning pujas, temple visits, and family celebrations in Mumbai's tropical climate.",
       gallery: [
-        "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/m/t/z/free-saree-mumbaibazar-unstitched-original-imahqnqzjdynhab6.jpeg?q=80",
-        "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/m/o/q/free-saree-mumbaibazar-unstitched-original-imahqnqzyuyqgtnz.jpeg?q=80",
+        "/products/woven-magenta-1.jpeg",
+        "/products/woven-magenta-2.jpeg",
       ],
     },
   },
@@ -148,71 +148,79 @@ function getWeaveFromProduct(node: ProductNode): string {
   return "Saree";
 }
 
-const FLIPKART_GALLERIES: Record<string, { gallery: string[]; name?: string; weave?: string }> = {
+const FLIPKART_GALLERIES: Record<string, { gallery: string[]; name?: string; weave?: string; fabric?: string; description?: string }> = {
   "meher-wine-banarasi-silk-saree": {
     name: "Champagne Beige Woven Saree with Embroidered Blouse",
     weave: "Bollywood Woven Satin",
+    fabric: "Woven satin with metallic embroidery",
+    description:
+      "An elegant Champagne Beige woven saree crafted from lustrous satin-finish fabric, accompanied by a beautifully embroidered blouse piece. Perfect for wedding receptions, sangeet, and festive celebrations. Try and drape across our 8 Mumbai stores or order online with 7-day easy exchange.",
     gallery: [
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/l/u/j/free-saare002-mumbai-bazar-unstitched-original-imahqg2feysfeyex.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/c/1/m/free-saare002-mumbai-bazar-unstitched-original-imahqg2frzqbkndr.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/c/i/d/free-saare002-mumbai-bazar-unstitched-original-imahqg2fvghk8sve.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/v/x/p/free-saare002-mumbai-bazar-unstitched-original-imahqhbcjcvnzybc.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/l/2/u/free-saare002-mumbai-bazar-unstitched-original-imahqg2frrv4np9h.jpeg?q=80",
+      "/products/meher-wine-1.jpeg",
+      "/products/meher-wine-2.jpeg",
+      "/products/meher-wine-3.jpeg",
+      "/products/meher-wine-4.jpeg",
+      "/products/meher-wine-5.jpeg",
     ],
   },
   "gulabi-shringar-saree": {
     name: "Gulabi Shringar Striped Embroidered Saree",
     weave: "Bollywood Silk Blend",
+    fabric: "Silk blend with contrast striped weaving",
     gallery: [
-      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/f/l/z/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqf95asq9w.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/e/o/l/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqhvkbu8wu.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/l/u/k/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqnbtgyaja.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/y/d/i/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqrubyay2t.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/1600/2140/xif0q/sari/t/9/x/free-fendi-rani-mumbaibazar-unstitched-original-imahqzxqwvyszsth.jpeg?q=80",
+      "/products/gulabi-shringar-1.jpeg",
+      "/products/gulabi-shringar-2.jpeg",
+      "/products/gulabi-shringar-3.jpeg",
+      "/products/gulabi-shringar-4.jpeg",
+      "/products/gulabi-shringar-5.jpeg",
     ],
   },
   "rangrez-royale-saree": {
     name: "Rangrez Royale Crimson Paisley Jacquard Saree",
     weave: "Jacquard Woven Silk",
+    fabric: "Jacquard woven silk blend",
     gallery: [
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/g/o/free-saree-mumbaibazar-unstitched-original-imahqnm3y5zmhhfc.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/h/y/9/free-saree-mumbaibazar-unstitched-original-imahqnm3gb7gwsdk.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/o/m/v/free-saree-mumbaibazar-unstitched-original-imahqnm3hzmphghf.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/7/y/y/free-saree-mumbaibazar-unstitched-original-imahqnm3r4djts9v.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/t/i/8/free-saree-mumbaibazar-unstitched-original-imahqnm3hqsxmfhd.jpeg?q=80",
+      "/products/rangrez-royale-1.jpeg",
+      "/products/rangrez-royale-2.jpeg",
+      "/products/rangrez-royale-3.jpeg",
+      "/products/rangrez-royale-4.jpeg",
+      "/products/rangrez-royale-5.jpeg",
     ],
   },
   "neelam-rangoli-saree": {
     name: "Neelam Rangoli Peacock Diamond Jacquard Saree",
     weave: "Jacquard Woven Silk",
+    fabric: "Jacquard woven silk blend",
     gallery: [
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/n/d/q/free-saree-mumbaibazar-unstitched-original-imahqnm3yg9tbb8y.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/g/d/w/free-saree-mumbaibazar-unstitched-original-imahqnm3ezryyxs7.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/j/u/x/free-saree-mumbaibazar-unstitched-original-imahqnm3dufy4uga.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/7/y/t/free-saree-mumbaibazar-unstitched-original-imahqnm3dygegzt4.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/o/g/n/free-saree-mumbaibazar-unstitched-original-imahqnm32z3awawb.jpeg?q=80",
+      "/products/neelam-rangoli-1.jpeg",
+      "/products/neelam-rangoli-2.jpeg",
+      "/products/neelam-rangoli-3.jpeg",
+      "/products/neelam-rangoli-4.jpeg",
+      "/products/neelam-rangoli-5.jpeg",
     ],
   },
   "rangrez-heritage-saree": {
     name: "Rangrez Heritage Floral Jacquard Saree",
     weave: "Jacquard Woven Silk",
+    fabric: "Jacquard woven silk blend",
     gallery: [
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/a/6/b/free-saree-mumbaibazar-unstitched-original-imahqnm3rpfehfcj.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/w/x/x/free-saree-mumbaibazar-unstitched-original-imahqnm3ruj5gcnz.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/i/j/b/free-saree-mumbaibazar-unstitched-original-imahqnm336jcnbks.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/0/m/g/free-saree-mumbaibazar-unstitched-original-imahqnm34d6guzqz.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/k/1/f/free-saree-mumbaibazar-unstitched-original-imahqnm3z7k9hqth.jpeg?q=80",
+      "/products/rangrez-heritage-1.jpeg",
+      "/products/rangrez-heritage-2.jpeg",
+      "/products/rangrez-heritage-3.jpeg",
+      "/products/rangrez-heritage-4.jpeg",
+      "/products/rangrez-heritage-5.jpeg",
     ],
   },
   "heritage-canvas-saree": {
     name: "Heritage Canvas Pichwai Block Mosaic Saree",
     weave: "Jacquard Cotton Silk",
+    fabric: "Cotton silk with Pichwai heritage print motifs",
     gallery: [
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/f/u/j/free-saree-mumbaibazar-unstitched-original-imahqnm372fe3mhk.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/b/w/e/free-saree-mumbaibazar-unstitched-original-imahqnm3ysjzrbgu.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/1/0/a/free-saree-mumbaibazar-unstitched-original-imahqnm3zq4jse8d.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/y/i/5/free-saree-mumbaibazar-unstitched-original-imahqnm34qjbuxza.jpeg?q=80",
-      "https://rukminim2.flixcart.com/image/832/832/xif0q/sari/x/7/8/free-saree-mumbaibazar-unstitched-original-imahqnm36ay2amtb.jpeg?q=80",
+      "/products/heritage-canvas-1.jpeg",
+      "/products/heritage-canvas-2.jpeg",
+      "/products/heritage-canvas-3.jpeg",
+      "/products/heritage-canvas-4.jpeg",
+      "/products/heritage-canvas-5.jpeg",
     ],
   },
 };
@@ -259,17 +267,23 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
   ];
   const fkData = FLIPKART_GALLERIES[node.handle];
   const gallery = fkData?.gallery && fkData.gallery.length > 0
-    ? [image.url, ...fkData.gallery.filter((u) => u !== image.url)]
+    ? fkData.gallery
     : (node.images?.nodes ?? [image]).map((item) => item.url);
+  const primaryImg = fkData?.gallery?.[0] || image.url;
   const secondaryImage = gallery.length > 1 ? gallery[1] : undefined;
   const weave = fkData?.weave || getWeaveFromProduct(node);
   const name = fkData?.name || node.title;
+  const rawDesc = fkData?.description || node.description || "";
+  const isPlaceholder = rawDesc.includes("add saree details") || rawDesc.trim().length < 40;
+  const description = isPlaceholder
+    ? `${name}, handcrafted and curated by Mumbai Bazar. Elegant border detailing with matching unstitched blouse piece. Try and drape in person across any of our 8 Mumbai stores or order online with 7-day easy returns.`
+    : rawDesc;
   return {
     id: node.handle,
     handle: node.handle,
     shopifyProductId: node.id,
     shopifyVariantId: variant.id,
-    img: image.url,
+    img: primaryImg,
     secondaryImg: secondaryImage,
     name,
     weave,
@@ -286,7 +300,7 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
         : undefined,
     category,
     details: {
-      fabric: node.productType || weave,
+      fabric: fkData?.fabric || node.productType || weave,
       drape: "Refined, easy drape",
       blousePiece: "Matching unstitched blouse piece",
       length: "5.5 m saree + blouse piece",
@@ -297,7 +311,7 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
         "Store folded in soft muslin",
         "Avoid direct sunlight and perfume contact",
       ],
-      description: node.description || `${name}, curated by Mumbai Bazar.`,
+      description,
       gallery,
     },
   };
