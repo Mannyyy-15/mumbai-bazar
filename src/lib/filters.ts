@@ -31,7 +31,7 @@ export const COLOR_OPTIONS: ColorFilterOption[] = [
     key: "gold-yellow",
     label: "Gold & Mustard",
     hex: "#D4AF37",
-    keywords: ["gold", "sunehri", "mustard", "haldi", "yellow", "zari", "golden"],
+    keywords: ["gold", "sunehri", "mustard", "haldi", "yellow", "golden"],
   },
   {
     key: "blue-peacock",

@@ -117,34 +117,91 @@ function ProductDetail() {
   const [added, setAdded] = useState(false);
   const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Dynamically determine color swatches based on product metadata/keywords
-  // Automatically scales from 1 color today to multi-color variants in the future.
+  // Reset selected swatch when navigating between products
+  useEffect(() => {
+    setSwatch(0);
+  }, [product.id]);
+
+  // Dynamically determine color swatches:
+  // - If the product has multiple variants with distinct colors, shows all variant colors.
+  // - For single-color products, detects and shows ONLY the PRIMARY/MAIN color of the saree (ignoring zari/border accents).
   const productColors = useMemo(() => {
-    const text = (
-      product.name +
-      " " +
-      product.weave +
-      " " +
-      (product.details?.fabric || "") +
-      " " +
-      (product.details?.description || "") +
-      " " +
-      product.id
-    ).toLowerCase();
-
-    const matched = COLOR_OPTIONS.filter((c) =>
-      c.keywords.some((kw) => text.includes(kw))
-    );
-
-    if (matched.length > 0) {
-      return matched.map((c) => ({
-        name: c.label.split("&")[0].trim(),
-        hex: c.hex,
-        border: c.border,
-      }));
+    // 1. Check for explicit multi-color variants if present in Shopify/catalog data
+    const explicitVariants = (product as any).variants || (product as any).colorVariants;
+    if (Array.isArray(explicitVariants) && explicitVariants.length > 1) {
+      return explicitVariants.map((v: any) => {
+        const vName = typeof v === "string" ? v : v.color || v.title || v.name || "Variant";
+        const matched = COLOR_OPTIONS.find((c) =>
+          c.keywords.some((kw) => vName.toLowerCase().includes(kw))
+        );
+        return {
+          name: vName,
+          hex: matched?.hex || "#641F2A",
+          border: matched?.border,
+        };
+      });
     }
 
-    return [{ name: "Heritage Silk", hex: "#641F2A" }];
+    // 2. For single-color products: identify the ONE primary main body color.
+    // Strip common weave/accent phrases like "gold zari", "antique zari", "golden border", etc.
+    const cleanText = (str: string) =>
+      str
+        .toLowerCase()
+        .replace(/\b(gold\s+zari|golden\s+zari|antique\s+zari|silver\s+zari|zari\s+border|zari\s+pallu|zari\s+work|zari\s+buta|zari\s+buti)\b/gi, "")
+        .replace(/\b(golden\s+border|gold\s+border|silver\s+border)\b/gi, "");
+
+    const nameText = cleanText(product.name);
+    const idText = cleanText(product.id);
+
+    // Primary priority: match color in product name/title
+    for (const c of COLOR_OPTIONS) {
+      for (const kw of c.keywords) {
+        const regex = new RegExp(`\\b${kw}\\b`, "i");
+        if (regex.test(nameText)) {
+          const matchedWord = nameText.match(regex)?.[0] || kw;
+          const capitalized = matchedWord.charAt(0).toUpperCase() + matchedWord.slice(1).toLowerCase();
+          return [{
+            name: capitalized,
+            hex: c.hex,
+            border: c.border,
+          }];
+        }
+      }
+    }
+
+    // Secondary priority: match color in product id/slug
+    for (const c of COLOR_OPTIONS) {
+      for (const kw of c.keywords) {
+        if (idText.includes(kw)) {
+          const capitalized = kw.charAt(0).toUpperCase() + kw.slice(1).toLowerCase();
+          return [{
+            name: capitalized,
+            hex: c.hex,
+            border: c.border,
+          }];
+        }
+      }
+    }
+
+    // Tertiary priority: match in weave or description (with zari stripped)
+    const descText = cleanText((product.weave || "") + " " + (product.details?.description || ""));
+    for (const c of COLOR_OPTIONS) {
+      for (const kw of c.keywords) {
+        const regex = new RegExp(`\\b${kw}\\b`, "i");
+        if (regex.test(descText)) {
+          const matchedWord = descText.match(regex)?.[0] || kw;
+          const capitalized = matchedWord.charAt(0).toUpperCase() + matchedWord.slice(1).toLowerCase();
+          return [{
+            name: capitalized,
+            hex: c.hex,
+            border: c.border,
+          }];
+        }
+      }
+    }
+
+    // Default fallback to 1 artisanal color
+    return [{ name: "Boutique Silk", hex: "#641F2A" }];
   }, [product]);
 
   const currentSwatch = productColors[swatch] || productColors[0];
