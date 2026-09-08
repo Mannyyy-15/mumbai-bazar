@@ -762,11 +762,59 @@ function ProductFeed() {
   );
 }
 
-/* ---------------- Shop by Collection strip (Shop by Weave) ---------------- */
+/* ---------------- Shop by Collection strip (Shop by Weave Auto Carousel) ---------------- */
 function CollectionStrip() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [paused, setPaused] = useState(false);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const container = scrollRef.current;
+      const firstCard = container.querySelector("a");
+      const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
+      const cardWidth = firstCard ? firstCard.clientWidth + gap : 340;
+      const amount = direction === "left" ? -cardWidth : cardWidth;
+      
+      if (
+        direction === "right" &&
+        container.scrollLeft + container.clientWidth >= container.scrollHeight - 10
+      ) {
+        container.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        container.scrollBy({ left: amount, behavior: "smooth" });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (paused) return;
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const container = scrollRef.current;
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        if (container.scrollLeft >= maxScroll - 15) {
+          container.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          const firstCard = container.querySelector("a");
+          const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
+          const cardWidth = firstCard ? firstCard.clientWidth + gap : 340;
+          container.scrollBy({ left: cardWidth, behavior: "smooth" });
+        }
+      }
+    }, 3800);
+
+    return () => clearInterval(interval);
+  }, [paused]);
+
   return (
-    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24">
-      <div className="text-center mb-12 md:mb-16">
+    <section
+      className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
+    >
+      <div className="text-center mb-8 md:mb-12">
         <div className="flex items-center justify-center gap-3 sm:gap-6">
           <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
           <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
@@ -777,16 +825,42 @@ function CollectionStrip() {
         <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
           Handpicked weaves from India's legendary artisan clusters — Banarasi, Kanjivaram, Paithani &amp; Pure Silks.
         </p>
+
+        {/* Carousel controls */}
+        <div className="mt-5 flex items-center justify-center gap-3">
+          <button
+            onClick={() => scroll("left")}
+            className="h-10 w-10 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm"
+            aria-label="Previous weave"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            className="h-10 w-10 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm"
+            aria-label="Next weave"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+          <Link
+            to="/collections"
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-maroon/40 text-[11px] font-bold tracking-[0.2em] uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all duration-300 ml-2"
+          >
+            All Weaves →
+          </Link>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-        {COLLECTIONS.map((c, i) => (
+      <div
+        ref={scrollRef}
+        className="flex gap-4 md:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide scroll-smooth"
+        style={{ touchAction: "pan-x" }}
+      >
+        {COLLECTIONS.map((c) => (
           <Link
             key={c.slug}
             to="/collections"
-            className={`group block relative aspect-[4/5] overflow-hidden rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/30 ${
-              i === 0 ? "sm:col-span-2 lg:col-span-1" : ""
-            }`}
+            className="group snap-center sm:snap-start shrink-0 w-[82vw] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] block relative aspect-[4/5] overflow-hidden rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/30"
           >
             <img
               src={c.img}
@@ -854,7 +928,7 @@ function TrustBar() {
   );
 }
 
-/* ---------------- Shop by Occasion ---------------- */
+/* ---------------- Shop by Occasion (Auto Carousel) ---------------- */
 const OCCASIONS: { label: string; sub: string; to: string; img: string }[] = [
   { label: "Bridal", sub: "The Sacred Day", to: "/wedding-sarees", img: IMG.colWedding },
   { label: "Festive", sub: "Diwali & Beyond", to: "/festive-edit", img: IMG.colFestive },
@@ -865,9 +939,57 @@ const OCCASIONS: { label: string; sub: string; to: string; img: string }[] = [
 ];
 
 function ShopByOccasion() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [paused, setPaused] = useState(false);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const container = scrollRef.current;
+      const firstCard = container.querySelector("a");
+      const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
+      const cardWidth = firstCard ? firstCard.clientWidth + gap : 300;
+      const amount = direction === "left" ? -cardWidth : cardWidth;
+      
+      if (
+        direction === "right" &&
+        container.scrollLeft + container.clientWidth >= container.scrollHeight - 10
+      ) {
+        container.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        container.scrollBy({ left: amount, behavior: "smooth" });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (paused) return;
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const container = scrollRef.current;
+        const maxScroll = container.scrollWidth - container.clientWidth;
+        if (container.scrollLeft >= maxScroll - 15) {
+          container.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          const firstCard = container.querySelector("a");
+          const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
+          const cardWidth = firstCard ? firstCard.clientWidth + gap : 300;
+          container.scrollBy({ left: cardWidth, behavior: "smooth" });
+        }
+      }
+    }, 3600);
+
+    return () => clearInterval(interval);
+  }, [paused]);
+
   return (
-    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24">
-      <div className="text-center mb-12 md:mb-16">
+    <section
+      className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
+    >
+      <div className="text-center mb-8 md:mb-12">
         <div className="flex items-center justify-center gap-3 sm:gap-6">
           <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
           <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
@@ -878,14 +1000,42 @@ function ShopByOccasion() {
         <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
           A drape for every moment — from sacred bridal vows to everyday grace.
         </p>
+
+        {/* Carousel controls */}
+        <div className="mt-5 flex items-center justify-center gap-3">
+          <button
+            onClick={() => scroll("left")}
+            className="h-10 w-10 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm"
+            aria-label="Previous occasion"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            className="h-10 w-10 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm"
+            aria-label="Next occasion"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+          <Link
+            to="/shop"
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-maroon/40 text-[11px] font-bold tracking-[0.2em] uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all duration-300 ml-2"
+          >
+            View All →
+          </Link>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+      <div
+        ref={scrollRef}
+        className="flex gap-4 md:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide scroll-smooth"
+        style={{ touchAction: "pan-x" }}
+      >
         {OCCASIONS.map((o) => (
           <Link
             key={o.label}
             to={o.to}
-            className="group block relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/40"
+            className="group snap-center sm:snap-start shrink-0 w-[72vw] sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)] block relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/40"
           >
             <img
               src={o.img}
@@ -899,15 +1049,15 @@ function ShopByOccasion() {
             {/* Multi-stage dark gradient scrim */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 via-50% to-transparent opacity-85 transition-opacity duration-300 group-hover:opacity-100" />
 
-            <div className="absolute inset-x-0 bottom-0 p-3.5 sm:p-5 md:p-8 text-ivory flex flex-col justify-end">
+            <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5 md:p-6 text-ivory flex flex-col justify-end">
               <p className="text-[11px] sm:text-xs tracking-[0.16em] uppercase text-amber-300 font-bold drop-shadow-sm">
                 {o.sub}
               </p>
-              <p className="font-serif text-xl sm:text-2xl md:text-4xl mt-0.5 sm:mt-1 font-normal drop-shadow-md leading-tight">
+              <p className="font-serif text-xl sm:text-2xl md:text-3xl mt-0.5 sm:mt-1 font-normal drop-shadow-md leading-tight">
                 {o.label}
               </p>
-              <div className="hidden md:block mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ivory/20 backdrop-blur-md text-[10px] tracking-widest uppercase text-ivory border border-ivory/30">
+              <div className="mt-2.5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ivory/20 backdrop-blur-md text-[9px] tracking-widest uppercase text-ivory border border-ivory/30">
                   Explore Collection →
                 </span>
               </div>
