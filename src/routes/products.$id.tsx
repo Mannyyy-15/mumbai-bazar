@@ -153,13 +153,34 @@ function ProductDetail() {
     openCart();
   };
 
-  const related = useMemo(
-    () =>
-      catalogProducts
-        .filter((p) => p.id !== product.id && p.category.some((c) => product.category.includes(c)))
-        .slice(0, 5),
-    [catalogProducts, product],
-  );
+  const related = useMemo(() => {
+    const pool = catalogProducts.filter((p) => p.id !== product.id);
+    if (pool.length === 0) return [];
+
+    // 1. Prioritize pieces matching category
+    const sameCategory = pool.filter((p) =>
+      p.category && p.category.some((c) => product.category && product.category.includes(c)),
+    );
+
+    // 2. Secondary: pieces matching weave or fabric
+    const sameWeave = pool.filter(
+      (p) =>
+        p.weave &&
+        product.weave &&
+        p.weave.toLowerCase() === product.weave.toLowerCase() &&
+        !sameCategory.some((item) => item.id === p.id),
+    );
+
+    // 3. Fallback: all other pieces in the catalog
+    const others = pool.filter(
+      (p) =>
+        !sameCategory.some((item) => item.id === p.id) &&
+        !sameWeave.some((item) => item.id === p.id),
+    );
+
+    // Combined unique list with up to 8 curated items
+    return [...sameCategory, ...sameWeave, ...others].slice(0, 8);
+  }, [catalogProducts, product]);
 
   const waMsg = encodeURIComponent(
     `Hello Mumbai Bazar, I'd like to enquire about "${product.name}" (${product.price}). Could you share availability and drape details?`,
@@ -440,7 +461,7 @@ function ProductDetail() {
               Browse all →
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-3 md:gap-x-4 gap-y-10">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6 lg:gap-8">
             {related.map((r) => (
               <ProductCard key={r.id} p={r} />
             ))}
