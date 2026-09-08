@@ -1634,69 +1634,124 @@ function Testimonials() {
 
 /* ---------------- Instagram Banner Section ---------------- */
 function InstagramBanner() {
-  const images = [
-    { img: IMG.look1, label: "Yellow Festive Silk Saree" },
-    { img: IMG.colWedding, label: "Red Bridal Heritage Saree" },
-    { img: IMG.look3, label: "Blush Peach Draped Saree" },
-    { img: IMG.look2, label: "Magenta Partywear Lehenga" },
-    { img: IMG.colFestive, label: "Pastel Festive Silk Saree" },
+  const reels = [
+    {
+      img: "/instagram/reel_1_viral_saree.jpg",
+      title: "Viral Dual-Tone Shimmer Saree",
+      views: "148K",
+      tag: "Trending",
+    },
+    {
+      img: "/instagram/reel_2_trending_nalasopara.jpg",
+      title: "Handcrafted Bridal Box Unboxing",
+      views: "92K",
+      tag: "Bridal",
+    },
+    {
+      img: "/instagram/reel_3_trending_shop.jpg",
+      title: "Live Saree Collection Walkthrough",
+      views: "215K",
+      tag: "Live In Store",
+    },
+    {
+      img: "/instagram/reel_4_rakhi_special.jpg",
+      title: "Festive Silk & Party Drapes",
+      views: "110K",
+      tag: "Festive Drop",
+    },
+    {
+      img: "/instagram/reel_5_viral_saree_shop.jpg",
+      title: "Dulhan Red Banarasi Showcase",
+      views: "185K",
+      tag: "Dulhan Special",
+    },
   ];
 
+  const igReelsUrl = "https://www.instagram.com/mumbai__bazar__nalasopara/reels/";
+
   return (
-    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-8 md:py-14" aria-label="Follow Mumbai Bazar on Instagram">
+    <section
+      className="mx-auto max-w-[1600px] px-4 md:px-8 py-8 md:py-14"
+      aria-label="Watch Mumbai Bazar Trending Reels on Instagram"
+    >
       <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-[#F2D7D5] bg-[#FDF5F5] shadow-xs flex flex-col lg:flex-row items-stretch">
-        
-        {/* Left: 5 Image Tiles */}
-        <div className="w-full lg:w-[48%] xl:w-[50%] p-2 sm:p-3 shrink-0">
-          <div className="grid grid-cols-5 gap-1.5 sm:gap-2 h-full">
-            {images.map((item, i) => (
+        {/* Left: 5 Real Instagram Reels Cards */}
+        <div className="w-full lg:w-[50%] xl:w-[52%] p-2.5 sm:p-3.5 shrink-0">
+          <div className="grid grid-cols-5 gap-1.5 sm:gap-2.5 h-full">
+            {reels.map((reel, i) => (
               <a
                 key={i}
-                href="https://www.instagram.com/mumbai__bazar__nalasopara/"
+                href={igReelsUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="group relative block aspect-[3/4] sm:aspect-[4/5] rounded-lg sm:rounded-xl overflow-hidden bg-rose-100/50 shadow-2xs"
-                aria-label={`View Instagram look ${i + 1}`}
+                className="group relative block aspect-[9/16] rounded-xl sm:rounded-2xl overflow-hidden bg-black/90 shadow-sm border border-gold/30 hover:border-maroon transition-all"
+                aria-label={`Watch Reel: ${reel.title}`}
               >
                 <img
-                  src={item.img}
-                  alt={item.label}
-                  width={300}
-                  height={400}
+                  src={reel.img}
+                  alt={reel.title}
+                  width={360}
+                  height={640}
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110 opacity-90 group-hover:opacity-100"
                 />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                  <Instagram className="h-5 w-5 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md" />
+
+                {/* Dark gradient for text & badges */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
+
+                {/* Top Badge: Reel Tag / Play Indicator */}
+                <div className="absolute top-2 left-2 right-2 flex items-center justify-between pointer-events-none">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-black/60 backdrop-blur-md px-1.5 sm:px-2 py-0.5 text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-gold">
+                    <Play className="h-2 w-2 fill-gold text-gold" />
+                    <span className="hidden sm:inline">Reel</span>
+                  </span>
+                </div>
+
+                {/* Center Hover Play Icon */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <span className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-white/90 backdrop-blur-md text-maroon flex items-center justify-center shadow-lg transition-all duration-300 scale-90 opacity-0 group-hover:scale-105 group-hover:opacity-100">
+                    <Play className="h-4 w-4 sm:h-5 sm:w-5 fill-maroon text-maroon ml-0.5" />
+                  </span>
+                </div>
+
+                {/* Bottom Overlay: Views & Title */}
+                <div className="absolute inset-x-0 bottom-0 p-1.5 sm:p-2.5 text-white pointer-events-none">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-black/60 backdrop-blur-md px-1.5 py-0.5 text-[8px] sm:text-[9px] font-bold text-white/90">
+                    <Play className="h-2 w-2 fill-white" />
+                    <span>{reel.views}</span>
+                  </span>
+                  <p className="mt-1 text-[9px] sm:text-[10px] font-semibold text-white/95 leading-tight line-clamp-1 hidden sm:block">
+                    {reel.title}
+                  </p>
                 </div>
               </a>
             ))}
           </div>
         </div>
 
-        {/* Center & Right: Instagram CTA + Script Calligraphy */}
+        {/* Center & Right: Instagram Follow Callout + Stay Connected */}
         <div className="flex-1 px-6 sm:px-10 py-6 md:py-8 flex flex-col sm:flex-row items-center justify-between gap-6 bg-gradient-to-r from-[#FDF5F5] via-[#FCEDEA] to-[#FDF5F5]">
-          
           {/* Middle Follow Callout */}
           <div className="flex items-start sm:items-center gap-3.5 sm:gap-4">
-            <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-sm">
+            <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-md">
               <Instagram className="h-6 w-6" />
             </div>
             <div>
               <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase font-bold text-[#A6192E]">
-                FOLLOW @MUMBAIBAZAR
+                WATCH REELS @MUMBAIBAZAR
               </p>
               <p className="text-xs sm:text-sm text-ink/75 font-medium mt-0.5">
-                Discover our latest looks &amp; new arrivals.
+                Watch viral saree draping videos, customer looks &amp; daily new drops.
               </p>
               <a
-                href="https://www.instagram.com/mumbai__bazar__nalasopara/"
+                href={igReelsUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-2.5 inline-flex items-center gap-1.5 px-5 py-1.5 rounded border border-[#A6192E] text-[#A6192E] hover:bg-[#A6192E] hover:text-ivory text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] transition-all shadow-2xs active:scale-95"
+                className="mt-2.5 inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-amber-600 via-rose-600 to-purple-600 text-white hover:opacity-95 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] transition-all shadow-md active:scale-95"
               >
-                FOLLOW US →
+                <Play className="h-3 w-3 fill-white" />
+                <span>WATCH REELS ON INSTAGRAM →</span>
               </a>
             </div>
           </div>
@@ -1710,9 +1765,7 @@ function InstagramBanner() {
               <span className="text-lg">♡</span>
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   );
