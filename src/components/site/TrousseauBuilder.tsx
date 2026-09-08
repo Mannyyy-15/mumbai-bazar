@@ -45,12 +45,15 @@ export function TrousseauBuilder() {
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-maroon/20 bg-white text-xs uppercase tracking-[0.16em] text-maroon font-bold mb-3 shadow-sm">
             <Gift className="h-3.5 w-3.5 text-maroon" /> Luxury Bridal Offer
           </span>
-          <h2 className="font-serif text-3xl md:text-5xl text-maroon font-semibold leading-tight">
-            Build Your 3-Piece Trousseau Box
-          </h2>
-          <p className="mt-3 text-sm md:text-base text-ink/80 font-normal leading-relaxed">
-            Select 3 sarees for your wedding functions to receive our complimentary gold-embossed
-            Velvet Trousseau Chest + 15% bundle savings.
+          <div className="flex items-center justify-center gap-3 sm:gap-6 mt-1 mb-2">
+            <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[100px] md:max-w-[140px]" />
+            <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+              Build Your 3-Piece Trousseau Box
+            </h2>
+            <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[100px] md:max-w-[140px]" />
+          </div>
+          <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/80 font-medium leading-relaxed">
+            Select 3 sarees for your wedding functions to receive our complimentary gold-embossed Velvet Trousseau Chest + 15% bundle savings.
           </p>
         </div>
 

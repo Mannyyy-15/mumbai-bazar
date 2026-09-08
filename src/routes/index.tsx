@@ -550,29 +550,93 @@ function ProductTile({ p }: { p: Product }) {
   );
 }
 
+/* ---------------- Shop By Category (First Section) ---------------- */
+const CATEGORIES = [
+  {
+    label: "BRIDAL SAREES",
+    to: "/wedding-sarees",
+    img: IMG.colWedding,
+  },
+  {
+    label: "LEHENGAS",
+    to: "/wedding-sarees",
+    img: IMG.colFestive,
+  },
+  {
+    label: "DRESSES",
+    to: "/festive-edit",
+    img: IMG.look3,
+  },
+  {
+    label: "SAREES",
+    to: "/silk-sarees",
+    img: IMG.colBanarasi,
+  },
+];
+
+function ShopByCategory() {
+  return (
+    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-10 md:py-16">
+      <div className="text-center mb-8 md:mb-12">
+        <div className="flex items-center justify-center gap-3 sm:gap-6">
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+            Shop By Category
+          </h2>
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-5 md:gap-6">
+        {CATEGORIES.map((cat) => (
+          <Link
+            key={cat.label}
+            to={cat.to}
+            className="group flex flex-col rounded-2xl overflow-hidden border border-[#D4AF37]/50 bg-[#FAF7F2] shadow-sm hover:shadow-xl hover:border-maroon transition-all duration-300"
+          >
+            <div className="relative aspect-[4/5] sm:aspect-[3/4] w-full overflow-hidden bg-[#F0E9DC]">
+              <img
+                src={cat.img}
+                alt={cat.label}
+                width={600}
+                height={800}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+              />
+            </div>
+            <div className="py-3 sm:py-3.5 px-3 sm:px-4 bg-[#FAF7F2] border-t border-[#D4AF37]/30 flex items-center justify-center text-center">
+              <span className="text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.16em] text-maroon group-hover:text-gold-deep transition-colors inline-flex items-center gap-1.5">
+                {cat.label} <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </span>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function ImmediateProductShelf() {
   const { products, loading } = useCatalog();
   const items = products.slice(0, 4);
 
   return (
-    <section className="bg-ivory px-4 py-8 md:px-8 md:py-14" aria-labelledby="shop-best-sellers">
+    <section className="bg-ivory px-4 py-10 md:px-8 md:py-16" aria-labelledby="shop-new-arrivals">
       <div className="mx-auto max-w-[1600px]">
-        <div className="mb-5 flex items-end justify-between gap-4 md:mb-8">
-          <div>
-            <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-maroon/70">
-              Made to be worn now
-            </p>
-            <h2 id="shop-best-sellers" className="mt-1 font-serif text-3xl text-maroon md:text-5xl">
-              Shop Bestsellers
+        <div className="text-center mb-8 md:mb-12">
+          <div className="flex items-center justify-center gap-3 sm:gap-6">
+            <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+            <h2 id="shop-new-arrivals" className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+              New Arrivals
             </h2>
+            <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
           </div>
-          <Link
-            to="/shop"
-            className="shrink-0 border-b border-maroon/50 pb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-maroon"
-          >
-            View all
-          </Link>
+          <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
+            Fresh designs. Just for you.
+          </p>
         </div>
+
         {loading ? (
           <div className="grid grid-cols-2 gap-x-3 gap-y-7 md:grid-cols-4 md:gap-x-5 md:gap-y-10">
             {[...Array(4)].map((_, i) => (
@@ -586,6 +650,15 @@ function ImmediateProductShelf() {
             ))}
           </div>
         ) : null}
+
+        <div className="mt-10 text-center">
+          <Link
+            to="/shop"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-full border border-maroon/40 text-[11px] font-bold uppercase tracking-[0.2em] text-maroon hover:bg-maroon hover:text-ivory transition-all shadow-sm"
+          >
+            Explore All New Arrivals →
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -618,41 +691,47 @@ function ProductFeed() {
 
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-20">
-      <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-8 md:mb-10 border-b border-maroon/40 pb-6">
-        <div>
-          <h3 className="font-serif text-3xl md:text-4xl text-maroon">Ready to Ship</h3>
-          <p className="text-[11px] uppercase tracking-wider text-maroon/60 mt-1">
-            {pool.length} pieces available
-          </p>
+      <div className="text-center mb-8 md:mb-12">
+        <div className="flex items-center justify-center gap-3 sm:gap-6">
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+            Ready to Ship
+          </h2>
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
         </div>
-        <div className="flex gap-6 md:gap-8 text-[11px] uppercase tracking-widest text-maroon">
-          <Link to="/shop" className="flex items-center gap-2 hover:opacity-60">
-            <SlidersHorizontal className="h-3.5 w-3.5" /> Filter
-          </Link>
-          <div className="relative">
-            <button
-              onClick={() => setSortOpen((v) => !v)}
-              className="flex items-center gap-2 hover:opacity-60"
-            >
-              Sort: {sortLabel[sort]} <ChevronDown className="h-3 w-3" />
-            </button>
-            {sortOpen && (
-              <div className="absolute right-0 top-full mt-2 z-20 bg-ivory border border-maroon/40 shadow-lg min-w-[200px] max-w-[240px]">
-                {(Object.keys(sortLabel) as SortKey[]).map((k) => (
-                  <button
-                    key={k}
-                    onClick={() => {
-                      setSort(k);
-                      setSortOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-3 text-[10px] tracking-widest uppercase hover:bg-maroon/5 ${sort === k ? "text-maroon font-medium" : "text-maroon/70"}`}
-                  >
-                    {sortLabel[k]}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+        <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
+          Handcrafted heirlooms ready for immediate doorstep dispatch ({pool.length} pieces)
+        </p>
+      </div>
+
+      <div className="flex justify-center items-center gap-6 md:gap-8 text-[11px] uppercase tracking-widest text-maroon mb-8 md:mb-12 border-y border-maroon/20 py-3.5">
+        <Link to="/shop" className="flex items-center gap-2 hover:opacity-60 font-bold">
+          <SlidersHorizontal className="h-3.5 w-3.5" /> Filter Collection
+        </Link>
+        <span className="text-maroon/30">|</span>
+        <div className="relative">
+          <button
+            onClick={() => setSortOpen((v) => !v)}
+            className="flex items-center gap-2 hover:opacity-60 font-bold"
+          >
+            Sort: {sortLabel[sort]} <ChevronDown className="h-3 w-3" />
+          </button>
+          {sortOpen && (
+            <div className="absolute right-0 top-full mt-2 z-20 bg-ivory border border-maroon/40 shadow-lg min-w-[200px] max-w-[240px] rounded-xl overflow-hidden">
+              {(Object.keys(sortLabel) as SortKey[]).map((k) => (
+                <button
+                  key={k}
+                  onClick={() => {
+                    setSort(k);
+                    setSortOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 text-[10px] tracking-widest uppercase hover:bg-maroon/5 ${sort === k ? "text-maroon font-bold bg-maroon/5" : "text-maroon/70"}`}
+                >
+                  {sortLabel[k]}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -666,14 +745,14 @@ function ProductFeed() {
         {visible < pool.length ? (
           <button
             onClick={() => setVisible((v) => v + 10)}
-            className="px-12 md:px-16 py-4 border border-maroon text-[11px] tracking-widest uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all"
+            className="px-12 md:px-16 py-4 rounded-full border border-maroon text-[11px] font-bold tracking-widest uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all shadow-sm"
           >
             Load More Products
           </button>
         ) : (
           <Link
             to="/shop"
-            className="inline-block px-12 md:px-16 py-4 border border-maroon text-[11px] tracking-widest uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all"
+            className="inline-block px-12 md:px-16 py-4 rounded-full border border-maroon text-[11px] font-bold tracking-widest uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all shadow-sm"
           >
             View Full Boutique
           </Link>
@@ -688,14 +767,15 @@ function CollectionStrip() {
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24">
       <div className="text-center mb-12 md:mb-16">
-        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs md:text-[13px] tracking-[0.16em] uppercase text-maroon font-bold mb-3">
-          Heritage Loom Clusters
-        </span>
-        <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl text-maroon">Shop by Weave</h3>
-        <div className="w-16 h-0.5 bg-gold/60 mx-auto mt-4 mb-3" />
-        <p className="text-sm md:text-base text-ink/85 font-medium max-w-xl mx-auto">
-          Handpicked weaves from India's legendary artisan clusters — Banarasi, Kanjivaram, Paithani
-          & Pure Silks.
+        <div className="flex items-center justify-center gap-3 sm:gap-6">
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+            Shop by Weave
+          </h2>
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+        </div>
+        <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
+          Handpicked weaves from India's legendary artisan clusters — Banarasi, Kanjivaram, Paithani &amp; Pure Silks.
         </p>
       </div>
 
@@ -722,11 +802,6 @@ function CollectionStrip() {
 
             {/* Card Content */}
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 text-ivory flex flex-col justify-end">
-              {/*
-                Was "Authentic Loom" on every weave card — an origin claim the
-                catalogue cannot support. "Shop the weave" is a call to action,
-                not an assertion about provenance.
-              */}
               <span className="text-xs uppercase tracking-[0.16em] text-amber-300 font-bold mb-1 drop-shadow-sm">
                 Shop the weave
               </span>
@@ -793,14 +868,14 @@ function ShopByOccasion() {
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24">
       <div className="text-center mb-12 md:mb-16">
-        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs md:text-[13px] tracking-[0.16em] uppercase text-maroon font-bold mb-3">
-          The Boutique Collection
-        </span>
-        <h3 className="font-serif text-3xl md:text-5xl lg:text-6xl text-maroon">
-          Shop by Occasion
-        </h3>
-        <div className="w-16 h-0.5 bg-gold/60 mx-auto mt-4 mb-3" />
-        <p className="text-sm md:text-base text-ink/85 font-medium max-w-xl mx-auto">
+        <div className="flex items-center justify-center gap-3 sm:gap-6">
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+            Shop by Occasion
+          </h2>
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+        </div>
+        <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
           A drape for every moment — from sacred bridal vows to everyday grace.
         </p>
       </div>
@@ -863,15 +938,19 @@ function TrendingNow() {
   return (
     <section className="w-full bg-beige/25 border-y border-maroon/40 py-16 md:py-24">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
-        <div className="flex items-end justify-between mb-8 md:mb-12">
-          <div>
-            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs md:text-[13px] tracking-[0.16em] uppercase text-maroon font-bold mb-2">
-              Loved This Week
-            </span>
-            <h3 className="font-serif text-3xl md:text-5xl text-maroon">Trending Now</h3>
+        <div className="text-center mb-8 md:mb-12">
+          <div className="flex items-center justify-center gap-3 sm:gap-6">
+            <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+            <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+              Trending Now
+            </h2>
+            <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
           </div>
+          <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
+            Loved this week by our patrons across Mumbai
+          </p>
 
-          <div className="flex items-center gap-3">
+          <div className="mt-5 flex items-center justify-center gap-3">
             <button
               onClick={() => scroll("left")}
               className="h-10 w-10 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm"
@@ -888,7 +967,7 @@ function TrendingNow() {
             </button>
             <Link
               to="/shop"
-              className="hidden md:inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-maroon/40 text-[11px] tracking-[0.2em] uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all duration-300 ml-2"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-maroon/40 text-[11px] font-bold tracking-[0.2em] uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all duration-300 ml-2"
             >
               View All →
             </Link>
@@ -993,7 +1072,7 @@ function EditorialSplit() {
             Collection
           </h3>
           <p className="mt-3 max-w-sm text-sm text-ivory/85">
-            Kanjivaram, Paithani & Tissue heirlooms for the most sacred day.
+            Kanjivaram, Paithani &amp; Tissue heirlooms for the most sacred day.
           </p>
           <span className="mt-5 inline-block text-[10px] md:text-[11px] tracking-[0.3em] uppercase border-b border-ivory/60 pb-1">
             Discover →
@@ -1041,7 +1120,7 @@ function EditorialSplit() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/30 via-55% to-transparent" />
           <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-6 md:p-10 text-ivory max-w-xs">
             <span className="text-[10px] tracking-[0.4em] uppercase text-gold/90 font-medium">
-              Silk & Gold
+              Silk &amp; Gold
             </span>
             <h3 className="mt-2 font-serif text-2xl md:text-4xl leading-tight drop-shadow-sm">
               Festive <span className="italic">Edit</span>
@@ -1062,21 +1141,17 @@ function Bestsellers() {
   const items = products.slice(0, 4);
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-20">
-      <div className="flex items-end justify-between mb-8 md:mb-10 border-b border-maroon/40 pb-6">
-        <div>
-          <span className="text-[10px] tracking-[0.4em] uppercase text-maroon/60">
-            Signature Silks
-          </span>
-          <h3 className="mt-2 font-serif text-3xl md:text-4xl lg:text-5xl text-maroon">
+      <div className="text-center mb-10 md:mb-14">
+        <div className="flex items-center justify-center gap-3 sm:gap-6">
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
             Bestsellers
-          </h3>
+          </h2>
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
         </div>
-        <Link
-          to="/shop"
-          className="text-[10px] tracking-widest uppercase text-maroon border-b border-maroon/40 pb-1 hover:opacity-60"
-        >
-          Shop all
-        </Link>
+        <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
+          Signature handcrafted silks &amp; bridal favorites
+        </p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 md:gap-x-4 gap-y-10">
         {items.map((p) => (
@@ -1117,11 +1192,16 @@ function Testimonials() {
     <section className="w-full bg-beige/25 py-16 md:py-24 border-y border-gold/50">
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
         <div className="text-center mb-12 md:mb-16">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-maroon/40 bg-maroon/5 text-xs md:text-[13px] tracking-[0.16em] uppercase text-maroon font-bold mb-3">
-            Loved By Our Patrons
-          </span>
-          <h3 className="font-serif text-3xl md:text-5xl text-maroon">Words from Our Women</h3>
-          <div className="w-16 h-0.5 bg-gold/60 mx-auto mt-4" />
+          <div className="flex items-center justify-center gap-3 sm:gap-6">
+            <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+            <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+              Words from Our Women
+            </h2>
+            <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+          </div>
+          <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
+            Loved by brides &amp; saree patrons across India
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
@@ -1231,16 +1311,15 @@ function InstagramGrid() {
   return (
     <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24 border-t border-maroon/10">
       <div className="text-center mb-10 md:mb-14">
-        <div className="inline-flex items-center gap-2 rounded-full bg-maroon/5 border border-maroon/15 px-4 py-1.5 text-xs text-maroon font-semibold tracking-wide mb-3">
-          <Instagram className="h-3.5 w-3.5 text-maroon" />
-          <span>@mumbai__bazar__nalasopara · 19K+ Community</span>
+        <div className="flex items-center justify-center gap-3 sm:gap-6">
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+            Boutique Diaries
+          </h2>
+          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
         </div>
-        <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-maroon font-semibold">
-          Trending Reels &amp; Boutique Diaries
-        </h3>
-        <p className="mt-3 text-sm md:text-base text-ink/75 max-w-2xl mx-auto">
-          Watch our viral saree draping sessions, bridal unboxings, and fresh stock arrivals
-          straight from our flagship Nalasopara boutique.
+        <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 max-w-2xl mx-auto">
+          Trending Reels &amp; live draping sessions straight from our flagship boutique @mumbai__bazar__nalasopara
         </p>
       </div>
 
@@ -1322,14 +1401,18 @@ function Newsletter() {
   return (
     <section className="w-full bg-maroon text-ivory py-16 md:py-24">
       <div className="mx-auto max-w-3xl px-4 md:px-8 text-center">
-        <span className="text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-ivory/60">
-          The Atelier Letter
-        </span>
-        <h3 className="mt-4 font-serif text-3xl md:text-5xl leading-tight">
+        <div className="flex items-center justify-center gap-3 sm:gap-6 mb-4">
+          <div className="h-px bg-gold/50 flex-1 max-w-[60px] sm:max-w-[100px]" />
+          <span className="text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-gold font-bold">
+            The Atelier Letter
+          </span>
+          <div className="h-px bg-gold/50 flex-1 max-w-[60px] sm:max-w-[100px]" />
+        </div>
+        <h3 className="font-serif text-3xl md:text-5xl leading-tight">
           Be the first to <span className="italic">know</span>
         </h3>
         <p className="mt-4 text-sm md:text-base text-ivory/75 max-w-xl mx-auto">
-          Early access to new arrivals, bridal previews and private atelier events. Plus a heartfelt
+          Early access to new arrivals, bridal previews and private boutique events. Plus a heartfelt
           ₹1,000 off your first heirloom.
         </p>
         <form
@@ -1345,11 +1428,11 @@ function Newsletter() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Your email address"
-            className="flex-1 bg-transparent border border-ivory/40 px-5 py-3.5 text-sm text-ivory placeholder:text-ivory/50 focus:outline-none focus:border-ivory transition-colors"
+            className="flex-1 bg-transparent border border-ivory/40 px-5 py-3.5 text-sm text-ivory placeholder:text-ivory/50 focus:outline-none focus:border-ivory transition-colors rounded-xl sm:rounded-l-full sm:rounded-r-none"
           />
           <button
             type="submit"
-            className="px-8 py-3.5 bg-ivory text-maroon text-[10px] md:text-[11px] tracking-[0.3em] uppercase hover:bg-gold hover:text-ivory transition-colors"
+            className="px-8 py-3.5 bg-ivory text-maroon text-[10px] md:text-[11px] font-bold tracking-[0.3em] uppercase hover:bg-gold hover:text-ivory transition-colors rounded-xl sm:rounded-r-full sm:rounded-l-none"
           >
             {done ? "Subscribed ✓" : "Subscribe"}
           </button>
@@ -1368,6 +1451,7 @@ function Home() {
     <div className="bg-ivory text-ink">
       <HeroCarousel />
       <TrustBar />
+      <ShopByCategory />
       <ImmediateProductShelf />
       <TrendingNow />
       <ProductFeed />
@@ -1381,3 +1465,4 @@ function Home() {
     </div>
   );
 }
+
