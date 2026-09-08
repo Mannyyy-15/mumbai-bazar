@@ -272,10 +272,21 @@ export function outletSchema(o: Outlet) {
         closes: SITE.hours.closes,
       },
     ],
-    makesOffer: o.specialities.map((item) => ({
-      "@type": "Offer",
-      itemOffered: { "@type": "Product", name: item },
-    })),
+    knowsAbout: [
+      ...o.specialities,
+      "Sarees",
+      "Lehengas",
+      "Bridal Wear",
+      "Ethnic Wear",
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `${o.area} Boutique Collections`,
+      itemListElement: o.specialities.map((item) => ({
+        "@type": "OfferCatalog",
+        name: item,
+      })),
+    },
     currenciesAccepted: SITE.currency,
     paymentAccepted: "Cash, UPI, Credit Card, Debit Card, Net Banking",
     // Only emitted where coordinates have actually been confirmed — a guessed
