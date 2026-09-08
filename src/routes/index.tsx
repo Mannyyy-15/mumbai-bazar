@@ -505,7 +505,7 @@ function ProductTile({ p }: { p: Product }) {
         )}
 
         <div // Desktop hover only. On mobile the overlay sat permanently over the
-          // saree; the product page has its own Add to Bag button.
+          // saree; the product page has its own Shop Now button.
           className="hidden md:block absolute inset-x-3 bottom-3 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
         >
           <button
@@ -521,7 +521,7 @@ function ProductTile({ p }: { p: Product }) {
               </>
             ) : (
               <>
-                <ShoppingBag className="h-3.5 w-3.5" /> Add to Bag
+                <ShoppingBag className="h-3.5 w-3.5" /> Shop Now
               </>
             )}
           </button>

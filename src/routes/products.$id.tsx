@@ -341,7 +341,7 @@ function ProductDetail() {
                     </>
                   ) : (
                     <>
-                      <ShoppingBag className="h-4 w-4" /> Add to Shopping Bag
+                      <ShoppingBag className="h-4 w-4" /> Shop Now
                     </>
                   )}
                 </button>

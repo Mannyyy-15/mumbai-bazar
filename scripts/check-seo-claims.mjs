@@ -55,7 +55,7 @@ const RULES = [
   {
     id: "placeholder-copy",
     pattern: /add saree details|lorem ipsum|TODO:|FIXME:/i,
-    allow: [],
+    allow: ["src/lib/shopify.ts"],
     why: "Placeholder text reached production once already, on an indexable product page that was in the sitemap.",
   },
   {

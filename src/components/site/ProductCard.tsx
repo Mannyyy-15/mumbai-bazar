@@ -93,7 +93,7 @@ export function ProductCard({ p }: { p: Product }) {
           <Heart className={`h-4 w-4 ${isSaved ? "fill-ivory text-ivory" : ""}`} />
         </button>
 
-        {/* Hover Add to Bag Action (Desktop hover only so mobile images stay completely clear) */}
+        {/* Hover Shop Now Action (Desktop hover only so mobile images stay completely clear) */}
         <div className="hidden md:block absolute inset-x-3 bottom-3 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
           <button
             onClick={quickAdd}
@@ -108,7 +108,7 @@ export function ProductCard({ p }: { p: Product }) {
               </>
             ) : (
               <>
-                <ShoppingBag className="h-3.5 w-3.5" /> Add to Bag
+                <ShoppingBag className="h-3.5 w-3.5" /> Shop Now
               </>
             )}
           </button>
