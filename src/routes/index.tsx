@@ -15,6 +15,7 @@ import {
   Quote,
   Heart,
   Play,
+  MapPin,
 } from "lucide-react";
 
 import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
@@ -757,6 +758,95 @@ function ProductFeed() {
             View Full Boutique
           </Link>
         )}
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Store Visit Banner (Flagship Boutique) ---------------- */
+function StoreVisitBanner() {
+  return (
+    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-6 md:py-12" aria-label="Visit Our Flagship Boutique">
+      <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-[#D4AF37]/50 bg-[#FAF7F2] shadow-md flex flex-col md:flex-row items-stretch">
+        
+        {/* Left: Storefront Facade */}
+        <div className="w-full md:w-[35%] lg:w-[32%] min-h-[220px] sm:min-h-[260px] md:min-h-[280px] relative overflow-hidden bg-[#2A080C] shrink-0">
+          <img
+            src="/storefront.webp"
+            alt="Mumbai Bazar Sarees, Lehengas and Bridal Storefront in Nalasopara East"
+            width={700}
+            height={500}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover object-center transition-transform duration-700 hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/40 via-transparent to-transparent pointer-events-none" />
+        </div>
+
+        {/* Center: Boutique Details & Directions */}
+        <div className="flex-1 px-5 sm:px-8 py-6 md:py-8 flex flex-col justify-center bg-[#FAF7F2]">
+          <span className="text-[10px] sm:text-xs tracking-[0.25em] uppercase font-bold text-ink/60">
+            VISIT OUR STORE
+          </span>
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-black tracking-[0.05em] uppercase text-[#A6192E] mt-1">
+            MUMBAI BAZAR
+          </h2>
+          <p className="mt-1 text-xs sm:text-sm font-semibold text-ink/85">
+            Nalasopara East's destination for Sarees &amp; Lehengas
+          </p>
+          
+          <div className="mt-3.5 flex items-start gap-2 text-ink/75">
+            <MapPin className="h-4 w-4 text-[#A6192E] shrink-0 mt-0.5" />
+            <span className="text-xs sm:text-sm font-medium leading-relaxed">
+              Tiwari Nagar, Shop No. 1, Near Flyover Bridge, Nalasopara East
+            </span>
+          </div>
+
+          <div className="mt-5 flex items-center gap-3">
+            <Link
+              to="/stores/nalasopara"
+              className="inline-flex items-center justify-center gap-1.5 px-6 py-2.5 bg-[#A6192E] hover:bg-maroon text-ivory text-[11px] sm:text-xs font-bold uppercase tracking-[0.16em] rounded shadow-sm hover:shadow-md transition-all active:scale-95"
+            >
+              VISIT STORE →
+            </Link>
+          </div>
+        </div>
+
+        {/* Right: Style Tradition Elegance + Bride Model */}
+        <div className="hidden lg:flex items-stretch shrink-0 relative bg-[#FAF7F2]">
+          {/* Vertical divider */}
+          <div className="w-px bg-[#D4AF37]/35 my-6 self-stretch" />
+          
+          <div className="flex items-center px-4 lg:px-6">
+            <div className="text-center flex flex-col items-center justify-center pr-3 lg:pr-5">
+              <p className="font-serif italic text-lg lg:text-2xl text-[#B8860B] font-medium leading-relaxed">
+                Style<br />
+                <span className="text-[10px] not-italic text-[#B8860B]/60">·</span><br />
+                Tradition<br />
+                <span className="text-[10px] not-italic text-[#B8860B]/60">·</span><br />
+                Elegance
+              </p>
+              <div className="mt-2 flex items-center justify-center gap-1 text-[#B8860B]/70">
+                <span className="h-px w-4 bg-[#B8860B]/40" />
+                <span className="text-[10px]">❧</span>
+                <span className="h-px w-4 bg-[#B8860B]/40" />
+              </div>
+            </div>
+
+            <div className="w-24 xl:w-32 h-full relative overflow-hidden shrink-0 flex items-end">
+              <img
+                src="/bridal-banner-model.webp"
+                alt="Bridal Saree and Lehenga Collection at Mumbai Bazar"
+                width={300}
+                height={450}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   );
@@ -1605,6 +1695,7 @@ function Home() {
       <ImmediateProductShelf />
       <TrendingNow />
       <ProductFeed />
+      <StoreVisitBanner />
       <TrousseauBuilder />
       <Bestsellers />
       <ShopByOccasion />
