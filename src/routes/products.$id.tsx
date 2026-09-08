@@ -202,7 +202,7 @@ function ProductDetail() {
                         : "border-transparent hover:border-maroon/40 opacity-70 hover:opacity-100"
                     }`}
                   >
-                    <img src={g} alt="" className="h-full w-full object-cover" />
+                    <img src={g} alt="" className="h-full w-full object-cover object-top" />
                   </button>
                 ))}
               </div>
@@ -213,7 +213,7 @@ function ProductDetail() {
                   <img
                     src={d.gallery[active]}
                     alt={product.name}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover object-top"
                   />
                 </div>
                 {product.tag && (
@@ -242,7 +242,7 @@ function ProductDetail() {
                         : "border-gold/40 opacity-70 hover:opacity-100"
                     }`}
                   >
-                    <img src={g} alt="" className="h-full w-full object-cover" />
+                    <img src={g} alt="" className="h-full w-full object-cover object-top" />
                   </button>
                 ))}
               </div>

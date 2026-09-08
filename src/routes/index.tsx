@@ -489,7 +489,7 @@ function ProductTile({ p }: { p: Product }) {
           height={800}
           loading="lazy"
           decoding="async"
-          className={`w-full h-full object-cover transition-all duration-700 ease-out ${
+          className={`w-full h-full object-cover object-top transition-all duration-700 ease-out ${
             p.secondaryImg ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-108"
           }`}
         />
@@ -503,7 +503,7 @@ function ProductTile({ p }: { p: Product }) {
             height={800}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover object-top opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
           />
         )}
 
@@ -605,7 +605,7 @@ function ShopByCategory() {
                 height={800}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-108"
               />
             </div>
             <div className="py-3 sm:py-3.5 px-3 sm:px-4 bg-[#FAF7F2] border-t border-[#D4AF37]/30 flex items-center justify-center text-center">
@@ -1391,7 +1391,7 @@ function TrendingNow() {
                   height={800}
                   loading="lazy"
                   decoding="async"
-                  className={`w-full h-full object-cover transition-all duration-700 ease-out ${
+                  className={`w-full h-full object-cover object-top transition-all duration-700 ease-out ${
                     p.secondaryImg
                       ? "group-hover:opacity-0 group-hover:scale-105"
                       : "group-hover:scale-108"
@@ -1407,7 +1407,7 @@ function TrendingNow() {
                     height={800}
                     loading="lazy"
                     decoding="async"
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+                    className="absolute inset-0 w-full h-full object-cover object-top opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
                   />
                 )}
               </div>
@@ -1452,7 +1452,7 @@ function EditorialSplit() {
           width={800}
           height={1000}
           loading="lazy"
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 via-55% to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 text-ivory">
@@ -1483,7 +1483,7 @@ function EditorialSplit() {
             width={800}
             height={500}
             loading="lazy"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/30 via-55% to-transparent" />
           <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-6 md:p-10 text-ivory max-w-xs">
@@ -1508,7 +1508,7 @@ function EditorialSplit() {
             width={800}
             height={500}
             loading="lazy"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/30 via-55% to-transparent" />
           <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-6 md:p-10 text-ivory max-w-xs">
@@ -1669,7 +1669,7 @@ function InstagramBanner() {
                   height={400}
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
                   <Instagram className="h-5 w-5 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md" />

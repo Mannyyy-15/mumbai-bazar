@@ -286,3 +286,11 @@ html.lenis.lenis-smooth [data-lenis-prevent] {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Apparel & Model Image Framing — Always anchor to top-center so model heads and jewelry are never cut off */
+.aspect-\[3\/4\] img,
+.aspect-\[4\/5\] img,
+.aspect-\[2\/3\] img,
+.aspect-\[3\/2\] img {
+  object-position: center top !important;
+}

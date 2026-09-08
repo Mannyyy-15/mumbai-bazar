@@ -53,7 +53,7 @@ export function ProductCard({ p }: { p: Product }) {
           alt={productAltText(p.name, p.weave)}
           loading="lazy"
           decoding="async"
-          className={`h-full w-full object-cover transition-all duration-700 ease-out ${
+          className={`h-full w-full object-cover object-top transition-all duration-700 ease-out ${
             p.secondaryImg ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-108"
           }`}
         />
@@ -65,7 +65,7 @@ export function ProductCard({ p }: { p: Product }) {
             alt={productAltText(p.name, p.weave, "palla detail")}
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 h-full w-full object-cover opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
+            className="absolute inset-0 h-full w-full object-cover object-top opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
           />
         )}
 
