@@ -38,6 +38,11 @@ export function MobileBottomNav() {
   const isShop = pathname === "/shop";
   const isCollections = pathname === "/collections";
 
+  // On product detail pages, hide the global bottom nav so the sticky product "Shop Now" bar has exclusive unobstructed space.
+  if (pathname.startsWith("/products/")) {
+    return null;
+  }
+
   return (
     <div
       aria-label="Mobile navigation"

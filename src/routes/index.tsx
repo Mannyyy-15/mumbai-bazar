@@ -28,6 +28,7 @@ import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useCatalog } from "@/lib/catalog-context";
 import { TrousseauBuilder } from "@/components/site/TrousseauBuilder";
+import { ProductCard } from "@/components/site/ProductCard";
 
 /**
  * Hero slide asset base paths — extension omitted so each <picture> can offer
@@ -417,140 +418,7 @@ function FeedDivider() {
 type SortKey = "featured" | "newest" | "price-asc" | "price-desc";
 
 function ProductTile({ p }: { p: Product }) {
-  const { wishlist, toggleWishlist } = useWishlist();
-  const { addItem } = useCart();
-  const isSaved = wishlist.some((w) => w.id === p.id);
-  const [added, setAdded] = useState(false);
-  const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(
-    () => () => {
-      if (addedTimer.current) clearTimeout(addedTimer.current);
-    },
-    [],
-  );
-
-  const handleQuickAdd = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // A Product is not a CartItem — price has to be parsed to a number and the
-    // display string kept separately, the same mapping ProductCard uses.
-    addItem({
-      id: p.id,
-      name: p.name,
-      price: parsePriceToNumber(p.price),
-      priceLabel: p.price,
-      image: p.img,
-      weave: p.weave,
-      shopifyVariantId: p.shopifyVariantId,
-    });
-
-    // Without this the click looks like nothing happened: only the small cart
-    // badge changes, which is easy to miss.
-    setAdded(true);
-    if (addedTimer.current) clearTimeout(addedTimer.current);
-    addedTimer.current = setTimeout(() => setAdded(false), 1800);
-  };
-
-  return (
-    <Link
-      to="/products/$id"
-      params={{ id: p.id }}
-      className="group relative flex flex-col bg-ivory rounded-2xl border border-[#A27633]/60 shadow-sm hover:shadow-xl hover:border-[#A27633] transition-all duration-300 overflow-hidden"
-    >
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F5EFEB]">
-        {p.tag && (
-          <span className="absolute top-3 left-3 z-10 px-2.5 py-1 rounded-full bg-maroon/95 text-ivory text-[9px] font-bold tracking-[0.2em] uppercase shadow-md backdrop-blur-sm border border-[#A27633]/50">
-            {p.tag}
-          </span>
-        )}
-
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleWishlist(p);
-          }}
-          aria-label={isSaved ? "Remove from wishlist" : "Add to wishlist"}
-          className={`absolute top-3 right-3 z-10 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${
-            isSaved
-              ? "bg-maroon text-ivory shadow-md"
-              : "bg-ivory/80 text-maroon hover:bg-maroon hover:text-ivory shadow-sm"
-          }`}
-        >
-          <Heart className={`h-4 w-4 ${isSaved ? "fill-ivory text-ivory" : ""}`} />
-        </button>
-
-        {/* Primary Image */}
-        <img
-          src={p.img}
-          alt={p.name}
-          width={600}
-          height={800}
-          loading="lazy"
-          decoding="async"
-          className={`w-full h-full object-cover object-top transition-all duration-700 ease-out ${
-            p.secondaryImg ? "group-hover:opacity-0 group-hover:scale-105" : "group-hover:scale-108"
-          }`}
-        />
-
-        {/* Secondary Hover Image */}
-        {p.secondaryImg && (
-          <img
-            src={p.secondaryImg}
-            alt={`${p.name} alternate view`}
-            width={600}
-            height={800}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 w-full h-full object-cover object-top opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
-          />
-        )}
-
-        <div // Desktop hover only. On mobile the overlay sat permanently over the
-          // saree; the product page has its own Shop Now button.
-          className="hidden md:block absolute inset-x-3 bottom-3 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
-        >
-          <button
-            onClick={handleQuickAdd}
-            aria-live="polite"
-            className={`w-full py-2.5 rounded-xl text-[10px] font-bold tracking-[0.2em] uppercase transition-colors flex items-center justify-center gap-2 shadow-lg ${
-              added ? "bg-green-700 text-white" : "bg-maroon text-ivory hover:bg-wine"
-            }`}
-          >
-            {added ? (
-              <>
-                <Check className="h-3.5 w-3.5" /> Added to Bag
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="h-3.5 w-3.5" /> Shop Now
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-
-      <div className="p-4 md:p-5 flex flex-col space-y-1.5 text-left">
-        <p className="text-[10px] uppercase tracking-[0.22em] text-gold-deep font-semibold">
-          {p.weave}
-        </p>
-        <h4 className="font-sans text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
-          {p.name}
-        </h4>
-        <div className="flex items-baseline gap-2 pt-2 border-t border-[#A27633]/40 mt-1">
-          <span className="font-sans text-base md:text-lg font-bold text-ink tracking-tight">
-            {p.price}
-          </span>
-          {p.original && (
-            <span className="text-xs text-taupe font-medium line-through font-sans">
-              {p.original}
-            </span>
-          )}
-        </div>
-      </div>
-    </Link>
-  );
+  return <ProductCard p={p} />;
 }
 
 /* ---------------- Shop By Category (First Section) ---------------- */

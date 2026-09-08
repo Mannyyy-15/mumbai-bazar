@@ -18,6 +18,7 @@ import { fetchShopifyProduct } from "@/lib/shopify";
 import { useCatalog } from "@/lib/catalog-context";
 import { seo, jsonLd, SITE } from "@/lib/seo";
 import { productSchema, breadcrumbSchema, priceToSchema } from "@/lib/structured-data";
+import { COLOR_OPTIONS } from "@/lib/filters";
 
 export const Route = createFileRoute("/products/$id")({
   loader: async ({ params }) => {
@@ -106,13 +107,6 @@ export const Route = createFileRoute("/products/$id")({
   ),
 });
 
-const SWATCHES = [
-  { name: "Wine", hex: "#641F2A" },
-  { name: "Midnight", hex: "#2D1F3F" },
-  { name: "Emerald", hex: "#1A3E35" },
-  { name: "Antique", hex: "#B69054" },
-];
-
 function ProductDetail() {
   const { product } = Route.useLoaderData();
   const { products: catalogProducts } = useCatalog();
@@ -122,6 +116,38 @@ function ProductDetail() {
   const [swatch, setSwatch] = useState(0);
   const [added, setAdded] = useState(false);
   const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Dynamically determine color swatches based on product metadata/keywords
+  // Automatically scales from 1 color today to multi-color variants in the future.
+  const productColors = useMemo(() => {
+    const text = (
+      product.name +
+      " " +
+      product.weave +
+      " " +
+      (product.details?.fabric || "") +
+      " " +
+      (product.details?.description || "") +
+      " " +
+      product.id
+    ).toLowerCase();
+
+    const matched = COLOR_OPTIONS.filter((c) =>
+      c.keywords.some((kw) => text.includes(kw))
+    );
+
+    if (matched.length > 0) {
+      return matched.map((c) => ({
+        name: c.label.split("&")[0].trim(),
+        hex: c.hex,
+        border: c.border,
+      }));
+    }
+
+    return [{ name: "Heritage Silk", hex: "#641F2A" }];
+  }, [product]);
+
+  const currentSwatch = productColors[swatch] || productColors[0];
   useEffect(
     () => () => {
       if (addedTimer.current) clearTimeout(addedTimer.current);
@@ -188,7 +214,7 @@ function ProductDetail() {
   const waHref = `https://wa.me/${SITE.whatsapp}?text=${waMsg}`;
 
   return (
-    <div className="bg-ivory text-ink">
+    <div className="bg-ivory text-ink pb-28 md:pb-0">
       {/* Breadcrumb */}
       <div className="mx-auto max-w-[1600px] px-4 md:px-8 pt-5 md:pt-6 border-b border-maroon/40 pb-4">
         <nav className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-maroon/60">
@@ -302,31 +328,41 @@ function ProductDetail() {
 
               <div className="my-7 h-px bg-maroon/15" />
 
-              {/* Colour swatches — like the hero */}
+              {/* Colour swatches — dynamic according to product */}
               <div>
                 <div className="flex items-center justify-between">
                   <p className="text-xs uppercase tracking-[0.16em] text-maroon font-bold">
-                    Select Weave Colour
+                    {productColors.length > 1 ? "Select Variant Colour" : "Product Colour"}
                   </p>
                   <span className="text-xs uppercase tracking-[0.14em] text-maroon font-semibold">
-                    {SWATCHES[swatch].name}
+                    {currentSwatch.name}
                   </span>
                 </div>
-                <div className="mt-4 flex gap-3">
-                  {SWATCHES.map((s, i) => (
+                <div className="mt-4 flex flex-wrap gap-3">
+                  {productColors.map((s, i) => (
                     <button
-                      key={s.name}
+                      key={s.name + i}
                       onClick={() => setSwatch(i)}
                       aria-label={s.name}
-                      className={`relative h-11 w-11 rounded-full border transition-all ${
+                      title={s.name}
+                      className={`relative h-11 w-11 rounded-full border transition-all duration-200 ${
                         swatch === i
-                          ? "border-maroon ring-1 ring-maroon ring-offset-2 ring-offset-ivory"
-                          : "border-maroon/40 hover:border-maroon/50"
+                          ? "border-maroon ring-2 ring-maroon ring-offset-2 ring-offset-ivory scale-105 shadow-sm"
+                          : "border-maroon/30 hover:border-maroon/60"
                       }`}
-                      style={{ backgroundColor: s.hex }}
+                      style={{
+                        backgroundColor: s.hex,
+                        borderColor: s.border || undefined,
+                      }}
                     >
                       {swatch === i && (
-                        <Check className="absolute inset-0 m-auto h-4 w-4 text-ivory drop-shadow" />
+                        <Check
+                          className={`absolute inset-0 m-auto h-4 w-4 ${
+                            s.hex.toLowerCase() === "#f5efeb" || s.hex.toLowerCase() === "#ffffff"
+                              ? "text-maroon"
+                              : "text-ivory"
+                          } drop-shadow-sm`}
+                        />
                       )}
                     </button>
                   ))}
@@ -468,6 +504,47 @@ function ProductDetail() {
           </div>
         </section>
       )}
+
+      {/* Mobile Floating Bottom Bar: Price, Compare Price, and Shop Now CTA */}
+      <div className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-ivory/95 backdrop-blur-xl border-t border-gold/50 px-4 py-3 shadow-[0_-8px_30px_rgba(100,31,42,0.15)] pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
+        <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
+          <div className="flex flex-col">
+            <div className="flex items-baseline gap-1.5">
+              <span className="font-sans text-xl font-black text-maroon tracking-tight">
+                {product.price}
+              </span>
+              {product.original && (
+                <span className="text-xs text-taupe font-medium line-through font-sans">
+                  {product.original}
+                </span>
+              )}
+            </div>
+            <span className="text-[10px] text-ink/75 font-semibold tracking-wide">
+              Complimentary Shipping
+            </span>
+          </div>
+
+          <button
+            onClick={handleAddToCart}
+            aria-live="polite"
+            className={`flex-1 max-w-[210px] py-3.5 px-4 rounded-xl text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95 shadow-md ${
+              added
+                ? "bg-green-700 text-white"
+                : "bg-maroon text-white hover:bg-wine active:bg-wine"
+            }`}
+          >
+            {added ? (
+              <>
+                <Check className="h-4 w-4" /> Added
+              </>
+            ) : (
+              <>
+                <ShoppingBag className="h-4 w-4" /> Shop Now
+              </>
+            )}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

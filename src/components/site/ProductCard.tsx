@@ -33,8 +33,6 @@ export function ProductCard({ p }: { p: Product }) {
       shopifyVariantId: p.shopifyVariantId,
     });
 
-    // Confirm on the button itself rather than yanking the drawer open, which
-    // interrupted browsing after every add.
     setAdded(true);
     if (addedTimer.current) clearTimeout(addedTimer.current);
     addedTimer.current = setTimeout(() => setAdded(false), 1800);
@@ -44,7 +42,7 @@ export function ProductCard({ p }: { p: Product }) {
     <Link
       to="/products/$id"
       params={{ id: p.id }}
-      className="group block relative overflow-hidden rounded-2xl border border-[#A27633]/60 bg-ivory shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(100,31,42,0.25)] hover:border-[#A27633]"
+      className="group flex flex-col justify-between relative overflow-hidden rounded-2xl border border-[#A27633]/60 bg-ivory shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(100,31,42,0.25)] hover:border-[#A27633]"
     >
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
         {/* Primary Image */}
@@ -92,47 +90,49 @@ export function ProductCard({ p }: { p: Product }) {
         >
           <Heart className={`h-4 w-4 ${isSaved ? "fill-ivory text-ivory" : ""}`} />
         </button>
-
-        {/* Hover Shop Now Action (Desktop hover only so mobile images stay completely clear) */}
-        <div className="hidden md:block absolute inset-x-3 bottom-3 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-          <button
-            onClick={quickAdd}
-            aria-live="polite"
-            className={`w-full py-2.5 rounded-xl text-[10px] font-medium tracking-[0.16em] uppercase transition-colors flex items-center justify-center gap-1.5 shadow-lg ${
-              added ? "bg-green-700 text-white" : "bg-maroon text-ivory hover:bg-wine"
-            }`}
-          >
-            {added ? (
-              <>
-                <Check className="h-3.5 w-3.5" /> Added to Bag
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="h-3.5 w-3.5" /> Shop Now
-              </>
-            )}
-          </button>
-        </div>
       </div>
 
-      {/* Card Details — Tight Spacing Between Name & Price */}
-      <div className="p-3 sm:p-4 md:p-5 flex flex-col space-y-1 sm:space-y-1.5">
-        <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.14em] text-gold-deep font-bold truncate">
-          {p.weave}
-        </p>
-        <h3 className="font-sans text-xs sm:text-base md:text-lg font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
-          {p.name}
-        </h3>
-        <div className="flex items-baseline gap-2 pt-1.5 sm:pt-2 border-t border-[#A27633]/40 mt-0.5 sm:mt-1">
-          <span className="font-sans text-base sm:text-lg md:text-xl font-bold text-maroon tracking-tight">
-            {p.price}
-          </span>
-          {p.original && (
-            <span className="text-xs sm:text-sm text-taupe font-medium line-through font-sans">
-              {p.original}
+      {/* Card Details & Always-Visible Shop Now Button */}
+      <div className="p-3 sm:p-4 flex flex-col justify-between flex-1 space-y-1">
+        <div>
+          <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.14em] text-gold-deep font-bold truncate">
+            {p.weave}
+          </p>
+          <h3 className="font-sans text-xs sm:text-sm md:text-base font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
+            {p.name}
+          </h3>
+          <div className="flex items-baseline gap-2 pt-1.5 border-t border-[#A27633]/30 mt-1">
+            <span className="font-sans text-sm sm:text-base md:text-lg font-bold text-maroon tracking-tight">
+              {p.price}
             </span>
-          )}
+            {p.original && (
+              <span className="text-[11px] sm:text-xs text-taupe font-medium line-through font-sans">
+                {p.original}
+              </span>
+            )}
+          </div>
         </div>
+
+        {/* Dedicated Always-Visible Shop Now Button */}
+        <button
+          onClick={quickAdd}
+          aria-live="polite"
+          className={`mt-2.5 w-full py-2 sm:py-2.5 px-3 rounded-xl text-[10px] sm:text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 shadow-xs ${
+            added
+              ? "bg-green-700 text-white shadow-sm"
+              : "bg-maroon text-white hover:bg-wine active:scale-98 shadow-sm group-hover:bg-wine"
+          }`}
+        >
+          {added ? (
+            <>
+              <Check className="h-3.5 w-3.5" /> Added
+            </>
+          ) : (
+            <>
+              <ShoppingBag className="h-3.5 w-3.5" /> Shop Now
+            </>
+          )}
+        </button>
       </div>
     </Link>
   );
