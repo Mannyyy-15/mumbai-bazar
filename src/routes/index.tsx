@@ -1846,7 +1846,6 @@ function Home() {
   return (
     <div className="bg-ivory text-ink">
       <HeroCarousel />
-      <TrustBar />
       <ShopByCategory />
       <ImmediateProductShelf />
       <TrendingNow />
