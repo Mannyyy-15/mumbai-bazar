@@ -16,6 +16,8 @@ import {
   Heart,
   Play,
   MapPin,
+  RotateCcw,
+  Headphones,
 } from "lucide-react";
 
 import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
@@ -856,23 +858,73 @@ function StoreVisitBanner() {
 function CollectionStrip() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const getCardMetrics = () => {
+    if (!scrollRef.current) return { cardWidth: 340, gap: 16 };
+    const container = scrollRef.current;
+    const firstCard = container.querySelector("a");
+    const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
+    const cardWidth = firstCard ? firstCard.clientWidth + gap : 340;
+    return { cardWidth, gap };
+  };
+
+  const scrollToSlide = (index: number) => {
+    if (scrollRef.current) {
+      const { cardWidth } = getCardMetrics();
+      scrollRef.current.scrollTo({ left: index * cardWidth, behavior: "smooth" });
+      setActiveIndex(index);
+    }
+  };
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const container = scrollRef.current;
-      const firstCard = container.querySelector("a");
-      const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
-      const cardWidth = firstCard ? firstCard.clientWidth + gap : 340;
+      const { cardWidth } = getCardMetrics();
       const amount = direction === "left" ? -cardWidth : cardWidth;
-      
-      if (
-        direction === "right" &&
-        container.scrollLeft + container.clientWidth >= container.scrollHeight - 10
-      ) {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+
+      if (direction === "right" && container.scrollLeft >= maxScroll - 15) {
         container.scrollTo({ left: 0, behavior: "smooth" });
+      } else if (direction === "left" && container.scrollLeft <= 15) {
+        container.scrollTo({ left: maxScroll, behavior: "smooth" });
       } else {
         container.scrollBy({ left: amount, behavior: "smooth" });
       }
+    }
+  };
+
+  const handleUserInteractionStart = () => {
+    setPaused(true);
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  };
+
+  const handleUserInteractionEnd = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      setPaused(false);
+    }, 5000);
+  };
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { cardWidth } = getCardMetrics();
+      const newIndex = Math.min(
+        COLLECTIONS.length - 1,
+        Math.max(0, Math.round(scrollRef.current.scrollLeft / cardWidth))
+      );
+      setActiveIndex(newIndex);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      scroll("left");
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      scroll("right");
     }
   };
 
@@ -885,13 +937,11 @@ function CollectionStrip() {
         if (container.scrollLeft >= maxScroll - 15) {
           container.scrollTo({ left: 0, behavior: "smooth" });
         } else {
-          const firstCard = container.querySelector("a");
-          const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
-          const cardWidth = firstCard ? firstCard.clientWidth + gap : 340;
+          const { cardWidth } = getCardMetrics();
           container.scrollBy({ left: cardWidth, behavior: "smooth" });
         }
       }
-    }, 3800);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [paused]);
@@ -899,10 +949,13 @@ function CollectionStrip() {
   return (
     <section
       className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setPaused(false)}
+      onMouseEnter={handleUserInteractionStart}
+      onMouseLeave={handleUserInteractionEnd}
+      onTouchStart={handleUserInteractionStart}
+      onTouchEnd={handleUserInteractionEnd}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Shop by Weave"
     >
       <div className="text-center mb-8 md:mb-12">
         <div className="flex items-center justify-center gap-3 sm:gap-6">
@@ -919,22 +972,30 @@ function CollectionStrip() {
         {/* Carousel controls */}
         <div className="mt-5 flex items-center justify-center gap-3">
           <button
-            onClick={() => scroll("left")}
-            className="h-10 w-10 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm"
+            onClick={() => {
+              handleUserInteractionStart();
+              scroll("left");
+              handleUserInteractionEnd();
+            }}
+            className="min-h-[44px] min-w-[44px] h-11 w-11 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon"
             aria-label="Previous weave"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
           <button
-            onClick={() => scroll("right")}
-            className="h-10 w-10 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm"
+            onClick={() => {
+              handleUserInteractionStart();
+              scroll("right");
+              handleUserInteractionEnd();
+            }}
+            className="min-h-[44px] min-w-[44px] h-11 w-11 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon"
             aria-label="Next weave"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
           <Link
             to="/collections"
-            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-maroon/40 text-[11px] font-bold tracking-[0.2em] uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all duration-300 ml-2"
+            className="inline-flex items-center gap-1.5 min-h-[44px] px-5 py-2.5 rounded-full border border-maroon/40 text-[11px] font-bold tracking-[0.2em] uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all duration-300 ml-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon"
           >
             All Weaves →
           </Link>
@@ -943,14 +1004,20 @@ function CollectionStrip() {
 
       <div
         ref={scrollRef}
-        className="flex gap-4 md:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide scroll-smooth"
-        style={{ touchAction: "pan-x" }}
+        onScroll={handleScroll}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        aria-live="polite"
+        className="flex gap-4 md:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scroll-pl-4 md:scroll-pl-8 scrollbar-hide overscroll-x-contain focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon/20 rounded-2xl"
       >
-        {COLLECTIONS.map((c) => (
+        {COLLECTIONS.map((c, idx) => (
           <Link
             key={c.slug}
             to="/collections"
-            className="group snap-center sm:snap-start shrink-0 w-[82vw] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] block relative aspect-[4/5] overflow-hidden rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/30"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${idx + 1} of ${COLLECTIONS.length}: ${c.name}`}
+            className="group snap-center sm:snap-start shrink-0 w-[78vw] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] block relative aspect-[4/5] overflow-hidden rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon"
           >
             <img
               src={c.img}
@@ -965,19 +1032,19 @@ function CollectionStrip() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 via-50% to-transparent opacity-85 transition-opacity duration-300 group-hover:opacity-100" />
 
             {/* Card Content */}
-            <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 text-ivory flex flex-col justify-end">
-              <span className="text-xs uppercase tracking-[0.16em] text-amber-300 font-bold mb-1 drop-shadow-sm">
+            <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6 md:p-8 text-ivory flex flex-col justify-end">
+              <span className="text-[11px] sm:text-xs uppercase tracking-[0.16em] text-amber-300 font-bold mb-1 drop-shadow-sm">
                 Shop the weave
               </span>
-              <p className="font-serif text-3xl md:text-4xl font-normal drop-shadow-md leading-tight">
+              <p className="font-serif text-2xl sm:text-3xl md:text-4xl font-normal drop-shadow-md leading-tight">
                 {c.name}
               </p>
-              <p className="text-xs uppercase tracking-widest text-ivory/85 mt-2 line-clamp-1 font-medium">
+              <p className="text-[11px] sm:text-xs uppercase tracking-widest text-ivory/85 mt-1.5 sm:mt-2 line-clamp-1 font-medium">
                 {c.tagline}
               </p>
 
-              <div className="mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ivory/20 backdrop-blur-md text-[10px] tracking-widest uppercase text-ivory border border-ivory/30">
+              <div className="mt-3.5 sm:mt-4 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 transform sm:translate-y-2 sm:group-hover:translate-y-0">
+                <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-ivory/20 backdrop-blur-md text-[9px] sm:text-[10px] tracking-widest uppercase text-ivory border border-ivory/30">
                   Explore Weave →
                 </span>
               </div>
@@ -985,33 +1052,29 @@ function CollectionStrip() {
           </Link>
         ))}
       </div>
-    </section>
-  );
-}
 
-/* ---------------- Trust / USP bar ---------------- */
-function TrustBar() {
-  const items = [
-    { icon: Truck, title: "Complimentary Shipping", copy: "On all India orders above ₹5,000" },
-    { icon: ShieldCheck, title: "See Before You Buy", copy: "Drape any piece in store first" },
-    { icon: Clock, title: "Open Every Day", copy: `${SITE.hours.short}, all seven days` },
-    { icon: ShoppingBag, title: "Easy 7-Day Returns", copy: "No-questions exchange policy" },
-  ];
-  return (
-    <section className="w-full bg-ivory border-y border-maroon/40">
-      <div className="mx-auto max-w-[1600px] px-4 md:px-8 py-6 md:py-10 grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-5 md:gap-8 divide-maroon/10">
-        {items.map(({ icon: Icon, title, copy }) => (
-          <div key={title} className="flex items-center gap-3 md:gap-4 md:flex-row">
-            <div className="h-9 w-9 md:h-11 md:w-11 flex items-center justify-center border border-maroon/40 text-maroon shrink-0">
-              <Icon className="h-4 w-4 md:h-5 md:w-5" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] md:text-xs tracking-[0.18em] md:tracking-[0.2em] uppercase text-maroon leading-tight">
-                {title}
-              </p>
-              <p className="hidden sm:block text-[11px] md:text-xs text-maroon/60 mt-1">{copy}</p>
-            </div>
-          </div>
+      {/* Interactive Mobile & Desktop Pagination Dots */}
+      <div className="mt-6 flex items-center justify-center gap-2" aria-label="Carousel pagination">
+        {COLLECTIONS.map((c, idx) => (
+          <button
+            key={c.slug}
+            onClick={() => {
+              handleUserInteractionStart();
+              scrollToSlide(idx);
+              handleUserInteractionEnd();
+            }}
+            className={`min-h-[24px] min-w-[24px] flex items-center justify-center rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon`}
+            aria-label={`Go to slide ${idx + 1}: ${c.name}`}
+            aria-current={activeIndex === idx ? "true" : undefined}
+          >
+            <span
+              className={`h-2 rounded-full transition-all duration-300 ${
+                activeIndex === idx
+                  ? "w-7 bg-maroon shadow-sm"
+                  : "w-2 bg-maroon/25 hover:bg-maroon/50"
+              }`}
+            />
+          </button>
         ))}
       </div>
     </section>
@@ -1031,23 +1094,73 @@ const OCCASIONS: { label: string; sub: string; to: string; img: string }[] = [
 function ShopByOccasion() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [paused, setPaused] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const getCardMetrics = () => {
+    if (!scrollRef.current) return { cardWidth: 300, gap: 16 };
+    const container = scrollRef.current;
+    const firstCard = container.querySelector("a");
+    const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
+    const cardWidth = firstCard ? firstCard.clientWidth + gap : 300;
+    return { cardWidth, gap };
+  };
+
+  const scrollToSlide = (index: number) => {
+    if (scrollRef.current) {
+      const { cardWidth } = getCardMetrics();
+      scrollRef.current.scrollTo({ left: index * cardWidth, behavior: "smooth" });
+      setActiveIndex(index);
+    }
+  };
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const container = scrollRef.current;
-      const firstCard = container.querySelector("a");
-      const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
-      const cardWidth = firstCard ? firstCard.clientWidth + gap : 300;
+      const { cardWidth } = getCardMetrics();
       const amount = direction === "left" ? -cardWidth : cardWidth;
-      
-      if (
-        direction === "right" &&
-        container.scrollLeft + container.clientWidth >= container.scrollHeight - 10
-      ) {
+      const maxScroll = container.scrollWidth - container.clientWidth;
+
+      if (direction === "right" && container.scrollLeft >= maxScroll - 15) {
         container.scrollTo({ left: 0, behavior: "smooth" });
+      } else if (direction === "left" && container.scrollLeft <= 15) {
+        container.scrollTo({ left: maxScroll, behavior: "smooth" });
       } else {
         container.scrollBy({ left: amount, behavior: "smooth" });
       }
+    }
+  };
+
+  const handleUserInteractionStart = () => {
+    setPaused(true);
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  };
+
+  const handleUserInteractionEnd = () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      setPaused(false);
+    }, 5000);
+  };
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { cardWidth } = getCardMetrics();
+      const newIndex = Math.min(
+        OCCASIONS.length - 1,
+        Math.max(0, Math.round(scrollRef.current.scrollLeft / cardWidth))
+      );
+      setActiveIndex(newIndex);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      scroll("left");
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      scroll("right");
     }
   };
 
@@ -1060,13 +1173,11 @@ function ShopByOccasion() {
         if (container.scrollLeft >= maxScroll - 15) {
           container.scrollTo({ left: 0, behavior: "smooth" });
         } else {
-          const firstCard = container.querySelector("a");
-          const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
-          const cardWidth = firstCard ? firstCard.clientWidth + gap : 300;
+          const { cardWidth } = getCardMetrics();
           container.scrollBy({ left: cardWidth, behavior: "smooth" });
         }
       }
-    }, 3600);
+    }, 3800);
 
     return () => clearInterval(interval);
   }, [paused]);
@@ -1074,10 +1185,13 @@ function ShopByOccasion() {
   return (
     <section
       className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setPaused(false)}
+      onMouseEnter={handleUserInteractionStart}
+      onMouseLeave={handleUserInteractionEnd}
+      onTouchStart={handleUserInteractionStart}
+      onTouchEnd={handleUserInteractionEnd}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Shop by Occasion"
     >
       <div className="text-center mb-8 md:mb-12">
         <div className="flex items-center justify-center gap-3 sm:gap-6">
@@ -1094,22 +1208,30 @@ function ShopByOccasion() {
         {/* Carousel controls */}
         <div className="mt-5 flex items-center justify-center gap-3">
           <button
-            onClick={() => scroll("left")}
-            className="h-10 w-10 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm"
+            onClick={() => {
+              handleUserInteractionStart();
+              scroll("left");
+              handleUserInteractionEnd();
+            }}
+            className="min-h-[44px] min-w-[44px] h-11 w-11 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon"
             aria-label="Previous occasion"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
           <button
-            onClick={() => scroll("right")}
-            className="h-10 w-10 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm"
+            onClick={() => {
+              handleUserInteractionStart();
+              scroll("right");
+              handleUserInteractionEnd();
+            }}
+            className="min-h-[44px] min-w-[44px] h-11 w-11 rounded-full border border-maroon/30 text-maroon hover:bg-maroon hover:text-ivory transition-colors flex items-center justify-center shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon"
             aria-label="Next occasion"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
           <Link
             to="/shop"
-            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-maroon/40 text-[11px] font-bold tracking-[0.2em] uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all duration-300 ml-2"
+            className="inline-flex items-center gap-1.5 min-h-[44px] px-5 py-2.5 rounded-full border border-maroon/40 text-[11px] font-bold tracking-[0.2em] uppercase text-maroon hover:bg-maroon hover:text-ivory transition-all duration-300 ml-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon"
           >
             View All →
           </Link>
@@ -1118,14 +1240,20 @@ function ShopByOccasion() {
 
       <div
         ref={scrollRef}
-        className="flex gap-4 md:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide scroll-smooth"
-        style={{ touchAction: "pan-x" }}
+        onScroll={handleScroll}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        aria-live="polite"
+        className="flex gap-4 md:gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scroll-pl-4 md:scroll-pl-8 scrollbar-hide overscroll-x-contain focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon/20 rounded-2xl"
       >
-        {OCCASIONS.map((o) => (
+        {OCCASIONS.map((o, idx) => (
           <Link
             key={o.label}
             to={o.to}
-            className="group snap-center sm:snap-start shrink-0 w-[72vw] sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)] block relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/40"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${idx + 1} of ${OCCASIONS.length}: ${o.label} - ${o.sub}`}
+            className="group snap-center sm:snap-start shrink-0 w-[72vw] sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)] block relative aspect-[3/4] overflow-hidden rounded-xl md:rounded-2xl border border-gold/50 shadow-lg transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_25px_50px_-15px_rgba(100,31,42,0.3)] bg-beige/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon"
           >
             <img
               src={o.img}
@@ -1146,13 +1274,38 @@ function ShopByOccasion() {
               <p className="font-serif text-xl sm:text-2xl md:text-3xl mt-0.5 sm:mt-1 font-normal drop-shadow-md leading-tight">
                 {o.label}
               </p>
-              <div className="mt-2.5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+              <div className="mt-2.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-300 transform sm:translate-y-2 sm:group-hover:translate-y-0">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-ivory/20 backdrop-blur-md text-[9px] tracking-widest uppercase text-ivory border border-ivory/30">
                   Explore Collection →
                 </span>
               </div>
             </div>
           </Link>
+        ))}
+      </div>
+
+      {/* Interactive Mobile & Desktop Pagination Dots */}
+      <div className="mt-6 flex items-center justify-center gap-2" aria-label="Carousel pagination">
+        {OCCASIONS.map((o, idx) => (
+          <button
+            key={o.label}
+            onClick={() => {
+              handleUserInteractionStart();
+              scrollToSlide(idx);
+              handleUserInteractionEnd();
+            }}
+            className={`min-h-[24px] min-w-[24px] flex items-center justify-center rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon`}
+            aria-label={`Go to slide ${idx + 1}: ${o.label}`}
+            aria-current={activeIndex === idx ? "true" : undefined}
+          >
+            <span
+              className={`h-2 rounded-full transition-all duration-300 ${
+                activeIndex === idx
+                  ? "w-7 bg-maroon shadow-sm"
+                  : "w-2 bg-maroon/25 hover:bg-maroon/50"
+              }`}
+            />
+          </button>
         ))}
       </div>
     </section>
@@ -1483,152 +1636,155 @@ function Testimonials() {
   );
 }
 
-/* ---------------- Instagram Lookbook ---------------- */
-const INSTAGRAM_POSTS = [
-  {
-    id: "reel-1",
-    type: "reel" as const,
-    views: "18.4K",
-    likes: "231",
-    title: "Trending Pastel Striped Saree Draping",
-    tag: "Most Viral",
-    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/DcpqIcIsMzP/",
-    img: "/instagram/reel_1_viral_saree.jpg",
-  },
-  {
-    id: "reel-2",
-    type: "reel" as const,
-    views: "9.2K",
-    likes: "91",
-    title: "Tested Zari Bridal Saree Unboxing",
-    tag: "Bridal Edit",
-    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/DcsO6clRZYC/",
-    img: "/instagram/reel_2_trending_nalasopara.jpg",
-  },
-  {
-    id: "reel-3",
-    type: "reel" as const,
-    views: "7.8K",
-    likes: "61",
-    title: "Live from Nalasopara East Boutique",
-    tag: "Boutique Tour",
-    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/DcqiMflsz__/",
-    img: "/instagram/reel_3_trending_shop.jpg",
-  },
-  {
-    id: "reel-4",
-    type: "reel" as const,
-    views: "6.5K",
-    likes: "48",
-    title: "Festive Drapes & Designer Silks",
-    tag: "Festive Edit",
-    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/Dcb8SQoNeDN/",
-    img: "/instagram/reel_4_rakhi_special.jpg",
-  },
-  {
-    id: "reel-5",
-    type: "reel" as const,
-    views: "5.9K",
-    likes: "43",
-    title: "Red Zari Dulhan Drape Showcase",
-    tag: "Wedding",
-    href: "https://www.instagram.com/mumbai__bazar__nalasopara/reel/DcdhObltQ8l/",
-    img: "/instagram/reel_5_viral_saree_shop.jpg",
-  },
-  {
-    id: "post-6",
-    type: "post" as const,
-    views: "4.1K",
-    likes: "56",
-    title: "Bridal Collection & New Varieties",
-    tag: "New Arrivals",
-    href: "https://www.instagram.com/mumbai__bazar__nalasopara/",
-    img: "/instagram/post_6_collection_look.webp",
-  },
-];
+/* ---------------- Instagram Banner Section ---------------- */
+function InstagramBanner() {
+  const images = [
+    { img: IMG.look1, label: "Yellow Festive Silk Saree" },
+    { img: IMG.colWedding, label: "Red Bridal Heritage Saree" },
+    { img: IMG.look3, label: "Blush Peach Draped Saree" },
+    { img: IMG.look2, label: "Magenta Partywear Lehenga" },
+    { img: IMG.colFestive, label: "Pastel Festive Silk Saree" },
+  ];
 
-function InstagramGrid() {
   return (
-    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-16 md:py-24 border-t border-maroon/10">
-      <div className="text-center mb-10 md:mb-14">
-        <div className="flex items-center justify-center gap-3 sm:gap-6">
-          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
-          <h2 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
-            Boutique Diaries
-          </h2>
-          <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
+    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-8 md:py-14" aria-label="Follow Mumbai Bazar on Instagram">
+      <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-[#F2D7D5] bg-[#FDF5F5] shadow-xs flex flex-col lg:flex-row items-stretch">
+        
+        {/* Left: 5 Image Tiles */}
+        <div className="w-full lg:w-[48%] xl:w-[50%] p-2 sm:p-3 shrink-0">
+          <div className="grid grid-cols-5 gap-1.5 sm:gap-2 h-full">
+            {images.map((item, i) => (
+              <a
+                key={i}
+                href="https://www.instagram.com/mumbai__bazar__nalasopara/"
+                target="_blank"
+                rel="noreferrer"
+                className="group relative block aspect-[3/4] sm:aspect-[4/5] rounded-lg sm:rounded-xl overflow-hidden bg-rose-100/50 shadow-2xs"
+                aria-label={`View Instagram look ${i + 1}`}
+              >
+                <img
+                  src={item.img}
+                  alt={item.label}
+                  width={300}
+                  height={400}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                  <Instagram className="h-5 w-5 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md" />
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
-        <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 max-w-2xl mx-auto">
-          Trending Reels &amp; live draping sessions straight from our flagship boutique @mumbai__bazar__nalasopara
-        </p>
-      </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-        {INSTAGRAM_POSTS.map((item) => (
-          <a
-            key={item.id}
-            href={item.href}
-            target="_blank"
-            rel="noreferrer"
-            className="group relative block aspect-[9/16] sm:aspect-[3/4] lg:aspect-[9/16] overflow-hidden rounded-xl bg-beige/30 border border-maroon/15 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-          >
-            <img
-              src={item.img}
-              alt={item.title}
-              width={400}
-              height={700}
-              loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-
-            {/* Gradient Shadow Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30 group-hover:from-black/90 transition-opacity" />
-
-            {/* Top Pill Tag */}
-            <div className="absolute top-2.5 left-2.5 right-2.5 flex items-center justify-between pointer-events-none">
-              <span className="bg-maroon/90 backdrop-blur-md text-ivory text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md shadow-sm border border-gold/30">
-                {item.tag}
-              </span>
-              <span className="flex items-center gap-1 bg-black/60 backdrop-blur-md text-ivory text-[10px] font-medium px-2 py-0.5 rounded-full">
-                <Heart className="h-3 w-3 text-red-500 fill-red-500" />
-                {item.likes}
-              </span>
+        {/* Center & Right: Instagram CTA + Script Calligraphy */}
+        <div className="flex-1 px-6 sm:px-10 py-6 md:py-8 flex flex-col sm:flex-row items-center justify-between gap-6 bg-gradient-to-r from-[#FDF5F5] via-[#FCEDEA] to-[#FDF5F5]">
+          
+          {/* Middle Follow Callout */}
+          <div className="flex items-start sm:items-center gap-3.5 sm:gap-4">
+            <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-sm">
+              <Instagram className="h-6 w-6" />
             </div>
-
-            {/* Center Play Icon on Hover */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all pointer-events-none">
-              <div className="w-11 h-11 rounded-full bg-maroon/90 border border-gold/60 flex items-center justify-center shadow-lg text-ivory">
-                <Play className="h-5 w-5 fill-ivory ml-0.5" />
-              </div>
-            </div>
-
-            {/* Bottom Caption & Stats */}
-            <div className="absolute bottom-0 inset-x-0 p-3 text-ivory pointer-events-none">
-              <p className="text-xs font-semibold leading-snug line-clamp-2 drop-shadow-sm text-white/95">
-                {item.title}
+            <div>
+              <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase font-bold text-[#A6192E]">
+                FOLLOW @MUMBAIBAZAR
               </p>
-              <div className="mt-2 flex items-center justify-between text-[10px] text-white/80 font-medium border-t border-white/20 pt-1.5">
-                <span className="flex items-center gap-1">
-                  <Instagram className="h-3 w-3 text-gold" />
-                  Watch Reel
-                </span>
-                <span>{item.views} views</span>
-              </div>
+              <p className="text-xs sm:text-sm text-ink/75 font-medium mt-0.5">
+                Discover our latest looks &amp; new arrivals.
+              </p>
+              <a
+                href="https://www.instagram.com/mumbai__bazar__nalasopara/"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2.5 inline-flex items-center gap-1.5 px-5 py-1.5 rounded border border-[#A6192E] text-[#A6192E] hover:bg-[#A6192E] hover:text-ivory text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] transition-all shadow-2xs active:scale-95"
+              >
+                FOLLOW US →
+              </a>
             </div>
-          </a>
-        ))}
-      </div>
+          </div>
 
-      <div className="mt-10 text-center">
-        <a
-          href="https://www.instagram.com/mumbai__bazar__nalasopara/"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-2.5 rounded-full bg-maroon text-ivory px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] shadow-md hover:bg-maroon/90 hover:scale-[1.02] transition-all"
-        >
-          <Instagram className="h-4 w-4 text-gold" />
-          Follow @mumbai__bazar__nalasopara on Instagram
-        </a>
+          {/* Right: Stay Connected Script Calligraphy */}
+          <div className="text-center sm:text-right shrink-0 pt-2 sm:pt-0">
+            <p className="font-serif italic text-2xl sm:text-3xl text-[#A6192E] font-medium leading-none tracking-tight">
+              Stay<br className="hidden sm:inline" /> Connected
+            </p>
+            <div className="mt-1 flex items-center justify-center sm:justify-end text-[#A6192E]">
+              <span className="text-lg">♡</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- Bottom Trust / Guarantee Bar ---------------- */
+function BottomTrustBar() {
+  const items = [
+    {
+      icon: Truck,
+      title: "Free Shipping",
+      subtitle: "Across India",
+    },
+    {
+      icon: RotateCcw,
+      title: "Easy Returns",
+      subtitle: "Within 7 Days",
+    },
+    {
+      icon: ShieldCheck,
+      title: "Secure Payments",
+      subtitle: "100% Safe",
+    },
+    {
+      icon: Headphones,
+      title: "Customer Support",
+      subtitle: "+91 89566 64631",
+      href: "tel:+918956664631",
+    },
+  ];
+
+  return (
+    <section className="w-full bg-[#FAF8F5] border-y border-maroon/20 py-8 md:py-12" aria-label="Customer Guarantees & Support">
+      <div className="mx-auto max-w-[1600px] px-4 md:px-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          {items.map((item, idx) => {
+            const Icon = item.icon;
+            const Content = (
+              <div className="flex items-center gap-3.5 sm:gap-4 group">
+                <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-maroon/5 flex items-center justify-center text-maroon shrink-0 transition-transform group-hover:scale-110">
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6 stroke-[1.5]" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-xs sm:text-sm font-bold uppercase tracking-[0.14em] text-maroon leading-tight">
+                    {item.title}
+                  </h3>
+                  <p className="text-[11px] sm:text-xs text-ink/70 font-medium mt-0.5">
+                    {item.subtitle}
+                  </p>
+                </div>
+              </div>
+            );
+
+            return item.href ? (
+              <a
+                key={idx}
+                href={item.href}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-maroon rounded-lg"
+              >
+                {Content}
+              </a>
+            ) : (
+              <div key={idx}>
+                {Content}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -1701,7 +1857,8 @@ function Home() {
       <ShopByOccasion />
       <CollectionStrip />
       <Testimonials />
-      <InstagramGrid />
+      <InstagramBanner />
+      <BottomTrustBar />
       <Newsletter />
     </div>
   );
