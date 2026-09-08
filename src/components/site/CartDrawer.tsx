@@ -151,7 +151,7 @@ export function CartDrawer() {
                     className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-wine transition-all shadow-md"
                   >
                     <Lock className="h-4 w-4" />
-                    <span>Proceed to Secure Checkout</span>
+                    <span>Shop Now</span>
                     <ArrowRight className="h-4 w-4" />
                   </a>
                 ) : (
@@ -160,7 +160,7 @@ export function CartDrawer() {
                       disabled
                       className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon/60 py-3.5 text-xs font-bold uppercase tracking-wider text-white cursor-not-allowed"
                     >
-                      <span>Preparing Secure Checkout...</span>
+                      <span>Preparing Order...</span>
                     </button>
                     {/* If Shopify never returns a checkout URL the button above
                         stays disabled forever, so say plainly that WhatsApp
