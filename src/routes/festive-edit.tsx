@@ -1,12 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Gift, Flame, PartyPopper } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
-import { IMG, PRODUCTS } from "@/lib/site-data";
+import { IMG } from "@/lib/site-data";
+import { fetchShopifyProducts } from "@/lib/shopify";
 import { seo, jsonLd } from "@/lib/seo";
 import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/festive-edit")({
-  head: () => {
+  loader: async () => ({ products: await fetchShopifyProducts(50).catch(() => []) }),
+  head: ({ loaderData }) => {
+    const categoryProducts = (loaderData?.products ?? []).filter((p) =>
+      p.category.includes("festive-edit"),
+    );
     const { meta, links } = seo({
       title: "Festive Sarees for Diwali & Navratri | Mumbai Bazar",
       description:
@@ -27,7 +31,7 @@ export const Route = createFileRoute("/festive-edit")({
       scripts: [
         jsonLd(
           itemListSchema(
-            PRODUCTS.filter((p) => p.category.includes("festive-edit")),
+            categoryProducts,
             "Festive Sarees",
             "/festive-edit",
           ),
@@ -43,13 +47,6 @@ export const Route = createFileRoute("/festive-edit")({
   },
   component: FestiveEditPage,
 });
-
-const PALETTE = [
-  { name: "Royal Crimson", hex: "#641F2A", desc: "Classic auspicious red & zari" },
-  { name: "Peacock Emerald", hex: "#1A3E35", desc: "Rich jewel-toned brocades" },
-  { name: "Midnight Violet", hex: "#2D1F3F", desc: "Deep evening ceremony hues" },
-  { name: "Antique Gold", hex: "#B69054", desc: "Shimmering tissue zari weaves" },
-];
 
 function FestiveEditPage() {
   return (

@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Clock, ArrowUpRight, Flame, ShieldCheck } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
-import { GoldRule } from "@/components/site/Motif";
-import { IMG, PRODUCTS } from "@/lib/site-data";
+import { IMG } from "@/lib/site-data";
+import { fetchShopifyProducts } from "@/lib/shopify";
 import { seo, jsonLd } from "@/lib/seo";
 import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/new-arrivals")({
-  head: () => {
+  loader: async () => ({ products: await fetchShopifyProducts(50).catch(() => []) }),
+  head: ({ loaderData }) => {
+    const categoryProducts = (loaderData?.products ?? []).filter((p) =>
+      p.category.includes("new-arrivals"),
+    );
     const { meta, links } = seo({
       title: "New Arrival Sarees | Latest Drops | Mumbai Bazar",
       description:
@@ -27,7 +30,7 @@ export const Route = createFileRoute("/new-arrivals")({
       scripts: [
         jsonLd(
           itemListSchema(
-            PRODUCTS.filter((p) => p.category.includes("new-arrivals")),
+            categoryProducts,
             "New Arrival Sarees",
             "/new-arrivals",
           ),

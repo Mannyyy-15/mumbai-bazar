@@ -1,11 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CategoryPage } from "@/components/site/CategoryPage";
-import { IMG, PRODUCTS } from "@/lib/site-data";
+import { IMG } from "@/lib/site-data";
+import { fetchShopifyProducts } from "@/lib/shopify";
 import { seo, jsonLd } from "@/lib/seo";
 import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/silk-sarees")({
-  head: () => {
+  loader: async () => ({ products: await fetchShopifyProducts(50).catch(() => []) }),
+  head: ({ loaderData }) => {
+    const categoryProducts = (loaderData?.products ?? []).filter((p) =>
+      p.category.includes("silk-sarees"),
+    );
     const { meta, links } = seo({
       title: "Silk Sarees: Banarasi & Kanjivaram | Mumbai Bazar",
       description:
@@ -26,7 +31,7 @@ export const Route = createFileRoute("/silk-sarees")({
       scripts: [
         jsonLd(
           itemListSchema(
-            PRODUCTS.filter((p) => p.category.includes("silk-sarees")),
+            categoryProducts,
             "Pure Silk Sarees",
             "/silk-sarees",
           ),

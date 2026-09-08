@@ -1,12 +1,16 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Heart, Music, Scissors, MessageCircle, Crown } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { CategoryPage } from "@/components/site/CategoryPage";
-import { IMG, PRODUCTS } from "@/lib/site-data";
+import { IMG } from "@/lib/site-data";
+import { fetchShopifyProducts } from "@/lib/shopify";
 import { seo, jsonLd } from "@/lib/seo";
 import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/wedding-sarees")({
-  head: () => {
+  loader: async () => ({ products: await fetchShopifyProducts(50).catch(() => []) }),
+  head: ({ loaderData }) => {
+    const categoryProducts = (loaderData?.products ?? []).filter((p) =>
+      p.category.includes("wedding-sarees"),
+    );
     const { meta, links } = seo({
       title: "Dulhan Sarees & Bridal Lehengas | Mumbai Bazar",
       description:
@@ -28,7 +32,7 @@ export const Route = createFileRoute("/wedding-sarees")({
       scripts: [
         jsonLd(
           itemListSchema(
-            PRODUCTS.filter((p) => p.category.includes("wedding-sarees")),
+            categoryProducts,
             "Wedding & Bridal Sarees",
             "/wedding-sarees",
           ),
@@ -44,25 +48,6 @@ export const Route = createFileRoute("/wedding-sarees")({
   },
   component: WeddingSareesPage,
 });
-
-const ROLES = [
-  {
-    role: "The Bride",
-    desc: "Heavy gold brocade Kanjivarams & royal crimson Banarasis",
-    icon: Crown,
-  },
-  {
-    role: "Mother of the Bride",
-    desc: "Regal Paithani & subtle antique gold tissue drapes",
-    icon: Heart,
-  },
-  {
-    role: "Sangeet & Cocktail",
-    desc: "Lightweight metallic tissue & fluid organza silk",
-    icon: Music,
-  },
-  { role: "Bridesmaids", desc: "Coordinated pastel silks & modern zari borders", icon: Scissors },
-];
 
 function WeddingSareesPage() {
   return (

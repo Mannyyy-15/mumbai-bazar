@@ -1,12 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Feather, Sun, ShieldCheck, Heart } from "lucide-react";
 import { CategoryPage } from "@/components/site/CategoryPage";
-import { IMG, PRODUCTS } from "@/lib/site-data";
+import { IMG } from "@/lib/site-data";
+import { fetchShopifyProducts } from "@/lib/shopify";
 import { seo, jsonLd } from "@/lib/seo";
 import { breadcrumbSchema, itemListSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/everyday-sarees")({
-  head: () => {
+  loader: async () => ({ products: await fetchShopifyProducts(50).catch(() => []) }),
+  head: ({ loaderData }) => {
+    const categoryProducts = (loaderData?.products ?? []).filter((p) =>
+      p.category.includes("everyday-sarees"),
+    );
     const { meta, links } = seo({
       title: "Everyday & Office Wear Sarees | Mumbai Bazar",
       description:
@@ -27,7 +31,7 @@ export const Route = createFileRoute("/everyday-sarees")({
       scripts: [
         jsonLd(
           itemListSchema(
-            PRODUCTS.filter((p) => p.category.includes("everyday-sarees")),
+            categoryProducts,
             "Everyday Sarees",
             "/everyday-sarees",
           ),
@@ -43,24 +47,6 @@ export const Route = createFileRoute("/everyday-sarees")({
   },
   component: EverydaySareesPage,
 });
-
-const FEATURES = [
-  {
-    icon: Feather,
-    title: "Featherlight Weight",
-    desc: "Under 450 grams for zero shoulder fatigue during long working hours.",
-  },
-  {
-    icon: Sun,
-    title: "Breathable Weave",
-    desc: "Natural silk-cotton and soft mulberry weaves that stay cool all day.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Wrinkle Resistant",
-    desc: "Formulated for minimal creasing, ideal for travel and daily drapes.",
-  },
-];
 
 function EverydaySareesPage() {
   return (
