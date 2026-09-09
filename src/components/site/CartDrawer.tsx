@@ -162,7 +162,7 @@ export function CartDrawer() {
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-wine active:scale-98 transition-all shadow-md"
                 >
                   <Lock className="h-4 w-4" />
-                  <span>Proceed to Checkout</span>
+                  <span>Shop Now</span>
                   <ArrowRight className="h-4 w-4" />
                 </a>
 
