@@ -130,25 +130,6 @@ function ProductDetail() {
     return list;
   }, [d.gallery, product.variants, product.img]);
 
-  // Sync selected swatch with the product's primary featured image
-  useEffect(() => {
-    if (product.variants && product.variants.length > 1) {
-      const matchIdx = productColors.findIndex(
-        (c) => c.img && (c.img === product.img || product.img.includes(c.img)),
-      );
-      const targetIdx = matchIdx >= 0 ? matchIdx : 0;
-      setSwatch(targetIdx);
-      const targetImg = productColors[targetIdx]?.img;
-      if (targetImg) {
-        const gIndex = gallery.indexOf(targetImg);
-        if (gIndex >= 0) setActive(gIndex);
-      }
-    } else {
-      setSwatch(0);
-      setActive(0);
-    }
-  }, [product.id, productColors, gallery, product.img]);
-
   // Dynamically determine color swatches:
   // - If the product has multiple variants with distinct colors (e.g. Red, White, Black), extracts and displays all variant swatches.
   // - For single-color products, detects and shows ONLY the primary main color of the saree (ignoring zari/border accents).
@@ -290,6 +271,25 @@ function ProductDetail() {
       available: true,
     }];
   }, [product]);
+
+  // Sync selected swatch with the product's primary featured image
+  useEffect(() => {
+    if (product.variants && product.variants.length > 1) {
+      const matchIdx = productColors.findIndex(
+        (c) => c.img && (c.img === product.img || product.img.includes(c.img)),
+      );
+      const targetIdx = matchIdx >= 0 ? matchIdx : 0;
+      setSwatch(targetIdx);
+      const targetImg = productColors[targetIdx]?.img;
+      if (targetImg) {
+        const gIndex = gallery.indexOf(targetImg);
+        if (gIndex >= 0) setActive(gIndex);
+      }
+    } else {
+      setSwatch(0);
+      setActive(0);
+    }
+  }, [product.id, productColors, gallery, product.img]);
 
   const currentSwatch = productColors[swatch] || productColors[0];
   const activePrice = currentSwatch.price || product.price;

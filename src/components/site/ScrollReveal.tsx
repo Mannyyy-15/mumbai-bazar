@@ -12,6 +12,7 @@ export function ScrollReveal() {
       const observerCallback: IntersectionObserverCallback = (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            (entry.target as HTMLElement).setAttribute("data-revealed", "true");
             entry.target.classList.add("is-visible");
             obs.unobserve(entry.target);
           }
@@ -24,11 +25,10 @@ export function ScrollReveal() {
         threshold: 0.05,
       });
 
-      const elements = document.querySelectorAll("section, .reveal-on-scroll, [data-reveal]");
+      const elements = document.querySelectorAll<HTMLElement>(".reveal-on-scroll, [data-reveal]");
 
       elements.forEach((el) => {
-        if (!el.classList.contains("is-visible")) {
-          el.classList.add("reveal-init");
+        if (!el.hasAttribute("data-revealed")) {
           observer?.observe(el);
         }
       });
