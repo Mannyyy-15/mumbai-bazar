@@ -28,7 +28,6 @@ import { FLAGSHIP } from "@/lib/locations";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useCatalog } from "@/lib/catalog-context";
-import { TrousseauBuilder } from "@/components/site/TrousseauBuilder";
 import { ProductCard } from "@/components/site/ProductCard";
 
 /**
@@ -1788,7 +1787,6 @@ function Home() {
       <TrendingNow />
       <ProductFeed />
       <StoreVisitBanner />
-      <TrousseauBuilder />
       <Bestsellers />
       <ShopByOccasion />
       <CollectionStrip />
