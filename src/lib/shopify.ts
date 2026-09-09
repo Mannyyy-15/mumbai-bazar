@@ -1,4 +1,5 @@
-import { PRODUCTS, type Product, type ProductVariant } from "./site-data";
+import { type Product, type ProductVariant } from "./site-data";
+import { SHOPIFY_CATALOG_PRODUCTS } from "./shopify-catalog-data";
 
 const domain =
   (import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string | undefined) ||
@@ -367,14 +368,21 @@ export const FLIPKART_PRODUCTS: ShopifyProduct[] = [
   },
 ];
 
+const legacyAlias = SHOPIFY_CATALOG_PRODUCTS.find(
+  (p) => p.handle === "gulab-box-silk-blend-embroidered-saree",
+);
+
 export const ALL_STORE_PRODUCTS: ShopifyProduct[] = [
-  ...FLIPKART_PRODUCTS,
-  ...PRODUCTS.map((p) => ({
-    ...p,
-    handle: p.id,
-    shopifyProductId: p.shopifyProductId || `boutique-${p.id}`,
-    shopifyVariantId: p.shopifyVariantId || `boutique-var-${p.id}`,
-  })),
+  ...SHOPIFY_CATALOG_PRODUCTS,
+  ...(legacyAlias
+    ? [
+        {
+          ...legacyAlias,
+          id: "womens-silk-blend-saree-embroidered-border",
+          handle: "womens-silk-blend-saree-embroidered-border",
+        },
+      ]
+    : []),
 ];
 
 export async function fetchShopifyProducts(first = 50): Promise<ShopifyProduct[]> {
@@ -389,28 +397,43 @@ export async function fetchShopifyProducts(first = 50): Promise<ShopifyProduct[]
     const existingHandles = new Set(remoteProducts.map((p) => p.handle));
     const extraLocal = ALL_STORE_PRODUCTS.filter((p) => !existingHandles.has(p.handle));
     
-    return [...remoteProducts, ...extraLocal];
+    const combined = [...remoteProducts, ...extraLocal];
+    return combined.length > 0 ? combined : ALL_STORE_PRODUCTS;
   } catch {
     return ALL_STORE_PRODUCTS;
   }
 }
 
 export async function fetchShopifyProduct(handle: string): Promise<ShopifyProduct | null> {
-  const localMatch = ALL_STORE_PRODUCTS.find((p) => p.handle === handle || p.id === handle);
+  const targetHandle =
+    handle === "womens-silk-blend-saree-embroidered-border"
+      ? "gulab-box-silk-blend-embroidered-saree"
+      : handle;
 
+  // 1. Instant 0ms local match for seamless, zero-latency product details opening
+  const localMatch = ALL_STORE_PRODUCTS.find(
+    (p) =>
+      p.handle === targetHandle ||
+      p.id === targetHandle ||
+      p.handle === handle ||
+      p.id === handle,
+  );
+  if (localMatch) return localMatch;
+
+  // 2. Remote fallback if newly published product isn't in static catalog
   try {
     const payload = await storefrontRequest<{ product: ProductNode | null }>(
       `query Product($handle: String!) { product(handle: $handle) { ${PRODUCT_FIELDS} } }`,
-      { handle },
+      { handle: targetHandle },
     );
     if (payload.product) {
       return toProduct(payload.product);
     }
   } catch {
-    // fallback to local match
+    // fallback
   }
 
-  return localMatch || null;
+  return null;
 }
 
 function getWeaveFromProduct(node: ProductNode): string {
@@ -647,16 +670,23 @@ async function storefrontRequest<T>(
   if (!domain) throw new Error("Shopify store domain is not configured");
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (token) headers["X-Shopify-Storefront-Access-Token"] = token;
-  const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ query, variables }),
-  });
-  if (!response.ok) throw new Error(`Shopify Storefront API returned ${response.status}`);
-  const payload = (await response.json()) as ShopifyResponse<T>;
-  if (payload.errors?.length || !payload.data)
-    throw new Error(payload.errors?.[0]?.message ?? "Shopify response was empty");
-  return payload.data;
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  const timeoutId = controller ? setTimeout(() => controller.abort(), 2500) : null;
+  try {
+    const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ query, variables }),
+      signal: controller?.signal,
+    });
+    if (!response.ok) throw new Error(`Shopify Storefront API returned ${response.status}`);
+    const payload = (await response.json()) as ShopifyResponse<T>;
+    if (payload.errors?.length || !payload.data)
+      throw new Error(payload.errors?.[0]?.message ?? "Shopify response was empty");
+    return payload.data;
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
 }
 
 export type ShopifyCart = {

@@ -81,7 +81,16 @@ export function resolveColorSwatch(colorName: string): { name: string; hex: stri
   const clean = colorName.trim();
   const lower = clean.toLowerCase();
 
-  // 1. Direct match in COLOR_OPTIONS keywords
+  // 1. Direct match for ethnic shade names
+  if (lower.includes("bottle green")) return { name: clean, hex: "#004225" };
+  if (lower.includes("rama") || lower.includes("firozi") || lower.includes("turquoise")) return { name: clean, hex: "#008B8B" };
+  if (lower.includes("rani")) return { name: clean, hex: "#E71D73" };
+  if (lower.includes("navy")) return { name: clean, hex: "#0B1D51" };
+  if (lower.includes("wine")) return { name: clean, hex: "#58111A" };
+  if (lower.includes("maroon")) return { name: clean, hex: "#63101E" };
+  if (lower.includes("magenta")) return { name: clean, hex: "#C2185B" };
+
+  // 2. Direct match in COLOR_OPTIONS keywords
   for (const c of COLOR_OPTIONS) {
     for (const kw of c.keywords) {
       if (lower.includes(kw)) {
@@ -94,7 +103,7 @@ export function resolveColorSwatch(colorName: string): { name: string; hex: stri
     }
   }
 
-  // 2. Fallbacks for standard fashion colors
+  // 3. Fallbacks for standard fashion colors
   if (lower.includes("black") || lower.includes("noir")) return { name: clean, hex: "#1A1A1A", border: "#444444" };
   if (lower.includes("white") || lower.includes("off white") || lower.includes("ivory")) return { name: clean, hex: "#F5EFEB", border: "#C5A880" };
   if (lower.includes("red") || lower.includes("crimson") || lower.includes("ruby")) return { name: clean, hex: "#A31D1D" };
