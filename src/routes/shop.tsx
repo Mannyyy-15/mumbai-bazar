@@ -20,7 +20,6 @@ import { breadcrumbSchema } from "@/lib/structured-data";
 import {
   COLOR_OPTIONS,
   TYPE_OPTIONS,
-  FABRIC_OPTIONS,
   PRICE_PRESETS,
   parsePriceNumber,
   getDynamicColorOptions,
@@ -34,7 +33,7 @@ export const Route = createFileRoute("/shop")({
     const { meta, links } = seo({
       title: "Shop All Sarees, Lehengas & Ethnic Wear — Mumbai Bazar",
       description:
-        "Browse the full Mumbai Bazar catalog. Filter by price range, color, fabric weave, and occasion across authentic Banarasi, Kanjivaram, and party wear sarees.",
+        "Browse the full Mumbai Bazar catalog. Filter by price range, colour and occasion across authentic Banarasi, Kanjivaram, and party wear sarees.",
       path: "/shop",
       keywords: [
         "buy sarees online",
@@ -78,7 +77,6 @@ function ShopPage() {
   // Filter States
   const [selColors, setSelColors] = useState<Set<string>>(new Set());
   const [selTypes, setSelTypes] = useState<Set<string>>(new Set());
-  const [selFabrics, setSelFabrics] = useState<Set<string>>(new Set());
   const [selPricePreset, setSelPricePreset] = useState<string | null>(null);
   const [customPriceMin, setCustomPriceMin] = useState<string>("");
   const [customPriceMax, setCustomPriceMax] = useState<string>("");
@@ -129,7 +127,6 @@ function ShopPage() {
   const clearAll = () => {
     setSelColors(new Set());
     setSelTypes(new Set());
-    setSelFabrics(new Set());
     setSelPricePreset(null);
     setAppliedPriceRange(null);
     setCustomPriceMin("");
@@ -137,10 +134,7 @@ function ShopPage() {
   };
 
   const activeCount =
-    selColors.size +
-    selTypes.size +
-    selFabrics.size +
-    (appliedPriceRange || selPricePreset ? 1 : 0);
+    selColors.size + selTypes.size + (appliedPriceRange || selPricePreset ? 1 : 0);
 
   // Filtered Products
   const filtered = useMemo(() => {
@@ -148,9 +142,7 @@ function ShopPage() {
 
     // 1. Color filter (dynamic from Shopify variants and options)
     if (selColors.size > 0) {
-      list = list.filter((p) =>
-        Array.from(selColors).some((cKey) => matchesDynamicColor(p, cKey)),
-      );
+      list = list.filter((p) => Array.from(selColors).some((cKey) => matchesDynamicColor(p, cKey)));
     }
 
     // 2. Type filter
@@ -158,16 +150,6 @@ function ShopPage() {
       list = list.filter((p) =>
         Array.from(selTypes).some((tKey) => {
           const opt = TYPE_OPTIONS.find((t) => t.key === tKey);
-          return opt ? opt.match(p) : false;
-        }),
-      );
-    }
-
-    // 3. Fabric filter
-    if (selFabrics.size > 0) {
-      list = list.filter((p) =>
-        Array.from(selFabrics).some((fKey) => {
-          const opt = FABRIC_OPTIONS.find((f) => f.key === fKey);
           return opt ? opt.match(p) : false;
         }),
       );
@@ -217,7 +199,7 @@ function ShopPage() {
     }
 
     return list;
-  }, [products, selColors, selTypes, selFabrics, appliedPriceRange, sort]);
+  }, [products, selColors, selTypes, appliedPriceRange, sort]);
 
   useEffect(() => {
     if (!drawerOpen) return;
@@ -233,13 +215,11 @@ function ShopPage() {
       availableColors={availableColors}
       selColors={selColors}
       selTypes={selTypes}
-      selFabrics={selFabrics}
       selPricePreset={selPricePreset}
       customPriceMin={customPriceMin}
       customPriceMax={customPriceMax}
       onToggleColor={(k) => toggle(setSelColors, selColors, k)}
       onToggleType={(k) => toggle(setSelTypes, selTypes, k)}
-      onToggleFabric={(k) => toggle(setSelFabrics, selFabrics, k)}
       onPricePreset={applyPricePreset}
       onCustomPriceMinChange={setCustomPriceMin}
       onCustomPriceMaxChange={setCustomPriceMax}
@@ -289,7 +269,7 @@ function ShopPage() {
             <aside
               data-lenis-prevent
               onWheel={(e) => e.stopPropagation()}
-              className="hidden md:block sticky top-[120px] z-20 max-h-[calc(100vh-136px)] overflow-y-auto overscroll-contain rounded-2xl border border-gold/40 bg-white p-6 shadow-sm boutique-scrollbar"
+              className="hidden md:block sticky top-[120px] z-20 max-h-[calc(100vh-136px)] overflow-y-auto overscroll-contain rounded-2xl border border-gold/40 bg-white p-6 shadow-sm ghost-scrollbar"
             >
               {sidebarContent}
             </aside>
@@ -375,7 +355,8 @@ function ShopPage() {
                     <span className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm">
                       <IndianRupee className="h-3 w-3 text-gold-deep" />
                       {selPricePreset
-                        ? (PRICE_PRESETS.find((p) => p.key === selPricePreset)?.label || "Price Filter")
+                        ? PRICE_PRESETS.find((p) => p.key === selPricePreset)?.label ||
+                          "Price Filter"
                         : `₹ ${appliedPriceRange?.min.toLocaleString("en-IN")} – ${appliedPriceRange?.max === Infinity ? "Above" : "₹ " + appliedPriceRange?.max.toLocaleString("en-IN")}`}
                       <button
                         onClick={() => {
@@ -393,8 +374,14 @@ function ShopPage() {
 
                   {/* Color Chips */}
                   {Array.from(selColors).map((cKey) => {
-                    const cOpt = availableColors.find((c) => c.key === cKey) || (typeof COLOR_OPTIONS !== "undefined" ? COLOR_OPTIONS.find((c) => c.key === cKey) : undefined);
-                    const label = cOpt?.label || cKey.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+                    const cOpt =
+                      availableColors.find((c) => c.key === cKey) ||
+                      (typeof COLOR_OPTIONS !== "undefined"
+                        ? COLOR_OPTIONS.find((c) => c.key === cKey)
+                        : undefined);
+                    const label =
+                      cOpt?.label ||
+                      cKey.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
                     const hex = cOpt?.hex || "#D4AF37";
                     return (
                       <span
@@ -435,25 +422,6 @@ function ShopPage() {
                     );
                   })}
 
-                  {/* Fabric Chips */}
-                  {Array.from(selFabrics).map((fKey) => {
-                    const fOpt = FABRIC_OPTIONS.find((f) => f.key === fKey);
-                    return (
-                      <span
-                        key={fKey}
-                        className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
-                      >
-                        {fOpt?.label || fKey}
-                        <button
-                          onClick={() => toggle(setSelFabrics, selFabrics, fKey)}
-                          className="text-maroon/60 hover:text-maroon ml-0.5"
-                        >
-                          <X className="h-3.5 w-3.5" />
-                        </button>
-                      </span>
-                    );
-                  })}
-
                   <button
                     onClick={clearAll}
                     className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-maroon hover:text-gold-deep transition-colors ml-auto underline underline-offset-4"
@@ -472,8 +440,8 @@ function ShopPage() {
                       No Sarees Match Your Selected Filters
                     </h3>
                     <p className="mt-2 text-sm text-ink/75 max-w-md mx-auto">
-                      Try widening your price range, selecting alternative colors or fabrics, or
-                      reset all filters.
+                      Try widening your price range, selecting a different colour, or reset all
+                      filters.
                     </p>
                     <button
                       onClick={clearAll}
@@ -530,7 +498,7 @@ function ShopPage() {
             <div
               data-lenis-prevent
               onWheel={(e) => e.stopPropagation()}
-              className="flex-1 overflow-y-auto px-6 py-6 overscroll-contain boutique-scrollbar"
+              className="flex-1 overflow-y-auto px-6 py-6 overscroll-contain ghost-scrollbar"
             >
               {sidebarContent}
             </div>
@@ -567,13 +535,11 @@ function ShopFilterSidebar({
   availableColors,
   selColors,
   selTypes,
-  selFabrics,
   selPricePreset,
   customPriceMin,
   customPriceMax,
   onToggleColor,
   onToggleType,
-  onToggleFabric,
   onPricePreset,
   onCustomPriceMinChange,
   onCustomPriceMaxChange,
@@ -584,13 +550,11 @@ function ShopFilterSidebar({
   availableColors: DynamicColorFilterOption[];
   selColors: Set<string>;
   selTypes: Set<string>;
-  selFabrics: Set<string>;
   selPricePreset: string | null;
   customPriceMin: string;
   customPriceMax: string;
   onToggleColor: (k: string) => void;
   onToggleType: (k: string) => void;
-  onToggleFabric: (k: string) => void;
   onPricePreset: (k: string) => void;
   onCustomPriceMinChange: (v: string) => void;
   onCustomPriceMaxChange: (v: string) => void;
@@ -671,11 +635,10 @@ function ShopFilterSidebar({
 
       {/* 2. DYNAMIC COLOR FILTER SELECTION FROM SHOPIFY VARIANTS */}
       <FilterAccordion title={`Colour Palette (${availableColors.length})`} defaultOpen={true}>
-        <div
-          data-lenis-prevent
-          onWheel={(e) => e.stopPropagation()}
-          className="grid grid-cols-2 gap-2 pt-1 max-h-72 overflow-y-auto overscroll-contain pr-1.5 boutique-scrollbar"
-        >
+        {/* No max-height or inner scroll: a nested scroll area inside the
+            sidebar hid colours and made the panel awkward to use. The whole
+            list renders, and the sidebar itself scrolls if it needs to. */}
+        <div className="grid grid-cols-2 gap-2 pt-1">
           {availableColors.map((col) => {
             const active = selColors.has(col.key);
             return (
@@ -720,23 +683,6 @@ function ShopFilterSidebar({
                 label={t.label}
                 active={active}
                 onClick={() => onToggleType(t.key)}
-              />
-            );
-          })}
-        </div>
-      </FilterAccordion>
-
-      {/* 4. FABRIC & WEAVE FILTER */}
-      <FilterAccordion title="Fabric & Craft Weave" defaultOpen={true}>
-        <div className="space-y-2 pt-1">
-          {FABRIC_OPTIONS.map((f) => {
-            const active = selFabrics.has(f.key);
-            return (
-              <CheckboxItem
-                key={f.key}
-                label={f.label}
-                active={active}
-                onClick={() => onToggleFabric(f.key)}
               />
             );
           })}

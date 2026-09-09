@@ -37,6 +37,40 @@
   }
 }
 
+/*
+ * Invisible at rest, faintly visible while the area is hovered or actively
+ * scrolled. Used where a visible track is distracting — the product gallery
+ * thumbnails and the shop sidebar — without removing the ability to drag,
+ * which display:none would.
+ */
+@utility ghost-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 9999px;
+    transition: background-color 0.25s ease;
+  }
+
+  &:hover {
+    scrollbar-color: rgba(155, 16, 24, 0.28) transparent;
+  }
+  &:hover::-webkit-scrollbar-thumb {
+    background: rgba(155, 16, 24, 0.28);
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(155, 16, 24, 0.5);
+  }
+}
+
 /* ---------------------------------------------------------------
    Mumbai Bazar — Premium saree boutique design system.
    Palette: Mumbai Bazar red, deep red, warm white,

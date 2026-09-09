@@ -402,7 +402,7 @@ function ProductDetail() {
                   onWheel={(e) => {
                     e.stopPropagation();
                   }}
-                  className="flex flex-col gap-3 max-h-[calc(100vh-8.5rem)] overflow-y-auto overflow-x-hidden pr-1.5 overscroll-contain scroll-smooth boutique-scrollbar"
+                  className="flex flex-col gap-3 max-h-[calc(100vh-8.5rem)] overflow-y-auto overflow-x-hidden pr-1.5 overscroll-contain scroll-smooth ghost-scrollbar"
                 >
                   {gallery.map((g: string, i: number) => (
                     <button
@@ -484,7 +484,7 @@ function ProductDetail() {
               <div
                 data-lenis-prevent
                 onWheel={(e) => e.stopPropagation()}
-                className="md:hidden flex items-center gap-2.5 overflow-x-auto scroll-smooth py-2 px-1 overscroll-contain [scrollbar-width:none]"
+                className="md:hidden flex items-center gap-2.5 overflow-x-auto scroll-smooth py-2 px-1 overscroll-contain no-scrollbar"
               >
                 {gallery.map((g: string, i: number) => (
                   <button
