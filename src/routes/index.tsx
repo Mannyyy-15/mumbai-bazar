@@ -43,11 +43,24 @@ export const Route = createFileRoute("/")({
   component: Home,
   head: () => {
     const { meta, links } = seo({
-      title: "Saree & Bridal Wear Shops in Nalasopara | Mumbai Bazar",
-      description: `Sarees, dress material, designer lehengas and dulhan wear at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
+      // The brand leads, deliberately.
+      //
+      // Search Console (30 Aug - 6 Sep 2026): the homepage took 726 of 799
+      // impressions at position 2.73, but only a 2.07% CTR. Roughly 442 of
+      // those impressions were people typing the brand name -- they already
+      // know who we are and are looking for the official site, so the previous
+      // title ("Saree & Bridal Wear Shops in Nalasopara | Mumbai Bazar") made
+      // them scan to the end of the line to confirm they had found us, and many
+      // clicked a directory listing instead. Brand first, then the belt name
+      // people actually search ("Vasai Virar"), then the proof of scale.
+      title: "Mumbai Bazar — Saree Shops in Vasai Virar, Nalasopara & Mumbai",
+      description: `Sarees from ₹800, designer lehengas, dulhan wear and dress material at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
       path: "/",
       keywords: [
+        "mumbai bazar",
         "saree shop near me",
+        "saree shop in vasai virar",
+        "best saree shop in vasai virar",
         "saree shop nalasopara",
         "saree shop virar",
         "lehenga shop nalasopara",

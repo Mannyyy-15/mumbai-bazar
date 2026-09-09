@@ -4,6 +4,7 @@ import { SITE } from "@/lib/seo";
 import { fetchShopifyProducts } from "@/lib/shopify";
 import { PUBLISHED_OUTLETS } from "@/lib/locations";
 import { GUIDES } from "@/lib/guides";
+import { LOCAL_AREAS } from "@/lib/local-areas";
 
 type Entry = { path: string };
 
@@ -85,6 +86,11 @@ async function buildSitemap(): Promise<string> {
   // me" in each locality and back the Google Business Profile listings.
   const outletUrls = PUBLISHED_OUTLETS.map((o) => urlEntry(`/stores/${o.slug}`));
 
+  // Area landing pages. These target "saree shop in <belt>" — the queries the
+  // single-branch store pages cannot rank for, because locals search the whole
+  // Vasai-Virar belt as one place rather than by individual station.
+  const areaUrls = LOCAL_AREAS.map((a) => urlEntry(`/sarees-in/${a.slug}`));
+
   // Editorial guides — the topical-authority cluster, and the only URLs with a
   // real modified date.
   const guideUrls = GUIDES.map((g) => urlEntry(`/guides/${g.slug}`, g.modified));
@@ -95,6 +101,7 @@ async function buildSitemap(): Promise<string> {
     ...staticUrls,
     ...productUrls,
     ...outletUrls,
+    ...areaUrls,
     ...guideUrls,
     "</urlset>",
   ].join("\n");
