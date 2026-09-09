@@ -16,25 +16,31 @@ const WishlistContext = createContext<WishlistContextType | null>(null);
 const STORAGE_KEY = "mumbai_bazar_wishlist_v1";
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
-  const [wishlist, setWishlist] = useState<Product[]>(() => {
-    if (typeof window === "undefined") return [];
+  const [wishlist, setWishlist] = useState<Product[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
+      if (saved) {
+        setWishlist(JSON.parse(saved));
+      }
     } catch {
-      return [];
+      // Storage unavailable
     }
-  });
+    setHydrated(true);
+  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
+    if (!hydrated) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(wishlist));
     } catch (e) {
       console.error("Failed to save wishlist to localStorage", e);
     }
-  }, [wishlist]);
+  }, [wishlist, hydrated]);
 
   const toggleWishlist = (p: Product) => {
     setWishlist((prev) => {

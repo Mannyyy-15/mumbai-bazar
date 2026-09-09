@@ -8,7 +8,7 @@ import { useWishlist } from "@/lib/wishlist-context";
 import { resolveColorSwatch } from "@/lib/filters";
 
 export function ProductCard({ p }: { p: Product }) {
-  const { addItem } = useCart();
+  const { addItem, openCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const isSaved = isInWishlist(p.id);
   const [added, setAdded] = useState(false);
@@ -52,6 +52,7 @@ export function ProductCard({ p }: { p: Product }) {
     setAdded(true);
     if (addedTimer.current) clearTimeout(addedTimer.current);
     addedTimer.current = setTimeout(() => setAdded(false), 1800);
+    openCart();
   };
 
   return (

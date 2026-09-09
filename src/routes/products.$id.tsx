@@ -11,10 +11,12 @@ import {
   RotateCcw,
   ChevronRight,
   Check,
+  Lock,
 } from "lucide-react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
-import { fetchShopifyProduct } from "@/lib/shopify";
+import { fetchShopifyProduct, getDirectCheckoutUrl } from "@/lib/shopify";
+import { useWishlist } from "@/lib/wishlist-context";
 import { useCatalog } from "@/lib/catalog-context";
 import { seo, jsonLd, SITE } from "@/lib/seo";
 import { productSchema, breadcrumbSchema, priceToSchema } from "@/lib/structured-data";
@@ -265,6 +267,8 @@ function ProductDetail() {
     [],
   );
   const { addItem, openCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
+  const isSaved = isInWishlist(product.id);
 
   const handleAddToCart = () => {
     addItem(
@@ -284,6 +288,11 @@ function ProductDetail() {
     if (addedTimer.current) clearTimeout(addedTimer.current);
     addedTimer.current = setTimeout(() => setAdded(false), 1800);
     openCart();
+  };
+
+  const handleBuyNow = () => {
+    const directUrl = getDirectCheckoutUrl(activeVariantId, qty);
+    window.location.href = directUrl;
   };
 
   const related = useMemo(() => {
@@ -380,7 +389,9 @@ function ProductDetail() {
                   <img
                     src={gallery[active] || product.img}
                     alt={product.name}
-                    className="h-full w-full object-cover object-top"
+                    loading="eager"
+                    decoding="async"
+                    className="h-full w-full object-cover object-top transition-opacity duration-200"
                   />
                 </div>
                 {product.tag && (
@@ -390,9 +401,14 @@ function ProductDetail() {
                 )}
                 <button
                   aria-label="Add to wishlist"
-                  className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-ivory/95 text-maroon hover:bg-ivory transition-colors shadow-sm"
+                  onClick={() => toggleWishlist(product)}
+                  className={`absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full transition-all shadow-sm ${
+                    isSaved
+                      ? "bg-maroon text-ivory scale-105"
+                      : "bg-ivory/95 text-maroon hover:bg-ivory"
+                  }`}
                 >
-                  <Heart className="h-4 w-4" />
+                  <Heart className={`h-4 w-4 ${isSaved ? "fill-ivory text-ivory" : ""}`} />
                 </button>
               </div>
 
@@ -511,38 +527,48 @@ function ProductDetail() {
                 </div>
               ) : null}
 
-              {/* Quantity + Add */}
-              <div className="mt-8 flex items-stretch gap-3">
-                <div className="inline-flex items-center border border-maroon/30">
+              {/* Quantity + Add to Bag + Buy Now */}
+              <div className="mt-8 flex flex-col sm:flex-row items-stretch gap-3">
+                <div className="inline-flex items-center border border-maroon/30 self-start sm:self-auto h-14">
                   <button
                     aria-label="Decrease"
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5"
+                    className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5 transition-colors"
                   >
                     <Minus className="h-4 w-4" />
                   </button>
-                  <span className="w-10 text-center text-sm tabular-nums text-maroon">{qty}</span>
+                  <span className="w-10 text-center text-sm tabular-nums text-maroon font-bold">{qty}</span>
                   <button
                     aria-label="Increase"
                     onClick={() => setQty((q) => q + 1)}
-                    className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5"
+                    className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5 transition-colors"
                   >
                     <Plus className="h-4 w-4" />
                   </button>
                 </div>
+
+                {/* Add to Bag */}
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 h-14 bg-maroon text-ivory text-[11px] tracking-[0.28em] uppercase flex items-center justify-center gap-2 hover:bg-maroon/90 transition-colors"
+                  className="flex-1 h-14 border-2 border-maroon text-maroon text-[11px] tracking-[0.24em] uppercase font-bold flex items-center justify-center gap-2 hover:bg-maroon hover:text-ivory transition-all duration-200 active:scale-98 shadow-sm"
                 >
                   {added ? (
                     <>
-                      <Check className="h-4 w-4" /> Added
+                      <Check className="h-4 w-4 text-green-700" /> Added to Bag
                     </>
                   ) : (
                     <>
-                      <ShoppingBag className="h-4 w-4" /> Shop Now
+                      <ShoppingBag className="h-4 w-4" /> Add to Bag
                     </>
                   )}
+                </button>
+
+                {/* Instant 1-Click Buy Now */}
+                <button
+                  onClick={handleBuyNow}
+                  className="flex-1 h-14 bg-maroon text-ivory text-[11px] tracking-[0.24em] uppercase font-bold flex items-center justify-center gap-2 hover:bg-wine transition-all duration-200 active:scale-98 shadow-md"
+                >
+                  <Lock className="h-4 w-4" /> Buy Now
                 </button>
               </div>
 
@@ -647,44 +673,44 @@ function ProductDetail() {
         </section>
       )}
 
-      {/* Mobile Floating Bottom Bar: Price, Compare Price, and Shop Now CTA */}
-      <div className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-ivory/95 backdrop-blur-xl border-t border-gold/50 px-4 py-3 shadow-[0_-8px_30px_rgba(100,31,42,0.15)] pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
-        <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
-          <div className="flex flex-col">
+      {/* Mobile Floating Bottom Bar: Price, Compare Price, and CTAs */}
+      <div className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-ivory/95 backdrop-blur-xl border-t border-gold/50 px-3 py-2.5 shadow-[0_-8px_30px_rgba(100,31,42,0.15)] pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
+        <div className="flex items-center justify-between gap-2 max-w-md mx-auto">
+          <div className="flex flex-col min-w-0 pr-1">
             <div className="flex items-baseline gap-1.5">
-              <span className="font-sans text-xl font-black text-maroon tracking-tight">
+              <span className="font-sans text-lg font-black text-maroon tracking-tight">
                 {activePrice}
               </span>
               {activeOriginal && (
-                <span className="text-xs text-taupe font-medium line-through font-sans">
+                <span className="text-[11px] text-taupe font-medium line-through font-sans">
                   {activeOriginal}
                 </span>
               )}
             </div>
-            <span className="text-[10px] text-ink/75 font-semibold tracking-wide">
-              Complimentary Shipping
+            <span className="text-[9px] text-ink/75 font-semibold tracking-wide truncate">
+              Free Express Shipping
             </span>
           </div>
 
-          <button
-            onClick={handleAddToCart}
-            aria-live="polite"
-            className={`flex-1 max-w-[210px] py-3.5 px-4 rounded-xl text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95 shadow-md ${
-              added
-                ? "bg-green-700 text-white"
-                : "bg-maroon text-white hover:bg-wine active:bg-wine"
-            }`}
-          >
-            {added ? (
-              <>
-                <Check className="h-4 w-4" /> Added
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="h-4 w-4" /> Shop Now
-              </>
-            )}
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              onClick={handleAddToCart}
+              aria-label="Add to Bag"
+              className={`p-3 rounded-xl border-2 border-maroon transition-all duration-200 active:scale-95 flex items-center justify-center ${
+                added ? "bg-green-700 text-white border-green-700" : "text-maroon bg-ivory hover:bg-maroon/5"
+              }`}
+            >
+              {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
+            </button>
+
+            <button
+              onClick={handleBuyNow}
+              className="py-3 px-4 rounded-xl bg-maroon text-white hover:bg-wine text-xs font-bold tracking-[0.14em] uppercase transition-all duration-200 flex items-center justify-center gap-1.5 active:scale-95 shadow-md"
+            >
+              <Lock className="h-3.5 w-3.5" />
+              <span>Buy Now</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

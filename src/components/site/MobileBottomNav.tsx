@@ -8,7 +8,12 @@ export function MobileBottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const [visible, setVisible] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,7 +99,7 @@ export function MobileBottomNav() {
         >
           <div className="relative">
             <ShoppingBag className="h-5 w-5" />
-            {cartCount > 0 && (
+            {mounted && cartCount > 0 && (
               <span className="absolute -top-1 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-maroon px-1 text-[8px] font-bold text-ivory shadow-sm">
                 {cartCount}
               </span>

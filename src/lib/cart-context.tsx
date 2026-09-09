@@ -10,6 +10,7 @@ import {
 import {
   addToShopifyCart,
   createShopifyCart,
+  getShopifyCartPermalink,
   removeFromShopifyCart,
   shopifyConfigured,
   updateShopifyCartLine,
@@ -118,6 +119,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     };
   }, [isOpen]);
 
+  const effectiveCheckoutUrl = useMemo(() => {
+    if (checkoutUrl && !checkoutUrl.includes("www.mumbaibazar.com")) {
+      return checkoutUrl;
+    }
+    if (items.length > 0) {
+      return getShopifyCartPermalink(items);
+    }
+    return undefined;
+  }, [checkoutUrl, items]);
+
   const value = useMemo<CartContextValue>(() => {
     const count = items.reduce((s, i) => s + i.qty, 0);
     const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
@@ -126,7 +137,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       isOpen,
       count,
       subtotal,
-      checkoutUrl,
+      checkoutUrl: effectiveCheckoutUrl,
       lastAddedId,
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
@@ -246,7 +257,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setCheckoutUrl(undefined);
       },
     };
-  }, [items, isOpen, checkoutUrl, shopifyCartId, lastAddedId]);
+  }, [items, isOpen, effectiveCheckoutUrl, shopifyCartId, lastAddedId]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

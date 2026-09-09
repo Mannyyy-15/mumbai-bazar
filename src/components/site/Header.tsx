@@ -451,10 +451,10 @@ export function Header() {
           <button
             onClick={openWishlist}
             className="relative grid h-9 w-9 place-items-center text-ink/80 hover:text-maroon"
-            aria-label={`Wishlist, ${wishlist.length} saved`}
+            aria-label={mounted && wishlist.length > 0 ? `Wishlist, ${wishlist.length} saved` : "Wishlist"}
           >
             <Heart className="h-[18px] w-[18px]" />
-            {wishlist.length > 0 && (
+            {mounted && wishlist.length > 0 && (
               <span className="absolute right-0.5 top-0.5 grid h-4 w-4 place-items-center rounded-full bg-gold-deep text-[9px] font-bold text-ivory">
                 {wishlist.length}
               </span>
@@ -464,10 +464,10 @@ export function Header() {
           <button
             onClick={openCart}
             className="relative grid h-9 w-9 place-items-center text-ink/80 hover:text-maroon"
-            aria-label={`Shopping bag, ${cartCount} ${cartCount === 1 ? "item" : "items"}`}
+            aria-label={mounted && cartCount > 0 ? `Shopping bag, ${cartCount} ${cartCount === 1 ? "item" : "items"}` : "Shopping bag"}
           >
             <ShoppingBag className="h-[18px] w-[18px]" />
-            {cartCount > 0 && (
+            {mounted && cartCount > 0 && (
               <span className="absolute right-0.5 top-0.5 grid h-4 w-4 place-items-center rounded-full bg-maroon text-[9px] font-medium text-ivory">
                 {cartCount}
               </span>

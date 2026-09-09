@@ -145,37 +145,20 @@ export function CartDrawer() {
 
               {/* Action Buttons */}
               <div className="mt-4 grid gap-2.5">
-                {checkoutUrl ? (
-                  <a
-                    href={checkoutUrl}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-wine transition-all shadow-md"
-                  >
-                    <Lock className="h-4 w-4" />
-                    <span>Shop Now</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                ) : (
-                  <>
-                    <button
-                      disabled
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon/60 py-3.5 text-xs font-bold uppercase tracking-wider text-white cursor-not-allowed"
-                    >
-                      <span>Preparing Order...</span>
-                    </button>
-                    {/* If Shopify never returns a checkout URL the button above
-                        stays disabled forever, so say plainly that WhatsApp
-                        below still works rather than leaving a dead end. */}
-                    <p className="text-center text-[11px] font-medium text-ink/60">
-                      Taking a moment? You can order on WhatsApp below.
-                    </p>
-                  </>
-                )}
+                <a
+                  href={checkoutUrl || "#"}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-wine active:scale-98 transition-all shadow-md"
+                >
+                  <Lock className="h-4 w-4" />
+                  <span>Proceed to Checkout</span>
+                  <ArrowRight className="h-4 w-4" />
+                </a>
 
                 <a
                   href={waHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#25D366] bg-[#25D366]/10 py-3 text-xs font-bold uppercase tracking-wider text-[#128C7E] hover:bg-[#25D366] hover:text-white transition-all shadow-sm"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#25D366] bg-[#25D366]/10 py-3 text-xs font-bold uppercase tracking-wider text-[#128C7E] hover:bg-[#25D366] hover:text-white active:scale-98 transition-all shadow-sm"
                 >
                   <MessageCircle className="h-4 w-4" />
                   <span>Order Directly on WhatsApp</span>

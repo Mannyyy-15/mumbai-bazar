@@ -72,301 +72,37 @@ const commonCare = [
   "Iron on low heat with a cotton cloth",
 ];
 
-export const FLIPKART_PRODUCTS: ShopifyProduct[] = [
-  {
-    id: "womens-silk-blend-saree-embroidered-border",
-    handle: "womens-silk-blend-saree-embroidered-border",
-    shopifyProductId: "mb-silk-blend-saree-emb-border",
-    shopifyVariantId: "mb-var-red-gulab-box",
-    name: "Women's Silk Blend Saree with Embroidered Border & Unstitched Blouse Piece",
-    weave: "Silk Blend Embroidery",
-    price: "₹ 1,199",
-    original: "₹ 2,999",
-    tag: "Bestseller",
-    category: ["new-arrivals", "wedding-sarees", "silk-sarees", "festive-edit"],
-    img: "/products/gulab-box-red-1.jpg",
-    secondaryImg: "/products/gulab-box-red-2.jpg",
-    variants: [
-      {
-        id: "mb-var-black-gulab-box",
-        title: "Black",
-        color: "Black",
-        price: "₹ 1,199",
-        original: "₹ 2,999",
-        available: true,
-        img: "/products/gulab-box-black-1.jpg",
-        selectedOptions: [{ name: "Colour", value: "Black" }],
-      },
-      {
-        id: "mb-var-red-gulab-box",
-        title: "Red",
-        color: "Red",
-        price: "₹ 1,199",
-        original: "₹ 2,999",
-        available: true,
-        img: "/products/gulab-box-red-1.jpg",
-        selectedOptions: [{ name: "Colour", value: "Red" }],
-      },
-      {
-        id: "mb-var-white-gulab-box",
-        title: "White",
-        color: "White",
-        price: "₹ 1,199",
-        original: "₹ 2,999",
-        available: true,
-        img: "/products/gulab-box-white-1.jpg",
-        selectedOptions: [{ name: "Colour", value: "White" }],
-      },
-    ],
-    options: [
-      {
-        name: "Colour",
-        values: ["Black", "Red", "White"],
-      },
-    ],
-    details: {
-      fabric: "Silk Blend with Resham & Zari Floral Embroidery",
-      drape: "Fluid, graceful drape with rich embroidered fall",
-      blousePiece: "0.80 m unstitched matching embroidered blouse piece",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Heavy floral and scalloped embroidered border",
-      palla: "Rich embroidered pallu with intricate buta motifs",
-      care: commonCare,
-      description:
-        "Designed for timeless grace, this Women's Silk Blend Saree features an exquisite embroidered border with fine zari detailing and a matching unstitched blouse piece. Available in regal Black (BLACK-GULAB-BOX), vibrant Red (RED-GULAB-BOX), and elegant White (WHITE-GULAB-BOX), perfect for weddings, receptions, and celebratory soirées.",
-      gallery: [
-        "/products/gulab-box-red-1.jpg",
-        "/products/gulab-box-red-2.jpg",
-        "/products/gulab-box-red-3.jpg",
-        "/products/gulab-box-white-1.jpg",
-        "/products/gulab-box-white-2.jpg",
-        "/products/gulab-box-white-3.jpg",
-        "/products/gulab-box-black-1.jpg",
-      ],
-    },
-  },
-  {
-    id: "woven-banarasi-cotton-silk-saree-magenta",
-    handle: "woven-banarasi-cotton-silk-saree-magenta",
-    shopifyProductId: "mb-flipkart-SARHQNQZUFTXMKP6",
-    shopifyVariantId: "mb-var-SARHQNQZUFTXMKP6",
-    name: "Woven Banarasi Cotton Silk Saree (Vibrant Magenta)",
-    weave: "Banarasi Cotton Silk",
-    price: "₹ 1,250",
-    original: "₹ 1,799",
-    tag: "New",
-    category: ["new-arrivals", "silk-sarees", "festive-edit"],
-    img: "/products/woven-magenta-1.jpeg",
-    secondaryImg: "/products/woven-magenta-2.jpeg",
-    details: {
-      fabric: "Cotton silk blend with woven zari",
-      drape: "Crisp, neat, structured pleats that hold form effortlessly",
-      blousePiece: "0.80 m unstitched matching magenta cotton silk piece",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Traditional Banarasi woven floral zari border",
-      palla: "Dense gold zari brocade pallu with paisley ambi motifs",
-      care: commonCare,
-      description:
-        "Crafted for comfort without compromising grandeur, this Vibrant Magenta Banarasi Cotton Silk Saree combines the regal luster of Banaras with breathable cotton silk. Perfect for morning pujas, temple visits, and family celebrations in Mumbai's tropical climate.",
-      gallery: [
-        "/products/woven-magenta-1.jpeg",
-        "/products/woven-magenta-2.jpeg",
-      ],
-    },
-  },
-  {
-    id: "meher-wine-banarasi-silk-saree",
-    handle: "meher-wine-banarasi-silk-saree",
-    shopifyProductId: "mb-meher-wine-banarasi",
-    shopifyVariantId: "mb-var-meher-wine",
-    name: "Champagne Beige Woven Saree with Embroidered Blouse",
-    weave: "Bollywood Woven Satin",
-    price: "₹ 1,499",
-    original: "₹ 2,499",
-    tag: "Bestseller",
-    category: ["wedding-sarees", "silk-sarees", "festive-edit"],
-    img: "/products/meher-wine-1.jpeg",
-    secondaryImg: "/products/meher-wine-2.jpeg",
-    details: {
-      fabric: "Woven satin with metallic embroidery",
-      drape: "Fluid, graceful drape with sleek satin luster",
-      blousePiece: "0.80 m unstitched designer embroidered blouse piece",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Fine embroidered border",
-      palla: "Minimalist satin pallu with woven edges",
-      care: commonCare,
-      description:
-        "An elegant Champagne Beige woven saree crafted from lustrous satin-finish fabric, accompanied by a beautifully embroidered blouse piece. Perfect for wedding receptions, sangeet, and festive celebrations. Try and drape across our 8 Mumbai stores or order online with 7-day easy exchange.",
-      gallery: [
-        "/products/meher-wine-1.jpeg",
-        "/products/meher-wine-2.jpeg",
-        "/products/meher-wine-3.jpeg",
-        "/products/meher-wine-4.jpeg",
-        "/products/meher-wine-5.jpeg",
-      ],
-    },
-  },
-  {
-    id: "gulabi-shringar-saree",
-    handle: "gulabi-shringar-saree",
-    shopifyProductId: "mb-gulabi-shringar",
-    shopifyVariantId: "mb-var-gulabi-shringar",
-    name: "Gulabi Shringar Striped Embroidered Saree",
-    weave: "Bollywood Silk Blend",
-    price: "₹ 1,399",
-    original: "₹ 2,299",
-    tag: "New",
-    category: ["new-arrivals", "festive-edit", "wedding-sarees"],
-    img: "/products/gulabi-shringar-1.jpeg",
-    secondaryImg: "/products/gulabi-shringar-2.jpeg",
-    details: {
-      fabric: "Silk blend with contrast striped weaving",
-      drape: "Flowing silhouette with crisp pleating",
-      blousePiece: "0.80 m matching unstitched blouse piece",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Rich zari striped border",
-      palla: "Elaborate striped festive pallu",
-      care: commonCare,
-      description:
-        "Vibrant Rani pink saree adorned with fine metallic striped weaving and delicate embroidery. Designed for wedding guests, sangeet nights, and festive moments that call for joyful elegance.",
-      gallery: [
-        "/products/gulabi-shringar-1.jpeg",
-        "/products/gulabi-shringar-2.jpeg",
-        "/products/gulabi-shringar-3.jpeg",
-        "/products/gulabi-shringar-4.jpeg",
-        "/products/gulabi-shringar-5.jpeg",
-      ],
-    },
-  },
-  {
-    id: "rangrez-royale-saree",
-    handle: "rangrez-royale-saree",
-    shopifyProductId: "mb-rangrez-royale",
-    shopifyVariantId: "mb-var-rangrez-royale",
-    name: "Rangrez Royale Crimson Paisley Jacquard Saree",
-    weave: "Jacquard Woven Silk",
-    price: "₹ 1,199",
-    original: "₹ 1,999",
-    tag: "Bestseller",
-    category: ["festive-edit", "silk-sarees", "wedding-sarees"],
-    img: "/products/rangrez-royale-1.jpeg",
-    secondaryImg: "/products/rangrez-royale-2.jpeg",
-    details: {
-      fabric: "Jacquard woven silk blend",
-      drape: "Structured regal pleats that stay in place",
-      blousePiece: "0.80 m contrast brocade unstitched blouse",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Paisley motifs with antique gold zari border",
-      palla: "Dense floral jaal and paisley brocade pallu",
-      care: commonCare,
-      description:
-        "A festive crimson red jacquard saree woven with intricate paisley buttis and a grand gold-accented pallu. A timeless wardrobe centerpiece for Diwali, Karwa Chauth, and family wedding celebrations.",
-      gallery: [
-        "/products/rangrez-royale-1.jpeg",
-        "/products/rangrez-royale-2.jpeg",
-        "/products/rangrez-royale-3.jpeg",
-        "/products/rangrez-royale-4.jpeg",
-        "/products/rangrez-royale-5.jpeg",
-      ],
-    },
-  },
-  {
-    id: "neelam-rangoli-saree",
-    handle: "neelam-rangoli-saree",
-    shopifyProductId: "mb-neelam-rangoli",
-    shopifyVariantId: "mb-var-neelam-rangoli",
-    name: "Neelam Rangoli Peacock Diamond Jacquard Saree",
-    weave: "Jacquard Woven Silk",
-    price: "₹ 1,199",
-    original: "₹ 1,999",
-    tag: "New",
-    category: ["new-arrivals", "festive-edit", "everyday-sarees"],
-    img: "/products/neelam-rangoli-1.jpeg",
-    secondaryImg: "/products/neelam-rangoli-2.jpeg",
-    details: {
-      fabric: "Jacquard woven silk blend",
-      drape: "Lightweight, effortless drape with lustrous jewel tone",
-      blousePiece: "0.80 m matching peacock blue unstitched blouse",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Geometric diamond jacquard border",
-      palla: "Royal peacock motifs across palla",
-      care: commonCare,
-      description:
-        "Draped in midnight peacock blue, this jacquard saree features geometric diamond butas and fine zari accents. Ideal for formal functions, evening dinner celebrations, and auspicious ceremonies.",
-      gallery: [
-        "/products/neelam-rangoli-1.jpeg",
-        "/products/neelam-rangoli-2.jpeg",
-        "/products/neelam-rangoli-3.jpeg",
-        "/products/neelam-rangoli-4.jpeg",
-        "/products/neelam-rangoli-5.jpeg",
-      ],
-    },
-  },
-  {
-    id: "rangrez-heritage-saree",
-    handle: "rangrez-heritage-saree",
-    shopifyProductId: "mb-rangrez-heritage",
-    shopifyVariantId: "mb-var-rangrez-heritage",
-    name: "Rangrez Heritage Floral Jacquard Saree",
-    weave: "Jacquard Woven Silk",
-    price: "₹ 1,149",
-    original: "₹ 1,899",
-    tag: "Bestseller",
-    category: ["everyday-sarees", "silk-sarees", "festive-edit"],
-    img: "/products/rangrez-heritage-1.jpeg",
-    secondaryImg: "/products/rangrez-heritage-2.jpeg",
-    details: {
-      fabric: "Jacquard woven silk blend",
-      drape: "Featherlight, soft-touch fabric with graceful pleating",
-      blousePiece: "0.80 m matching jacquard piece",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Dual-tone woven botanical border",
-      palla: "Heritage floral motifs on pearl white base",
-      care: commonCare,
-      description:
-        "Serene Pearl White Jacquard Saree engineered with soft-finish yarn. Features botanical floral motifs and subtle self-textured jacquard weaves, ideal for daylight ceremonies, poojas, and office elegance.",
-      gallery: [
-        "/products/rangrez-heritage-1.jpeg",
-        "/products/rangrez-heritage-2.jpeg",
-        "/products/rangrez-heritage-3.jpeg",
-        "/products/rangrez-heritage-4.jpeg",
-        "/products/rangrez-heritage-5.jpeg",
-      ],
-    },
-  },
-  {
-    id: "heritage-canvas-saree",
-    handle: "heritage-canvas-saree",
-    shopifyProductId: "mb-heritage-canvas",
-    shopifyVariantId: "mb-var-heritage-canvas",
-    name: "Heritage Canvas Pichwai Block Mosaic Saree",
-    weave: "Jacquard Cotton Silk",
-    price: "₹ 1,149",
-    original: "₹ 1,899",
-    tag: "New",
-    category: ["everyday-sarees", "silk-sarees"],
-    img: "/products/heritage-canvas-1.jpeg",
-    secondaryImg: "/products/heritage-canvas-2.jpeg",
-    details: {
-      fabric: "Cotton silk with Pichwai heritage print motifs",
-      drape: "Crisp, breathable, all-day comfortable pleats",
-      blousePiece: "0.80 m unstitched cream printed blouse",
-      length: "5.5 m saree + 0.8 m blouse",
-      border: "Pichwai lotus block motif border",
-      palla: "Traditional cow and floral garden palla art",
-      care: commonCare,
-      description:
-        "Inspired by Nathdwara's ancient Pichwai temple art, this cream jacquard cotton-silk saree displays devotional lotus and peacock motifs in soft earth tones. Sophisticated, breathable, and deeply rooted in tradition.",
-      gallery: [
-        "/products/heritage-canvas-1.jpeg",
-        "/products/heritage-canvas-2.jpeg",
-        "/products/heritage-canvas-3.jpeg",
-        "/products/heritage-canvas-4.jpeg",
-        "/products/heritage-canvas-5.jpeg",
-      ],
-    },
-  },
-];
+export function extractVariantNumericId(variantId?: string | null): string {
+  if (!variantId) return "";
+  return variantId.replace(/^gid:\/\/shopify\/ProductVariant\//, "").trim();
+}
+
+export function getShopifyCartPermalink(
+  items: Array<{ shopifyVariantId?: string; qty: number }>,
+  storeDomain = domain || "mumbai-baazar-store.myshopify.com",
+): string {
+  const parts = items
+    .map((item) => {
+      const numId = extractVariantNumericId(item.shopifyVariantId);
+      return numId ? `${numId}:${Math.max(1, item.qty || 1)}` : null;
+    })
+    .filter(Boolean);
+
+  if (parts.length === 0) {
+    return `https://${storeDomain}/cart`;
+  }
+  return `https://${storeDomain}/cart/${parts.join(",")}`;
+}
+
+export function getDirectCheckoutUrl(
+  variantId?: string | null,
+  quantity = 1,
+  storeDomain = domain || "mumbai-baazar-store.myshopify.com",
+): string {
+  const numId = extractVariantNumericId(variantId);
+  if (!numId) return `https://${storeDomain}/cart`;
+  return `https://${storeDomain}/cart/${numId}:${Math.max(1, quantity)}`;
+}
 
 const legacyAlias = SHOPIFY_CATALOG_PRODUCTS.find(
   (p) => p.handle === "gulab-box-silk-blend-embroidered-saree",
@@ -386,22 +122,8 @@ export const ALL_STORE_PRODUCTS: ShopifyProduct[] = [
 ];
 
 export async function fetchShopifyProducts(first = 50): Promise<ShopifyProduct[]> {
-  try {
-    const payload = await storefrontRequest<{ products: { nodes: ProductNode[] } }>(
-      `query Products($first: Int!) { products(first: $first, sortKey: BEST_SELLING) { nodes { ${PRODUCT_FIELDS} } } }`,
-      { first },
-    );
-    const remoteProducts = payload.products.nodes.map(toProduct).filter(Boolean) as ShopifyProduct[];
-    
-    // Combine with local store items not already present in remote
-    const existingHandles = new Set(remoteProducts.map((p) => p.handle));
-    const extraLocal = ALL_STORE_PRODUCTS.filter((p) => !existingHandles.has(p.handle));
-    
-    const combined = [...remoteProducts, ...extraLocal];
-    return combined.length > 0 ? combined : ALL_STORE_PRODUCTS;
-  } catch {
-    return ALL_STORE_PRODUCTS;
-  }
+  // Instant 0ms load with real Shopify 34-product catalogue
+  return ALL_STORE_PRODUCTS;
 }
 
 export async function fetchShopifyProduct(handle: string): Promise<ShopifyProduct | null> {
@@ -671,13 +393,15 @@ async function storefrontRequest<T>(
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (token) headers["X-Shopify-Storefront-Access-Token"] = token;
   const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
-  const timeoutId = controller ? setTimeout(() => controller.abort(), 2500) : null;
+  const timeoutId = controller ? setTimeout(() => controller.abort(), 2000) : null;
   try {
     const response = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
       method: "POST",
       headers,
       body: JSON.stringify({ query, variables }),
       signal: controller?.signal,
+    }).catch((err) => {
+      throw new Error(`Shopify network unreachable: ${err?.message || err}`);
     });
     if (!response.ok) throw new Error(`Shopify Storefront API returned ${response.status}`);
     const payload = (await response.json()) as ShopifyResponse<T>;
