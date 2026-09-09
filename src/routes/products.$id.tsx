@@ -10,6 +10,8 @@ import {
   ShieldCheck,
   RotateCcw,
   ChevronRight,
+  ChevronUp,
+  ChevronDown,
   Check,
   Lock,
 } from "lucide-react";
@@ -336,6 +338,17 @@ function ProductDetail() {
   );
   const waHref = `https://wa.me/${SITE.whatsapp}?text=${waMsg}`;
   const thumbRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+  const desktopRailRef = useRef<HTMLDivElement>(null);
+
+  const scrollRail = (direction: "up" | "down") => {
+    if (desktopRailRef.current) {
+      const scrollAmount = 180;
+      desktopRailRef.current.scrollBy({
+        top: direction === "up" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
 
   // Auto-scroll active thumbnail into view when active changes
   useEffect(() => {
@@ -369,25 +382,54 @@ function ProductDetail() {
           <div className="md:col-span-7">
             <div className="md:sticky md:top-24 flex flex-col md:flex-row gap-3 md:gap-4">
               {/* Vertical thumbnail rail for Desktop — generous size, scrollable */}
-              <div className="hidden md:flex flex-col gap-3 w-24 lg:w-28 shrink-0 max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden pr-1.5 scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgba(88,17,26,0.3)_rgba(88,17,26,0.05)]">
-                {gallery.map((g: string, i: number) => (
+              <div className="hidden md:flex flex-col relative w-24 lg:w-28 shrink-0">
+                {gallery.length > 4 && (
                   <button
-                    key={i}
-                    ref={(el) => {
-                      if (el) thumbRefs.current.set(i, el);
-                      else thumbRefs.current.delete(i);
-                    }}
-                    onClick={() => setActive(i)}
-                    aria-label={`View image ${i + 1}`}
-                    className={`aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#F0E9DC] border-2 transition-all duration-200 shrink-0 ${
-                      active === i
-                        ? "border-maroon shadow-md scale-[1.02] ring-2 ring-maroon/20"
-                        : "border-gold/30 hover:border-maroon/50 opacity-75 hover:opacity-100"
-                    }`}
+                    type="button"
+                    onClick={() => scrollRail("up")}
+                    aria-label="Scroll thumbnails up"
+                    className="w-full py-1 mb-1 text-maroon/70 hover:text-maroon flex justify-center items-center rounded-lg bg-gold/15 hover:bg-gold/30 transition-colors"
                   >
-                    <img src={g} alt="" className="h-full w-full object-cover object-top" />
+                    <ChevronUp className="h-4 w-4" />
                   </button>
-                ))}
+                )}
+                <div
+                  ref={desktopRailRef}
+                  data-lenis-prevent
+                  onWheel={(e) => {
+                    e.stopPropagation();
+                  }}
+                  className="flex flex-col gap-3 max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden pr-1.5 overscroll-contain scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgba(88,17,26,0.35)_rgba(88,17,26,0.05)]"
+                >
+                  {gallery.map((g: string, i: number) => (
+                    <button
+                      key={i}
+                      ref={(el) => {
+                        if (el) thumbRefs.current.set(i, el);
+                        else thumbRefs.current.delete(i);
+                      }}
+                      onClick={() => setActive(i)}
+                      aria-label={`View image ${i + 1}`}
+                      className={`aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#F0E9DC] border-2 transition-all duration-200 shrink-0 ${
+                        active === i
+                          ? "border-maroon shadow-md scale-[1.02] ring-2 ring-maroon/20"
+                          : "border-gold/30 hover:border-maroon/50 opacity-75 hover:opacity-100"
+                      }`}
+                    >
+                      <img src={g} alt="" className="h-full w-full object-cover object-top" />
+                    </button>
+                  ))}
+                </div>
+                {gallery.length > 4 && (
+                  <button
+                    type="button"
+                    onClick={() => scrollRail("down")}
+                    aria-label="Scroll thumbnails down"
+                    className="w-full py-1 mt-1 text-maroon/70 hover:text-maroon flex justify-center items-center rounded-lg bg-gold/15 hover:bg-gold/30 transition-colors"
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                )}
               </div>
 
               {/* Main image */}
@@ -420,7 +462,11 @@ function ProductDetail() {
               </div>
 
               {/* Mobile thumbnail strip: horizontal scrollable rail with generous size */}
-              <div className="md:hidden flex items-center gap-2.5 overflow-x-auto scroll-smooth py-2 px-1 [scrollbar-width:none]">
+              <div
+                data-lenis-prevent
+                onWheel={(e) => e.stopPropagation()}
+                className="md:hidden flex items-center gap-2.5 overflow-x-auto scroll-smooth py-2 px-1 overscroll-contain [scrollbar-width:none]"
+              >
                 {gallery.map((g: string, i: number) => (
                   <button
                     key={i}

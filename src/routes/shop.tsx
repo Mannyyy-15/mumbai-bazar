@@ -286,7 +286,11 @@ function ShopPage() {
         <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
           <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[300px_1fr] xl:grid-cols-[320px_1fr] gap-8 md:gap-10 lg:gap-12 items-start">
             {/* Desktop Left Sticky Sidebar */}
-            <aside className="hidden md:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar rounded-2xl border border-gold/40 bg-white p-6 shadow-sm">
+            <aside
+              data-lenis-prevent
+              onWheel={(e) => e.stopPropagation()}
+              className="hidden md:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain rounded-2xl border border-gold/40 bg-white p-6 shadow-sm [scrollbar-width:thin] [scrollbar-color:rgba(88,17,26,0.35)_rgba(88,17,26,0.05)]"
+            >
               {sidebarContent}
             </aside>
 
@@ -491,45 +495,6 @@ function ShopPage() {
         </div>
       </section>
 
-      {/* Buying guide — below the grid so products stay above it. */}
-      <section className="border-t border-gold/30 bg-white/60">
-        <div className="mx-auto w-full max-w-4xl px-4 py-14 md:px-8 md:py-20">
-          <div className="space-y-9">
-            {CATEGORY_COPY.shop.guide.map((block) => (
-              <div key={block.heading}>
-                <h2 className="font-serif text-xl md:text-2xl text-maroon font-bold">
-                  {block.heading}
-                </h2>
-                <p className="mt-2.5 text-sm md:text-[15px] leading-relaxed text-ink/85">
-                  {block.body}
-                </p>
-              </div>
-            ))}
-
-            {CATEGORY_COPY.shop.relatedGuides && (
-              <div className="border-t border-gold/30 pt-8">
-                <h2 className="font-serif text-xl md:text-2xl text-maroon font-bold">
-                  Read before you buy
-                </h2>
-                <ul className="mt-3.5 space-y-2">
-                  {CATEGORY_COPY.shop.relatedGuides.map((g) => (
-                    <li key={g.slug}>
-                      <Link
-                        to="/guides/$slug"
-                        params={{ slug: g.slug }}
-                        className="text-sm md:text-[15px] font-semibold text-maroon underline decoration-gold/60 underline-offset-4 hover:text-gold-deep transition-colors"
-                      >
-                        {g.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
       {/* Mobile Filter Drawer */}
       {drawerOpen && (
         <div
@@ -543,7 +508,11 @@ function ShopPage() {
             className="absolute inset-0 bg-ink/70 backdrop-blur-sm transition-opacity"
             onClick={() => setDrawerOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 flex w-[90%] max-w-md flex-col bg-white shadow-2xl">
+          <div
+            data-lenis-prevent
+            onWheel={(e) => e.stopPropagation()}
+            className="absolute inset-y-0 left-0 flex w-[90%] max-w-md flex-col bg-white shadow-2xl"
+          >
             <div className="flex items-center justify-between border-b border-gold/40 px-6 py-5 bg-[#FAF7F2]">
               <div className="flex items-center gap-2.5">
                 <Filter className="h-5 w-5 text-maroon" />
@@ -558,7 +527,13 @@ function ShopPage() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-6 py-6">{sidebarContent}</div>
+            <div
+              data-lenis-prevent
+              onWheel={(e) => e.stopPropagation()}
+              className="flex-1 overflow-y-auto px-6 py-6 overscroll-contain"
+            >
+              {sidebarContent}
+            </div>
 
             <div className="flex gap-3 border-t border-gold/40 p-5 bg-[#FAF7F2]">
               <button
@@ -696,7 +671,11 @@ function ShopFilterSidebar({
 
       {/* 2. DYNAMIC COLOR FILTER SELECTION FROM SHOPIFY VARIANTS */}
       <FilterAccordion title={`Colour Palette (${availableColors.length})`} defaultOpen={true}>
-        <div className="grid grid-cols-2 gap-2.5 pt-1">
+        <div
+          data-lenis-prevent
+          onWheel={(e) => e.stopPropagation()}
+          className="grid grid-cols-2 gap-2 pt-1 max-h-72 overflow-y-auto overscroll-contain pr-1.5 [scrollbar-width:thin] [scrollbar-color:rgba(88,17,26,0.35)_rgba(88,17,26,0.05)]"
+        >
           {availableColors.map((col) => {
             const active = selColors.has(col.key);
             return (
