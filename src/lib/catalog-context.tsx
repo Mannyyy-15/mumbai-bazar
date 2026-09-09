@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Product } from "./site-data";
-import { fetchShopifyProducts } from "./shopify";
 
 const CatalogContext = createContext<{ products: Product[]; loading: boolean }>({
   products: [],
@@ -38,7 +37,11 @@ export function CatalogProvider({
     if (hasServerData) return;
 
     let cancelled = false;
-    fetchShopifyProducts(50)
+    // Imported lazily: this pulls in the catalogue snapshot, which is ~94 KB of
+    // the client bundle. Only pages that actually fall back to a client fetch
+    // should pay for it.
+    import("./shopify")
+      .then(({ fetchShopifyProducts }) => fetchShopifyProducts(50))
       .then((remote) => {
         if (!cancelled) setClientProducts(remote);
       })

@@ -1,5 +1,4 @@
 import { type Product, type ProductVariant } from "./site-data";
-import { SHOPIFY_CATALOG_PRODUCTS } from "./shopify-catalog-data";
 
 const domain =
   (import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string | undefined) ||
@@ -104,26 +103,37 @@ export function getDirectCheckoutUrl(
   return `https://${storeDomain}/cart/${numId}:${Math.max(1, quantity)}`;
 }
 
-const legacyAlias = SHOPIFY_CATALOG_PRODUCTS.find(
-  (p) => p.handle === "gulab-box-silk-blend-embroidered-saree",
-);
+/**
+ * The catalogue snapshot is ~94 KB. Importing it at module scope pulled it into
+ * the client bundle for every page, including ones with no products on them,
+ * because the cart and checkout helpers live in this same module. Loading it on
+ * first use keeps it out of the critical path.
+ */
+let catalogueCache: ShopifyProduct[] | null = null;
 
-export const ALL_STORE_PRODUCTS: ShopifyProduct[] = [
-  ...SHOPIFY_CATALOG_PRODUCTS,
-  ...(legacyAlias
-    ? [
-        {
-          ...legacyAlias,
-          id: "womens-silk-blend-saree-embroidered-border",
-          handle: "womens-silk-blend-saree-embroidered-border",
-        },
-      ]
-    : []),
-];
+async function loadCatalogue(): Promise<ShopifyProduct[]> {
+  if (catalogueCache) return catalogueCache;
+  const { SHOPIFY_CATALOG_PRODUCTS } = await import("./shopify-catalog-data");
+  const legacyAlias = SHOPIFY_CATALOG_PRODUCTS.find(
+    (p) => p.handle === "gulab-box-silk-blend-embroidered-saree",
+  );
+  catalogueCache = [
+    ...SHOPIFY_CATALOG_PRODUCTS,
+    ...(legacyAlias
+      ? [
+          {
+            ...legacyAlias,
+            id: "womens-silk-blend-saree-embroidered-border",
+            handle: "womens-silk-blend-saree-embroidered-border",
+          },
+        ]
+      : []),
+  ];
+  return catalogueCache;
+}
 
-export async function fetchShopifyProducts(first = 50): Promise<ShopifyProduct[]> {
-  // Instant 0ms load with real Shopify 34-product catalogue
-  return ALL_STORE_PRODUCTS;
+export async function fetchShopifyProducts(_first = 50): Promise<ShopifyProduct[]> {
+  return loadCatalogue();
 }
 
 export async function fetchShopifyProduct(handle: string): Promise<ShopifyProduct | null> {
@@ -133,7 +143,7 @@ export async function fetchShopifyProduct(handle: string): Promise<ShopifyProduc
       : handle;
 
   // 1. Instant 0ms local match for seamless, zero-latency product details opening
-  const localMatch = ALL_STORE_PRODUCTS.find(
+  const localMatch = (await loadCatalogue()).find(
     (p) =>
       p.handle === targetHandle ||
       p.id === targetHandle ||

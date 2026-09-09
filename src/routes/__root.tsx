@@ -20,7 +20,6 @@ import { CartDrawer } from "@/components/site/CartDrawer";
 import { CartProvider } from "@/lib/cart-context";
 import { SmoothScroll } from "@/components/site/SmoothScroll";
 import { CatalogProvider } from "@/lib/catalog-context";
-import { fetchShopifyProducts } from "@/lib/shopify";
 import { WishlistProvider } from "@/lib/wishlist-context";
 import { WishlistDrawer } from "@/components/site/WishlistDrawer";
 import { PageTransition } from "@/components/site/PageTransition";
@@ -108,7 +107,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
    * throwing), and staleTime keeps navigation from refetching on every route
    * change.
    */
-  loader: async () => ({ products: await fetchShopifyProducts(50).catch(() => []) }),
+  loader: async () => {
+    // Imported here rather than at module scope so the catalogue snapshot
+    // (~94 KB) is not pulled into the client bundle that every page loads.
+    // The loader still runs on the server, so grids stay in the initial HTML.
+    const { fetchShopifyProducts } = await import("@/lib/shopify");
+    return { products: await fetchShopifyProducts(50).catch(() => []) };
+  },
   staleTime: 5 * 60 * 1000,
   head: () => ({
     meta: [
