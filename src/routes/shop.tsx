@@ -18,6 +18,7 @@ import { useCatalog } from "@/lib/catalog-context";
 import { seo, jsonLd } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import {
+  COLOR_OPTIONS,
   TYPE_OPTIONS,
   FABRIC_OPTIONS,
   PRICE_PRESETS,
@@ -388,7 +389,7 @@ function ShopPage() {
 
                   {/* Color Chips */}
                   {Array.from(selColors).map((cKey) => {
-                    const cOpt = COLOR_OPTIONS.find((c) => c.key === cKey);
+                    const cOpt = availableColors.find((c) => c.key === cKey) || COLOR_OPTIONS.find((c) => c.key === cKey);
                     return (
                       <span
                         key={cKey}
