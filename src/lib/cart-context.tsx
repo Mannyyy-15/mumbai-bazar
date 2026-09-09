@@ -38,6 +38,8 @@ type CartContextValue = {
   checkoutUrl?: string;
   /** Id of the item most recently added, so a card can confirm the click. */
   lastAddedId: string | null;
+  /** What the cart last did, so the header can say "Added" vs "Removed". */
+  lastAction: { kind: "added" | "removed"; seq: number } | null;
   openCart: () => void;
   closeCart: () => void;
   toggleCart: () => void;
@@ -67,6 +69,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const cartCreationRef = useRef<Promise<ShopifyCart> | null>(null);
   /** Signals a successful add so the UI can confirm it. */
   const [lastAddedId, setLastAddedId] = useState<string | null>(null);
+  const [lastAction, setLastAction] = useState<{ kind: "added" | "removed"; seq: number } | null>(
+    null,
+  );
+  const actionSeq = useRef(0);
 
   useEffect(() => {
     try {
@@ -139,6 +145,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       subtotal,
       checkoutUrl: effectiveCheckoutUrl,
       lastAddedId,
+      lastAction,
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
       toggleCart: () => setIsOpen((v) => !v),
@@ -157,6 +164,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         // Confirm optimistically. The local cart is the source of truth for the
         // UI; a Shopify failure must not make a successful add look broken.
         setLastAddedId(item.id);
+        actionSeq.current += 1;
+        setLastAction({ kind: "added", seq: actionSeq.current });
 
         if (!shopifyConfigured || !item.shopifyVariantId) return;
         const variantId = item.shopifyVariantId;
@@ -215,6 +224,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         });
       },
       removeItem: (id) => {
+        actionSeq.current += 1;
+        setLastAction({ kind: "removed", seq: actionSeq.current });
         const existing = items.find((item) => item.id === id);
         const remaining = items.filter((p) => p.id !== id);
         setItems(remaining);
@@ -257,7 +268,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setCheckoutUrl(undefined);
       },
     };
-  }, [items, isOpen, effectiveCheckoutUrl, shopifyCartId, lastAddedId]);
+  }, [items, isOpen, effectiveCheckoutUrl, shopifyCartId, lastAddedId, lastAction]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
@@ -269,6 +280,7 @@ const defaultCartContext: CartContextValue = {
   subtotal: 0,
   checkoutUrl: undefined,
   lastAddedId: null,
+  lastAction: null,
   openCart: () => {},
   closeCart: () => {},
   toggleCart: () => {},

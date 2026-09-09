@@ -358,3 +358,35 @@ html.lenis.lenis-smooth [data-lenis-prevent] {
 .aspect-\[3\/2\] img {
   object-position: center top !important;
 }
+
+/*
+ * Cart feedback. A single settle — the bag dips, lifts, and comes to rest —
+ * rather than Tailwind's animate-bounce, which loops indefinitely and reads as
+ * a placeholder. Short enough to register without holding the eye.
+ */
+@keyframes cart-settle {
+  0%   { transform: translateY(0) scale(1); }
+  30%  { transform: translateY(3px) scale(0.92); }
+  60%  { transform: translateY(-4px) scale(1.08); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@utility animate-cart-settle {
+  animation: cart-settle 420ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes cart-toast-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-cart-toast {
+  animation: cart-toast-in 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-cart-settle,
+  .animate-cart-toast {
+    animation: none;
+  }
+}
