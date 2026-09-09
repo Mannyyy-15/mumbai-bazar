@@ -23,6 +23,7 @@ export type CartItem = {
   priceLabel: string; // display string e.g. "₹ 24,500"
   image: string;
   weave?: string;
+  color?: string;
   qty: number;
   shopifyVariantId?: string;
   lineId?: string;
@@ -132,8 +133,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
       toggleCart: () => setIsOpen((v) => !v),
       addItem: (item, qty = 1) => {
         setItems((prev) => {
-          const found = prev.find((p) => p.id === item.id);
-          if (found) return prev.map((p) => (p.id === item.id ? { ...p, qty: p.qty + qty } : p));
+          const isMatch = (p: CartItem) =>
+            p.shopifyVariantId && item.shopifyVariantId
+              ? p.shopifyVariantId === item.shopifyVariantId
+              : p.id === item.id && p.color === item.color;
+
+          const found = prev.find(isMatch);
+          if (found) return prev.map((p) => (isMatch(p) ? { ...p, qty: p.qty + qty } : p));
           return [...prev, { ...item, qty }];
         });
 

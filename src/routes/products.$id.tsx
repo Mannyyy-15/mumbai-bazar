@@ -18,7 +18,7 @@ import { fetchShopifyProduct } from "@/lib/shopify";
 import { useCatalog } from "@/lib/catalog-context";
 import { seo, jsonLd, SITE } from "@/lib/seo";
 import { productSchema, breadcrumbSchema, priceToSchema } from "@/lib/structured-data";
-import { COLOR_OPTIONS } from "@/lib/filters";
+import { COLOR_OPTIONS, resolveColorSwatch } from "@/lib/filters";
 
 export const Route = createFileRoute("/products/$id")({
   loader: async ({ params }) => {
@@ -117,33 +117,95 @@ function ProductDetail() {
   const [added, setAdded] = useState(false);
   const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Merge any variant images that exist into the gallery list so user can see every color in thumbnails
+  const gallery = useMemo(() => {
+    const list = [...(d.gallery && d.gallery.length > 0 ? d.gallery : [product.img])];
+    if (product.variants) {
+      for (const v of product.variants) {
+        if (v.img && !list.includes(v.img)) {
+          list.push(v.img);
+        }
+      }
+    }
+    return list;
+  }, [d.gallery, product.variants, product.img]);
+
   // Reset selected swatch when navigating between products
   useEffect(() => {
     setSwatch(0);
   }, [product.id]);
 
   // Dynamically determine color swatches:
-  // - If the product has multiple variants with distinct colors, shows all variant colors.
-  // - For single-color products, detects and shows ONLY the PRIMARY/MAIN color of the saree (ignoring zari/border accents).
+  // - If the product has multiple variants with distinct colors (e.g. Red, White, Black), extracts and displays all variant swatches.
+  // - For single-color products, detects and shows ONLY the primary main color of the saree (ignoring zari/border accents).
   const productColors = useMemo(() => {
-    // 1. Check for explicit multi-color variants if present in Shopify/catalog data
-    const explicitVariants = (product as any).variants || (product as any).colorVariants;
+    // 1. Check for explicit variants on product (Shopify / catalog)
+    const explicitVariants = product.variants;
     if (Array.isArray(explicitVariants) && explicitVariants.length > 1) {
-      return explicitVariants.map((v: any) => {
-        const vName = typeof v === "string" ? v : v.color || v.title || v.name || "Variant";
-        const matched = COLOR_OPTIONS.find((c) =>
-          c.keywords.some((kw) => vName.toLowerCase().includes(kw))
+      const list: Array<{
+        variantId: string;
+        name: string;
+        hex: string;
+        border?: string;
+        img?: string;
+        price?: string;
+        original?: string;
+        available: boolean;
+      }> = [];
+      const seen = new Set<string>();
+
+      for (const v of explicitVariants) {
+        const colorName =
+          v.color ||
+          v.selectedOptions?.find((o) => /colou?r/i.test(o.name))?.value ||
+          (v.title !== "Default Title" ? v.title.split("/")[0].trim() : null);
+
+        if (colorName) {
+          const key = colorName.toLowerCase();
+          if (!seen.has(key)) {
+            seen.add(key);
+            const resolved = resolveColorSwatch(colorName);
+            list.push({
+              variantId: v.id,
+              name: colorName,
+              hex: resolved.hex,
+              border: resolved.border,
+              img: v.img,
+              price: v.price,
+              original: v.original,
+              available: v.available ?? true,
+            });
+          }
+        }
+      }
+
+      if (list.length > 1) return list;
+    }
+
+    // 2. Check options for Color with multiple values
+    const colorOpt = product.options?.find((o) => /colou?r/i.test(o.name));
+    if (colorOpt && colorOpt.values.length > 1) {
+      return colorOpt.values.map((val) => {
+        const resolved = resolveColorSwatch(val);
+        const matchingVariant = product.variants?.find(
+          (v) =>
+            v.color?.toLowerCase() === val.toLowerCase() ||
+            v.title.toLowerCase().includes(val.toLowerCase()),
         );
         return {
-          name: vName,
-          hex: matched?.hex || "#641F2A",
-          border: matched?.border,
+          variantId: matchingVariant?.id || product.shopifyVariantId,
+          name: val,
+          hex: resolved.hex,
+          border: resolved.border,
+          img: matchingVariant?.img,
+          price: matchingVariant?.price,
+          original: matchingVariant?.original,
+          available: matchingVariant?.available ?? true,
         };
       });
     }
 
-    // 2. For single-color products: identify the ONE primary main body color.
-    // Strip common weave/accent phrases like "gold zari", "antique zari", "golden border", etc.
+    // 3. For single-color products: identify the ONE primary main body color.
     const cleanText = (str: string) =>
       str
         .toLowerCase()
@@ -161,9 +223,11 @@ function ProductDetail() {
           const matchedWord = nameText.match(regex)?.[0] || kw;
           const capitalized = matchedWord.charAt(0).toUpperCase() + matchedWord.slice(1).toLowerCase();
           return [{
+            variantId: product.shopifyVariantId,
             name: capitalized,
             hex: c.hex,
             border: c.border,
+            available: true,
           }];
         }
       }
@@ -175,9 +239,11 @@ function ProductDetail() {
         if (idText.includes(kw)) {
           const capitalized = kw.charAt(0).toUpperCase() + kw.slice(1).toLowerCase();
           return [{
+            variantId: product.shopifyVariantId,
             name: capitalized,
             hex: c.hex,
             border: c.border,
+            available: true,
           }];
         }
       }
@@ -192,19 +258,45 @@ function ProductDetail() {
           const matchedWord = descText.match(regex)?.[0] || kw;
           const capitalized = matchedWord.charAt(0).toUpperCase() + matchedWord.slice(1).toLowerCase();
           return [{
+            variantId: product.shopifyVariantId,
             name: capitalized,
             hex: c.hex,
             border: c.border,
+            available: true,
           }];
         }
       }
     }
 
     // Default fallback to 1 artisanal color
-    return [{ name: "Boutique Silk", hex: "#641F2A" }];
+    return [{
+      variantId: product.shopifyVariantId,
+      name: "Boutique Silk",
+      hex: "#641F2A",
+      available: true,
+    }];
   }, [product]);
 
   const currentSwatch = productColors[swatch] || productColors[0];
+  const activePrice = currentSwatch.price || product.price;
+  const activeOriginal = currentSwatch.original || product.original;
+  const activeVariantId = currentSwatch.variantId || product.shopifyVariantId;
+
+  const priceNum = parsePriceToNumber(activePrice);
+  const origNum = activeOriginal ? parsePriceToNumber(activeOriginal) : 0;
+  const savePct = origNum > 0 ? Math.round(((origNum - priceNum) / origNum) * 100) : 0;
+
+  const handleSelectSwatch = (index: number) => {
+    setSwatch(index);
+    const selected = productColors[index];
+    if (selected && selected.img) {
+      const gIndex = gallery.indexOf(selected.img);
+      if (gIndex >= 0) {
+        setActive(gIndex);
+      }
+    }
+  };
+
   useEffect(
     () => () => {
       if (addedTimer.current) clearTimeout(addedTimer.current);
@@ -213,20 +305,17 @@ function ProductDetail() {
   );
   const { addItem, openCart } = useCart();
 
-  const priceNum = parsePriceToNumber(product.price);
-  const origNum = product.original ? parsePriceToNumber(product.original) : 0;
-  const savePct = origNum > 0 ? Math.round(((origNum - priceNum) / origNum) * 100) : 0;
-
   const handleAddToCart = () => {
     addItem(
       {
         id: product.id,
         name: product.name,
         price: priceNum,
-        priceLabel: product.price,
-        image: product.img,
+        priceLabel: activePrice,
+        image: currentSwatch.img || gallery[active] || product.img,
         weave: product.weave,
-        shopifyVariantId: product.shopifyVariantId,
+        color: currentSwatch.name,
+        shopifyVariantId: activeVariantId,
       },
       qty,
     );
@@ -295,7 +384,7 @@ function ProductDetail() {
             <div className="md:sticky md:top-24 flex flex-col md:flex-row gap-3 md:gap-4">
               {/* Vertical thumbnail rail for Desktop */}
               <div className="hidden md:flex flex-col gap-3 w-20 shrink-0 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide">
-                {d.gallery.map((g: string, i: number) => (
+                {gallery.map((g: string, i: number) => (
                   <button
                     key={i}
                     onClick={() => setActive(i)}
@@ -315,7 +404,7 @@ function ProductDetail() {
               <div className="flex-1 relative overflow-hidden rounded-2xl md:rounded-none bg-[#F0E9DC] shadow-sm md:shadow-none">
                 <div className="aspect-[4/5] w-full max-h-[calc(100vh-8rem)]">
                   <img
-                    src={d.gallery[active]}
+                    src={gallery[active] || product.img}
                     alt={product.name}
                     className="h-full w-full object-cover object-top"
                   />
@@ -335,7 +424,7 @@ function ProductDetail() {
 
               {/* Mobile thumbnail strip: clean 1-line horizontal scrollable rail */}
               <div className="md:hidden flex items-center gap-2 overflow-x-auto no-scrollbar py-1 px-0.5">
-                {d.gallery.map((g: string, i: number) => (
+                {gallery.map((g: string, i: number) => (
                   <button
                     key={i}
                     onClick={() => setActive(i)}
@@ -366,12 +455,12 @@ function ProductDetail() {
               {/* Price row */}
               <div className="mt-6 flex items-baseline gap-4">
                 <span className="font-sans text-3xl md:text-4xl font-extrabold text-maroon tracking-tight">
-                  {product.price}
+                  {activePrice}
                 </span>
-                {product.original && (
+                {activeOriginal && (
                   <>
                     <span className="text-sm font-sans text-taupe font-medium line-through">
-                      {product.original}
+                      {activeOriginal}
                     </span>
                     <span className="text-[10px] tracking-[0.22em] uppercase bg-maroon text-ivory px-2.5 py-1 font-semibold rounded-md shadow-sm">
                       Save {savePct}%
@@ -399,8 +488,8 @@ function ProductDetail() {
                   {productColors.map((s, i) => (
                     <button
                       key={s.name + i}
-                      onClick={() => setSwatch(i)}
-                      aria-label={s.name}
+                      onClick={() => handleSelectSwatch(i)}
+                      aria-label={`Select ${s.name}`}
                       title={s.name}
                       className={`relative h-11 w-11 rounded-full border transition-all duration-200 ${
                         swatch === i
@@ -568,11 +657,11 @@ function ProductDetail() {
           <div className="flex flex-col">
             <div className="flex items-baseline gap-1.5">
               <span className="font-sans text-xl font-black text-maroon tracking-tight">
-                {product.price}
+                {activePrice}
               </span>
-              {product.original && (
+              {activeOriginal && (
                 <span className="text-xs text-taupe font-medium line-through font-sans">
-                  {product.original}
+                  {activeOriginal}
                 </span>
               )}
             </div>

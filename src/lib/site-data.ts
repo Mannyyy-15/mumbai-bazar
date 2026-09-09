@@ -63,6 +63,17 @@ export type ProductDetails = {
   gallery: string[];
 };
 
+export type ProductVariant = {
+  id: string;
+  title: string;
+  color?: string;
+  price?: string;
+  original?: string;
+  available?: boolean;
+  img?: string;
+  selectedOptions?: Array<{ name: string; value: string }>;
+};
+
 export type Product = {
   id: string;
   img: string;
@@ -79,6 +90,8 @@ export type Product = {
   shopifyVariantId?: string;
   handle?: string;
   details?: ProductDetails;
+  variants?: ProductVariant[];
+  options?: Array<{ id?: string; name: string; values: string[] }>;
 };
 
 const commonCare = [

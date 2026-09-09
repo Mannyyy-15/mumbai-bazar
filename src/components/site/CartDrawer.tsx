@@ -288,11 +288,18 @@ function CartRow({
             </button>
           </div>
 
-          {item.weave && (
-            <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-gold/15 text-[10px] font-bold uppercase tracking-wider text-maroon">
-              {item.weave}
-            </span>
-          )}
+          <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+            {item.weave && (
+              <span className="px-2 py-0.5 rounded-full bg-gold/15 text-[10px] font-bold uppercase tracking-wider text-maroon">
+                {item.weave}
+              </span>
+            )}
+            {item.color && (
+              <span className="px-2 py-0.5 rounded-full bg-maroon/10 text-[10px] font-bold uppercase tracking-wider text-maroon">
+                Colour: {item.color}
+              </span>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center justify-between pt-2 border-t border-gold/20 mt-2">

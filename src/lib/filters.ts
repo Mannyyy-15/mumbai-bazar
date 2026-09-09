@@ -64,7 +64,53 @@ export const COLOR_OPTIONS: ColorFilterOption[] = [
     border: "#C5A880",
     keywords: ["ivory", "cream", "white", "beige", "canvas", "off-white", "ecru"],
   },
+  {
+    key: "black-ebony",
+    label: "Black & Midnight",
+    hex: "#1A1A1A",
+    border: "#444444",
+    keywords: ["black", "ebony", "charcoal", "jet black", "kala", "dark"],
+  },
 ];
+
+/**
+ * Maps any variant color name (e.g. "Red", "White", "Black", "Wine", "Navy") to
+ * the best matching hex color and border for visual swatches.
+ */
+export function resolveColorSwatch(colorName: string): { name: string; hex: string; border?: string } {
+  const clean = colorName.trim();
+  const lower = clean.toLowerCase();
+
+  // 1. Direct match in COLOR_OPTIONS keywords
+  for (const c of COLOR_OPTIONS) {
+    for (const kw of c.keywords) {
+      if (lower.includes(kw)) {
+        return {
+          name: clean,
+          hex: c.hex,
+          border: c.border,
+        };
+      }
+    }
+  }
+
+  // 2. Fallbacks for standard fashion colors
+  if (lower.includes("black") || lower.includes("noir")) return { name: clean, hex: "#1A1A1A", border: "#444444" };
+  if (lower.includes("white") || lower.includes("off white") || lower.includes("ivory")) return { name: clean, hex: "#F5EFEB", border: "#C5A880" };
+  if (lower.includes("red") || lower.includes("crimson") || lower.includes("ruby")) return { name: clean, hex: "#A31D1D" };
+  if (lower.includes("maroon") || lower.includes("wine") || lower.includes("burgundy")) return { name: clean, hex: "#58111A" };
+  if (lower.includes("pink") || lower.includes("rose") || lower.includes("blush") || lower.includes("magenta")) return { name: clean, hex: "#D63384" };
+  if (lower.includes("gold") || lower.includes("mustard") || lower.includes("yellow")) return { name: clean, hex: "#D4AF37" };
+  if (lower.includes("green") || lower.includes("emerald") || lower.includes("olive") || lower.includes("mehendi")) return { name: clean, hex: "#196F3D" };
+  if (lower.includes("blue") || lower.includes("navy") || lower.includes("royal") || lower.includes("peacock")) return { name: clean, hex: "#1A5276" };
+  if (lower.includes("teal") || lower.includes("cyan")) return { name: clean, hex: "#0E8686" };
+  if (lower.includes("purple") || lower.includes("violet") || lower.includes("lavender")) return { name: clean, hex: "#6C3483" };
+  if (lower.includes("coral") || lower.includes("peach") || lower.includes("orange") || lower.includes("rust")) return { name: clean, hex: "#E76F51" };
+  if (lower.includes("grey") || lower.includes("gray") || lower.includes("silver")) return { name: clean, hex: "#8E8E93", border: "#B0B0B5" };
+  if (lower.includes("brown") || lower.includes("copper") || lower.includes("beige")) return { name: clean, hex: "#795548" };
+
+  return { name: clean, hex: "#641F2A" };
+}
 
 export type TypeFilterOption = {
   key: string;

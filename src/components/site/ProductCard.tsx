@@ -1,10 +1,11 @@
 import { Check, Heart, ShoppingBag } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { productAltText } from "@/lib/seo";
 import type { Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
+import { resolveColorSwatch } from "@/lib/filters";
 
 export function ProductCard({ p }: { p: Product }) {
   const { addItem } = useCart();
@@ -20,6 +21,20 @@ export function ProductCard({ p }: { p: Product }) {
     [],
   );
 
+  const variantColors = useMemo(() => {
+    if (!p.variants || p.variants.length <= 1) return [];
+    const seen = new Set<string>();
+    const list: Array<{ name: string; hex: string; border?: string }> = [];
+    for (const v of p.variants) {
+      const c = v.color || (v.title !== "Default Title" ? v.title.split("/")[0].trim() : null);
+      if (c && !seen.has(c.toLowerCase())) {
+        seen.add(c.toLowerCase());
+        list.push(resolveColorSwatch(c));
+      }
+    }
+    return list;
+  }, [p.variants]);
+
   const quickAdd = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
@@ -30,6 +45,7 @@ export function ProductCard({ p }: { p: Product }) {
       priceLabel: p.price,
       image: p.img,
       weave: p.weave,
+      color: variantColors[0]?.name,
       shopifyVariantId: p.shopifyVariantId,
     });
 
@@ -101,6 +117,26 @@ export function ProductCard({ p }: { p: Product }) {
           <h3 className="font-sans text-xs sm:text-sm md:text-base font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
             {p.name}
           </h3>
+
+          {/* Variant Colours Indicator if product has multiple colors */}
+          {variantColors.length > 1 && (
+            <div className="flex items-center gap-1.5 pt-1">
+              <div className="flex items-center -space-x-1">
+                {variantColors.slice(0, 4).map((c, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-block h-3 w-3 rounded-full border border-white shadow-xs"
+                    style={{ backgroundColor: c.hex, borderColor: c.border || "#C5A880" }}
+                    title={c.name}
+                  />
+                ))}
+              </div>
+              <span className="text-[10px] font-semibold text-ink/75">
+                {variantColors.length} Colours
+              </span>
+            </div>
+          )}
+
           <div className="flex items-baseline gap-2 pt-1.5 border-t border-[#A27633]/30 mt-1">
             <span className="font-sans text-sm sm:text-base md:text-lg font-bold text-maroon tracking-tight">
               {p.price}

@@ -1,4 +1,4 @@
-import type { Product } from "./site-data";
+import type { Product, ProductVariant } from "./site-data";
 
 const domain =
   (import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string | undefined) ||
@@ -28,7 +28,18 @@ type ProductNode = {
   images?: { nodes: Array<{ url: string; altText?: string | null }> };
   priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
   compareAtPriceRange: { minVariantPrice: { amount: string } };
-  variants: { nodes: Array<{ id: string }> };
+  options?: Array<{ id: string; name: string; values: string[] }>;
+  variants: {
+    nodes: Array<{
+      id: string;
+      title: string;
+      availableForSale?: boolean;
+      price: { amount: string; currencyCode: string };
+      compareAtPrice?: { amount: string; currencyCode: string } | null;
+      selectedOptions?: Array<{ name: string; value: string }>;
+      image?: { url: string; altText?: string | null } | null;
+    }>;
+  };
 };
 
 type ShopifyResponse<T> = { data?: T; errors?: Array<{ message: string }> };
@@ -36,10 +47,21 @@ type ShopifyResponse<T> = { data?: T; errors?: Array<{ message: string }> };
 const PRODUCT_FIELDS = `
   id handle title vendor productType description tags
   featuredImage { url altText }
-  images(first: 8) { nodes { url altText } }
+  images(first: 15) { nodes { url altText } }
   priceRange { minVariantPrice { amount currencyCode } }
   compareAtPriceRange { minVariantPrice { amount } }
-  variants(first: 1) { nodes { id } }
+  options { id name values }
+  variants(first: 30) {
+    nodes {
+      id
+      title
+      availableForSale
+      price { amount currencyCode }
+      compareAtPrice { amount currencyCode }
+      selectedOptions { name value }
+      image { url altText }
+    }
+  }
 `;
 
 const commonCare = [
@@ -50,6 +72,71 @@ const commonCare = [
 ];
 
 export const FLIPKART_PRODUCTS: ShopifyProduct[] = [
+  {
+    id: "womens-silk-blend-saree-embroidered-border",
+    handle: "womens-silk-blend-saree-embroidered-border",
+    shopifyProductId: "mb-silk-blend-saree-emb-border",
+    shopifyVariantId: "mb-var-silk-blend-red",
+    name: "Women's Silk Blend Saree with Embroidered Border & Unstitched Blouse Piece",
+    weave: "Embroidered Silk Blend",
+    price: "₹ 1,499",
+    original: "₹ 2,999",
+    tag: "Bestseller",
+    category: ["new-arrivals", "silk-sarees", "festive-edit", "wedding-sarees"],
+    img: "/products/rangrez-royale-1.jpeg",
+    variants: [
+      {
+        id: "mb-var-silk-blend-red",
+        title: "Red",
+        color: "Red",
+        price: "₹ 1,499",
+        original: "₹ 2,999",
+        available: true,
+        img: "/products/rangrez-royale-1.jpeg",
+      },
+      {
+        id: "mb-var-silk-blend-white",
+        title: "White",
+        color: "White",
+        price: "₹ 1,499",
+        original: "₹ 2,999",
+        available: true,
+        img: "/products/meher-wine-1.jpeg",
+      },
+      {
+        id: "mb-var-silk-blend-black",
+        title: "Black",
+        color: "Black",
+        price: "₹ 1,499",
+        original: "₹ 2,999",
+        available: true,
+        img: "/products/neelam-rangoli-1.jpeg",
+      },
+    ],
+    options: [
+      {
+        name: "Color",
+        values: ["Red", "White", "Black"],
+      },
+    ],
+    details: {
+      fabric: "Silk Blend with Resham & Zari Embroidery",
+      drape: "Fluid, graceful drape with rich embroidered fall",
+      blousePiece: "0.80 m unstitched matching embroidered blouse piece",
+      length: "5.5 m saree + 0.8 m blouse",
+      border: "Heavy floral and scalloped embroidered border",
+      palla: "Rich embroidered pallu with intricate buta motifs",
+      care: commonCare,
+      description:
+        "Designed for timeless grace, this Women's Silk Blend Saree features an exquisite embroidered border with fine zari detailing and a matching unstitched blouse piece. Available in vibrant Red, elegant White, and regal Black, perfect for weddings, receptions, and celebratory soirées.",
+      gallery: [
+        "/products/rangrez-royale-1.jpeg",
+        "/products/meher-wine-1.jpeg",
+        "/products/neelam-rangoli-1.jpeg",
+        "/products/rangrez-royale-2.jpeg",
+      ],
+    },
+  },
   {
     id: "woven-banarasi-cotton-silk-saree-magenta",
     handle: "woven-banarasi-cotton-silk-saree-magenta",
@@ -278,6 +365,30 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
   const description = isPlaceholder
     ? `${name}, handcrafted and curated by Mumbai Bazar. Elegant border detailing with matching unstitched blouse piece. Try and drape in person across any of our 8 Mumbai stores or order online with 7-day easy returns.`
     : rawDesc;
+  const variants: ProductVariant[] = (node.variants?.nodes ?? []).map((v) => {
+    const colorOpt = v.selectedOptions?.find((opt) => /colou?r/i.test(opt.name));
+    const colorVal = colorOpt ? colorOpt.value : (v.title !== "Default Title" ? v.title.split("/")[0].trim() : undefined);
+    const hasDiscount = Boolean(
+      v.compareAtPrice?.amount && Number(v.compareAtPrice.amount) > Number(v.price.amount)
+    );
+
+    return {
+      id: v.id,
+      title: v.title,
+      color: colorVal,
+      available: v.availableForSale ?? true,
+      price: formatShopifyPrice(v.price.amount, v.price.currencyCode),
+      original: hasDiscount && v.compareAtPrice
+        ? formatShopifyPrice(v.compareAtPrice.amount, v.price.currencyCode)
+        : undefined,
+      img: v.image?.url,
+      selectedOptions: v.selectedOptions,
+    };
+  });
+
+  const variantImages = variants.map((v) => v.img).filter(Boolean) as string[];
+  const finalGallery = Array.from(new Set([...gallery, ...variantImages]));
+
   return {
     id: node.handle,
     handle: node.handle,
@@ -299,6 +410,8 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
           )
         : undefined,
     category,
+    variants,
+    options: node.options,
     details: {
       fabric: fkData?.fabric || node.productType || weave,
       drape: "Refined, easy drape",
@@ -312,7 +425,7 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
         "Avoid direct sunlight and perfume contact",
       ],
       description,
-      gallery,
+      gallery: finalGallery,
     },
   };
 }
