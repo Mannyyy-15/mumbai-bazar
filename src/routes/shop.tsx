@@ -18,13 +18,14 @@ import { useCatalog } from "@/lib/catalog-context";
 import { seo, jsonLd } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import {
-  COLOR_OPTIONS,
   TYPE_OPTIONS,
   FABRIC_OPTIONS,
   PRICE_PRESETS,
-  matchesColor,
   parsePriceNumber,
-  type ColorFilterOption,
+  getDynamicColorOptions,
+  matchesDynamicColor,
+  getProductColors,
+  type DynamicColorFilterOption,
 } from "@/lib/filters";
 
 export const Route = createFileRoute("/shop")({
@@ -58,16 +59,20 @@ export const Route = createFileRoute("/shop")({
   component: ShopPage,
 });
 
-type SortKey = "featured" | "new" | "price-asc" | "price-desc";
+type SortKey = "featured" | "new" | "price-asc" | "price-desc" | "color-asc";
 const SORTS: { key: SortKey; label: string }[] = [
   { key: "featured", label: "Featured" },
   { key: "new", label: "Newest Arrivals" },
   { key: "price-asc", label: "Price: Low to High" },
   { key: "price-desc", label: "Price: High to Low" },
+  { key: "color-asc", label: "Color: A to Z" },
 ];
 
 function ShopPage() {
   const { products } = useCatalog();
+
+  // Dynamic available colors derived from actual Shopify products and variants
+  const availableColors = useMemo(() => getDynamicColorOptions(products), [products]);
 
   // Filter States
   const [selColors, setSelColors] = useState<Set<string>>(new Set());
@@ -140,9 +145,11 @@ function ShopPage() {
   const filtered = useMemo(() => {
     let list = products.slice();
 
-    // 1. Color filter
+    // 1. Color filter (dynamic from Shopify variants and options)
     if (selColors.size > 0) {
-      list = list.filter((p) => Array.from(selColors).some((cKey) => matchesColor(p, cKey)));
+      list = list.filter((p) =>
+        Array.from(selColors).some((cKey) => matchesDynamicColor(p, cKey)),
+      );
     }
 
     // 2. Type filter
@@ -184,6 +191,28 @@ function ShopPage() {
       case "price-desc":
         list.sort((a, b) => parsePriceNumber(b.price) - parsePriceNumber(a.price));
         break;
+      case "color-asc":
+        list.sort((a, b) => {
+          const colA = (getProductColors(a)[0] || "").toLowerCase();
+          const colB = (getProductColors(b)[0] || "").toLowerCase();
+          return colA.localeCompare(colB);
+        });
+        break;
+      case "featured":
+      default:
+        // When filtering by specific variant colors, prioritize items with explicit matching variants
+        if (selColors.size > 0) {
+          list.sort((a, b) => {
+            const hasVarA = (a.variants || []).some(
+              (v) => v.color && Array.from(selColors).some((ck) => ck.includes(v.color.toLowerCase())),
+            );
+            const hasVarB = (b.variants || []).some(
+              (v) => v.color && Array.from(selColors).some((ck) => ck.includes(v.color.toLowerCase())),
+            );
+            return Number(hasVarB) - Number(hasVarA);
+          });
+        }
+        break;
     }
 
     return list;
@@ -200,6 +229,7 @@ function ShopPage() {
 
   const sidebarContent = (
     <ShopFilterSidebar
+      availableColors={availableColors}
       selColors={selColors}
       selTypes={selTypes}
       selFabrics={selFabrics}
@@ -556,6 +586,7 @@ function ShopPage() {
  * 4. Fabric & Handloom Weave
  */
 function ShopFilterSidebar({
+  availableColors,
   selColors,
   selTypes,
   selFabrics,
@@ -572,6 +603,7 @@ function ShopFilterSidebar({
   clearAll,
   activeCount,
 }: {
+  availableColors: DynamicColorFilterOption[];
   selColors: Set<string>;
   selTypes: Set<string>;
   selFabrics: Set<string>;
@@ -659,31 +691,36 @@ function ShopFilterSidebar({
         </div>
       </FilterAccordion>
 
-      {/* 2. COLOR FILTER SELECTION */}
-      <FilterAccordion title="Color Palette" defaultOpen={true}>
+      {/* 2. DYNAMIC COLOR FILTER SELECTION FROM SHOPIFY VARIANTS */}
+      <FilterAccordion title={`Colour Palette (${availableColors.length})`} defaultOpen={true}>
         <div className="grid grid-cols-2 gap-2.5 pt-1">
-          {COLOR_OPTIONS.map((col) => {
+          {availableColors.map((col) => {
             const active = selColors.has(col.key);
             return (
               <button
                 key={col.key}
                 onClick={() => onToggleColor(col.key)}
-                className={`flex items-center gap-2.5 p-2 rounded-xl border text-xs font-semibold transition-all text-left ${
+                className={`flex items-center justify-between p-2 rounded-xl border text-xs font-semibold transition-all text-left ${
                   active
-                    ? "border-maroon bg-maroon/10 text-maroon shadow-sm"
+                    ? "border-maroon bg-maroon/10 text-maroon shadow-sm ring-1 ring-maroon/50"
                     : "border-gold/40 bg-[#FAF7F2] text-ink hover:border-maroon"
                 }`}
               >
-                <span
-                  className="w-5 h-5 rounded-full border shrink-0 relative grid place-items-center"
-                  style={{
-                    backgroundColor: col.hex,
-                    borderColor: col.border || "rgba(0,0,0,0.15)",
-                  }}
-                >
-                  {active && <Check className="h-3 w-3 text-white drop-shadow-sm" />}
+                <div className="flex items-center gap-2 min-w-0">
+                  <span
+                    className="w-5 h-5 rounded-full border shrink-0 relative grid place-items-center"
+                    style={{
+                      backgroundColor: col.hex,
+                      borderColor: col.border || "rgba(0,0,0,0.15)",
+                    }}
+                  >
+                    {active && <Check className="h-3 w-3 text-white drop-shadow-sm" />}
+                  </span>
+                  <span className="truncate text-xs font-medium">{col.label}</span>
+                </div>
+                <span className="text-[10px] text-taupe font-bold shrink-0 ml-1">
+                  ({col.count})
                 </span>
-                <span className="truncate text-xs font-medium">{col.label}</span>
               </button>
             );
           })}

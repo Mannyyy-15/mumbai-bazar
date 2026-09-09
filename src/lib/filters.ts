@@ -248,10 +248,137 @@ export const PRICE_PRESETS = [
 ];
 
 export function matchesColor(p: Product, colorKey: string): boolean {
+  // Check dynamic color match first
+  if (matchesDynamicColor(p, colorKey)) return true;
   const color = COLOR_OPTIONS.find((c) => c.key === colorKey);
   if (!color) return false;
   const text = (p.name + " " + p.weave + " " + (p.details?.description || "") + " " + p.id).toLowerCase();
   return color.keywords.some((kw) => text.includes(kw));
+}
+
+export type DynamicColorFilterOption = {
+  key: string;
+  label: string;
+  hex: string;
+  border?: string;
+  count: number;
+};
+
+/**
+ * Extracts all authentic colors for a product based on its Shopify variants,
+ * options, or garment title (for single-variant products).
+ */
+export function getProductColors(p: Product): string[] {
+  const colors: string[] = [];
+
+  // 1. Explicit variants from Shopify
+  if (p.variants && Array.isArray(p.variants)) {
+    for (const v of p.variants) {
+      if (v.color && v.color.trim().toLowerCase() !== "default title") {
+        colors.push(v.color.trim());
+      } else if (v.selectedOptions && Array.isArray(v.selectedOptions)) {
+        for (const opt of v.selectedOptions) {
+          if (/colou?r/i.test(opt.name) && opt.value) {
+            colors.push(opt.value.trim());
+          }
+        }
+      } else if (v.title && v.title.trim().toLowerCase() !== "default title") {
+        colors.push(v.title.split("/")[0].trim());
+      }
+    }
+  }
+
+  // 2. Product options from Shopify
+  if (p.options && Array.isArray(p.options)) {
+    for (const opt of p.options) {
+      if (/colou?r/i.test(opt.name) && Array.isArray(opt.values)) {
+        for (const val of opt.values) {
+          if (val) colors.push(val.trim());
+        }
+      }
+    }
+  }
+
+  // 3. For single-variant products without explicit variant options, identify primary saree color
+  if (colors.length === 0) {
+    const text = `${p.name} ${p.id} ${p.weave || ""}`.toLowerCase();
+    const colorRules: Array<[string, string[]]> = [
+      ["Bottle Green", ["bottle green"]],
+      ["Rama", ["rama"]],
+      ["Navy Blue", ["navy blue", "navy"]],
+      ["Turquoise", ["turquoise", "neel tarang"]],
+      ["Blue", ["blue", "neelam"]],
+      ["Rani", ["rani"]],
+      ["Magenta", ["magenta"]],
+      ["Pink", ["pink", "gulabi"]],
+      ["Wine", ["wine"]],
+      ["Maroon", ["maroon"]],
+      ["Red", ["red", "sindoori", "lal"]],
+      ["Rust", ["rust"]],
+      ["Orange", ["orange", "kesarika"]],
+      ["Yellow", ["yellow", "rangbahar"]],
+      ["Gold", ["gold", "sunehri"]],
+      ["Green", ["green"]],
+      ["Purple", ["purple"]],
+      ["Black", ["black", "shyamali"]],
+      ["White", ["white", "ivory", "cream", "off-white"]],
+    ];
+
+    for (const [label, kws] of colorRules) {
+      if (kws.some((kw) => text.includes(kw))) {
+        colors.push(label);
+        break;
+      }
+    }
+  }
+
+  // Return unique colors preserving order
+  return Array.from(new Set(colors));
+}
+
+/**
+ * Dynamically derives available color filter options directly from the products catalogue.
+ * No hardcoded color list; each color reflects live Shopify variants and items.
+ */
+export function getDynamicColorOptions(products: Product[]): DynamicColorFilterOption[] {
+  const colorMap = new Map<string, { label: string; count: number }>();
+
+  for (const p of products) {
+    const pColors = getProductColors(p);
+    for (const raw of pColors) {
+      const key = raw.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      const existing = colorMap.get(key);
+      if (existing) {
+        existing.count += 1;
+      } else {
+        colorMap.set(key, { label: raw, count: 1 });
+      }
+    }
+  }
+
+  const result: DynamicColorFilterOption[] = [];
+  for (const [key, { label, count }] of colorMap.entries()) {
+    const resolved = resolveColorSwatch(label);
+    result.push({
+      key,
+      label,
+      hex: resolved.hex,
+      border: resolved.border,
+      count,
+    });
+  }
+
+  // Sort by product count descending (most popular colors first), then alphabetically
+  return result.sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+}
+
+export function matchesDynamicColor(p: Product, colorKey: string): boolean {
+  const pColors = getProductColors(p);
+  const targetKey = colorKey.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  return pColors.some((c) => {
+    const cKey = c.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    return cKey === targetKey || cKey.includes(targetKey) || targetKey.includes(cKey);
+  });
 }
 
 export function parsePriceNumber(s?: string | number | null): number {

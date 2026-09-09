@@ -18,7 +18,7 @@ import { fetchShopifyProduct } from "@/lib/shopify";
 import { useCatalog } from "@/lib/catalog-context";
 import { seo, jsonLd, SITE } from "@/lib/seo";
 import { productSchema, breadcrumbSchema, priceToSchema } from "@/lib/structured-data";
-import { COLOR_OPTIONS, resolveColorSwatch } from "@/lib/filters";
+import { resolveColorSwatch, getProductColors } from "@/lib/filters";
 
 export const Route = createFileRoute("/products/$id")({
   loader: async ({ params }) => {
@@ -132,9 +132,9 @@ function ProductDetail() {
 
   // Dynamically determine color swatches:
   // - If the product has multiple variants with distinct colors (e.g. Red, White, Black), extracts and displays all variant swatches.
-  // - For single-color products, detects and shows ONLY the primary main color of the saree (ignoring zari/border accents).
+  // Dynamically determine color swatches from Shopify variants and options
   const productColors = useMemo(() => {
-    // 1. Check for explicit variants on product (Shopify / catalog)
+    // 1. Check for explicit variants on product (from Shopify)
     const explicitVariants = product.variants;
     if (Array.isArray(explicitVariants) && explicitVariants.length > 1) {
       const list: Array<{
@@ -153,7 +153,7 @@ function ProductDetail() {
         const colorName =
           v.color ||
           v.selectedOptions?.find((o) => /colou?r/i.test(o.name))?.value ||
-          (v.title !== "Default Title" ? v.title.split("/")[0].trim() : null);
+          (v.title && v.title !== "Default Title" ? v.title.split("/")[0].trim() : null);
 
         if (colorName) {
           const key = colorName.toLowerCase();
@@ -200,76 +200,23 @@ function ProductDetail() {
       });
     }
 
-    // 3. For single-color products: identify the ONE primary main body color.
-    const cleanText = (str: string) =>
-      str
-        .toLowerCase()
-        .replace(/\b(gold\s+zari|golden\s+zari|antique\s+zari|silver\s+zari|zari\s+border|zari\s+pallu|zari\s+work|zari\s+buta|zari\s+buti)\b/gi, "")
-        .replace(/\b(golden\s+border|gold\s+border|silver\s+border)\b/gi, "");
-
-    const nameText = cleanText(product.name);
-    const idText = cleanText(product.id);
-
-    // Primary priority: match color in product name/title
-    for (const c of COLOR_OPTIONS) {
-      for (const kw of c.keywords) {
-        const regex = new RegExp(`\\b${kw}\\b`, "i");
-        if (regex.test(nameText)) {
-          const matchedWord = nameText.match(regex)?.[0] || kw;
-          const capitalized = matchedWord.charAt(0).toUpperCase() + matchedWord.slice(1).toLowerCase();
-          return [{
-            variantId: product.shopifyVariantId,
-            name: capitalized,
-            hex: c.hex,
-            border: c.border,
-            available: true,
-          }];
-        }
-      }
+    // 3. For single-variant products: identify authentic saree color from Shopify garment data
+    const detectedColors = getProductColors(product);
+    if (detectedColors.length > 0) {
+      const primaryColor = detectedColors[0];
+      const resolved = resolveColorSwatch(primaryColor);
+      return [
+        {
+          variantId: product.shopifyVariantId,
+          name: primaryColor,
+          hex: resolved.hex,
+          border: resolved.border,
+          available: true,
+        },
+      ];
     }
 
-    // Secondary priority: match color in product id/slug
-    for (const c of COLOR_OPTIONS) {
-      for (const kw of c.keywords) {
-        if (idText.includes(kw)) {
-          const capitalized = kw.charAt(0).toUpperCase() + kw.slice(1).toLowerCase();
-          return [{
-            variantId: product.shopifyVariantId,
-            name: capitalized,
-            hex: c.hex,
-            border: c.border,
-            available: true,
-          }];
-        }
-      }
-    }
-
-    // Tertiary priority: match in weave or description (with zari stripped)
-    const descText = cleanText((product.weave || "") + " " + (product.details?.description || ""));
-    for (const c of COLOR_OPTIONS) {
-      for (const kw of c.keywords) {
-        const regex = new RegExp(`\\b${kw}\\b`, "i");
-        if (regex.test(descText)) {
-          const matchedWord = descText.match(regex)?.[0] || kw;
-          const capitalized = matchedWord.charAt(0).toUpperCase() + matchedWord.slice(1).toLowerCase();
-          return [{
-            variantId: product.shopifyVariantId,
-            name: capitalized,
-            hex: c.hex,
-            border: c.border,
-            available: true,
-          }];
-        }
-      }
-    }
-
-    // Default fallback to 1 artisanal color
-    return [{
-      variantId: product.shopifyVariantId,
-      name: "Boutique Silk",
-      hex: "#641F2A",
-      available: true,
-    }];
+    return [];
   }, [product]);
 
   // Sync selected swatch with the product's primary featured image
@@ -488,46 +435,64 @@ function ProductDetail() {
 
               <div className="my-7 h-px bg-maroon/15" />
 
-              {/* Colour swatches — dynamic according to product */}
-              <div>
-                <div className="flex items-center justify-between">
-                  <p className="text-xs uppercase tracking-[0.16em] text-maroon font-bold">
-                    {productColors.length > 1 ? "Select Variant Colour" : "Product Colour"}
-                  </p>
+              {/* Colour swatches — dynamic according to Shopify product variants */}
+              {productColors.length > 1 ? (
+                <div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs uppercase tracking-[0.16em] text-maroon font-bold">
+                      Select Variant Colour
+                    </p>
+                    <span className="text-xs uppercase tracking-[0.14em] text-maroon font-semibold">
+                      {currentSwatch?.name}
+                    </span>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    {productColors.map((s, i) => (
+                      <button
+                        key={s.name + i}
+                        onClick={() => handleSelectSwatch(i)}
+                        aria-label={`Select ${s.name}`}
+                        title={s.name}
+                        className={`relative h-11 w-11 rounded-full border transition-all duration-200 ${
+                          swatch === i
+                            ? "border-maroon ring-2 ring-maroon ring-offset-2 ring-offset-ivory scale-105 shadow-sm"
+                            : "border-maroon/30 hover:border-maroon/60"
+                        }`}
+                        style={{
+                          backgroundColor: s.hex,
+                          borderColor: s.border || undefined,
+                        }}
+                      >
+                        {swatch === i && (
+                          <Check
+                            className={`absolute inset-0 m-auto h-4 w-4 ${
+                              s.hex.toLowerCase() === "#f5efeb" || s.hex.toLowerCase() === "#ffffff"
+                                ? "text-maroon"
+                                : "text-ivory"
+                            } drop-shadow-sm`}
+                          />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : productColors.length === 1 && productColors[0].name ? (
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xs uppercase tracking-[0.16em] text-maroon font-bold">
+                    Saree Colour:
+                  </span>
+                  <span
+                    className="w-4 h-4 rounded-full border border-maroon/30 inline-block shadow-inner"
+                    style={{
+                      backgroundColor: productColors[0].hex,
+                      borderColor: productColors[0].border || undefined,
+                    }}
+                  />
                   <span className="text-xs uppercase tracking-[0.14em] text-maroon font-semibold">
-                    {currentSwatch.name}
+                    {productColors[0].name}
                   </span>
                 </div>
-                <div className="mt-4 flex flex-wrap gap-3">
-                  {productColors.map((s, i) => (
-                    <button
-                      key={s.name + i}
-                      onClick={() => handleSelectSwatch(i)}
-                      aria-label={`Select ${s.name}`}
-                      title={s.name}
-                      className={`relative h-11 w-11 rounded-full border transition-all duration-200 ${
-                        swatch === i
-                          ? "border-maroon ring-2 ring-maroon ring-offset-2 ring-offset-ivory scale-105 shadow-sm"
-                          : "border-maroon/30 hover:border-maroon/60"
-                      }`}
-                      style={{
-                        backgroundColor: s.hex,
-                        borderColor: s.border || undefined,
-                      }}
-                    >
-                      {swatch === i && (
-                        <Check
-                          className={`absolute inset-0 m-auto h-4 w-4 ${
-                            s.hex.toLowerCase() === "#f5efeb" || s.hex.toLowerCase() === "#ffffff"
-                              ? "text-maroon"
-                              : "text-ivory"
-                          } drop-shadow-sm`}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              ) : null}
 
               {/* Quantity + Add */}
               <div className="mt-8 flex items-stretch gap-3">
