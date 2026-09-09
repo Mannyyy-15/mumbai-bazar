@@ -974,8 +974,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
       "wedding-sarees",
       "silk-sarees"
     ],
-    "img": "/products/gulab-box-white-1.jpg",
-    "secondaryImg": "/products/gulab-box-white-2.jpg",
+    "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
+    "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_2.png?v=1788797034",
     "variants": [
       {
         "id": "gid://shopify/ProductVariant/51408935223332",
@@ -984,7 +984,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 1,249",
         "original": "\u20b9 2,999",
         "available": true,
-        "img": null,
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
         "selectedOptions": [
           {
             "name": "Border Colour",
@@ -999,7 +999,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 1,249",
         "original": "\u20b9 2,999",
         "available": true,
-        "img": null,
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
         "selectedOptions": [
           {
             "name": "Border Colour",
@@ -1014,7 +1014,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 1,249",
         "original": "\u20b9 2,999",
         "available": true,
-        "img": null,
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
         "selectedOptions": [
           {
             "name": "Border Colour",
@@ -1048,8 +1048,10 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
       ],
       "description": "Drape yourself in timeless elegance with this stunning white silk blend saree, crafted for women who appreciate traditional artistry and graceful style. The saree features a rich blue embroidered border adorned with delicate sequin work and intricate floral butta embroidery near the lower border and pallu, lending it a regal and festive appeal. The lightweight silk blend fabric ensures a comfortable, fluid drape that flatters every silhouette. Paired with a matching blue unstitched blouse piece in a stylish printed design, this saree offers the flexibility to get the blouse tailored to your preferred fit and style. The classic white and blue colour combination makes it a versatile choice for a wide range of occasions, including weddings, festivals, parties, receptions, and traditional functions. Dry cleaning is recommended to maintain the fabric's lustre and embroidery. Each package includes one saree and one unstitched blouse piece. Handcrafted in India, this saree is a beautiful blend of heritage craftsmanship and contemporary elegance.",
       "gallery": [
-        "/products/gulab-box-white-1.jpg",
-        "/products/gulab-box-white-2.jpg"
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_2.png?v=1788797034",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_3.png?v=1788797034",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_4.png?v=1788797034"
       ]
     }
   },
@@ -1146,6 +1148,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/redsaree_2.png?v=1788796964",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/redsaree_3.png?v=1788796965",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/redsaree_4.png?v=1788796964",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/redsaree_6.png?v=1788796964",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_2.png?v=1788797034",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_3.png?v=1788797034",
@@ -1153,15 +1156,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/blacksaree_1.png?v=1788797046",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/blacksaree_2.png?v=1788797046",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/blacksaree_3.png?v=1788797046",
-        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/blacksaree_4.png?v=1788797046",
-        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/redsaree_6.png?v=1788796964",
-        "/products/gulab-box-red-1.jpg",
-        "/products/gulab-box-red-2.jpg",
-        "/products/gulab-box-red-3.jpg",
-        "/products/gulab-box-white-1.jpg",
-        "/products/gulab-box-white-2.jpg",
-        "/products/gulab-box-white-3.jpg",
-        "/products/gulab-box-black-1.jpg"
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/blacksaree_4.png?v=1788797046"
       ]
     }
   },
@@ -1240,8 +1235,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
       "festive-edit",
       "everyday-sarees"
     ],
-    "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/IMG-20260826-WA0034_jpg.png?v=1788797349",
-    "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine3.png?v=1788797370",
+    "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareebottlegreen1.png?v=1788797386",
+    "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareebottlegreen2.png?v=1788797386",
     "variants": [
       {
         "id": "gid://shopify/ProductVariant/51408935649316",
@@ -1295,7 +1290,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 1,249",
         "original": "\u20b9 1,899",
         "available": true,
-        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine3.png?v=1788797370",
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine1.png?v=1788797370",
         "selectedOptions": [
           {
             "name": "Colour",
@@ -1330,18 +1325,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
       ],
       "description": "Add a touch of timeless tradition to your wardrobe with this stunning Kalyani Cotton Jhumar Silk Saree in a rich, deep magenta hue. Crafted from a fine cotton silk blend, this saree beautifully combines comfort with elegance, making it ideal for weddings, festivals, and other special occasions. The saree is adorned with intricate golden zari buti work scattered across the body, complemented by rows of delicate floral and geometric woven motifs. A bold temple-style zari border frames the saree gracefully, while the eye-catching jhalar pallu with decorative tassels adds a festive finishing touch. The saree measures 6 metres in length and comes with an unstitched blouse piece of 0.8 metres in a self-design silk cotton blend fabric, allowing you to customise the fit to your preference. The thick gold zari border lends a regal look that pairs beautifully with traditional jewellery. Whether you are attending a wedding ceremony or celebrating a festival, this Banarasi-style saree is sure to make you stand out. Dry clean recommended to maintain the lustre and longevity of the fabric.",
       "gallery": [
-        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/IMG-20260826-WA0034_jpg.png?v=1788797349",
-        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine3.png?v=1788797370",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareebottlegreen1.png?v=1788797386",
-        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareebottlegreen3.png?v=1788797386",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareebottlegreen2.png?v=1788797386",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareebottlegreen3.png?v=1788797386",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/IMG-20260826-WA0034_jpg.png?v=1788797349",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/IMG-20260826-WA0035.png?v=1788797349",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/IMG-20260826-WA0036_jpg.png?v=1788797349",
-        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine1.png?v=1788797370",
-        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine2.png?v=1788797370",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareerama1.png?v=1788797377",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareerama2.png?v=1788797376",
-        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareerama3.png?v=1788797377"
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareerama3.png?v=1788797377",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine1.png?v=1788797370",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine2.png?v=1788797370",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine3.png?v=1788797370"
       ]
     }
   },
@@ -1360,8 +1355,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
       "wedding-sarees",
       "silk-sarees"
     ],
-    "img": "/products/woven-magenta-1.jpeg",
-    "secondaryImg": "/products/woven-magenta-2.jpeg",
+    "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
+    "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_50_12PM.png?v=1787980563",
     "variants": [
       {
         "id": "gid://shopify/ProductVariant/51408935976996",
@@ -1370,7 +1365,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 999",
         "original": "\u20b9 1,999",
         "available": true,
-        "img": null,
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
           {
             "name": "Colour",
@@ -1385,7 +1380,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 999",
         "original": "\u20b9 1,999",
         "available": true,
-        "img": null,
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
           {
             "name": "Colour",
@@ -1400,7 +1395,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 999",
         "original": "\u20b9 1,999",
         "available": true,
-        "img": null,
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
           {
             "name": "Colour",
@@ -1415,7 +1410,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 999",
         "original": "\u20b9 1,999",
         "available": true,
-        "img": null,
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
           {
             "name": "Colour",
@@ -1430,7 +1425,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 999",
         "original": "\u20b9 1,999",
         "available": true,
-        "img": null,
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
           {
             "name": "Colour",
@@ -1445,7 +1440,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "price": "\u20b9 999",
         "original": "\u20b9 1,999",
         "available": true,
-        "img": null,
+        "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
           {
             "name": "Colour",
@@ -1482,8 +1477,10 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
       ],
       "description": "Add timeless elegance to your ethnic collection with this beautiful Maheshwari silk saree for women. The saree features evenly spaced gold-toned woven butti work across the body, complemented by a traditional zari-woven border and an attractive contrast pallu decorated with ornamental motifs and tassels. Its elegant colour combination and rich traditional detailing make it suitable for weddings, festivals, family functions, parties, pujas and special occasions. The saree comes with a coordinated contrast unstitched blouse piece that can be tailored to your preferred style. Package Contains: 1 Saree with 1 Unstitched Blouse Piece Work: Woven Butti and Zari Work Occasion: Wedding, Festive, Party and Traditional Wear Wash Care: Dry clean recommended",
       "gallery": [
-        "/products/woven-magenta-1.jpeg",
-        "/products/woven-magenta-2.jpeg"
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_50_12PM.png?v=1787980563",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_47_15PM.png?v=1787980563",
+        "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_47_25PM.png?v=1787980563"
       ]
     }
   },

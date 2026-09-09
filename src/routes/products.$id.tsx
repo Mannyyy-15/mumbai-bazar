@@ -319,11 +319,20 @@ function ProductDetail() {
     `Hello Mumbai Bazar, I'd like to enquire about "${product.name}" (${product.price}). Could you share availability and drape details?`,
   );
   const waHref = `https://wa.me/${SITE.whatsapp}?text=${waMsg}`;
+  const thumbRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+
+  // Auto-scroll active thumbnail into view when active changes
+  useEffect(() => {
+    const activeEl = thumbRefs.current.get(active);
+    if (activeEl) {
+      activeEl.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    }
+  }, [active]);
 
   return (
-    <div className="bg-ivory text-ink pb-28 md:pb-0">
-      {/* Breadcrumb */}
-      <div className="mx-auto max-w-[1600px] px-4 md:px-8 pt-5 md:pt-6 border-b border-maroon/40 pb-4">
+    <div className="bg-ivory text-ink">
+      {/* Breadcrumbs */}
+      <div className="border-b border-gold/30 bg-[#FAF7F2] px-4 md:px-8 py-3">
         <nav className="flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] text-maroon/60">
           <Link to="/" className="hover:text-maroon">
             Home
@@ -343,17 +352,21 @@ function ProductDetail() {
           {/* LEFT — Thumbnail rail + Main image (sticky) */}
           <div className="md:col-span-7">
             <div className="md:sticky md:top-24 flex flex-col md:flex-row gap-3 md:gap-4">
-              {/* Vertical thumbnail rail for Desktop */}
-              <div className="hidden md:flex flex-col gap-3 w-20 shrink-0 max-h-[calc(100vh-8rem)] overflow-y-auto scrollbar-hide">
+              {/* Vertical thumbnail rail for Desktop — generous size, scrollable */}
+              <div className="hidden md:flex flex-col gap-3 w-24 lg:w-28 shrink-0 max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden pr-1.5 scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgba(88,17,26,0.3)_rgba(88,17,26,0.05)]">
                 {gallery.map((g: string, i: number) => (
                   <button
                     key={i}
+                    ref={(el) => {
+                      if (el) thumbRefs.current.set(i, el);
+                      else thumbRefs.current.delete(i);
+                    }}
                     onClick={() => setActive(i)}
                     aria-label={`View image ${i + 1}`}
-                    className={`aspect-[4/5] overflow-hidden rounded-lg bg-[#F0E9DC] border transition-all ${
+                    className={`aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#F0E9DC] border-2 transition-all duration-200 shrink-0 ${
                       active === i
-                        ? "border-maroon shadow-sm"
-                        : "border-transparent hover:border-maroon/40 opacity-70 hover:opacity-100"
+                        ? "border-maroon shadow-md scale-[1.02] ring-2 ring-maroon/20"
+                        : "border-gold/30 hover:border-maroon/50 opacity-75 hover:opacity-100"
                     }`}
                   >
                     <img src={g} alt="" className="h-full w-full object-cover object-top" />
@@ -383,17 +396,21 @@ function ProductDetail() {
                 </button>
               </div>
 
-              {/* Mobile thumbnail strip: clean 1-line horizontal scrollable rail */}
-              <div className="md:hidden flex items-center gap-2 overflow-x-auto no-scrollbar py-1 px-0.5">
+              {/* Mobile thumbnail strip: horizontal scrollable rail with generous size */}
+              <div className="md:hidden flex items-center gap-2.5 overflow-x-auto scroll-smooth py-2 px-1 [scrollbar-width:none]">
                 {gallery.map((g: string, i: number) => (
                   <button
                     key={i}
+                    ref={(el) => {
+                      if (el) thumbRefs.current.set(i, el);
+                      else thumbRefs.current.delete(i);
+                    }}
                     onClick={() => setActive(i)}
                     aria-label={`Select photo ${i + 1}`}
-                    className={`w-14 h-16 sm:w-16 sm:h-20 shrink-0 rounded-xl overflow-hidden bg-[#F0E9DC] border-2 transition-all ${
+                    className={`w-16 h-20 sm:w-20 sm:h-24 shrink-0 rounded-xl overflow-hidden bg-[#F0E9DC] border-2 transition-all duration-200 ${
                       active === i
-                        ? "border-maroon shadow-sm scale-105"
-                        : "border-gold/40 opacity-70 hover:opacity-100"
+                        ? "border-maroon shadow-md scale-105 ring-2 ring-maroon/20"
+                        : "border-gold/40 opacity-75 hover:opacity-100"
                     }`}
                   >
                     <img src={g} alt="" className="h-full w-full object-cover object-top" />
