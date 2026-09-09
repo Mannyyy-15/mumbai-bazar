@@ -557,8 +557,8 @@ function ShopFilterSidebar({
 
       {/* 1. PRICE RANGE FILTER */}
       <FilterAccordion title="Price Range" defaultOpen={true}>
-        <div className="space-y-3 pt-1">
-          {/* Quick Preset Buttons */}
+        <div className="pt-1">
+          {/* Quick Preset Buttons - 3 Price Ranges Only */}
           <div className="grid grid-cols-1 gap-2">
             {PRICE_PRESETS.map((preset) => {
               const active = selPricePreset === preset.key;
@@ -577,36 +577,6 @@ function ShopFilterSidebar({
                 </button>
               );
             })}
-          </div>
-
-          {/* Custom Min / Max Inputs */}
-          <div className="pt-2 border-t border-gold/30">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-maroon block mb-2">
-              Custom Range (₹)
-            </span>
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                placeholder="Min"
-                value={customPriceMin}
-                onChange={(e) => onCustomPriceMinChange(e.target.value)}
-                className="w-1/2 px-3 py-2 text-xs font-medium border border-gold/50 rounded-lg bg-[#FAF8F5] text-ink focus:border-maroon focus:outline-none"
-              />
-              <span className="text-xs text-taupe font-bold">–</span>
-              <input
-                type="number"
-                placeholder="Max"
-                value={customPriceMax}
-                onChange={(e) => onCustomPriceMaxChange(e.target.value)}
-                className="w-1/2 px-3 py-2 text-xs font-medium border border-gold/50 rounded-lg bg-[#FAF8F5] text-ink focus:border-maroon focus:outline-none"
-              />
-            </div>
-            <button
-              onClick={onApplyCustomPrice}
-              className="mt-2.5 w-full py-2 rounded-lg bg-maroon text-white text-[11px] font-bold uppercase tracking-wider hover:bg-wine transition-colors"
-            >
-              Apply Price
-            </button>
           </div>
         </div>
       </FilterAccordion>

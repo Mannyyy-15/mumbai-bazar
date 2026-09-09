@@ -241,10 +241,8 @@ export const FABRIC_OPTIONS: FabricFilterOption[] = [
 
 export const PRICE_PRESETS = [
   { key: "u1k", label: "Under ₹ 1,000", min: 0, max: 999 },
-  { key: "1k-5k", label: "₹ 1,000 – ₹ 5,000", min: 1000, max: 5000 },
-  { key: "5k-15k", label: "₹ 5,000 – ₹ 15,000", min: 5000, max: 15000 },
-  { key: "15k-30k", label: "₹ 15,000 – ₹ 30,000", min: 15000, max: 30000 },
-  { key: "30kp", label: "Above ₹ 30,000", min: 30000, max: Infinity },
+  { key: "1k-3k", label: "₹ 1,000 – ₹ 3,000", min: 1000, max: 3000 },
+  { key: "3k-5k", label: "₹ 3,000 – ₹ 5,000", min: 3000, max: 5000 },
 ];
 
 export function matchesColor(p: Product, colorKey: string): boolean {
