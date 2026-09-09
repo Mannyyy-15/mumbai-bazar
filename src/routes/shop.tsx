@@ -204,12 +204,12 @@ function ShopPage() {
         // When filtering by specific variant colors, prioritize items with explicit matching variants
         if (selColors.size > 0) {
           list.sort((a, b) => {
-            const hasVarA = (a.variants || []).some(
-              (v) => v.color && Array.from(selColors).some((ck) => ck.includes(v.color.toLowerCase())),
-            );
-            const hasVarB = (b.variants || []).some(
-              (v) => v.color && Array.from(selColors).some((ck) => ck.includes(v.color.toLowerCase())),
-            );
+            const matchesSelectedColor = (v: { color?: string | null }) => {
+              const color = v.color?.toLowerCase();
+              return Boolean(color) && Array.from(selColors).some((ck) => ck.includes(color!));
+            };
+            const hasVarA = (a.variants || []).some(matchesSelectedColor);
+            const hasVarB = (b.variants || []).some(matchesSelectedColor);
             return Number(hasVarB) - Number(hasVarA);
           });
         }

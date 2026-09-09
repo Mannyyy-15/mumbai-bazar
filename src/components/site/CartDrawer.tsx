@@ -14,12 +14,20 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useCart, formatINR, type CartItem } from "@/lib/cart-context";
+import { getDirectCheckoutUrl } from "@/lib/shopify";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { useCountUp } from "@/hooks/use-count-up";
 import { SITE } from "@/lib/seo";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, setQty, removeItem, subtotal, count, checkoutUrl } = useCart();
+
+  // Shopify's cart API can be slow or fail. Rather than leave the checkout
+  // button pointing at "#" — a dead click on the highest-intent action in the
+  // funnel — fall back to a Shopify cart permalink built from the first line.
+  const firstVariantId = items.find((i) => i.shopifyVariantId)?.shopifyVariantId;
+  const checkoutHref =
+    checkoutUrl ?? (firstVariantId ? getDirectCheckoutUrl(firstVariantId, 1) : undefined);
   const panelRef = useFocusTrap<HTMLElement>(isOpen);
 
   const waMsg = encodeURIComponent(
@@ -146,7 +154,11 @@ export function CartDrawer() {
               {/* Action Buttons */}
               <div className="mt-4 grid gap-2.5">
                 <a
-                  href={checkoutUrl || "#"}
+                  href={checkoutHref ?? "#"}
+                  aria-disabled={!checkoutHref}
+                  onClick={(e) => {
+                    if (!checkoutHref) e.preventDefault();
+                  }}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-wine active:scale-98 transition-all shadow-md"
                 >
                   <Lock className="h-4 w-4" />

@@ -66,7 +66,7 @@ export type ProductDetails = {
 export type ProductVariant = {
   id: string;
   title: string;
-  color?: string;
+  color?: string | null;
   price?: string;
   original?: string;
   available?: boolean;
@@ -77,12 +77,12 @@ export type ProductVariant = {
 export type Product = {
   id: string;
   img: string;
-  secondaryImg?: string;
+  secondaryImg?: string | null;
   name: string;
   weave: string;
   price: string;
   original?: string;
-  tag?: "New" | "Bestseller";
+  tag?: "New" | "Bestseller" | null;
   category: (
     "new-arrivals" | "wedding-sarees" | "silk-sarees" | "festive-edit" | "everyday-sarees"
   )[];
@@ -91,7 +91,7 @@ export type Product = {
   handle?: string;
   details?: ProductDetails;
   variants?: ProductVariant[];
-  options?: Array<{ id?: string; name: string; values: string[] }>;
+  options?: Array<{ id?: string; name: string; values: string[] }> | null;
 };
 
 const commonCare = [
