@@ -371,7 +371,7 @@ function ShopPage() {
                     <span className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm">
                       <IndianRupee className="h-3 w-3 text-gold-deep" />
                       {selPricePreset
-                        ? PRICE_PRESETS.find((p) => p.key === selPricePreset)!.label
+                        ? (PRICE_PRESETS.find((p) => p.key === selPricePreset)?.label || "Price Filter")
                         : `₹ ${appliedPriceRange?.min.toLocaleString("en-IN")} – ${appliedPriceRange?.max === Infinity ? "Above" : "₹ " + appliedPriceRange?.max.toLocaleString("en-IN")}`}
                       <button
                         onClick={() => {
@@ -389,7 +389,9 @@ function ShopPage() {
 
                   {/* Color Chips */}
                   {Array.from(selColors).map((cKey) => {
-                    const cOpt = availableColors.find((c) => c.key === cKey) || COLOR_OPTIONS.find((c) => c.key === cKey);
+                    const cOpt = availableColors.find((c) => c.key === cKey) || (typeof COLOR_OPTIONS !== "undefined" ? COLOR_OPTIONS.find((c) => c.key === cKey) : undefined);
+                    const label = cOpt?.label || cKey.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+                    const hex = cOpt?.hex || "#D4AF37";
                     return (
                       <span
                         key={cKey}
@@ -397,9 +399,9 @@ function ShopPage() {
                       >
                         <span
                           className="w-3 h-3 rounded-full border border-black/20"
-                          style={{ backgroundColor: cOpt?.hex }}
+                          style={{ backgroundColor: hex }}
                         />
-                        {cOpt?.label}
+                        {label}
                         <button
                           onClick={() => toggle(setSelColors, selColors, cKey)}
                           className="text-maroon/60 hover:text-maroon ml-0.5"
@@ -418,7 +420,7 @@ function ShopPage() {
                         key={tKey}
                         className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
                       >
-                        {tOpt?.label}
+                        {tOpt?.label || tKey}
                         <button
                           onClick={() => toggle(setSelTypes, selTypes, tKey)}
                           className="text-maroon/60 hover:text-maroon ml-0.5"
@@ -437,7 +439,7 @@ function ShopPage() {
                         key={fKey}
                         className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
                       >
-                        {fOpt?.label}
+                        {fOpt?.label || fKey}
                         <button
                           onClick={() => toggle(setSelFabrics, selFabrics, fKey)}
                           className="text-maroon/60 hover:text-maroon ml-0.5"
