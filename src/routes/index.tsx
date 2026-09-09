@@ -113,7 +113,7 @@ const SLIDES: Slide[] = [
     eyebrow: "Bridal & Trousseau 2026",
     title: "The Royal",
     italic: "Trousseau Edit",
-    copy: "Bridal and dulhan sarees, designer lehengas and tissue drapes for the bride and her celebrations.",
+    copy: "Dulhan sarees, designer lehengas and party wear for the bride and her family.",
     cta: { label: "Shop Bridal Sarees", to: "/wedding-sarees" },
     secondary: { label: "View Collections", to: "/collections" },
     img: HERO_SLIDE_1,
@@ -1459,7 +1459,7 @@ function Testimonials() {
       city: "Hyderabad",
       img: TESTIMONIAL_IMGS.t3,
       quote:
-        "The tissue silk drapes like a dream. Mumbai Bazar has become my go-to for every festive occasion.",
+        "The tissue silk falls beautifully. Mumbai Bazar is now my first stop for every festival.",
     },
   ];
 
@@ -1541,7 +1541,7 @@ function InstagramBanner() {
     },
     {
       img: "/instagram/reel_4_rakhi_special.jpg",
-      title: "Festive Silk & Party Drapes",
+      title: "Festive Silk & Party Wear",
       views: "110K",
       tag: "Festive Drop",
     },

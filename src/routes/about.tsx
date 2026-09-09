@@ -117,18 +117,18 @@ const CLUSTERS = [
     region: "Kanchipuram, Tamil Nadu",
     name: "Kanjivaram Silk",
     detail: "Three-shuttle interlocked temple borders and heavy 700g+ sculpted pleating.",
-    bestFor: "South Indian muhurthams, heirloom trousseaus",
+    bestFor: "South Indian weddings and family functions",
   },
   {
     region: "Yeola & Paithan, Maharashtra",
     name: "Paithani Peacock Heritage",
-    detail: "Muniya borders, Asavali floral vines, and radiant kaleidoscope pallu drapes.",
+    detail: "Muniya borders, floral vine designs and bright, colourful pallus.",
     bestFor: "Gudi Padwa, Ganesh Chaturthi, Maharashtrian weddings",
   },
   {
     region: "Chanderi & Maheshwar, MP",
     name: "Chanderi Silk-Cotton & Zari",
-    detail: "Featherlight translucent drapes woven with pure cotton warps and silk wefts.",
+    detail: "Light, soft sarees made with pure cotton and silk.",
     bestFor: "Daytime celebrations, sangeet, summer festivals",
   },
 ];

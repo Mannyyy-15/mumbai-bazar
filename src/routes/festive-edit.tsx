@@ -29,13 +29,7 @@ export const Route = createFileRoute("/festive-edit")({
       meta,
       links,
       scripts: [
-        jsonLd(
-          itemListSchema(
-            categoryProducts,
-            "Festive Sarees",
-            "/festive-edit",
-          ),
-        ),
+        jsonLd(itemListSchema(categoryProducts, "Festive Sarees", "/festive-edit")),
         jsonLd(
           breadcrumbSchema([
             { name: "Home", path: "/" },
@@ -55,7 +49,7 @@ function FestiveEditPage() {
         eyebrow="Festive & Occasion"
         title="Festive & Celebration Sarees"
         crumb="Festive Edit"
-        copy="Sparkling zari and festive colors curated for Diwali, pujas, and evening galas."
+        copy="Shiny zari and bright colours for Diwali, pujas and evening parties."
         heroImg={IMG.colFestive}
         category="festive-edit"
         showHero={false}

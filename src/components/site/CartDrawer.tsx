@@ -80,7 +80,7 @@ export function CartDrawer() {
                 Your Shopping Bag
               </h2>
               <p className="text-xs font-semibold text-ink/70">
-                {count} {count === 1 ? "handwoven drape" : "handwoven drapes"}
+                {count} {count === 1 ? "item" : "items"}
               </p>
             </div>
           </div>

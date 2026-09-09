@@ -29,13 +29,7 @@ export const Route = createFileRoute("/everyday-sarees")({
       meta,
       links,
       scripts: [
-        jsonLd(
-          itemListSchema(
-            categoryProducts,
-            "Everyday Sarees",
-            "/everyday-sarees",
-          ),
-        ),
+        jsonLd(itemListSchema(categoryProducts, "Everyday Sarees", "/everyday-sarees")),
         jsonLd(
           breadcrumbSchema([
             { name: "Home", path: "/" },
@@ -55,7 +49,7 @@ function EverydaySareesPage() {
         eyebrow="Daily Soft Silks"
         title="Everyday & Ready-to-Wear Sarees"
         crumb="Everyday Sarees"
-        copy="Soft, breathable drapes crafted for everyday luxury and effortless style."
+        copy="Soft, comfortable sarees you can wear every day and to office."
         heroImg={IMG.colPuresilk}
         category="everyday-sarees"
         showHero={false}

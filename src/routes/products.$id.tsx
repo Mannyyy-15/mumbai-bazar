@@ -47,7 +47,7 @@ export const Route = createFileRoute("/products/$id")({
     const p = loaderData.product;
     const desc =
       p.details?.description ??
-      `${p.name} in ${p.weave}. Available to see and drape at our stores, with delivery across India.`;
+      `${p.name} in ${p.weave}. See it and try it on at our stores, or order online with delivery across India.`;
     // Titles are truncated by Google at roughly 60 characters. The old template
     // — `${name} — Buy ${weave} Online at Best Price | Mumbai Bazar` — ran
     // 82-115 characters on every product, so the brand and half the value

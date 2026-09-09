@@ -30,13 +30,7 @@ export const Route = createFileRoute("/wedding-sarees")({
       meta,
       links,
       scripts: [
-        jsonLd(
-          itemListSchema(
-            categoryProducts,
-            "Wedding & Bridal Sarees",
-            "/wedding-sarees",
-          ),
-        ),
+        jsonLd(itemListSchema(categoryProducts, "Wedding & Bridal Sarees", "/wedding-sarees")),
         jsonLd(
           breadcrumbSchema([
             { name: "Home", path: "/" },
@@ -56,7 +50,7 @@ function WeddingSareesPage() {
         eyebrow="Trousseau Curation"
         title="Wedding & Bridal Sarees"
         crumb="Wedding Sarees"
-        copy="Handloomed royal drapes designed for bridal ceremonies and grand celebrations."
+        copy="Rich wedding sarees for the bride, and for every function around it."
         heroImg={IMG.colFestive}
         category="wedding-sarees"
         showHero={false}

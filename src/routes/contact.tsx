@@ -221,7 +221,7 @@ function ContactPage() {
                   24h Response
                 </span>
               </div>
-              <h3 className="mt-5 font-serif text-xl font-bold text-maroon">Atelier Email Desk</h3>
+              <h3 className="mt-5 font-serif text-xl font-bold text-maroon">Email Us</h3>
               <p className="mt-2 text-sm text-ink leading-relaxed">
                 For order status updates, corporate gifting, wholesale inquiries, or press
                 collaboration requests.
@@ -470,7 +470,7 @@ function ContactPage() {
                   <span className="text-[11px] font-bold text-maroon uppercase tracking-wider block">
                     See Before You Buy
                   </span>
-                  <span className="text-[10px] text-ink block mt-0.5">Drape it in store</span>
+                  <span className="text-[10px] text-ink block mt-0.5">Try it on in store</span>
                 </div>
                 <div className="text-center p-3 rounded-2xl bg-white/80 border border-gold/30">
                   <Truck className="h-6 w-6 text-maroon mx-auto mb-1.5" />

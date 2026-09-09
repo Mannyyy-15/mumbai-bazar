@@ -42,15 +42,15 @@ export type CategoryCopy = {
 export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   "silk-sarees": {
     intro:
-      "Silk and silk-blend drapes in Banarasi, Kanjivaram, Paithani and Chanderi styles. Every piece here can be unfolded, draped and seen in daylight at any of our stores before you decide — the part a photograph cannot do for you.",
+      "Silk and silk-blend sarees in Banarasi, Kanjivaram, Paithani and Chanderi styles. You can open any saree and see it in daylight at any of our stores before you decide — the part a photograph cannot do for you.",
     guide: [
       {
         heading: "Silk, silk-blend, and how to tell what you are holding",
-        body: "Fabric names in the saree trade are loose, so it helps to know what you are actually comparing. Pure silk has weight and a soft rustle, warms in the hand, and its shine shifts colour as you turn it. Silk-blends and art silks are lighter, cooler to the touch, and hold a flatter, more even shine. Neither is wrong — a blend drapes more easily and costs far less — but they are different things and should be priced differently. We will tell you plainly which one a piece is, and you are welcome to compare two side by side on the counter.",
+        body: "Fabric names in the saree trade are loose, so it helps to know what you are actually comparing. Pure silk has weight and a soft rustle, warms in the hand, and its shine shifts colour as you turn it. Silk-blends and art silks are lighter, cooler to the touch, and hold a flatter, more even shine. Neither is wrong — a blend is lighter to wear and costs far less — but they are different things and should be priced differently. We will tell you plainly which one a piece is, and you are welcome to compare two side by side on the counter.",
       },
       {
-        heading: "Matching the weave to the occasion",
-        body: "Banarasi katan and heavier brocades hold their shape and photograph well under indoor lighting, which is why they suit weddings and receptions. Kanjivaram-style weaves with contrast borders carry temple visits and daytime functions. Chanderi and tissue are far lighter, so they work for long events in Mumbai heat where a heavy drape becomes punishing by hour three. If you are buying for a specific function, tell us the venue and time of day — it narrows the choice faster than any filter.",
+        heading: "Choosing the right saree for the occasion",
+        body: "Banarasi katan and heavier brocades hold their shape and photograph well under indoor lighting, which is why they suit weddings and receptions. Kanjivaram-style sarees with contrast borders carry temple visits and daytime functions. Chanderi and tissue are far lighter, so they work for long events in Mumbai heat where a heavy saree becomes hard work by hour three. If you are buying for a specific function, tell us the venue and time of day — it narrows the choice faster than any filter.",
       },
       {
         heading: "Living with a silk saree",
@@ -66,7 +66,7 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
 
   "wedding-sarees": {
     intro:
-      "Dulhan sarees, reception drapes and bridal lehengas, with blouse stitching and fittings handled in store. Bridal buying is rarely one visit — most families come two or three times, and that is entirely normal.",
+      "Dulhan sarees, reception sarees and bridal lehengas, with blouse stitching and fittings handled in store. Bridal buying is rarely one visit — most families come two or three times, and that is entirely normal.",
     guide: [
       {
         heading: "Start earlier than feels necessary",
@@ -74,7 +74,7 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
       },
       {
         heading: "Dressing the whole function, not just the day",
-        body: "Most brides need more than one drape: the pheras, the reception, the sangeet, and often haldi and mehendi. These have genuinely different requirements — the pheras drape sits for hours and needs to survive being sat in, while a reception piece is worn standing and photographed constantly. Buying them together also lets you coordinate the mother of the bride and the bridesmaids in one visit instead of chasing colour matches across three trips.",
+        body: "Most brides need more than one saree: the pheras, the reception, the sangeet, and often haldi and mehendi. These have genuinely different requirements — the saree for the pheras sits for hours and has to survive being sat in, while a reception piece is worn standing and photographed constantly. Buying them together also lets you coordinate the mother of the bride and the bridesmaids in one visit instead of chasing colour matches across three trips.",
       },
       {
         heading: "Bring the jewellery, or a photograph of it",
@@ -82,7 +82,7 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
       },
       {
         heading: "Trying before buying",
-        body: "Every piece can be draped in store. For bridal, this matters more than for anything else we sell: fall, weight and how a border sits at the shoulder are all things you cannot judge from a folded stack. Our flagship in Nalasopara East carries the widest bridal range, and the Virar, Bhayandar and Goregaon stores can have a piece brought across if you have seen something you like.",
+        body: "You can try on any saree in store. For bridal, this matters more than for anything else we sell: fall, weight and how a border sits at the shoulder are all things you cannot judge from a folded stack. Our flagship in Nalasopara East carries the widest bridal range, and the Virar, Bhayandar and Goregaon stores can have a piece brought across if you have seen something you like.",
       },
     ],
     relatedGuides: [
@@ -94,11 +94,11 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
 
   "festive-edit": {
     intro:
-      "Drapes for Diwali, Navratri, Ganesh Chaturthi and Karwa Chauth — the pieces that need to look considered in photographs and still be wearable through a long evening of visiting.",
+      "Sarees for Diwali, Navratri, Ganesh Chaturthi and Karwa Chauth — the pieces that need to look considered in photographs and still be wearable through a long evening of visiting.",
     guide: [
       {
         heading: "Festive dressing has a different brief to bridal",
-        body: "A festive saree is worn for hours of moving between homes, sitting on floors, serving food and being photographed without warning. That rules out anything that needs constant adjusting. Pre-stitched and ready-to-wear drapes have become genuinely popular for exactly this reason — they hold their pleats through the evening and take a minute to put on rather than twenty.",
+        body: "A festive saree is worn for hours of moving between homes, sitting on floors, serving food and being photographed without warning. That rules out anything that needs constant adjusting. Ready-to-wear sarees have become genuinely popular for exactly this reason — they hold their pleats through the evening and take a minute to put on rather than twenty.",
       },
       {
         heading: "Colours that carry the season",
@@ -152,7 +152,7 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
       },
       {
         heading: "Seeing it before deciding",
-        body: "Everything here can be unfolded and draped in store. Colour in particular rarely survives a photograph intact — screens shift reds and golds more than any other shades, which is precisely the range most of this stock sits in. If you order online instead, our seven-day return window covers you.",
+        body: "You can open and try on anything here in store. Colour in particular rarely survives a photograph intact — screens shift reds and golds more than any other shades, which is precisely the range most of this stock sits in. If you order online instead, our seven-day return window covers you.",
       },
     ],
     relatedGuides: [
@@ -163,15 +163,15 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
 
   shop: {
     intro:
-      "The full range across all our stores — sarees, dress material, lehengas and ready-to-wear drapes. Use the filters to narrow by price, colour, fabric and occasion, or browse the edits if you would rather be led.",
+      "The full range across all our stores — sarees, dress material, lehengas and ready-to-wear sarees. Use the filters to narrow by price, colour, fabric and occasion, or browse the edits if you would rather be led.",
     guide: [
       {
         heading: "Finding the right thing faster",
-        body: "If you are buying for a specific event, start from the occasion edits rather than the full grid: the Wedding Edit for bridal and reception, the Festive Edit for Diwali and Navratri, Everyday for office and daily wear. If you are buying by budget, the price filter is the quickest route. If you know the weave you want — Banarasi, Kanjivaram, Paithani, Chanderi — the silk collection groups them together.",
+        body: "If you are buying for a specific event, start from the occasion edits rather than the full grid: the Wedding Edit for bridal and reception, the Festive Edit for Diwali and Navratri, Everyday for office and daily wear. If you are buying by budget, the price filter is the quickest route. If you know the type you want — Banarasi, Kanjivaram, Paithani, Chanderi — the silk collection groups them together.",
       },
       {
         heading: "Online and in store are the same stock",
-        body: "What you see here is what sits on our counters across Nalasopara, Virar, Bhayandar and Goregaon. You can order for delivery anywhere in India, or find a piece here and come see it in person before deciding. Most customers do the second — the stores exist precisely so that a drape can be handled, held against the light and tried before money changes hands.",
+        body: "What you see here is what sits on our counters across Nalasopara, Virar, Bhayandar and Goregaon. You can order for delivery anywhere in India, or find a piece here and come see it in person before deciding. Most customers do the second — the stores exist precisely so a saree can be handled, held against the light and tried before money changes hands.",
       },
       {
         heading: "If you would rather ask than browse",

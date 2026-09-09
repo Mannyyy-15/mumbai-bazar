@@ -66,7 +66,7 @@ const MEGA_CATEGORIES: MegaMenu[] = [
     featured: {
       tag: "Fresh From Loom",
       title: "Royal Festive Drop",
-      desc: "Pure Banarasi & Kanjivaram drapes freshly woven for celebrations.",
+      desc: "Banarasi and Kanjivaram sarees for weddings and festivals.",
       to: "/new-arrivals",
     },
   },
@@ -78,8 +78,8 @@ const MEGA_CATEGORIES: MegaMenu[] = [
         title: "1-Minute Sarees",
         items: [
           { label: "Pre-Stitched with Pocket", to: "/everyday-sarees" },
-          { label: "1-Minute Silk Drapes", to: "/everyday-sarees" },
-          { label: "Party & Cocktail Pre-Drapes", to: "/festive-edit" },
+          { label: "Ready-to-Wear Silk Sarees", to: "/everyday-sarees" },
+          { label: "Party & Cocktail Sarees", to: "/festive-edit" },
           { label: "Farewell & Event Specials", to: "/everyday-sarees" },
         ],
       },
