@@ -266,9 +266,16 @@ function ProductDetail() {
     },
     [],
   );
-  const { addItem, openCart } = useCart();
+  const { addItem, openCart, items, setQty: setCartItemQty } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const isSaved = isInWishlist(product.id);
+
+  const inCartItem = items.find(
+    (i) =>
+      (activeVariantId && i.shopifyVariantId === activeVariantId) ||
+      i.id === product.id,
+  );
+  const inCartQty = inCartItem?.qty || 0;
 
   const handleAddToCart = () => {
     addItem(
@@ -527,50 +534,95 @@ function ProductDetail() {
                 </div>
               ) : null}
 
-              {/* Quantity + Add to Bag + Buy Now */}
-              <div className="mt-8 flex flex-col sm:flex-row items-stretch gap-3">
-                <div className="inline-flex items-center border border-maroon/30 self-start sm:self-auto h-14">
+              {/* Shop Now CTA or In-Cart Quantity Selector */}
+              {inCartQty > 0 ? (
+                <div className="mt-8 flex items-stretch gap-3">
+                  <div className="flex-1 flex items-center justify-between border-2 border-maroon bg-[#FAF7F2] h-14 px-3 shadow-sm">
+                    <button
+                      aria-label="Decrease quantity"
+                      onClick={() => inCartItem && setCartItemQty(inCartItem.id, inCartQty - 1)}
+                      className="grid h-10 w-10 place-items-center text-maroon hover:bg-maroon hover:text-ivory transition-colors active:scale-95"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+
+                    <button
+                      onClick={openCart}
+                      className="flex flex-col items-center leading-tight hover:opacity-80 transition-opacity"
+                    >
+                      {added ? (
+                        <div className="flex items-center gap-1.5 text-green-700 font-bold text-xs uppercase tracking-wider">
+                          <Check className="h-4 w-4 text-green-700" />
+                          <span>Added to Cart</span>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center">
+                          <span className="text-[10px] uppercase font-bold text-maroon/70 tracking-widest">
+                            In Your Bag
+                          </span>
+                          <span className="font-sans text-sm font-black text-maroon">
+                            Quantity: {inCartQty}
+                          </span>
+                        </div>
+                      )}
+                    </button>
+
+                    <button
+                      aria-label="Increase quantity"
+                      onClick={() => inCartItem && setCartItemQty(inCartItem.id, inCartQty + 1)}
+                      className="grid h-10 w-10 place-items-center bg-maroon text-ivory hover:bg-wine transition-colors active:scale-95 shadow-xs"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
+
                   <button
-                    aria-label="Decrease"
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5 transition-colors"
+                    onClick={openCart}
+                    className="h-14 px-6 bg-maroon text-ivory text-[11px] tracking-[0.24em] uppercase font-bold flex items-center justify-center gap-2 hover:bg-wine transition-colors active:scale-98 shadow-md"
                   >
-                    <Minus className="h-4 w-4" />
-                  </button>
-                  <span className="w-10 text-center text-sm tabular-nums text-maroon font-bold">{qty}</span>
-                  <button
-                    aria-label="Increase"
-                    onClick={() => setQty((q) => q + 1)}
-                    className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5 transition-colors"
-                  >
-                    <Plus className="h-4 w-4" />
+                    View Bag
                   </button>
                 </div>
+              ) : (
+                <div className="mt-8 flex items-stretch gap-3">
+                  <div className="inline-flex items-center border border-maroon/30 h-14">
+                    <button
+                      aria-label="Decrease"
+                      onClick={() => setQty((q) => Math.max(1, q - 1))}
+                      className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5 transition-colors"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <span className="w-10 text-center text-sm tabular-nums text-maroon font-bold">{qty}</span>
+                    <button
+                      aria-label="Increase"
+                      onClick={() => setQty((q) => q + 1)}
+                      className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5 transition-colors"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
 
-                {/* Add to Bag */}
-                <button
-                  onClick={handleAddToCart}
-                  className="flex-1 h-14 border-2 border-maroon text-maroon text-[11px] tracking-[0.24em] uppercase font-bold flex items-center justify-center gap-2 hover:bg-maroon hover:text-ivory transition-all duration-200 active:scale-98 shadow-sm"
-                >
-                  {added ? (
-                    <>
-                      <Check className="h-4 w-4 text-green-700" /> Added to Bag
-                    </>
-                  ) : (
-                    <>
-                      <ShoppingBag className="h-4 w-4" /> Add to Bag
-                    </>
-                  )}
-                </button>
-
-                {/* Instant 1-Click Buy Now */}
-                <button
-                  onClick={handleBuyNow}
-                  className="flex-1 h-14 bg-maroon text-ivory text-[11px] tracking-[0.24em] uppercase font-bold flex items-center justify-center gap-2 hover:bg-wine transition-all duration-200 active:scale-98 shadow-md"
-                >
-                  <Lock className="h-4 w-4" /> Buy Now
-                </button>
-              </div>
+                  <button
+                    onClick={handleAddToCart}
+                    className={`flex-1 h-14 text-[11px] tracking-[0.28em] uppercase font-bold flex items-center justify-center gap-2 transition-all duration-200 active:scale-98 shadow-md ${
+                      added
+                        ? "bg-green-700 text-white"
+                        : "bg-maroon text-ivory hover:bg-wine"
+                    }`}
+                  >
+                    {added ? (
+                      <>
+                        <Check className="h-4 w-4" /> Added to Cart
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingBag className="h-4 w-4" /> Shop Now
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
 
               {/* WhatsApp */}
               <a
@@ -692,25 +744,51 @@ function ProductDetail() {
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 shrink-0">
+          {inCartQty > 0 ? (
+            <div className="flex-1 max-w-[200px] flex items-center justify-between border-2 border-maroon bg-[#FAF7F2] py-2 px-2 rounded-xl shadow-sm">
+              <button
+                onClick={() => inCartItem && setCartItemQty(inCartItem.id, inCartQty - 1)}
+                aria-label="Decrease quantity"
+                className="grid h-8 w-8 place-items-center rounded-lg text-maroon hover:bg-maroon hover:text-ivory transition-colors active:scale-95"
+              >
+                <Minus className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={openCart}
+                className="flex flex-col items-center px-1"
+              >
+                <span className="text-[8px] uppercase font-bold text-maroon/70">In Bag</span>
+                <span className="font-sans text-xs font-black text-maroon">Qty: {inCartQty}</span>
+              </button>
+              <button
+                onClick={() => inCartItem && setCartItemQty(inCartItem.id, inCartQty + 1)}
+                aria-label="Increase quantity"
+                className="grid h-8 w-8 place-items-center rounded-lg bg-maroon text-ivory hover:bg-wine transition-colors active:scale-95 shadow-xs"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ) : (
             <button
               onClick={handleAddToCart}
-              aria-label="Add to Bag"
-              className={`p-3 rounded-xl border-2 border-maroon transition-all duration-200 active:scale-95 flex items-center justify-center ${
-                added ? "bg-green-700 text-white border-green-700" : "text-maroon bg-ivory hover:bg-maroon/5"
+              aria-live="polite"
+              className={`flex-1 max-w-[200px] py-3.5 px-4 rounded-xl text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95 shadow-md ${
+                added
+                  ? "bg-green-700 text-white"
+                  : "bg-maroon text-white hover:bg-wine active:bg-wine"
               }`}
             >
-              {added ? <Check className="h-4 w-4" /> : <ShoppingBag className="h-4 w-4" />}
+              {added ? (
+                <>
+                  <Check className="h-4 w-4" /> Added to Cart
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="h-4 w-4" /> Shop Now
+                </>
+              )}
             </button>
-
-            <button
-              onClick={handleBuyNow}
-              className="py-3 px-4 rounded-xl bg-maroon text-white hover:bg-wine text-xs font-bold tracking-[0.14em] uppercase transition-all duration-200 flex items-center justify-center gap-1.5 active:scale-95 shadow-md"
-            >
-              <Lock className="h-3.5 w-3.5" />
-              <span>Buy Now</span>
-            </button>
-          </div>
+          )}
         </div>
       </div>
     </div>
