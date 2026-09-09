@@ -1,8 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { type Product } from "@/lib/site-data";
 import { ProductCard } from "@/components/site/ProductCard";
-import { CATEGORY_COPY } from "@/lib/category-content";
 import {
   Check,
   X,
@@ -231,35 +230,14 @@ function ShopPage() {
 
   return (
     <div className="w-full bg-[#FAF7F2] text-ink min-h-screen">
-      {/* Top Breadcrumb & Title Bar */}
-      <div className="border-b border-gold/30 bg-white/70 backdrop-blur-sm py-4 px-4 md:px-8 lg:px-12 xl:px-16">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <nav className="text-xs tracking-[0.14em] uppercase text-maroon font-bold flex items-center gap-2">
-              <Link to="/" className="hover:text-gold-deep transition-colors">
-                Home
-              </Link>
-              <span className="text-gold-deep font-normal">/</span>
-              <span className="text-ink">Shop All Sarees</span>
-            </nav>
-            {/*
-              Was "The Artisan Handloom Catalog" — a provenance claim across a
-              catalogue that includes cotton, blends and ready-to-wear, and a
-              weak H1 besides: it matched none of the terms this page targets.
-            */}
-            <h1 className="mt-1 font-serif text-2xl sm:text-3xl text-maroon font-bold">
-              Shop All Sarees, Lehengas &amp; Ethnic Wear
-            </h1>
-            <p className="mt-2.5 max-w-3xl text-sm leading-relaxed text-ink/80">
-              {CATEGORY_COPY.shop.intro}
-            </p>
-          </div>
-          <span className="text-xs text-taupe font-medium hidden sm:inline-block">
-            Showing <strong className="text-maroon font-bold">{filtered.length}</strong> of{" "}
-            {products.length} pieces
-          </span>
-        </div>
-      </div>
+      {/*
+        The visible breadcrumb, heading, intro paragraph and result count were
+        removed so the page opens straight onto the products. The h1 stays as
+        screen-reader-only text: it is this page's only one, and dropping it
+        entirely would leave the main product page with no heading for search
+        engines or assistive tech. Same pattern as the homepage.
+      */}
+      <h1 className="sr-only">Shop All Sarees, Lehengas &amp; Ethnic Wear</h1>
 
       {/* Main Grid Section */}
       <section className="pt-6 pb-16 md:pt-8 md:pb-24">
