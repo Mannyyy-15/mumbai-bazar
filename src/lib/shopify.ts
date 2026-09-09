@@ -132,8 +132,46 @@ async function loadCatalogue(): Promise<ShopifyProduct[]> {
   return catalogueCache;
 }
 
-export async function fetchShopifyProducts(_first = 50): Promise<ShopifyProduct[]> {
-  return loadCatalogue();
+/**
+ * Live catalogue, with the snapshot as a fallback rather than as the source.
+ *
+ * The snapshot was previously returned unconditionally, so price changes made
+ * in Shopify admin never reached the site and every variant read as in stock —
+ * a customer could buy something sold out and only find out at checkout, where
+ * Shopify re-prices the cart anyway.
+ *
+ * The fetch is cached per process, so SSR does one request rather than one per
+ * page render. If Shopify is unreachable we still render the snapshot: a stale
+ * catalogue beats an empty shop.
+ */
+let livePromise: Promise<ShopifyProduct[]> | null = null;
+let liveFetchedAt = 0;
+const LIVE_TTL_MS = 5 * 60 * 1000;
+
+export async function fetchShopifyProducts(first = 50): Promise<ShopifyProduct[]> {
+  const fresh = livePromise && Date.now() - liveFetchedAt < LIVE_TTL_MS;
+  if (!fresh) {
+    liveFetchedAt = Date.now();
+    livePromise = storefrontRequest<{ products: { nodes: ProductNode[] } }>(
+      `query Products($first: Int!) { products(first: $first, sortKey: BEST_SELLING) { nodes { ${PRODUCT_FIELDS} } } }`,
+      { first },
+    )
+      .then((payload) => {
+        const mapped = payload.products.nodes
+          .map(toProduct)
+          .filter((p): p is ShopifyProduct => Boolean(p));
+        // An empty response usually means a misconfigured or frozen store, not
+        // an genuinely empty catalogue — fall back rather than blanking the shop.
+        if (!mapped.length) throw new Error("Shopify returned no products");
+        return mapped;
+      })
+      .catch(async () => {
+        livePromise = null;
+        liveFetchedAt = 0;
+        return loadCatalogue();
+      });
+  }
+  return livePromise!;
 }
 
 export async function fetchShopifyProduct(handle: string): Promise<ShopifyProduct | null> {
@@ -142,14 +180,22 @@ export async function fetchShopifyProduct(handle: string): Promise<ShopifyProduc
       ? "gulab-box-silk-blend-embroidered-saree"
       : handle;
 
-  // 1. Instant 0ms local match for seamless, zero-latency product details opening
+  // 1. Prefer the live catalogue so price and availability on the page a
+  //    customer buys from match what Shopify will charge.
+  const live = await fetchShopifyProducts(100).catch(() => []);
+  const liveMatch = live.find(
+    (p) =>
+      p.handle === targetHandle || p.id === targetHandle || p.handle === handle || p.id === handle,
+  );
+  if (liveMatch) return liveMatch;
+
+  // 2. Snapshot fallback, then a direct query for a product too new to be in either.
   const localMatch = (await loadCatalogue()).find(
     (p) =>
       p.handle === targetHandle || p.id === targetHandle || p.handle === handle || p.id === handle,
   );
   if (localMatch) return localMatch;
 
-  // 2. Remote fallback if newly published product isn't in static catalog
   try {
     const payload = await storefrontRequest<{ product: ProductNode | null }>(
       `query Product($handle: String!) { product(handle: $handle) { ${PRODUCT_FIELDS} } }`,
