@@ -258,12 +258,24 @@ export function Header() {
   const [mounted, setMounted] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [activeSubMenu, setActiveSubMenu] = useState<MobileNavItem | null>(null);
-  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const { count: cartCount, openCart } = useCart();
+  const { count: cartCount, openCart, lastAddedId } = useCart();
   const { wishlist, openWishlist } = useWishlist();
+  const [cartBump, setCartBump] = useState(false);
+  const prevCount = useRef(cartCount);
+
+  useEffect(() => {
+    if (cartCount > prevCount.current || lastAddedId) {
+      setCartBump(true);
+      const timer = setTimeout(() => setCartBump(false), 2000);
+      prevCount.current = cartCount;
+      return () => clearTimeout(timer);
+    }
+    prevCount.current = cartCount;
+  }, [cartCount, lastAddedId]);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const drawerRef = useFocusTrap<HTMLDivElement>(open);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = (label: string) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
@@ -463,13 +475,24 @@ export function Header() {
 
           <button
             onClick={openCart}
-            className="relative grid h-9 w-9 place-items-center text-ink/80 hover:text-maroon"
+            className={`relative grid h-9 w-9 place-items-center rounded-full transition-all duration-300 ${
+              cartBump
+                ? "scale-115 text-maroon ring-4 ring-gold/60 shadow-lg bg-gold/15"
+                : "text-ink/80 hover:text-maroon"
+            }`}
             aria-label={mounted && cartCount > 0 ? `Shopping bag, ${cartCount} ${cartCount === 1 ? "item" : "items"}` : "Shopping bag"}
           >
-            <ShoppingBag className="h-[18px] w-[18px]" />
+            <ShoppingBag className={`h-[18px] w-[18px] transition-transform duration-300 ${cartBump ? "scale-110 animate-bounce text-maroon" : ""}`} />
             {mounted && cartCount > 0 && (
-              <span className="absolute right-0.5 top-0.5 grid h-4 w-4 place-items-center rounded-full bg-maroon text-[9px] font-medium text-ivory">
+              <span className={`absolute -right-0.5 -top-0.5 grid h-4 min-w-4 px-1 place-items-center rounded-full text-[9px] font-bold text-ivory transition-all duration-300 ${
+                cartBump ? "bg-green-700 scale-125 shadow-md ring-2 ring-white" : "bg-maroon"
+              }`}>
                 {cartCount}
+              </span>
+            )}
+            {cartBump && (
+              <span className="absolute -bottom-6 right-0 whitespace-nowrap rounded-md bg-maroon px-2 py-0.5 text-[9px] font-bold text-white shadow-md z-50 animate-pulse pointer-events-none">
+                Item in Cart!
               </span>
             )}
           </button>

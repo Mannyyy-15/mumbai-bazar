@@ -262,10 +262,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
+const defaultCartContext: CartContextValue = {
+  items: [],
+  isOpen: false,
+  count: 0,
+  subtotal: 0,
+  checkoutUrl: undefined,
+  lastAddedId: null,
+  openCart: () => {},
+  closeCart: () => {},
+  toggleCart: () => {},
+  addItem: () => {},
+  removeItem: () => {},
+  setQty: () => {},
+  clear: () => {},
+};
+
 export function useCart() {
   const ctx = useContext(CartContext);
-  if (!ctx) throw new Error("useCart must be used inside <CartProvider>");
-  return ctx;
+  return ctx || defaultCartContext;
 }
 
 export function parsePriceToNumber(price?: string | number | null): number {

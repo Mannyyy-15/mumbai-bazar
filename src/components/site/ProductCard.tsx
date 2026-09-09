@@ -1,4 +1,4 @@
-import { Check, Heart, ShoppingBag } from "lucide-react";
+import { Check, Heart, ShoppingBag, Minus, Plus } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { productAltText } from "@/lib/seo";
@@ -8,7 +8,7 @@ import { useWishlist } from "@/lib/wishlist-context";
 import { resolveColorSwatch } from "@/lib/filters";
 
 export function ProductCard({ p }: { p: Product }) {
-  const { addItem, openCart } = useCart();
+  const { addItem, openCart, items, setQty } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const isSaved = isInWishlist(p.id);
   const [added, setAdded] = useState(false);
@@ -34,6 +34,13 @@ export function ProductCard({ p }: { p: Product }) {
     }
     return list;
   }, [p.variants]);
+
+  const inCartItem = items.find(
+    (i) =>
+      (p.shopifyVariantId && i.shopifyVariantId === p.shopifyVariantId) ||
+      i.id === p.id,
+  );
+  const inCartQty = inCartItem?.qty || 0;
 
   const quickAdd = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -150,26 +157,93 @@ export function ProductCard({ p }: { p: Product }) {
           </div>
         </div>
 
-        {/* Dedicated Always-Visible Shop Now Button */}
-        <button
-          onClick={quickAdd}
-          aria-live="polite"
-          className={`mt-2.5 w-full py-2 sm:py-2.5 px-3 rounded-xl text-[10px] sm:text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 shadow-xs ${
-            added
-              ? "bg-green-700 text-white shadow-sm"
-              : "bg-maroon text-white hover:bg-wine active:scale-98 shadow-sm group-hover:bg-wine"
-          }`}
-        >
-          {added ? (
-            <>
-              <Check className="h-3.5 w-3.5" /> Added
-            </>
-          ) : (
-            <>
-              <ShoppingBag className="h-3.5 w-3.5" /> Shop Now
-            </>
-          )}
-        </button>
+        {/* Dedicated Always-Visible Shop Now Button or In-Cart Quantity Selector */}
+        {inCartQty > 0 ? (
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            className={`mt-2.5 flex items-center justify-between rounded-xl border-2 p-1 shadow-sm transition-all duration-300 ${
+              added
+                ? "border-green-700 bg-green-50"
+                : "border-maroon/80 bg-[#FAF7F2]"
+            }`}
+          >
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (inCartItem) {
+                  setQty(inCartItem.id, inCartQty - 1);
+                }
+              }}
+              aria-label="Decrease quantity"
+              className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-lg text-maroon hover:bg-maroon hover:text-ivory transition-colors active:scale-95"
+            >
+              <Minus className="h-3.5 w-3.5" />
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openCart();
+              }}
+              className="flex flex-col items-center leading-none px-1.5 hover:opacity-80 transition-opacity"
+            >
+              {added ? (
+                <div className="flex items-center gap-1 text-green-700 font-bold text-[10px] uppercase tracking-wider">
+                  <Check className="h-3 w-3" />
+                  <span>Added to Cart</span>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <span className="text-[9px] uppercase font-bold text-maroon/70 tracking-wider">
+                    In Cart
+                  </span>
+                  <span className="font-sans text-xs font-black text-maroon">
+                    Qty: {inCartQty}
+                  </span>
+                </div>
+              )}
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (inCartItem) {
+                  setQty(inCartItem.id, inCartQty + 1);
+                }
+              }}
+              aria-label="Increase quantity"
+              className="grid h-7 w-7 sm:h-8 sm:w-8 place-items-center rounded-lg bg-maroon text-ivory hover:bg-wine transition-colors active:scale-95 shadow-xs"
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={quickAdd}
+            aria-live="polite"
+            className={`mt-2.5 w-full py-2 sm:py-2.5 px-3 rounded-xl text-[10px] sm:text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 shadow-xs ${
+              added
+                ? "bg-green-700 text-white shadow-sm"
+                : "bg-maroon text-white hover:bg-wine active:scale-98 shadow-sm group-hover:bg-wine"
+            }`}
+          >
+            {added ? (
+              <>
+                <Check className="h-3.5 w-3.5" /> Added to Cart
+              </>
+            ) : (
+              <>
+                <ShoppingBag className="h-3.5 w-3.5" /> Shop Now
+              </>
+            )}
+          </button>
+        )}
       </div>
     </Link>
   );
