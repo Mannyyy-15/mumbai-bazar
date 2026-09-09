@@ -2,6 +2,7 @@ import { Check, Heart, ShoppingBag, Minus, Plus } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { productAltText } from "@/lib/seo";
+import { shopifyImage, shopifyImageSrcSet } from "@/lib/shopify";
 import type { Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
@@ -36,9 +37,7 @@ export function ProductCard({ p }: { p: Product }) {
   }, [p.variants]);
 
   const inCartItem = items.find(
-    (i) =>
-      (p.shopifyVariantId && i.shopifyVariantId === p.shopifyVariantId) ||
-      i.id === p.id,
+    (i) => (p.shopifyVariantId && i.shopifyVariantId === p.shopifyVariantId) || i.id === p.id,
   );
   const inCartQty = inCartItem?.qty || 0;
 
@@ -71,8 +70,12 @@ export function ProductCard({ p }: { p: Product }) {
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
         {/* Primary Image */}
         <img
-          src={p.img}
+          src={shopifyImage(p.img, 600)}
+          srcSet={shopifyImageSrcSet(p.img, [300, 450, 600, 800])}
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           alt={productAltText(p.name, p.weave)}
+          width={600}
+          height={800}
           loading="lazy"
           decoding="async"
           className={`h-full w-full object-cover object-top transition-all duration-700 ease-out ${
@@ -83,8 +86,12 @@ export function ProductCard({ p }: { p: Product }) {
         {/* Secondary Hover Image */}
         {p.secondaryImg && (
           <img
-            src={p.secondaryImg}
+            src={shopifyImage(p.secondaryImg, 600)}
+            srcSet={shopifyImageSrcSet(p.secondaryImg, [300, 450, 600, 800])}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             alt={productAltText(p.name, p.weave, "palla detail")}
+            width={600}
+            height={800}
             loading="lazy"
             decoding="async"
             className="absolute inset-0 h-full w-full object-cover object-top opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
@@ -165,9 +172,7 @@ export function ProductCard({ p }: { p: Product }) {
               e.stopPropagation();
             }}
             className={`mt-2.5 flex items-center justify-between rounded-xl border-2 p-1 shadow-sm transition-all duration-300 ${
-              added
-                ? "border-green-700 bg-green-50"
-                : "border-maroon/80 bg-[#FAF7F2]"
+              added ? "border-green-700 bg-green-50" : "border-maroon/80 bg-[#FAF7F2]"
             }`}
           >
             <button
@@ -202,9 +207,7 @@ export function ProductCard({ p }: { p: Product }) {
                   <span className="text-[9px] uppercase font-bold text-maroon/70 tracking-wider">
                     In Cart
                   </span>
-                  <span className="font-sans text-xs font-black text-maroon">
-                    Qty: {inCartQty}
-                  </span>
+                  <span className="font-sans text-xs font-black text-maroon">Qty: {inCartQty}</span>
                 </div>
               )}
             </button>

@@ -17,7 +17,12 @@ import {
 } from "lucide-react";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
-import { fetchShopifyProduct, getDirectCheckoutUrl } from "@/lib/shopify";
+import {
+  fetchShopifyProduct,
+  getDirectCheckoutUrl,
+  shopifyImage,
+  shopifyImageSrcSet,
+} from "@/lib/shopify";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useCatalog } from "@/lib/catalog-context";
 import { seo, jsonLd, SITE } from "@/lib/seo";
@@ -273,9 +278,7 @@ function ProductDetail() {
   const isSaved = isInWishlist(product.id);
 
   const inCartItem = items.find(
-    (i) =>
-      (activeVariantId && i.shopifyVariantId === activeVariantId) ||
-      i.id === product.id,
+    (i) => (activeVariantId && i.shopifyVariantId === activeVariantId) || i.id === product.id,
   );
   const inCartQty = inCartItem?.qty || 0;
 
@@ -309,8 +312,8 @@ function ProductDetail() {
     if (pool.length === 0) return [];
 
     // 1. Prioritize pieces matching category
-    const sameCategory = pool.filter((p) =>
-      p.category && p.category.some((c) => product.category && product.category.includes(c)),
+    const sameCategory = pool.filter(
+      (p) => p.category && p.category.some((c) => product.category && product.category.includes(c)),
     );
 
     // 2. Secondary: pieces matching weave or fabric
@@ -416,7 +419,15 @@ function ProductDetail() {
                           : "border-gold/30 hover:border-maroon/50 opacity-75 hover:opacity-100"
                       }`}
                     >
-                      <img src={g} alt="" className="h-full w-full object-cover object-top" />
+                      <img
+                        src={shopifyImage(g, 160)}
+                        alt={`${product.name} view ${i + 1}`}
+                        width={160}
+                        height={200}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-full w-full object-cover object-top"
+                      />
                     </button>
                   ))}
                 </div>
@@ -436,9 +447,17 @@ function ProductDetail() {
               <div className="flex-1 relative overflow-hidden rounded-2xl md:rounded-none bg-[#F0E9DC] shadow-sm md:shadow-none">
                 <div className="aspect-[4/5] w-full max-h-[calc(100vh-8rem)]">
                   <img
-                    src={gallery[active] || product.img}
+                    src={shopifyImage(gallery[active] || product.img, 1000)}
+                    srcSet={shopifyImageSrcSet(
+                      gallery[active] || product.img,
+                      [600, 800, 1000, 1400],
+                    )}
+                    sizes="(max-width: 768px) 100vw, 55vw"
                     alt={product.name}
+                    width={1000}
+                    height={1250}
                     loading="eager"
+                    fetchPriority="high"
                     decoding="async"
                     className="h-full w-full object-cover object-top transition-opacity duration-200"
                   />
@@ -482,7 +501,15 @@ function ProductDetail() {
                         : "border-gold/40 opacity-75 hover:opacity-100"
                     }`}
                   >
-                    <img src={g} alt="" className="h-full w-full object-cover object-top" />
+                    <img
+                      src={shopifyImage(g, 160)}
+                      alt={`${product.name} view ${i + 1}`}
+                      width={160}
+                      height={200}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover object-top"
+                    />
                   </button>
                 ))}
               </div>
@@ -639,7 +666,9 @@ function ProductDetail() {
                     >
                       <Minus className="h-4 w-4" />
                     </button>
-                    <span className="w-10 text-center text-sm tabular-nums text-maroon font-bold">{qty}</span>
+                    <span className="w-10 text-center text-sm tabular-nums text-maroon font-bold">
+                      {qty}
+                    </span>
                     <button
                       aria-label="Increase"
                       onClick={() => setQty((q) => q + 1)}
@@ -652,9 +681,7 @@ function ProductDetail() {
                   <button
                     onClick={handleAddToCart}
                     className={`flex-1 h-14 text-[11px] tracking-[0.28em] uppercase font-bold flex items-center justify-center gap-2 transition-all duration-200 active:scale-98 shadow-md ${
-                      added
-                        ? "bg-green-700 text-white"
-                        : "bg-maroon text-ivory hover:bg-wine"
+                      added ? "bg-green-700 text-white" : "bg-maroon text-ivory hover:bg-wine"
                     }`}
                   >
                     {added ? (
@@ -799,10 +826,7 @@ function ProductDetail() {
               >
                 <Minus className="h-3.5 w-3.5" />
               </button>
-              <button
-                onClick={openCart}
-                className="flex flex-col items-center px-1"
-              >
+              <button onClick={openCart} className="flex flex-col items-center px-1">
                 <span className="text-[8px] uppercase font-bold text-maroon/70">In Bag</span>
                 <span className="font-sans text-xs font-black text-maroon">Qty: {inCartQty}</span>
               </button>

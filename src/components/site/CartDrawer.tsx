@@ -14,7 +14,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useCart, formatINR, type CartItem } from "@/lib/cart-context";
-import { getDirectCheckoutUrl } from "@/lib/shopify";
+import { getDirectCheckoutUrl, shopifyImage } from "@/lib/shopify";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { useCountUp } from "@/hooks/use-count-up";
 import { SITE } from "@/lib/seo";
@@ -253,7 +253,7 @@ function CartRow({
         className="block h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F0E9DC] border border-gold/30"
       >
         <img
-          src={item.image}
+          src={shopifyImage(item.image, 200)}
           alt={item.name}
           loading="lazy"
           decoding="async"

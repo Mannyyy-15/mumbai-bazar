@@ -145,10 +145,7 @@ export async function fetchShopifyProduct(handle: string): Promise<ShopifyProduc
   // 1. Instant 0ms local match for seamless, zero-latency product details opening
   const localMatch = (await loadCatalogue()).find(
     (p) =>
-      p.handle === targetHandle ||
-      p.id === targetHandle ||
-      p.handle === handle ||
-      p.id === handle,
+      p.handle === targetHandle || p.id === targetHandle || p.handle === handle || p.id === handle,
   );
   if (localMatch) return localMatch;
 
@@ -200,7 +197,10 @@ function getWeaveFromProduct(node: ProductNode): string {
   return "Saree";
 }
 
-const FLIPKART_GALLERIES: Record<string, { gallery: string[]; name?: string; weave?: string; fabric?: string; description?: string }> = {
+const FLIPKART_GALLERIES: Record<
+  string,
+  { gallery: string[]; name?: string; weave?: string; fabric?: string; description?: string }
+> = {
   "meher-wine-banarasi-silk-saree": {
     name: "Champagne Beige Woven Saree with Embroidered Blouse",
     weave: "Bollywood Woven Satin",
@@ -318,9 +318,10 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
       : []),
   ];
   const fkData = FLIPKART_GALLERIES[node.handle];
-  const gallery = fkData?.gallery && fkData.gallery.length > 0
-    ? fkData.gallery
-    : (node.images?.nodes ?? [image]).map((item) => item.url);
+  const gallery =
+    fkData?.gallery && fkData.gallery.length > 0
+      ? fkData.gallery
+      : (node.images?.nodes ?? [image]).map((item) => item.url);
   const primaryImg = fkData?.gallery?.[0] || image.url;
   const secondaryImage = gallery.length > 1 ? gallery[1] : undefined;
   const weave = fkData?.weave || getWeaveFromProduct(node);
@@ -332,9 +333,13 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
     : rawDesc;
   const variants: ProductVariant[] = (node.variants?.nodes ?? []).map((v) => {
     const colorOpt = v.selectedOptions?.find((opt) => /colou?r/i.test(opt.name));
-    const colorVal = colorOpt ? colorOpt.value : (v.title !== "Default Title" ? v.title.split("/")[0].trim() : undefined);
+    const colorVal = colorOpt
+      ? colorOpt.value
+      : v.title !== "Default Title"
+        ? v.title.split("/")[0].trim()
+        : undefined;
     const hasDiscount = Boolean(
-      v.compareAtPrice?.amount && Number(v.compareAtPrice.amount) > Number(v.price.amount)
+      v.compareAtPrice?.amount && Number(v.compareAtPrice.amount) > Number(v.price.amount),
     );
 
     return {
@@ -343,9 +348,10 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
       color: colorVal,
       available: v.availableForSale ?? true,
       price: formatShopifyPrice(v.price.amount, v.price.currencyCode),
-      original: hasDiscount && v.compareAtPrice
-        ? formatShopifyPrice(v.compareAtPrice.amount, v.price.currencyCode)
-        : undefined,
+      original:
+        hasDiscount && v.compareAtPrice
+          ? formatShopifyPrice(v.compareAtPrice.amount, v.price.currencyCode)
+          : undefined,
       img: v.image?.url,
       selectedOptions: v.selectedOptions,
     };
@@ -526,4 +532,34 @@ function formatShopifyPrice(amount: string, currency: string) {
     currency,
     maximumFractionDigits: 0,
   }).format(Number(amount));
+}
+
+/**
+ * Rewrites a Shopify CDN image URL to request a resized, modern-format copy.
+ *
+ * Product images are uploaded as full-size PNGs — often several MB each. A card
+ * renders them at roughly 300-600px, so serving the original wastes almost all
+ * of the transfer. Shopify's CDN resizes and converts on the fly from the same
+ * URL, so this needs no re-upload and no build step.
+ *
+ * Non-Shopify URLs (local /products/* files) are returned untouched.
+ */
+export function shopifyImage(url: string | null | undefined, width: number): string {
+  if (!url) return "";
+  if (!url.includes("cdn.shopify.com")) return url;
+  try {
+    const u = new URL(url);
+    u.searchParams.set("width", String(width));
+    // PNG photographs are far heavier than WebP at the same visual quality.
+    u.searchParams.set("format", "webp");
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
+/** Builds a srcSet so the browser picks the right width for the device. */
+export function shopifyImageSrcSet(url: string | null | undefined, widths: number[]): string {
+  if (!url || !url.includes("cdn.shopify.com")) return "";
+  return widths.map((w) => `${shopifyImage(url, w)} ${w}w`).join(", ");
 }

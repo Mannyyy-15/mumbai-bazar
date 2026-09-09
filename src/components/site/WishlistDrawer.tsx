@@ -1,4 +1,5 @@
 import { X, Heart, ShoppingBag, Trash2 } from "lucide-react";
+import { shopifyImage } from "@/lib/shopify";
 import { Link } from "@tanstack/react-router";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
@@ -86,7 +87,7 @@ export function WishlistDrawer() {
                     className="h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-beige/30"
                   >
                     <img
-                        src={p.img}
+                        src={shopifyImage(p.img, 200)}
                         alt={p.name}
                         loading="lazy"
                         decoding="async"

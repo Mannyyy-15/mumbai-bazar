@@ -22,6 +22,7 @@ import {
 
 import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
 import { seo, jsonLd, SITE } from "@/lib/seo";
+import { shopifyImage, shopifyImageSrcSet } from "@/lib/shopify";
 import { breadcrumbSchema, outletSchema } from "@/lib/structured-data";
 import { FLAGSHIP } from "@/lib/locations";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
@@ -478,7 +479,10 @@ function ShopByCategory() {
             </div>
             <div className="py-3 sm:py-3.5 px-3 sm:px-4 bg-[#FAF7F2] border-t border-[#D4AF37]/30 flex items-center justify-center text-center">
               <span className="text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.16em] text-maroon group-hover:text-gold-deep transition-colors inline-flex items-center gap-1.5">
-                {cat.label} <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                {cat.label}{" "}
+                <span className="transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
               </span>
             </div>
           </Link>
@@ -498,7 +502,10 @@ function ImmediateProductShelf() {
         <div className="text-center mb-8 md:mb-12">
           <div className="flex items-center justify-center gap-3 sm:gap-6">
             <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
-            <h2 id="shop-new-arrivals" className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap">
+            <h2
+              id="shop-new-arrivals"
+              className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-[0.18em] uppercase text-maroon text-center whitespace-nowrap"
+            >
               New Arrivals
             </h2>
             <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
@@ -636,9 +643,11 @@ function ProductFeed() {
 /* ---------------- Store Visit Banner (Flagship Boutique) ---------------- */
 function StoreVisitBanner() {
   return (
-    <section className="mx-auto max-w-[1600px] px-4 md:px-8 py-8 md:py-14" aria-label="Visit Our Flagship Boutique">
+    <section
+      className="mx-auto max-w-[1600px] px-4 md:px-8 py-8 md:py-14"
+      aria-label="Visit Our Flagship Boutique"
+    >
       <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-[#D4AF37]/50 bg-[#FAF7F2] shadow-sm flex flex-col md:flex-row items-stretch">
-        
         {/* Left: Real Storefront Facade */}
         <div className="w-full md:w-[42%] lg:w-[38%] min-h-[200px] sm:min-h-[240px] md:min-h-[280px] relative overflow-hidden bg-[#2A080C] shrink-0">
           <img
@@ -663,7 +672,7 @@ function StoreVisitBanner() {
           <p className="mt-1 text-xs sm:text-sm font-semibold text-ink/85">
             Nalasopara East's destination for Sarees &amp; Lehengas
           </p>
-          
+
           <div className="mt-3.5 flex items-start gap-2 text-ink/75">
             <MapPin className="h-4 w-4 text-[#A6192E] shrink-0 mt-0.5" />
             <span className="text-xs sm:text-sm font-medium leading-relaxed">
@@ -687,10 +696,14 @@ function StoreVisitBanner() {
           <div className="flex items-center gap-4">
             <div className="text-center flex flex-col items-center justify-center pr-2">
               <p className="font-serif italic text-xl lg:text-2xl text-[#B8860B] font-medium leading-relaxed">
-                Style<br />
-                <span className="text-[10px] not-italic text-[#B8860B]/60">·</span><br />
-                Tradition<br />
-                <span className="text-[10px] not-italic text-[#B8860B]/60">·</span><br />
+                Style
+                <br />
+                <span className="text-[10px] not-italic text-[#B8860B]/60">·</span>
+                <br />
+                Tradition
+                <br />
+                <span className="text-[10px] not-italic text-[#B8860B]/60">·</span>
+                <br />
                 Elegance
               </p>
               <div className="mt-2 flex items-center justify-center gap-1 text-[#B8860B]/70">
@@ -713,7 +726,6 @@ function StoreVisitBanner() {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );
@@ -777,7 +789,7 @@ function CollectionStrip() {
       const { cardWidth } = getCardMetrics();
       const newIndex = Math.min(
         COLLECTIONS.length - 1,
-        Math.max(0, Math.round(scrollRef.current.scrollLeft / cardWidth))
+        Math.max(0, Math.round(scrollRef.current.scrollLeft / cardWidth)),
       );
       setActiveIndex(newIndex);
     }
@@ -831,7 +843,8 @@ function CollectionStrip() {
           <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
         </div>
         <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
-          Handpicked weaves from India's legendary artisan clusters — Banarasi, Kanjivaram, Paithani &amp; Pure Silks.
+          Handpicked weaves from India's legendary artisan clusters — Banarasi, Kanjivaram, Paithani
+          &amp; Pure Silks.
         </p>
 
         {/* Carousel controls */}
@@ -1013,7 +1026,7 @@ function ShopByOccasion() {
       const { cardWidth } = getCardMetrics();
       const newIndex = Math.min(
         OCCASIONS.length - 1,
-        Math.max(0, Math.round(scrollRef.current.scrollLeft / cardWidth))
+        Math.max(0, Math.round(scrollRef.current.scrollLeft / cardWidth)),
       );
       setActiveIndex(newIndex);
     }
@@ -1250,7 +1263,9 @@ function TrendingNow() {
                 </div>
                 {/* Primary Image */}
                 <img
-                  src={p.img}
+                  src={shopifyImage(p.img, 600)}
+                  srcSet={shopifyImageSrcSet(p.img, [300, 450, 600, 800])}
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   alt={p.name}
                   width={600}
                   height={800}
@@ -1266,7 +1281,9 @@ function TrendingNow() {
                 {/* Secondary Hover Image */}
                 {p.secondaryImg && (
                   <img
-                    src={p.secondaryImg}
+                    src={shopifyImage(p.secondaryImg, 600)}
+                    srcSet={shopifyImageSrcSet(p.secondaryImg, [300, 450, 600, 800])}
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     alt={`${p.name} alternate view`}
                     width={600}
                     height={800}
@@ -1628,7 +1645,8 @@ function InstagramBanner() {
           {/* Right: Stay Connected Script Calligraphy */}
           <div className="text-center sm:text-right shrink-0 pt-2 sm:pt-0">
             <p className="font-serif italic text-2xl sm:text-3xl text-[#A6192E] font-medium leading-none tracking-tight">
-              Stay<br className="hidden sm:inline" /> Connected
+              Stay
+              <br className="hidden sm:inline" /> Connected
             </p>
             <div className="mt-1 flex items-center justify-center sm:justify-end text-[#A6192E]">
               <span className="text-lg">♡</span>
@@ -1667,7 +1685,10 @@ function BottomTrustBar() {
   ];
 
   return (
-    <section className="w-full bg-[#FAF8F5] border-y border-maroon/20 py-8 md:py-12" aria-label="Customer Guarantees & Support">
+    <section
+      className="w-full bg-[#FAF8F5] border-y border-maroon/20 py-8 md:py-12"
+      aria-label="Customer Guarantees & Support"
+    >
       <div className="mx-auto max-w-[1600px] px-4 md:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {items.map((item, idx) => {
@@ -1697,9 +1718,7 @@ function BottomTrustBar() {
                 {Content}
               </a>
             ) : (
-              <div key={idx}>
-                {Content}
-              </div>
+              <div key={idx}>{Content}</div>
             );
           })}
         </div>
@@ -1726,8 +1745,8 @@ function Newsletter() {
           Be the first to <span className="italic">know</span>
         </h3>
         <p className="mt-4 text-sm md:text-base text-ivory/75 max-w-xl mx-auto">
-          Early access to new arrivals, bridal previews and private boutique events. Plus a heartfelt
-          ₹1,000 off your first heirloom.
+          Early access to new arrivals, bridal previews and private boutique events. Plus a
+          heartfelt ₹1,000 off your first heirloom.
         </p>
         <form
           onSubmit={(e) => {
@@ -1780,4 +1799,3 @@ function Home() {
     </div>
   );
 }
-
