@@ -289,7 +289,7 @@ function ShopPage() {
             <aside
               data-lenis-prevent
               onWheel={(e) => e.stopPropagation()}
-              className="hidden md:block sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain rounded-2xl border border-gold/40 bg-white p-6 shadow-sm [scrollbar-width:thin] [scrollbar-color:rgba(88,17,26,0.35)_rgba(88,17,26,0.05)]"
+              className="hidden md:block sticky top-[120px] z-20 max-h-[calc(100vh-136px)] overflow-y-auto overscroll-contain rounded-2xl border border-gold/40 bg-white p-6 shadow-sm boutique-scrollbar"
             >
               {sidebarContent}
             </aside>
@@ -530,7 +530,7 @@ function ShopPage() {
             <div
               data-lenis-prevent
               onWheel={(e) => e.stopPropagation()}
-              className="flex-1 overflow-y-auto px-6 py-6 overscroll-contain"
+              className="flex-1 overflow-y-auto px-6 py-6 overscroll-contain boutique-scrollbar"
             >
               {sidebarContent}
             </div>
@@ -674,7 +674,7 @@ function ShopFilterSidebar({
         <div
           data-lenis-prevent
           onWheel={(e) => e.stopPropagation()}
-          className="grid grid-cols-2 gap-2 pt-1 max-h-72 overflow-y-auto overscroll-contain pr-1.5 [scrollbar-width:thin] [scrollbar-color:rgba(88,17,26,0.35)_rgba(88,17,26,0.05)]"
+          className="grid grid-cols-2 gap-2 pt-1 max-h-72 overflow-y-auto overscroll-contain pr-1.5 boutique-scrollbar"
         >
           {availableColors.map((col) => {
             const active = selColors.has(col.key);

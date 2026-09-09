@@ -380,7 +380,7 @@ function ProductDetail() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10">
           {/* LEFT — Thumbnail rail + Main image (sticky) */}
           <div className="md:col-span-7">
-            <div className="md:sticky md:top-24 flex flex-col md:flex-row gap-3 md:gap-4">
+            <div className="md:sticky md:top-[120px] flex flex-col md:flex-row gap-3 md:gap-4">
               {/* Vertical thumbnail rail for Desktop — generous size, scrollable */}
               <div className="hidden md:flex flex-col relative w-24 lg:w-28 shrink-0">
                 {gallery.length > 4 && (
@@ -399,7 +399,7 @@ function ProductDetail() {
                   onWheel={(e) => {
                     e.stopPropagation();
                   }}
-                  className="flex flex-col gap-3 max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden pr-1.5 overscroll-contain scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgba(88,17,26,0.35)_rgba(88,17,26,0.05)]"
+                  className="flex flex-col gap-3 max-h-[calc(100vh-8.5rem)] overflow-y-auto overflow-x-hidden pr-1.5 overscroll-contain scroll-smooth boutique-scrollbar"
                 >
                   {gallery.map((g: string, i: number) => (
                     <button

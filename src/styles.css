@@ -10,6 +10,33 @@
   scrollbar-width: none;
 }
 
+@utility boutique-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 16, 24, 0.45) rgba(162, 118, 51, 0.08);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(162, 118, 51, 0.07);
+    border-radius: 9999px;
+    margin: 6px 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(155, 16, 24, 0.4);
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    transition: background-color 0.2s ease;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(155, 16, 24, 0.8);
+  }
+  &::-webkit-scrollbar-thumb:active {
+    background: #9B1018;
+  }
+}
+
 /* ---------------------------------------------------------------
    Mumbai Bazar — Premium saree boutique design system.
    Palette: Mumbai Bazar red, deep red, warm white,
