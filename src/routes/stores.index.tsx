@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { PUBLISHED_OUTLETS, OUTLET_COUNT, FLAGSHIP } from "@/lib/locations";
+import { LOCAL_AREAS } from "@/lib/local-areas";
 import { seo, jsonLd, SITE } from "@/lib/seo";
 import { breadcrumbSchema, faqSchema, storeListSchema } from "@/lib/structured-data";
 
@@ -38,11 +39,12 @@ const LOCATOR_FAQS = [
 export const Route = createFileRoute("/stores/")({
   head: () => {
     const { meta, links } = seo({
-      title: "Saree Shops in Nalasopara, Virar & Mumbai | Mumbai Bazar",
+      title: "Saree Shops in Vasai Virar, Nalasopara & Mumbai | Mumbai Bazar",
       description: `Find your nearest Mumbai Bazar store. ${OUTLET_COUNT} saree and lehenga shops across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
       path: "/stores",
       keywords: [
         "saree shop near me",
+        "saree shop in vasai virar",
         "saree shop nalasopara",
         "saree shop virar",
         "lehenga shop bhayandar",
@@ -274,6 +276,63 @@ function StoreLocator() {
       </section>
 
       {/* 4. Common FAQs */}
+      {/* Area guides.
+          The store cards above answer "where is your Virar branch". This block
+          answers "where should I shop in Vasai Virar", which is the query that
+          actually gets typed — locals search the whole belt, not one station.
+          Without this link the area page is an orphan and will not rank. */}
+      <section className="py-14 md:py-20 border-b border-gold/30 bg-[#FAF7F2]">
+        <div className="mx-auto w-full max-w-4xl px-4 md:px-8">
+          <div className="text-center mb-8">
+            <span className="text-xs uppercase tracking-[0.2em] text-gold-deep font-bold block mb-2">
+              Shopping Guides
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-maroon">
+              Buying a saree in your area
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-ink/80 font-medium">
+              Which market is best for what, what sarees actually cost, and when to go.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {LOCAL_AREAS.map((a) => (
+              <Link
+                key={a.slug}
+                to="/sarees-in/$area"
+                params={{ area: a.slug }}
+                className="group flex items-center justify-between gap-4 rounded-2xl border border-gold/50 bg-white p-6 shadow-xs transition-colors hover:border-maroon"
+              >
+                <span>
+                  <span className="block font-serif text-xl font-bold text-maroon">
+                    Saree shops in {a.name}
+                  </span>
+                  <span className="mt-1 block text-sm text-ink/75 font-medium">
+                    {a.outletSlugs.length} stores &middot; prices, markets and timings
+                  </span>
+                </span>
+                <ArrowRight className="h-5 w-5 shrink-0 text-maroon transition-transform group-hover:translate-x-1" />
+              </Link>
+            ))}
+            <Link
+              to="/guides/$slug"
+              params={{ slug: "how-to-choose-a-saree-shop" }}
+              className="group flex items-center justify-between gap-4 rounded-2xl border border-gold/50 bg-white p-6 shadow-xs transition-colors hover:border-maroon"
+            >
+              <span>
+                <span className="block font-serif text-xl font-bold text-maroon">
+                  How to choose a saree shop
+                </span>
+                <span className="mt-1 block text-sm text-ink/75 font-medium">
+                  8 checks to make before you pay
+                </span>
+              </span>
+              <ArrowRight className="h-5 w-5 shrink-0 text-maroon transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="py-14 md:py-20 bg-white border-b border-gold/30">
         <div className="mx-auto w-full max-w-4xl px-4 md:px-8">
           <div className="text-center mb-10">

@@ -97,7 +97,7 @@ export const OUTLETS: Outlet[] = [
     occasions: ["Navratri", "Diwali", "Jivdani yatra", "wedding season"],
     specialities: ["Party wear sarees", "Dress material", "Fancy sarees", "Festive lehengas"],
     intro:
-      "Our Virar West store on Gaothan Road, next to Corporation Bank, has served the area since 2009. Virar shoppers come to us for festive drapes around Navratri and the Jivdani yatra, and for party wear that works for a long day out.",
+      "Our Virar West store on Gaothan Road, next to Corporation Bank, has served the area since 2009. Virar shoppers come to us for festive sarees around Navratri and the Jivdani yatra, and for party wear that works for a long day out.",
   },
   {
     slug: "bhayandar",

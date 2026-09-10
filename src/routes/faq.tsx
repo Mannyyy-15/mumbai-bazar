@@ -10,26 +10,29 @@ import {
   Truck,
   Scissors,
   RefreshCw,
+  MapPin,
 } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { GoldRule } from "@/components/site/Motif";
 import { IMG } from "@/lib/site-data";
-import { seo, jsonLd } from "@/lib/seo";
+import { seo, jsonLd, SITE } from "@/lib/seo";
 import { faqSchema, breadcrumbSchema } from "@/lib/structured-data";
 
 export const Route = createFileRoute("/faq")({
   head: () => {
     const { meta, links } = seo({
-      title: "Saree FAQs: Stitching, Shipping & Returns | Mumbai Bazar",
+      title: "Mumbai Bazar FAQs — Store Locations, Timings, Prices & Stitching",
       description:
-        "Answers on our saree and lehenga range, store timings and locations, blouse stitching, exchanges and delivery across India.",
+        "Where our 8 saree stores are, what timings they keep, what sarees cost, and how blouse stitching, exchanges and delivery work. Answers for Nalasopara, Virar, Vasai, Bhayandar and Goregaon.",
       path: "/faq",
       keywords: [
-        "saree FAQ",
+        "mumbai bazar store timings",
+        "saree shop near me",
+        "best saree shop in vasai virar",
+        "saree price nalasopara",
         "saree shop timings",
         "saree blouse stitching",
         "saree return policy",
-        "international saree shipping",
       ],
     });
     return {
@@ -53,6 +56,7 @@ export const Route = createFileRoute("/faq")({
 
 const CATEGORIES = [
   { id: "all", label: "All Questions", icon: HelpCircle },
+  { id: "stores", label: "Stores & Timings", icon: MapPin },
   { id: "weaves", label: "Sarees & Weaves", icon: ShieldCheck },
   { id: "shipping", label: "Shipping & Tracking", icon: Truck },
   { id: "blouse", label: "Blouse & Stitching", icon: Scissors },
@@ -104,6 +108,55 @@ const FAQS = [
     category: "returns",
     q: "What happens if a parcel is damaged in transit?",
     a: "Every parcel sent from Mumbai Bazar is 100% insured against loss or transit damage. If your package arrives damaged, notify us within 48 hours and we will ship an immediate replacement.",
+  },
+
+  // ---------------------------------------------------------------------------
+  // Store and location questions.
+  //
+  // Added 2026-09-09 off the back of Search Console. Every question below maps
+  // to a query with real local intent that this site had NO eligible answer for
+  // — "saree shop near me", "best saree shop in vasai virar", "saree price
+  // nalasopara" all scored zero impressions. The commercial pages state where
+  // the shops are; nothing stated it in the question-and-answer form that
+  // People Also Ask and AI answer engines actually lift.
+  //
+  // Answers name streets, landmarks and real prices on purpose. A vague answer
+  // is never the one that gets quoted.
+  // ---------------------------------------------------------------------------
+  {
+    category: "stores",
+    q: "Where are your saree shops located?",
+    a: "Mumbai Bazar has 8 stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. The flagship is at Shop 1, Tiwari Nagar, Tulinj Road, Nalasopara East — near the flyover bridge, opposite Seema Complex (401209). Our other published branches are Virar West (Gaothan Road, next to Corporation Bank), Bhayandar East (Talao Road, opposite Ujwal Book Depot) and Goregaon West (Kakaji Nagar, Jawahar Nagar).",
+  },
+  {
+    category: "stores",
+    q: "Which is the best saree shop in Vasai Virar?",
+    a: "It depends what you are buying. For bridal and dulhan sarees, our Nalasopara East store on Tulinj Road carries the widest range across the group — most customers come there to compare pieces side by side before a wedding. For party wear on a quicker trip, our Virar West store on Gaothan Road is easier to get in and out of.",
+  },
+  {
+    category: "stores",
+    q: "What are your store timings?",
+    a: `${SITE.hours.sentence}, including Sunday. Weekday mornings are the calmest; Sundays and the weeks before Diwali, Navratri and the wedding season are busiest.`,
+  },
+  {
+    category: "stores",
+    q: "How much does a saree cost at Mumbai Bazar?",
+    a: "Everyday cotton and printed sarees start around ₹800. Party wear with zari or embroidery runs ₹2,000 to ₹6,000. Designer lehengas sit at ₹5,000 to ₹15,000, and heavy dulhan and bridal pieces start near ₹12,000 and go past ₹40,000 depending on the work.",
+  },
+  {
+    category: "stores",
+    q: "Which store should I visit for a bridal or dulhan saree?",
+    a: "Nalasopara East. It is our flagship and holds the largest bridal and dulhan selection of all eight stores. Call +91 89566 64631 a day ahead with your colour, budget and wedding date and we will keep a selection ready, which saves a lot of time in peak season.",
+  },
+  {
+    category: "stores",
+    q: "Which saree shop is nearest to Nalasopara station?",
+    a: "Our Nalasopara East store on Tulinj Road, by the flyover bridge and opposite Seema Complex, is about ten minutes from Nalasopara station on the east side — walkable, or a short auto ride.",
+  },
+  {
+    category: "stores",
+    q: "Do I need an appointment to visit?",
+    a: `No, walk in any day — ${SITE.hours.short.toLowerCase()}, seven days a week. Calling ahead only helps for bridal shopping, where telling us your colour and budget in advance means pieces are ready when you arrive rather than being pulled out while you wait.`,
   },
 ];
 

@@ -39,6 +39,7 @@ import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as PoliciesPolicyRouteImport } from './routes/policies.$policy'
 import { Route as ProductsIdRouteImport } from './routes/products.$id'
+import { Route as SareesInAreaRouteImport } from './routes/sarees-in.$area'
 import { Route as StoresIndexRouteImport } from './routes/stores.index'
 import { Route as StoresSlugRouteImport } from './routes/stores.$slug'
 
@@ -192,6 +193,11 @@ const ProductsIdRoute = ProductsIdRouteImport.update({
   path: '/products/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SareesInAreaRoute = SareesInAreaRouteImport.update({
+  id: '/sarees-in/$area',
+  path: '/sarees-in/$area',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoresIndexRoute = StoresIndexRouteImport.update({
   id: '/stores/',
   path: '/stores/',
@@ -233,6 +239,7 @@ export interface FileRoutesByFullPath {
   '/guides/$slug': typeof GuidesSlugRoute
   '/policies/$policy': typeof PoliciesPolicyRoute
   '/products/$id': typeof ProductsIdRoute
+  '/sarees-in/$area': typeof SareesInAreaRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/guides/': typeof GuidesIndexRoute
   '/stores/': typeof StoresIndexRoute
@@ -267,6 +274,7 @@ export interface FileRoutesByTo {
   '/guides/$slug': typeof GuidesSlugRoute
   '/policies/$policy': typeof PoliciesPolicyRoute
   '/products/$id': typeof ProductsIdRoute
+  '/sarees-in/$area': typeof SareesInAreaRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/guides': typeof GuidesIndexRoute
   '/stores': typeof StoresIndexRoute
@@ -302,6 +310,7 @@ export interface FileRoutesById {
   '/guides/$slug': typeof GuidesSlugRoute
   '/policies/$policy': typeof PoliciesPolicyRoute
   '/products/$id': typeof ProductsIdRoute
+  '/sarees-in/$area': typeof SareesInAreaRoute
   '/stores/$slug': typeof StoresSlugRoute
   '/guides/': typeof GuidesIndexRoute
   '/stores/': typeof StoresIndexRoute
@@ -338,6 +347,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/policies/$policy'
     | '/products/$id'
+    | '/sarees-in/$area'
     | '/stores/$slug'
     | '/guides/'
     | '/stores/'
@@ -372,6 +382,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/policies/$policy'
     | '/products/$id'
+    | '/sarees-in/$area'
     | '/stores/$slug'
     | '/guides'
     | '/stores'
@@ -406,6 +417,7 @@ export interface FileRouteTypes {
     | '/guides/$slug'
     | '/policies/$policy'
     | '/products/$id'
+    | '/sarees-in/$area'
     | '/stores/$slug'
     | '/guides/'
     | '/stores/'
@@ -441,6 +453,7 @@ export interface RootRouteChildren {
   GuidesSlugRoute: typeof GuidesSlugRoute
   PoliciesPolicyRoute: typeof PoliciesPolicyRoute
   ProductsIdRoute: typeof ProductsIdRoute
+  SareesInAreaRoute: typeof SareesInAreaRoute
   StoresSlugRoute: typeof StoresSlugRoute
   GuidesIndexRoute: typeof GuidesIndexRoute
   StoresIndexRoute: typeof StoresIndexRoute
@@ -658,6 +671,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sarees-in/$area': {
+      id: '/sarees-in/$area'
+      path: '/sarees-in/$area'
+      fullPath: '/sarees-in/$area'
+      preLoaderRoute: typeof SareesInAreaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stores/': {
       id: '/stores/'
       path: '/stores'
@@ -705,6 +725,7 @@ const rootRouteChildren: RootRouteChildren = {
   GuidesSlugRoute: GuidesSlugRoute,
   PoliciesPolicyRoute: PoliciesPolicyRoute,
   ProductsIdRoute: ProductsIdRoute,
+  SareesInAreaRoute: SareesInAreaRoute,
   StoresSlugRoute: StoresSlugRoute,
   GuidesIndexRoute: GuidesIndexRoute,
   StoresIndexRoute: StoresIndexRoute,
