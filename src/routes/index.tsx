@@ -18,13 +18,16 @@ import {
   MapPin,
   RotateCcw,
   Headphones,
+  ArrowRight,
+  Phone,
+  Navigation,
 } from "lucide-react";
 
 import { IMG, COLLECTIONS, LOOKS, TESTIMONIAL_IMGS, type Product } from "@/lib/site-data";
 import { seo, jsonLd, SITE } from "@/lib/seo";
 import { shopifyImage, shopifyImageSrcSet } from "@/lib/shopify";
 import { breadcrumbSchema, outletSchema } from "@/lib/structured-data";
-import { FLAGSHIP } from "@/lib/locations";
+import { FLAGSHIP, OUTLET_COUNT } from "@/lib/locations";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useCatalog } from "@/lib/catalog-context";
@@ -661,7 +664,9 @@ function StoreVisitBanner() {
     >
       <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-[#D4AF37]/50 bg-[#FAF7F2] shadow-sm flex flex-col md:flex-row items-stretch">
         {/* Left: Real Storefront Facade */}
-        <div className="w-full md:w-[42%] lg:w-[38%] min-h-[200px] sm:min-h-[240px] md:min-h-[280px] relative overflow-hidden bg-[#2A080C] shrink-0">
+        {/* The storefront photo is the strongest proof this is a real shop, so
+            it gets a fixed 4:3 on phones rather than a 200px letterbox. */}
+        <div className="w-full md:w-[42%] lg:w-[38%] aspect-[4/3] sm:aspect-[16/9] md:aspect-auto md:min-h-[280px] relative overflow-hidden bg-[#2A080C] shrink-0">
           <img
             src="/storefront.webp"
             alt="Mumbai Bazar Sarees, Lehengas and Dresses Storefront in Nalasopara East"
@@ -687,20 +692,64 @@ function StoreVisitBanner() {
 
           <div className="mt-3.5 flex items-start gap-2 text-ink/75">
             <MapPin className="h-4 w-4 text-[#A6192E] shrink-0 mt-0.5" />
+            {/* Derived from FLAGSHIP, not retyped. This address is NAP data —
+                a second hardcoded copy is a copy that drifts, and a mismatch
+                against Google Business Profile costs local ranking. */}
             <span className="text-xs sm:text-sm font-medium leading-relaxed">
-              Tiwari Nagar, Shop No. 1, Near Flyover Bridge, Nalasopara East
+              {FLAGSHIP.street}, {FLAGSHIP.landmark}, {FLAGSHIP.area}
             </span>
           </div>
 
-          <div className="mt-5 flex items-center gap-3">
+          {/*
+            Actions.
+
+            96% of this site's traffic is mobile (Search Console, Aug-Sep 2026),
+            and for a physical saree shop the highest-intent taps are "call" and
+            "directions" — not "read another page". Those were missing entirely;
+            the section offered one link to the store page and nothing else.
+
+            Full-width stacked buttons on phones so each is a comfortable tap
+            target, inline from sm.
+          */}
+          <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <a
+              href={`tel:${FLAGSHIP.phone?.replace(/\s/g, "") ?? SITE.phone.replace(/\s/g, "")}`}
+              className="inline-flex items-center justify-center gap-1.5 rounded bg-[#A6192E] px-6 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-ivory shadow-sm transition-all hover:bg-[#851424] hover:shadow-md active:scale-95 sm:py-2.5 sm:text-xs"
+            >
+              <Phone className="h-3.5 w-3.5 shrink-0" />
+              <span>Call the store</span>
+            </a>
+
+            {FLAGSHIP.geo && (
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${FLAGSHIP.geo.lat},${FLAGSHIP.geo.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 rounded border border-[#A6192E]/40 bg-ivory px-6 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#A6192E] shadow-xs transition-all hover:bg-[#A6192E] hover:text-ivory active:scale-95 sm:py-2.5 sm:text-xs"
+              >
+                <Navigation className="h-3.5 w-3.5 shrink-0" />
+                <span>Directions</span>
+              </a>
+            )}
+
             <Link
               to="/stores/$slug"
               params={{ slug: "nalasopara" }}
-              className="inline-flex items-center justify-center gap-1.5 px-6 py-2.5 bg-[#A6192E] hover:bg-[#851424] text-ivory text-[11px] sm:text-xs font-bold uppercase tracking-[0.16em] rounded shadow-sm hover:shadow-md transition-all active:scale-95"
+              className="inline-flex items-center justify-center gap-1.5 rounded border border-[#A6192E]/40 bg-ivory px-6 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[#A6192E] shadow-xs transition-all hover:bg-[#A6192E] hover:text-ivory active:scale-95 sm:py-2.5 sm:text-xs"
             >
-              VISIT STORE →
+              <span>Store details</span>
+              <ArrowRight className="h-3.5 w-3.5 shrink-0" />
             </Link>
           </div>
+
+          {/* We have 8 stores; this banner only shows the flagship, so give the
+              other seven a way in rather than dead-ending here. */}
+          <Link
+            to="/stores"
+            className="mt-3.5 inline-flex items-center gap-1.5 text-[11px] font-semibold text-ink/70 underline decoration-[#D4AF37] underline-offset-4 transition-colors hover:text-[#A6192E]"
+          >
+            See all {OUTLET_COUNT} Mumbai Bazar stores
+          </Link>
         </div>
 
         {/* Right: Style Tradition Elegance + Bride Model */}
@@ -1623,7 +1672,9 @@ function InstagramBanner() {
     },
     {
       img: "/instagram/reel_2_trending_nalasopara.jpg",
-      title: "Handcrafted Bridal Box Unboxing",
+      // "Handcrafted" dropped — same unverifiable claim already stripped
+      // elsewhere on this site. The reel is an unboxing either way.
+      title: "Bridal Box Unboxing",
       views: "92K",
       tag: "Bridal",
     },
@@ -1655,16 +1706,33 @@ function InstagramBanner() {
       aria-label="Watch Mumbai Bazar Trending Reels on Instagram"
     >
       <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border border-[#F2D7D5] bg-[#FDF5F5] shadow-xs flex flex-col lg:flex-row items-stretch">
-        {/* Left: 5 Real Instagram Reels Cards */}
+        {/*
+          Left: the reels.
+
+          On phones this is a swipeable row, NOT a 5-up grid. grid-cols-5 was
+          hardcoded at every width, which on a 390px screen gave five 62px
+          slivers — too narrow to make out what any reel showed, and the titles
+          were hidden below sm to boot. Reels are 9:16, so five across only
+          works once there is real width to divide.
+
+          Below sm: horizontal scroll, cards at 46% so the third peeks in and
+          signals there is more. From sm: back to the 5-up grid.
+
+          touch-action is "pan-x pan-y" for the same reason as the Trending
+          carousel — a single-axis value kills the other direction outright.
+        */}
         <div className="w-full lg:w-[50%] xl:w-[52%] p-2.5 sm:p-3.5 shrink-0">
-          <div className="grid grid-cols-5 gap-1.5 sm:gap-2.5 h-full">
+          <div
+            className="flex gap-2.5 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-1 sm:grid sm:grid-cols-5 sm:gap-2.5 sm:overflow-visible sm:pb-0 h-full"
+            style={{ touchAction: "pan-x pan-y" }}
+          >
             {reels.map((reel, i) => (
               <a
                 key={i}
                 href={igReelsUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="group relative block aspect-[9/16] rounded-xl sm:rounded-2xl overflow-hidden bg-black/90 shadow-sm border border-gold/30 hover:border-maroon transition-all"
+                className="group relative block w-[46%] shrink-0 snap-start sm:w-auto sm:shrink aspect-[9/16] rounded-xl sm:rounded-2xl overflow-hidden bg-black/90 shadow-sm border border-gold/30 hover:border-maroon transition-all"
                 aria-label={`Watch Reel: ${reel.title}`}
               >
                 <img
@@ -1684,7 +1752,7 @@ function InstagramBanner() {
                 <div className="absolute top-2 left-2 right-2 flex items-center justify-between pointer-events-none">
                   <span className="inline-flex items-center gap-1 rounded-full bg-black/60 backdrop-blur-md px-1.5 sm:px-2 py-0.5 text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-gold">
                     <Play className="h-2 w-2 fill-gold text-gold" />
-                    <span className="hidden sm:inline">Reel</span>
+                    <span>Reel</span>
                   </span>
                 </div>
 
@@ -1701,7 +1769,10 @@ function InstagramBanner() {
                     <Play className="h-2 w-2 fill-white" />
                     <span>{reel.views}</span>
                   </span>
-                  <p className="mt-1 text-[9px] sm:text-[10px] font-semibold text-white/95 leading-tight line-clamp-1 hidden sm:block">
+                  {/* Shown on phones too now — the cards are wide enough to
+                      carry a line of text, and a reel with no title is just an
+                      unlabelled thumbnail. */}
+                  <p className="mt-1 text-[9px] sm:text-[10px] font-semibold text-white/95 leading-tight line-clamp-1">
                     {reel.title}
                   </p>
                 </div>
@@ -1711,9 +1782,12 @@ function InstagramBanner() {
         </div>
 
         {/* Center & Right: Instagram Follow Callout + Stay Connected */}
-        <div className="flex-1 px-6 sm:px-10 py-6 md:py-8 flex flex-col sm:flex-row items-center justify-between gap-6 bg-gradient-to-r from-[#FDF5F5] via-[#FCEDEA] to-[#FDF5F5]">
-          {/* Middle Follow Callout */}
-          <div className="flex items-start sm:items-center gap-3.5 sm:gap-4">
+        <div className="flex-1 px-5 sm:px-10 py-6 md:py-8 flex flex-col sm:flex-row items-center justify-between gap-5 sm:gap-6 bg-gradient-to-r from-[#FDF5F5] via-[#FCEDEA] to-[#FDF5F5]">
+          {/* Middle Follow Callout.
+              Stacked and centred on phones — the icon used to sit left of a
+              left-aligned text block while "Stay Connected" below it was
+              centred, so the section had two competing alignments. */}
+          <div className="flex flex-col items-center text-center gap-3 sm:flex-row sm:items-center sm:text-left sm:gap-4">
             <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-md">
               <Instagram className="h-6 w-6" />
             </div>
@@ -1728,10 +1802,14 @@ function InstagramBanner() {
                 href={igReelsUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-2.5 inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-amber-600 via-rose-600 to-purple-600 text-white hover:opacity-95 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] transition-all shadow-md active:scale-95"
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-amber-600 via-rose-600 to-purple-600 px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white shadow-md transition-all hover:opacity-95 active:scale-95 sm:w-auto sm:text-[11px]"
               >
-                <Play className="h-3 w-3 fill-white" />
-                <span>WATCH REELS ON INSTAGRAM →</span>
+                <Play className="h-3 w-3 shrink-0 fill-white" />
+                {/* Label and arrow kept in one non-wrapping run. The arrow used
+                    to sit inside the text, so on a narrow screen it wrapped
+                    alone onto a second line and read as a rendering fault. */}
+                <span className="whitespace-nowrap">Watch reels on Instagram</span>
+                <ArrowRight className="h-3 w-3 shrink-0" />
               </a>
             </div>
           </div>
