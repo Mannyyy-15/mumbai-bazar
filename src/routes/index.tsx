@@ -590,7 +590,7 @@ function ProductFeed() {
           <div className="h-px bg-gold/60 flex-1 max-w-[60px] sm:max-w-[120px] md:max-w-[180px]" />
         </div>
         <p className="mt-2 text-xs sm:text-sm md:text-base text-ink/75 font-medium max-w-xl mx-auto">
-          Handcrafted heirlooms ready for immediate doorstep dispatch ({pool.length} pieces)
+          In stock and ready to ship across India ({pool.length} pieces)
         </p>
       </div>
 
@@ -1202,21 +1202,99 @@ function ShopByOccasion() {
   );
 }
 
-/* ---------------- Trending Now (horizontal scroll with navigation buttons) ---------------- */
+/* ---------------- Trending Now (auto-advancing carousel) ---------------- */
 function TrendingNow() {
   const { products } = useCatalog();
   const items = products.slice(0, 8);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  /**
+   * Scroll position -> active dot.
+   *
+   * Read from the scroll container rather than tracked in state, so the dots
+   * stay correct however the strip moved: arrows, autoplay, a finger swipe or
+   * a trackpad. rAF-throttled because scroll fires per frame on touch.
+   */
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const card = el.querySelector<HTMLElement>("[data-card]");
+        if (!card) return;
+        const gap = window.innerWidth >= 768 ? 24 : 16;
+        const step = card.clientWidth + gap;
+        if (step <= 0) return;
+        const index = Math.round(el.scrollLeft / step);
+        setActive(Math.max(0, Math.min(items.length - 1, index)));
+      });
+    };
+
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [items.length]);
+
+  const scrollToIndex = (index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>("[data-card]");
+    if (!card) return;
+    const gap = window.innerWidth >= 768 ? 24 : 16;
+    el.scrollTo({ left: index * (card.clientWidth + gap), behavior: "smooth" });
+  };
 
   const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const firstCard = scrollRef.current.querySelector("a");
-      const gap = typeof window !== "undefined" && window.innerWidth >= 768 ? 24 : 16;
-      const cardWidth = firstCard ? firstCard.clientWidth + gap : 320;
-      const amount = direction === "left" ? -cardWidth : cardWidth;
-      scrollRef.current.scrollBy({ left: amount, behavior: "smooth" });
-    }
+    const next = direction === "left" ? active - 1 : active + 1;
+    scrollToIndex((next + items.length) % items.length);
   };
+
+  /**
+   * Autoplay.
+   *
+   * Paused on hover, on touch, and whenever the tab is hidden or the section is
+   * scrolled out of view — an off-screen carousel advancing in the background
+   * just burns battery. Skipped entirely under prefers-reduced-motion, where
+   * unrequested movement is the thing the user asked not to have.
+   */
+  useEffect(() => {
+    if (paused || items.length <= 1) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const el = scrollRef.current;
+    if (!el) return;
+
+    let visible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+      },
+      { threshold: 0.35 },
+    );
+    observer.observe(el);
+
+    const timer = setInterval(() => {
+      if (!visible || document.hidden) return;
+      setActive((current) => {
+        const next = (current + 1) % items.length;
+        scrollToIndex(next);
+        return next;
+      });
+    }, 4000);
+
+    return () => {
+      clearInterval(timer);
+      observer.disconnect();
+    };
+  }, [paused, items.length]);
 
   return (
     <section className="w-full bg-beige/25 border-y border-maroon/40 py-16 md:py-24">
@@ -1257,76 +1335,70 @@ function TrendingNow() {
           </div>
         </div>
 
+        {/*
+          touchAction is "pan-y", NOT "pan-x".
+
+          This element scrolls horizontally, so "pan-x" looks like the right
+          value and is the bug it used to have: it tells the browser this
+          element consumes horizontal gestures and handles nothing else, so a
+          vertical swipe that began on a card was swallowed and the page froze.
+          On a phone you had to find a gap beside the carousel to scroll past
+          the section at all.
+
+          "pan-y" gives vertical panning back to the page. Horizontal swiping
+          still works — that comes from overflow-x, not from touch-action.
+        */}
         <div
           ref={scrollRef}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onTouchStart={() => setPaused(true)}
           className="flex gap-4 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide scroll-smooth"
-          style={{ touchAction: "pan-x" }}
+          style={{ touchAction: "pan-y" }}
         >
           {items.map((p, i) => (
-            <Link
+            <div
               key={p.id}
-              to="/products/$id"
-              params={{ id: p.id }}
-              className="group snap-center sm:snap-start shrink-0 w-full sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)] flex flex-col bg-ivory rounded-2xl border border-gold/45 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+              data-card
+              className="relative snap-center sm:snap-start shrink-0 w-[78%] sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)] flex"
             >
-              <div className="relative aspect-[3/4] w-full overflow-hidden bg-beige/30">
-                <div className="absolute top-3 left-3 z-10 h-7 w-7 rounded-full flex items-center justify-center bg-maroon text-ivory text-[10px] font-bold shadow-md border border-gold/40">
-                  {i + 1}
-                </div>
-                {/* Primary Image */}
-                <img
-                  src={shopifyImage(p.img, 600)}
-                  srcSet={shopifyImageSrcSet(p.img, [300, 450, 600, 800])}
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  alt={p.name}
-                  width={600}
-                  height={800}
-                  loading="lazy"
-                  decoding="async"
-                  className={`w-full h-full object-cover object-top transition-all duration-700 ease-out ${
-                    p.secondaryImg
-                      ? "group-hover:opacity-0 group-hover:scale-105"
-                      : "group-hover:scale-108"
-                  }`}
-                />
-
-                {/* Secondary Hover Image */}
-                {p.secondaryImg && (
-                  <img
-                    src={shopifyImage(p.secondaryImg, 600)}
-                    srcSet={shopifyImageSrcSet(p.secondaryImg, [300, 450, 600, 800])}
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    alt={`${p.name} alternate view`}
-                    width={600}
-                    height={800}
-                    loading="lazy"
-                    decoding="async"
-                    className="absolute inset-0 w-full h-full object-cover object-top opacity-0 scale-100 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105 pointer-events-none"
-                  />
-                )}
+              {/* Rank badge sits over the shared card rather than inside it —
+                  ranking is a property of this list, not of the product. */}
+              <span className="pointer-events-none absolute top-3 left-3 z-20 h-7 w-7 rounded-full flex items-center justify-center bg-maroon text-ivory text-[10px] font-bold shadow-md border border-gold/40">
+                {i + 1}
+              </span>
+              {/* The shared card, so Trending gets the same Shop Now button,
+                  wishlist and in-cart quantity selector as every other grid.
+                  This section used to hand-roll its own markup and shipped
+                  without any of them. */}
+              <div className="w-full [&>a]:w-full">
+                <ProductCard p={p} />
               </div>
-
-              <div className="p-3.5 md:p-4 flex flex-col space-y-1.5 text-left">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-maroon font-bold">
-                  {p.weave}
-                </p>
-                <h4 className="font-sans text-sm md:text-base font-bold leading-snug text-maroon group-hover:text-gold-deep transition-colors line-clamp-1">
-                  {p.name}
-                </h4>
-                <div className="flex items-baseline gap-2 pt-2 border-t border-gold/45 mt-1">
-                  <span className="font-sans text-lg sm:text-xl md:text-2xl font-bold text-maroon tracking-tight">
-                    {p.price}
-                  </span>
-                  {p.original && (
-                    <span className="text-xs sm:text-sm text-taupe font-medium line-through font-sans">
-                      {p.original}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </Link>
+            </div>
           ))}
         </div>
+
+        {/* Dots. Without these a phone shows one card and nothing signals that
+            the strip moves at all. */}
+        {items.length > 1 && (
+          <div className="mt-5 flex items-center justify-center gap-2">
+            {items.map((p, i) => (
+              <button
+                key={p.id}
+                onClick={() => {
+                  setPaused(true);
+                  setActive(i);
+                  scrollToIndex(i);
+                }}
+                aria-label={`Go to product ${i + 1} of ${items.length}`}
+                aria-current={i === active}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === active ? "w-6 bg-maroon" : "w-2 bg-maroon/25 hover:bg-maroon/50"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
