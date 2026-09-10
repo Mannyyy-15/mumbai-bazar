@@ -1336,17 +1336,27 @@ function TrendingNow() {
         </div>
 
         {/*
-          touchAction is "pan-y", NOT "pan-x".
+          touchAction MUST list both axes. Do not "simplify" this to one.
 
-          This element scrolls horizontally, so "pan-x" looks like the right
-          value and is the bug it used to have: it tells the browser this
-          element consumes horizontal gestures and handles nothing else, so a
-          vertical swipe that began on a card was swallowed and the page froze.
-          On a phone you had to find a gap beside the carousel to scroll past
-          the section at all.
+          touch-action names every gesture the browser may handle itself;
+          anything omitted is withheld from it. Both single-axis values are
+          wrong here, and this element has now shipped with each of them:
 
-          "pan-y" gives vertical panning back to the page. Horizontal swiping
-          still works — that comes from overflow-x, not from touch-action.
+            "pan-x"  browser handles horizontal only. A vertical swipe that
+                     began on a card was swallowed, so on a phone the page
+                     froze at this section and you had to find a gap beside
+                     the carousel to scroll past it.
+            "pan-y"  browser handles vertical only. Page scrolling worked,
+                     but dragging the cards sideways did nothing — the fix
+                     for the first bug, which caused the second.
+
+          "pan-x pan-y" gives both axes back. The browser picks the axis from
+          the direction of the gesture, which is what a horizontally-scrolling
+          strip inside a vertically-scrolling page needs. Only pinch-zoom is
+          withheld, which is what we want on a product strip.
+
+          Note that overflow-x alone does NOT restore horizontal swiping on
+          touch: touch-action gates the gesture before overflow ever sees it.
         */}
         <div
           ref={scrollRef}
@@ -1354,7 +1364,7 @@ function TrendingNow() {
           onMouseLeave={() => setPaused(false)}
           onTouchStart={() => setPaused(true)}
           className="flex gap-4 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide scroll-smooth"
-          style={{ touchAction: "pan-y" }}
+          style={{ touchAction: "pan-x pan-y" }}
         >
           {items.map((p, i) => (
             <div
