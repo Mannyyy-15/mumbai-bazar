@@ -7,6 +7,7 @@ import type { Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { resolveColorSwatch } from "@/lib/filters";
+import { hapticImpact, hapticSuccess } from "@/lib/native-bridge";
 
 export function ProductCard({ p }: { p: Product }) {
   const { addItem, openCart, items, setQty } = useCart();
@@ -56,6 +57,7 @@ export function ProductCard({ p }: { p: Product }) {
     });
 
     setAdded(true);
+    hapticSuccess();
     if (addedTimer.current) clearTimeout(addedTimer.current);
     addedTimer.current = setTimeout(() => setAdded(false), 1800);
     openCart();
@@ -111,6 +113,7 @@ export function ProductCard({ p }: { p: Product }) {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            hapticImpact("light");
             toggleWishlist(p);
           }}
           className={`absolute right-3 top-3 z-10 grid h-8 w-8 place-items-center rounded-full transition-all shadow-sm ${
@@ -179,6 +182,7 @@ export function ProductCard({ p }: { p: Product }) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                hapticImpact("light");
                 if (inCartItem) {
                   setQty(inCartItem.id, inCartQty - 1);
                 }
@@ -216,6 +220,7 @@ export function ProductCard({ p }: { p: Product }) {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                hapticImpact("light");
                 if (inCartItem) {
                   setQty(inCartItem.id, inCartQty + 1);
                 }

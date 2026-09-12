@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mumbai Bazar | Authentic Sarees & Handloom Elegance</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#9B1018" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --maroon: #9B1018;
+        --maroon-dark: #680A0F;
+        --gold: #C5A059;
+        --gold-light: #E8D39E;
+        --ivory: #FFFDF8;
+        --charcoal: #1C1917;
+        --muted: #78716C;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: var(--ivory);
+        color: var(--charcoal);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        text-align: center;
+        padding-top: env(safe-area-inset-top, 24px);
+        padding-bottom: env(safe-area-inset-bottom, 24px);
+      }
+      .card {
+        background: #FFFFFF;
+        border: 1px solid rgba(197, 160, 89, 0.25);
+        border-radius: 20px;
+        box-shadow: 0 12px 36px rgba(104, 10, 15, 0.08);
+        padding: 36px 24px;
+        max-width: 400px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .logo {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        border: 2px solid var(--gold);
+        padding: 4px;
+        object-fit: contain;
+        background: #FFFDF8;
+        box-shadow: 0 4px 16px rgba(155, 16, 24, 0.12);
+        margin-bottom: 20px;
+      }
+      h1 {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 1.85rem;
+        font-weight: 700;
+        color: var(--maroon);
+        margin-bottom: 8px;
+        letter-spacing: -0.01em;
+      }
+      .tagline {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--gold);
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      p.desc {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+      }
+      .btn-primary {
+        background: var(--maroon);
+        color: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(155, 16, 24, 0.25);
+      }
+      .btn-primary:active {
+        background: var(--maroon-dark);
+        transform: scale(0.98);
+      }
+      .btn-secondary {
+        background: rgba(197, 160, 89, 0.15);
+        color: var(--maroon-dark);
+        margin-top: 10px;
+        border: 1px solid rgba(197, 160, 89, 0.35);
+      }
+      .btn-secondary:active {
+        background: rgba(197, 160, 89, 0.25);
+        transform: scale(0.98);
+      }
+      .contact-block {
+        margin-top: 28px;
+        padding-top: 20px;
+        border-top: 1px dashed rgba(197, 160, 89, 0.3);
+        width: 100%;
+        font-size: 0.825rem;
+        color: var(--muted);
+      }
+      .contact-block strong {
+        color: var(--charcoal);
+        display: block;
+        margin-bottom: 6px;
+      }
+      .spinner {
+        width: 28px;
+        height: 28px;
+        border: 3px solid rgba(155, 16, 24, 0.2);
+        border-top-color: var(--maroon);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-bottom: 16px;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      .hidden { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <img src="logo.png" alt="Mumbai Bazar" class="logo" />
+      
+      <!-- Connecting State -->
+      <div id="state-connecting">
+        <div class="spinner"></div>
+        <h1>Mumbai Bazar</h1>
+        <div class="tagline">Authentic Indian Sarees</div>
+        <p class="desc">Connecting to boutique collection...</p>
+      </div>
+
+      <!-- Offline State -->
+      <div id="state-offline" class="hidden">
+        <h1>You are Offline</h1>
+        <div class="tagline">Mumbai Bazar Boutique</div>
+        <p class="desc">
+          We couldn't connect to the live store. Please check your mobile data or Wi-Fi to browse our latest sarees.
+        </p>
+
+        <button id="retry-btn" class="btn btn-primary" type="button" onclick="checkAndConnect()">
+          ↻ Try Again
+        </button>
+
+        <a href="https://wa.me/918956664631?text=Hello%20Mumbai%20Bazar%2C%20I%20would%20like%20assistance%20with%20sarees." class="btn btn-secondary">
+          💬 Chat on WhatsApp
+        </a>
+
+        <div class="contact-block">
+          <strong>Visit Our Mumbai Stores</strong>
+          Nalasopara (W) Flagship • Virar • Bhayandar • Goregaon<br />
+          Open Everyday: 10:00 AM – 9:30 PM<br />
+          Phone: <a href="tel:+918956664631" style="color: var(--maroon); text-decoration: none; font-weight: 600;">+91 89566 64631</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const STORE_URL = "https://mumbaibazar.com";
+
+      function showOffline() {
+        document.getElementById("state-connecting").classList.add("hidden");
+        document.getElementById("state-offline").classList.remove("hidden");
+      }
+
+      function showConnecting() {
+        document.getElementById("state-offline").classList.add("hidden");
+        document.getElementById("state-connecting").classList.remove("hidden");
+      }
+
+      function checkAndConnect() {
+        showConnecting();
+        if (!navigator.onLine) {
+          setTimeout(showOffline, 600);
+          return;
+        }
+
+        // Ping check or direct navigation
+        const img = new Image();
+        const timeout = setTimeout(() => {
+          showOffline();
+        }, 5000);
+
+        img.onload = () => {
+          clearTimeout(timeout);
+          window.location.replace(STORE_URL);
+        };
+        img.onerror = () => {
+          // If storefront is reachable, redirect
+          clearTimeout(timeout);
+          window.location.replace(STORE_URL);
+        };
+        img.src = STORE_URL + "/favicon.png?t=" + Date.now();
+      }
+
+      window.addEventListener("online", () => {
+        checkAndConnect();
+      });
+
+      // Initial run
+      if (navigator.onLine) {
+        checkAndConnect();
+      } else {
+        showOffline();
+      }
+    </script>
+  </body>
+</html>

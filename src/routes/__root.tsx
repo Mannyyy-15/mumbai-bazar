@@ -25,6 +25,7 @@ import { WishlistDrawer } from "@/components/site/WishlistDrawer";
 import { PageTransition } from "@/components/site/PageTransition";
 import { ScrollReveal } from "@/components/site/ScrollReveal";
 import { MobileBottomNav } from "@/components/site/MobileBottomNav";
+import { initializeNativeApp } from "@/lib/native-bridge";
 
 function NotFoundComponent() {
   return (
@@ -118,7 +119,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5",
+      },
       { title: `${SITE.name} — ${SITE.tagline}` },
       { name: "description", content: SITE.description },
       { name: "author", content: SITE.name },
@@ -219,6 +223,10 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const { products } = Route.useLoaderData();
+
+  useEffect(() => {
+    initializeNativeApp();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
