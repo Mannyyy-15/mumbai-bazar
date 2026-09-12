@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { SITE, OG_IMAGE, jsonLd, verificationMeta } from "@/lib/seo";
@@ -204,6 +204,55 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+/**
+ * First-paint preloader — the brand mark over an ivory field, covering the
+ * window until React is interactive.
+ *
+ * The native app previously went: native splash -> white gap -> content, and
+ * that white gap is the most "website in a frame" moment of the whole launch.
+ * This closes it, sharing the splash's exact background so there is no seam.
+ *
+ * It is a React component rather than inline markup plus a script, because the
+ * inline version genuinely failed: the page hydrates with a mismatch, React
+ * regenerates the tree, and a script holding its own DOM reference is left
+ * pointing at a discarded node — so the overlay stayed at full opacity with
+ * pointer-events:auto over the entire shop. Owning the lifecycle in React means
+ * there is no second reference to go stale.
+ *
+ * Rendered server-side so it is visible in the very first byte, then unmounted
+ * on the effect after hydration.
+ */
+function AppPreloader() {
+  const [gone, setGone] = useState(false);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    // Two frames: the first lands before the browser has laid out the freshly
+    // hydrated tree, the second after — so the fade only begins once there is
+    // genuinely something behind the overlay.
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setFading(true));
+    });
+    const remove = setTimeout(() => setGone(true), 700);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(remove);
+    };
+  }, []);
+
+  if (gone) return null;
+
+  return (
+    <div id="app-preloader" aria-hidden="true" data-ready={fading ? "true" : undefined}>
+      <div className="preloader-mark">
+        <span className="preloader-ring" />
+        <img src="/logo.png" alt="" className="preloader-logo" width={40} height={27} />
+      </div>
+      <p className="preloader-label">Mumbai Bazar</p>
+    </div>
+  );
+}
+
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en-IN">
@@ -213,8 +262,49 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        {/*
+          First-paint preloader.
+
+          Covers the window from the very first byte until React hydrates. The
+          native app previously went: native splash -> white gap -> content, and
+          that white gap is the most "website in a frame" moment of the launch.
+
+          It is inline markup, not a component: anything that has to be fetched
+          cannot cover the gap that exists before it is fetched. The script
+          below is equally deliberate — it runs the moment it is parsed, so the
+          overlay is removed as soon as the app is interactive, and it is
+          wrapped so a failure can never leave the overlay stuck over the shop.
+        */}
+        <AppPreloader />
+
         {children}
         <Scripts />
+
+        {/*
+          Dismisses the preloader once the first route has painted.
+
+          requestAnimationFrame twice: the first fires before the browser has
+          laid out the newly hydrated tree, the second after — so the fade only
+          starts when there is genuinely something behind it.
+
+          The 4s timeout is a safety net, not the normal path. If hydration
+          fails outright the customer still gets the page rather than staring at
+          a spinner over a working site.
+        */}
+        {/*
+          Dismissal is handled by React in RootComponent, NOT by an inline
+          script here.
+
+          The first attempt did use an inline script, and it did not work: the
+          page hydrates with a mismatch, React regenerates the tree, and the
+          node the script had captured is discarded — leaving a full-opacity
+          overlay with pointer-events:auto sitting over the entire shop. A
+          Playwright check caught it; it would have shipped an app where no tap
+          worked.
+
+          Letting React own the element's lifecycle removes the whole class of
+          problem, because there is no second DOM reference to go stale.
+        */}
       </body>
     </html>
   );

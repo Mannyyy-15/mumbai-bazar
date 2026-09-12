@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
+import { BrandLoader } from "./components/site/BrandLoader";
 
 export const getRouter = () => {
   const queryClient = new QueryClient();
@@ -33,6 +34,22 @@ export const getRouter = () => {
     // preload actually count while keeping prices fresh; the catalogue is
     // re-fetched on its own five-minute cycle regardless.
     defaultPreloadStaleTime: 30_000,
+
+    // Branded loading state during navigation.
+    //
+    // There was no pending component, so a navigation waiting on the network
+    // showed nothing — a blank area under the header, which on a phone reads
+    // as a tap that did not register rather than as loading.
+    defaultPendingComponent: BrandLoader,
+
+    // Only show it if the load actually takes a moment. Below this, flashing a
+    // spinner for 80ms is worse than showing nothing: it reads as a flicker.
+    // Preloading on intent means most navigations never reach this threshold.
+    defaultPendingMs: 250,
+
+    // Once shown, keep it up for at least this long. Without a floor, a load
+    // finishing at 260ms flashes the loader for a single frame.
+    defaultPendingMinMs: 400,
   });
 
   return router;

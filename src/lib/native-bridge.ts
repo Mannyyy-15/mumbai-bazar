@@ -109,14 +109,34 @@ export async function initializeNativeApp() {
       await StatusBar.setBackgroundColor({ color: "#9B1018" });
     }
 
-    // 2. Hide Native Splash Screen smoothly once UI is mounted
-    setTimeout(async () => {
+    // 2. Hand the native splash over to the in-page preloader.
+    //
+    // launchAutoHide is false in capacitor.config.ts, so hiding this is OUR
+    // responsibility — if this code never runs, the splash stays up forever.
+    // Hence the belt-and-braces: hide when the page reports itself loaded, and
+    // hide unconditionally after 2.5s no matter what.
+    //
+    // Both the splash and the preloader use the same ivory (#FFFDF8), so the
+    // handover has no visible seam — which is the entire point. The old code
+    // hid on a fixed 400ms timer regardless of whether anything had rendered,
+    // which is what produced the white gap between splash and content.
+    const hideSplash = async () => {
       try {
-        await SplashScreen.hide({ fadeOutDuration: 300 });
+        await SplashScreen.hide({ fadeOutDuration: 200 });
       } catch {
-        // Ignored
+        // Already hidden, or the plugin is unavailable. Not worth surfacing.
       }
-    }, 400);
+    };
+
+    if (typeof document !== "undefined" && document.readyState === "complete") {
+      void hideSplash();
+    } else if (typeof window !== "undefined") {
+      window.addEventListener("load", () => void hideSplash(), { once: true });
+    }
+
+    // Safety net. A hung fetch must never leave the customer staring at a
+    // splash screen with no way forward.
+    setTimeout(() => void hideSplash(), 2500);
 
     // 3. Android Hardware Back Button listener
     CapApp.addListener("backButton", ({ canGoBack }) => {

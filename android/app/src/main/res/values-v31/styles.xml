@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 12+ splash screen.
+
+  From API 31 the system draws the splash itself and IGNORES a theme that just
+  sets android:background to a drawable — which is exactly what the base
+  styles.xml did. The result on a modern phone was a blank window followed by a
+  jump to the app, rather than a splash.
+
+  These are the properties the platform actually reads. The base styles.xml
+  still carries the legacy background for Android 11 and below.
+-->
+<resources>
+    <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
+        <!-- Ivory, matching the site background, so there is no flash of a
+             different colour when the webview takes over. -->
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+
+        <!-- The system masks this to a circle and animates it in. -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+
+        <!-- Theme handed to the activity once the splash finishes. -->
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
+    </style>
+</resources>

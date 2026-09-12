@@ -64,12 +64,29 @@ const config: CapacitorConfig = {
       overlaysWebView: false,
     },
     SplashScreen: {
-      launchShowDuration: 1800,
-      launchAutoHide: true,
+      /**
+       * launchAutoHide is false on purpose.
+       *
+       * With auto-hide on a timer, the splash disappeared after 1800ms whether
+       * or not the page had loaded — and because this app fetches the live site
+       * over mobile data, that regularly meant splash -> white gap -> content.
+       * That white gap is the most "website in a frame" moment of the launch.
+       *
+       * Now native-bridge.ts hides it once the page is actually up, handing
+       * straight over to the in-page preloader, which shares the same ivory
+       * background so there is no visible seam. The timeout in that code is the
+       * safety net against a hang.
+       */
+      launchShowDuration: 3000,
+      launchAutoHide: false,
       backgroundColor: "#FFFDF8",
       androidSplashResourceName: "splash",
-      androidScaleType: "CENTER_CROP",
+      // CENTER, not CENTER_CROP: the logo is artwork with margins, and
+      // cropping to fill chops its edges on tall screens.
+      androidScaleType: "CENTER",
       showSpinner: false,
+      splashFullScreen: false,
+      splashImmersive: false,
     },
   },
 };

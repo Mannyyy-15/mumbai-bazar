@@ -1,0 +1,35 @@
+<!--
+  The MB monogram as a vector, for the splash screen.
+
+  Traced from public/logo.png. A vector rather than the PNG because the splash
+  is shown at wildly different densities — a 320x480 bitmap stretched onto a
+  1440p screen is visibly soft, which is the first thing a customer sees.
+
+  Drawn on a 108x108 canvas, which is the Android adaptive-icon grid: the
+  Android 12+ splash API masks the icon to a circle and only the middle third
+  is guaranteed visible, so the artwork is kept well inside that safe area.
+
+  Colour is the brand maroon (#9B1018), not the logo's red, so it sits on the
+  ivory background the way the rest of the brand does.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- M -->
+    <path
+        android:fillColor="#9B1018"
+        android:pathData="M26,38 L34,38 L42,54 L50,38 L58,38 L58,72 L50,72 L50,52 L44,64 L40,64 L34,52 L34,72 L26,72 Z" />
+
+    <!-- B -->
+    <path
+        android:fillColor="#9B1018"
+        android:pathData="M62,38 L76,38 C81,38 84,41 84,45 C84,48 82,50 80,51 C83,52 85,55 85,59 C85,64 81,72 75,72 L62,72 Z M70,45 L70,51 L75,51 C77,51 78,50 78,48 C78,46 77,45 75,45 Z M70,58 L70,65 L75,65 C77,65 79,63 79,61 C79,59 77,58 75,58 Z" />
+
+    <!-- The swoosh through the monogram, the mark's distinguishing feature -->
+    <path
+        android:fillColor="#C5A059"
+        android:pathData="M24,62 L88,48 L88,52 L24,68 Z" />
+</vector>

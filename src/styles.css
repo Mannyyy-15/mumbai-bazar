@@ -499,3 +499,119 @@ html.lenis.lenis-smooth [data-lenis-prevent] {
 .native-app .overflow-x-auto {
   -webkit-overflow-scrolling: touch;
 }
+
+/* ---------------------------------------------------------------------------
+   Brand loader
+   ---------------------------------------------------------------------------
+   Used by BrandLoader during route navigation and by the first-paint preloader
+   in the document shell. Both the ring and the monogram animate, so a slow
+   connection still shows honest motion rather than a frozen mark.
+   --------------------------------------------------------------------------- */
+
+@keyframes brand-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes brand-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@utility animate-brand-spin {
+  animation: brand-spin 900ms linear infinite;
+}
+
+@utility animate-brand-pulse {
+  animation: brand-pulse 1400ms ease-in-out infinite;
+}
+
+/* Motion here is informative, not decorative — it is the signal that something
+   is happening — so it is reduced rather than removed: the ring stops, the
+   monogram keeps a slow fade. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-brand-spin {
+    animation: none;
+  }
+  .animate-brand-pulse {
+    animation: brand-pulse 2400ms ease-in-out infinite;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   First-paint preloader
+   ---------------------------------------------------------------------------
+   Sits in the document shell and covers the page until React hydrates, then
+   removes itself. Without it the native app goes: native splash -> white gap
+   -> content, and that white gap is the single most "website in a frame"
+   moment in the whole launch.
+
+   Inlined in the shell rather than loaded as a component, because anything
+   that has to be fetched first cannot cover the gap before it is fetched.
+   --------------------------------------------------------------------------- */
+
+#app-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background: #fffdf8;
+  /* Fades out once hydration sets data-ready, then stops intercepting taps. */
+  opacity: 1;
+  transition: opacity 260ms ease-out;
+}
+
+#app-preloader[data-ready="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#app-preloader .preloader-mark {
+  position: relative;
+  height: 4rem;
+  width: 4rem;
+}
+
+#app-preloader .preloader-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid rgba(197, 160, 89, 0.25);
+  border-top-color: #c5a059;
+  animation: brand-spin 900ms linear infinite;
+}
+
+#app-preloader .preloader-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.5rem;
+  object-fit: contain;
+  animation: brand-pulse 1400ms ease-in-out infinite;
+}
+
+#app-preloader .preloader-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #78716c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #app-preloader .preloader-ring {
+    animation: none;
+  }
+}

@@ -7,4 +7,7 @@
     <!-- Tint applied to the notification icon and accents. Same maroon as the
          status bar and the brand. -->
     <color name="brand_maroon">#9B1018</color>
+    <!-- Splash background. Ivory, same as the site background, so the handover
+         from splash to webview has no colour flash. -->
+    <color name="splash_background">#FFFDF8</color>
 </resources>
