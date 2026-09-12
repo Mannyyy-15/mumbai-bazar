@@ -46,16 +46,53 @@ export async function hapticSuccess() {
 }
 
 /**
- * Initializes native mobile app capabilities (Status Bar, Back Button, Splash Screen).
+ * Registry of active modal / drawer back-button handlers.
+ * Allows CartDrawer, WishlistDrawer, Mobile Menu, and Search overlays
+ * to intercept Android's back button and close themselves first.
+ */
+type BackHandler = () => boolean;
+const backHandlers: { priority: number; handler: BackHandler }[] = [];
+
+export function registerBackHandler(priority: number, handler: BackHandler): () => void {
+  const entry = { priority, handler };
+  backHandlers.push(entry);
+  backHandlers.sort((a, b) => b.priority - a.priority);
+
+  return () => {
+    const idx = backHandlers.indexOf(entry);
+    if (idx !== -1) {
+      backHandlers.splice(idx, 1);
+    }
+  };
+}
+
+/**
+ * Safely opens external URLs (WhatsApp, Phone, Maps, Instagram) in the native system handler.
+ */
+export function openExternalUrl(url: string) {
+  if (typeof window === "undefined") return;
+
+  if (url.startsWith("tel:") || url.startsWith("mailto:")) {
+    window.location.href = url;
+    return;
+  }
+
+  // Open external protocol or site via system browser / application
+  window.open(url, "_system");
+}
+
+let isInitialized = false;
+
+/**
+ * Initializes native mobile app capabilities (Status Bar, Back Button, Splash Screen, External Links).
  * Safe to call on all platforms; automatically acts as a no-op on regular web browsers.
  */
-export async function initializeNativeApp(options?: {
-  onHardwareBack?: () => boolean; // return true if handled (e.g. closed a drawer), false to proceed with history back
-}) {
-  if (!isNative) return;
+export async function initializeNativeApp() {
+  if (!isNative || isInitialized) return;
+  isInitialized = true;
 
   try {
-    // 1. Configure Native Status Bar
+    // 1. Configure Native Status Bar matching royal maroon brand palette
     await StatusBar.setStyle({ style: Style.Dark });
     if (Capacitor.getPlatform() === "android") {
       await StatusBar.setBackgroundColor({ color: "#9B1018" });
@@ -72,15 +109,55 @@ export async function initializeNativeApp(options?: {
 
     // 3. Android Hardware Back Button listener
     CapApp.addListener("backButton", ({ canGoBack }) => {
-      if (options?.onHardwareBack && options.onHardwareBack()) {
-        return;
+      // Check registered modal/drawer dismiss handlers first
+      for (const item of backHandlers) {
+        if (item.handler()) {
+          return; // Handled (e.g. dismissed cart drawer or menu)
+        }
       }
-      if (canGoBack) {
+
+      // If no modal was open, navigate history or exit
+      if (canGoBack && typeof window !== "undefined" && window.location.pathname !== "/") {
         window.history.back();
       } else {
         CapApp.exitApp();
       }
     });
+
+    // 4. External link click listener to cleanly route WhatsApp, Maps, Instagram & Tel
+    if (typeof document !== "undefined") {
+      document.addEventListener(
+        "click",
+        (e) => {
+          const target = (e.target as HTMLElement)?.closest("a");
+          if (!target || !target.href) return;
+
+          const href = target.getAttribute("href") || "";
+
+          // Intercept WhatsApp links
+          if (href.startsWith("https://wa.me/") || href.startsWith("whatsapp:")) {
+            e.preventDefault();
+            openExternalUrl(href);
+            return;
+          }
+
+          // Intercept Google Maps links
+          if (href.includes("maps.google.com") || href.includes("google.com/maps")) {
+            e.preventDefault();
+            openExternalUrl(href);
+            return;
+          }
+
+          // Intercept Instagram profile/reels
+          if (href.includes("instagram.com")) {
+            e.preventDefault();
+            openExternalUrl(href);
+            return;
+          }
+        },
+        { capture: true },
+      );
+    }
   } catch (err) {
     console.warn("Native bridge initialization error:", err);
   }

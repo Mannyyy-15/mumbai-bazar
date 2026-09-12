@@ -16,6 +16,7 @@ import {
   updateShopifyCartLine,
   type ShopifyCart,
 } from "./shopify";
+import { registerBackHandler } from "./native-bridge";
 
 export type CartItem = {
   id: string;
@@ -110,7 +111,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [items, shopifyCartId, checkoutUrl, hydrated]);
 
-  // Lock scroll when open
+  // Lock scroll when open & register Android hardware back button handler
   useEffect(() => {
     if (!isOpen) return;
     const prev = document.body.style.overflow;
@@ -119,9 +120,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (e.key === "Escape") setIsOpen(false);
     };
     window.addEventListener("keydown", onKey);
+
+    const unregisterBack = registerBackHandler(90, () => {
+      setIsOpen(false);
+      return true;
+    });
+
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
+      unregisterBack();
     };
   }, [isOpen]);
 

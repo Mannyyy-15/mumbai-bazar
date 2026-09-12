@@ -270,7 +270,7 @@ function FAQ() {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <a
-              href={`https://wa.me/919999999999?text=${waMsg}`}
+              href={`https://wa.me/${SITE.whatsapp}?text=${waMsg}`}
               target="_blank"
               rel="noreferrer"
               className="btn-primary inline-flex items-center gap-2"

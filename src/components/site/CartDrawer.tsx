@@ -18,6 +18,7 @@ import { getDirectCheckoutUrl, shopifyImage } from "@/lib/shopify";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { useCountUp } from "@/hooks/use-count-up";
 import { SITE } from "@/lib/seo";
+import { hapticImpact, hapticSuccess } from "@/lib/native-bridge";
 
 export function CartDrawer() {
   const { items, isOpen, closeCart, setQty, removeItem, subtotal, count, checkoutUrl } = useCart();
@@ -157,7 +158,11 @@ export function CartDrawer() {
                   href={checkoutHref ?? "#"}
                   aria-disabled={!checkoutHref}
                   onClick={(e) => {
-                    if (!checkoutHref) e.preventDefault();
+                    if (!checkoutHref) {
+                      e.preventDefault();
+                      return;
+                    }
+                    hapticImpact("medium");
                   }}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-wine active:scale-98 transition-all shadow-md"
                 >
@@ -170,6 +175,7 @@ export function CartDrawer() {
                   href={waHref}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => hapticSuccess()}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#25D366] bg-[#25D366]/10 py-3 text-xs font-bold uppercase tracking-wider text-[#128C7E] hover:bg-[#25D366] hover:text-white active:scale-98 transition-all shadow-sm"
                 >
                   <MessageCircle className="h-4 w-4" />
@@ -225,6 +231,7 @@ function CartRow({
   };
 
   const step = (delta: number) => {
+    hapticImpact("light");
     const next = Math.max(0, qty + delta);
     setLocalQty(next);
     setPulse(true);

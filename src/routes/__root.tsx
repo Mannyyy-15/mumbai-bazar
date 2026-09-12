@@ -235,7 +235,7 @@ function RootComponent() {
           <WishlistProvider>
             <SmoothScroll />
             <ScrollReveal />
-            <div id="main-content" className="flex min-h-screen flex-col bg-ivory pb-14 lg:pb-0">
+            <div id="main-content" className="flex min-h-screen flex-col bg-ivory pb-[calc(3.75rem+env(safe-area-inset-bottom,0px))] lg:pb-0">
               <AnnouncementBar />
               <Header />
               <main className="flex-1">

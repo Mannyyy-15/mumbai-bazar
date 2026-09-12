@@ -17,6 +17,8 @@ import {
 import { useCart } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
+import { SITE } from "@/lib/seo";
+import { registerBackHandler } from "@/lib/native-bridge";
 
 const PRIMARY_LEFT = [
   { label: "Shop", to: "/shop" },
@@ -324,19 +326,38 @@ export function Header() {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        setActiveSubMenu(null);
+      }
     };
     window.addEventListener("keydown", onKey);
+
+    const unregisterBack = registerBackHandler(100, () => {
+      setOpen(false);
+      setActiveSubMenu(null);
+      return true;
+    });
+
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", onKey);
+      unregisterBack();
     };
   }, [open]);
 
   useEffect(() => {
-    if (searchOpen) {
-      setTimeout(() => searchInputRef.current?.focus(), 50);
-    }
+    if (!searchOpen) return;
+    setTimeout(() => searchInputRef.current?.focus(), 50);
+
+    const unregisterBack = registerBackHandler(95, () => {
+      setSearchOpen(false);
+      return true;
+    });
+
+    return () => {
+      unregisterBack();
+    };
   }, [searchOpen]);
 
   const linkBase =
@@ -766,7 +787,7 @@ export function Header() {
               {/* Minimalist Bottom Assistance Link */}
               <div className="border-t border-[#EAE6DF] p-4 bg-[#FAF7F2]">
                 <a
-                  href="https://wa.me/919999999999?text=Hi%20Mumbai%20Bazar"
+                  href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hi Mumbai Bazar, I would like assistance with sarees.")}`}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider text-maroon hover:underline py-1"

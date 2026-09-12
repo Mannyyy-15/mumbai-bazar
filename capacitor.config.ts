@@ -8,6 +8,14 @@ const config: CapacitorConfig = {
     url: process.env.CAPACITOR_SERVER_URL || "https://mumbaibazar.com",
     androidScheme: "https",
     cleartext: false,
+    allowNavigation: [
+      "mumbaibazar.com",
+      "*.myshopify.com",
+      "checkout.shopify.com",
+      "cdn.shopify.com",
+      "fonts.googleapis.com",
+      "fonts.gstatic.com",
+    ],
   },
   plugins: {
     StatusBar: {

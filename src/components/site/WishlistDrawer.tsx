@@ -1,12 +1,22 @@
+import { useEffect } from "react";
 import { X, Heart, ShoppingBag, Trash2 } from "lucide-react";
 import { shopifyImage } from "@/lib/shopify";
 import { Link } from "@tanstack/react-router";
 import { useWishlist } from "@/lib/wishlist-context";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
+import { registerBackHandler } from "@/lib/native-bridge";
 
 export function WishlistDrawer() {
   const { wishlist, isOpen, closeWishlist, toggleWishlist } = useWishlist();
   const { addItem, openCart } = useCart();
+
+  useEffect(() => {
+    if (!isOpen) return;
+    return registerBackHandler(90, () => {
+      closeWishlist();
+      return true;
+    });
+  }, [isOpen, closeWishlist]);
 
   if (!isOpen) return null;
 
