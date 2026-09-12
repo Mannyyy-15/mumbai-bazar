@@ -17,8 +17,12 @@ function Col({ title, children }: { title: string; children: React.ReactNode }) 
 
 export function Footer() {
   return (
+    // Tighter vertical padding inside the app. The footer stays — the stores
+    // require privacy and terms to be reachable, and it carries the NAP — but a
+    // 14rem-tall link farm under every screen is a website convention, and the
+    // bottom nav already handles getting around.
     <footer className="bg-maroon text-white border-t border-[#F5CE7A]/30 relative">
-      <div className="mx-auto max-w-[1400px] px-4 py-14 md:px-8 md:py-20">
+      <div className="mx-auto max-w-[1400px] px-4 py-14 md:px-8 md:py-20 [.native-app_&]:py-8">
         {/* Main Grid: On mobile everything is centered */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 md:gap-8 items-start">
           {/* Brand Info */}
@@ -33,9 +37,12 @@ export function Footer() {
             <p className="mt-2 text-[11px] tracking-[0.35em] uppercase text-[#F5CE7A] font-bold">
               Sarees · Since 2009
             </p>
+            {/* "Handcrafted" dropped — the same unverifiable claim already
+                removed from the homepage, the reel titles and the mobile
+                fallback. What is left is true and checkable. */}
             <p className="mt-4 max-w-sm text-sm text-white/90 leading-relaxed font-normal">
-              Handcrafted Banarasi, Kanjivaram, and bridal sarees across 8 retail boutiques in Mumbai
-              — chosen with care, delivered with warmth.
+              Sarees, dress material, designer lehengas and dulhan wear across 8 stores in
+              Nalasopara, Virar, Vasai, Bhayandar and Goregaon.
             </p>
 
             {/* Social Icons */}

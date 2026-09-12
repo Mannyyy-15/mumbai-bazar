@@ -28,6 +28,22 @@ export function SmoothScroll() {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // Never on native.
+    //
+    // Lenis + GSAP is 88 KB that hijacks the scroll wheel to add momentum a
+    // desktop browser lacks. A phone webview already has momentum scrolling in
+    // the compositor, running off the main thread — so on native this library
+    // is not an enhancement, it is a second scroll implementation competing
+    // with the first, on the main thread, and it is a large part of why the
+    // app felt laggy next to the website.
+    //
+    // Checked via the global rather than importing native-bridge, so this
+    // component stays free of Capacitor imports and the web bundle is
+    // unchanged.
+    const cap = (window as unknown as { Capacitor?: { isNativePlatform?: () => boolean } })
+      .Capacitor;
+    if (cap?.isNativePlatform?.()) return;
+
     // Both libraries are dynamically imported, so their types come from the
     // import itself rather than a top-level import that would defeat the split.
     let onTickFn: ((time: number) => void) | null = null;

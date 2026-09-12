@@ -1,8 +1,14 @@
 import { MessageCircle } from "lucide-react";
 
 export function AnnouncementBar() {
+  // `web-only` hides this inside the native app.
+  //
+  // A promotional strip sitting above the navigation is a website convention —
+  // apps do not have one, and on a phone it costs a slice of an already short
+  // screen before the customer sees any product. The same message reaches app
+  // users through push instead, which is what push is for.
   return (
-    <div className="bg-maroon text-ivory">
+    <div className="web-only bg-maroon text-ivory">
       <div className="mx-auto flex max-w-[1360px] items-center justify-center gap-4 px-4 py-2 text-[11px] font-medium tracking-[0.22em] uppercase sm:justify-between">
         {/*
           Was "Assured Authenticity" — a guarantee the business has no

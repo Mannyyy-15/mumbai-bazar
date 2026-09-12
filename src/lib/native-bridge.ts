@@ -91,6 +91,17 @@ export async function initializeNativeApp() {
   if (!isNative || isInitialized) return;
   isInitialized = true;
 
+  // Mark the document as running inside the app.
+  //
+  // Everything under `.native-app` in styles.css keys off this: page
+  // transitions, no text selection, no tap highlight, no overscroll bounce.
+  // Set FIRST and synchronously, before any awaited call below, so the very
+  // first paint already has app styling rather than flashing web-styled
+  // content for a frame.
+  if (typeof document !== "undefined") {
+    document.documentElement.classList.add("native-app");
+  }
+
   try {
     // 1. Configure Native Status Bar matching royal maroon brand palette
     await StatusBar.setStyle({ style: Style.Dark });
