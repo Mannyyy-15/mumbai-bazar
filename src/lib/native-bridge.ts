@@ -172,6 +172,37 @@ export async function initializeNativeApp() {
         { capture: true },
       );
     }
+
+    // 5. Push notifications.
+    //
+    // Attaches listeners only — it does NOT prompt. Asking for notification
+    // permission during launch is how you get denied, and on iOS a denial is
+    // near-permanent (Settings-only to undo). The prompt belongs at a moment
+    // that makes sense to the customer; see requestPushPermission().
+    //
+    // Loaded dynamically so the plugin never enters the website bundle.
+    void import("./push-notifications")
+      .then((m) => m.initializePush())
+      .catch(() => undefined);
+
+    // 6. Native shell update check.
+    //
+    // Web content updates itself (the app loads the live site), so this is only
+    // about store releases. Deferred past first paint — nothing here is worth
+    // delaying the shop for, and it self-throttles to once a day.
+    setTimeout(() => {
+      void import("./app-update")
+        .then((m) => m.checkForUpdate())
+        .then((info) => {
+          if (info) {
+            console.info(
+              `[update] version ${info.latest} available (running ${info.current})` +
+                `${info.required ? " — required" : ""}`,
+            );
+          }
+        })
+        .catch(() => undefined);
+    }, 5000);
   } catch (err) {
     console.warn("Native bridge initialization error:", err);
   }

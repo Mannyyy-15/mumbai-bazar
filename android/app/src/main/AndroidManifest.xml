@@ -29,6 +29,21 @@
             </intent-filter>
         </activity>
 
+        <!--
+          Notification appearance. Without these FCM falls back to the full app
+          icon, which Android renders as a grey square on the status bar because
+          it expects a white-on-transparent silhouette.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_notify" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/brand_maroon" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="mumbai_bazar_default" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -42,4 +57,16 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!--
+      Notification permission is runtime-requested from Android 13 (API 33).
+      Declaring it is not enough: the app must also ask, which it does from
+      requestPushPermission() at a point the customer has shown intent. On
+      Android 12 and below the grant is implicit at install.
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Lets the update check see whether the device is actually online before
+         reporting a failed fetch as "no update". -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

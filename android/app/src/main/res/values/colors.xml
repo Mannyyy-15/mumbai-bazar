@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#680A0F</color>
     <color name="colorAccent">#C5A059</color>
     <color name="windowBackground">#FFFDF8</color>
+    <!-- Tint applied to the notification icon and accents. Same maroon as the
+         status bar and the brand. -->
+    <color name="brand_maroon">#9B1018</color>
 </resources>

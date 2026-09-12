@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IndexnowkeyDottxtRouteImport } from './routes/$indexnowkey[.]txt'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AppVersionDotjsonRouteImport } from './routes/app-version[.]json'
 import { Route as CareGuideRouteImport } from './routes/care-guide'
 import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -58,6 +59,11 @@ const IndexnowkeyDottxtRoute = IndexnowkeyDottxtRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppVersionDotjsonRoute = AppVersionDotjsonRouteImport.update({
+  id: '/app-version.json',
+  path: '/app-version.json',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CareGuideRoute = CareGuideRouteImport.update({
@@ -227,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$indexnowkey.txt': typeof IndexnowkeyDottxtRoute
   '/about': typeof AboutRoute
+  '/app-version.json': typeof AppVersionDotjsonRoute
   '/care-guide': typeof CareGuideRoute
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
@@ -264,6 +271,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$indexnowkey.txt': typeof IndexnowkeyDottxtRoute
   '/about': typeof AboutRoute
+  '/app-version.json': typeof AppVersionDotjsonRoute
   '/care-guide': typeof CareGuideRoute
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
@@ -302,6 +310,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$indexnowkey.txt': typeof IndexnowkeyDottxtRoute
   '/about': typeof AboutRoute
+  '/app-version.json': typeof AppVersionDotjsonRoute
   '/care-guide': typeof CareGuideRoute
   '/collections': typeof CollectionsRoute
   '/contact': typeof ContactRoute
@@ -341,6 +350,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$indexnowkey.txt'
     | '/about'
+    | '/app-version.json'
     | '/care-guide'
     | '/collections'
     | '/contact'
@@ -378,6 +388,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$indexnowkey.txt'
     | '/about'
+    | '/app-version.json'
     | '/care-guide'
     | '/collections'
     | '/contact'
@@ -415,6 +426,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$indexnowkey.txt'
     | '/about'
+    | '/app-version.json'
     | '/care-guide'
     | '/collections'
     | '/contact'
@@ -453,6 +465,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IndexnowkeyDottxtRoute: typeof IndexnowkeyDottxtRoute
   AboutRoute: typeof AboutRoute
+  AppVersionDotjsonRoute: typeof AppVersionDotjsonRoute
   CareGuideRoute: typeof CareGuideRoute
   CollectionsRoute: typeof CollectionsRoute
   ContactRoute: typeof ContactRoute
@@ -508,6 +521,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app-version.json': {
+      id: '/app-version.json'
+      path: '/app-version.json'
+      fullPath: '/app-version.json'
+      preLoaderRoute: typeof AppVersionDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/care-guide': {
@@ -741,6 +761,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IndexnowkeyDottxtRoute: IndexnowkeyDottxtRoute,
   AboutRoute: AboutRoute,
+  AppVersionDotjsonRoute: AppVersionDotjsonRoute,
   CareGuideRoute: CareGuideRoute,
   CollectionsRoute: CollectionsRoute,
   ContactRoute: ContactRoute,

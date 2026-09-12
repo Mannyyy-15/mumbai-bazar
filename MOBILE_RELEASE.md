@@ -52,6 +52,74 @@ reply and resubmit — but each round trip costs days.
 
 ---
 
+## Push notifications (Firebase) — 10 minutes, free
+
+The code is written and wired. It needs one file the client has to generate.
+
+1. console.firebase.google.com → **Add project** → name it "Mumbai Bazar".
+   Google Analytics is optional; skip it if unsure.
+2. In the project, **Add app → Android**.
+   - Package name: `com.mumbaibazar.store` (must match exactly)
+   - Nickname and SHA-1 can be left blank for now
+3. Download **`google-services.json`** and drop it at
+   `android/app/google-services.json`.
+4. Rebuild. That is all — the Gradle plugin only activates when the file is
+   present, which is why the app builds and runs fine without it today.
+
+### Sending a notification
+
+Firebase console → **Messaging** → New campaign → Notifications.
+Target **Topic: `all-customers`** — every install subscribes to it, so the shop
+can broadcast "new bridal range in at Nalasopara" with no backend at all.
+
+To make a notification open a specific page, add a custom data key:
+
+| Key | Value |
+|---|---|
+| `path` | `/sarees-in/vasai-virar` |
+
+Only same-origin paths are followed, so a bad payload cannot redirect the app
+off-site.
+
+### Important: the app does not prompt on launch
+
+`initializePush()` attaches listeners; it never asks for permission. Asking
+during launch is how you get denied, and on iOS a denial is near-permanent.
+Call `requestPushPermission()` after the customer does something that implies
+interest — places an order, saves to wishlist, or taps an explicit "notify me".
+That call is ready; wire it to whichever control you prefer.
+
+### Should `google-services.json` be committed?
+
+It contains no secret — it is shipped inside the APK and is extractable from it.
+Committing it is normal practice and keeps CI builds working. Leave it out only
+if the client prefers.
+
+---
+
+## App updates
+
+Two separate things, and only the second needs a release:
+
+**Web content** — prices, products, copy, layout — updates the instant the site
+deploys, because the shell loads `mumbaibazar.com`. Nothing to do.
+
+**The native shell** — plugins, permissions, splash, targetSdk — needs a store
+release. `src/routes/app-version[.]json.ts` is how old installs find out:
+
+1. Ship the new build to the store.
+2. Bump `version` in that file and deploy the website.
+3. Installs on the old version see the prompt within a day.
+
+Set `minimum` equal to `version` **only** to force an upgrade (a broken or
+unsafe build) — it makes the prompt non-dismissable.
+
+Play In-App Updates was deliberately not used: it requires the app to have been
+installed *by Play*, so it silently does nothing for the sideloaded APK you are
+about to test, and there is no iOS equivalent at all.
+
+---
+
 ## Step 1 — Google Play
 
 ### 1a. Create the signing key (once, and never lose it)
