@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Network policy for the Android app.
+
+  Cleartext HTTP is refused everywhere, including for hosts not listed below:
+  the base-config applies to everything, and the domain-config entries simply
+  make the intent explicit for the hosts we deliberately talk to.
+
+  These MUST stay in step with `allowNavigation` in capacitor.config.ts. The two
+  lists gate different things — allowNavigation controls what the webview may
+  navigate to, this controls what the platform will connect to at all — so a
+  host missing here still fails even when allowNavigation permits it.
+-->
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
+
     <domain-config cleartextTrafficPermitted="false">
+        <!-- Our own site -->
         <domain includeSubdomains="true">mumbaibazar.com</domain>
+
+        <!-- Shopify storefront, checkout and CDN -->
         <domain includeSubdomains="true">shopify.com</domain>
         <domain includeSubdomains="true">myshopify.com</domain>
+        <domain includeSubdomains="true">shopifycdn.com</domain>
+        <domain includeSubdomains="true">shop.app</domain>
+
+        <!-- Payment gateways named in our privacy policy and terms -->
+        <domain includeSubdomains="true">razorpay.com</domain>
+
+        <!-- UPI / wallet handoffs listed in our terms of service -->
+        <domain includeSubdomains="true">phonepe.com</domain>
+        <domain includeSubdomains="true">paytm.in</domain>
+        <domain includeSubdomains="true">paytm.com</domain>
+
+        <!-- Google services: fonts, and Google Pay for UPI -->
         <domain includeSubdomains="true">googleapis.com</domain>
         <domain includeSubdomains="true">gstatic.com</domain>
+        <domain includeSubdomains="true">google.com</domain>
     </domain-config>
 </network-security-config>

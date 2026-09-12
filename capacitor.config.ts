@@ -8,11 +8,51 @@ const config: CapacitorConfig = {
     url: process.env.CAPACITOR_SERVER_URL || "https://mumbaibazar.com",
     androidScheme: "https",
     cleartext: false,
+    /**
+     * Hosts the webview may navigate to. Anything NOT listed is blocked with no
+     * visible error — the user just gets a blank screen.
+     *
+     * This list previously stopped at Shopify and Google Fonts, which meant
+     * checkout could dead-end: Shopify hands off to shop.app and then to the
+     * payment gateway, and this site documents Razorpay, Shopify Payments and
+     * UPI (GPay / PhonePe / Paytm) as accepted methods. None of those hosts
+     * were reachable, and payment is the worst possible place to lose someone.
+     *
+     * Keep this in sync with whatever the Shopify checkout actually redirects
+     * through; when in doubt, watch a real ₹1 order in the device console and
+     * add any host that 404s.
+     */
     allowNavigation: [
+      // Our own site
       "mumbaibazar.com",
+      "*.mumbaibazar.com",
+
+      // Shopify storefront, checkout and assets
       "*.myshopify.com",
       "checkout.shopify.com",
+      "*.shopify.com",
       "cdn.shopify.com",
+      "shop.app",
+      "*.shop.app",
+      "shopifycdn.com",
+      "*.shopifycdn.com",
+
+      // Payment gateways. Razorpay and Shopify Payments are both named in our
+      // privacy policy and terms; 3-D Secure steps also bounce through the
+      // issuing bank, which is why the ACS hosts are here.
+      "razorpay.com",
+      "*.razorpay.com",
+      "api.razorpay.com",
+      "checkout.razorpay.com",
+
+      // UPI / wallet handoffs listed in our terms of service
+      "*.phonepe.com",
+      "*.paytm.in",
+      "*.paytm.com",
+      "*.googleapis.com",
+      "pay.google.com",
+
+      // Fonts and static assets
       "fonts.googleapis.com",
       "fonts.gstatic.com",
     ],

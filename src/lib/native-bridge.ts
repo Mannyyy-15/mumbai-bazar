@@ -134,6 +134,20 @@ export async function initializeNativeApp() {
 
           const href = target.getAttribute("href") || "";
 
+          // Intercept tel: and mailto:.
+          //
+          // These were missing, even though openExternalUrl() already had a
+          // branch for them that nothing reached. Inside a webview an
+          // un-intercepted tel: link is handled inconsistently across Android
+          // versions — sometimes the dialer opens, sometimes the navigation is
+          // simply dropped. "Call the store" is the highest-intent tap in the
+          // whole app for a physical saree shop, so it cannot be left to luck.
+          if (href.startsWith("tel:") || href.startsWith("mailto:")) {
+            e.preventDefault();
+            openExternalUrl(href);
+            return;
+          }
+
           // Intercept WhatsApp links
           if (href.startsWith("https://wa.me/") || href.startsWith("whatsapp:")) {
             e.preventDefault();

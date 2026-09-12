@@ -17,7 +17,7 @@
  * so whoever trips it can judge the fix rather than just silencing the check.
  */
 
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -25,6 +25,21 @@ import { fileURLToPath } from "node:url";
 // pathname leaves percent-encoded.
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = join(ROOT, "src");
+
+/**
+ * The native-app offline fallback TEMPLATE.
+ *
+ * This HTML lives outside src/, so the walk below never saw it — and the
+ * handloom claim duly reappeared there in the Capacitor commit, months after
+ * being scrubbed from the site itself, alongside a closing time of 9:30 PM
+ * against 9:00 PM everywhere else. Both would have shipped inside the app
+ * binaries, where fixing a typo costs a store resubmission.
+ *
+ * We scan the template, not the generated dist-mobile/index.html: the generated
+ * file legitimately CONTAINS the hours (that is the point of generating it),
+ * whereas a literal in the template is exactly the regression to catch.
+ */
+const EXTRA_FILES = [join(ROOT, "dist-mobile", "index.template.html")];
 
 /**
  * Files where a term is legitimate. The editorial guides teach people how to
@@ -92,7 +107,10 @@ function walk(dir) {
   return out;
 }
 
-const files = walk(SRC);
+const files = [
+  ...walk(SRC),
+  ...EXTRA_FILES.filter((f) => existsSync(f)),
+];
 const failures = [];
 
 /**

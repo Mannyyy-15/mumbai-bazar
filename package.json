@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "check:seo": "node scripts/check-seo-claims.mjs",
-    "cap:sync": "npx cap sync",
+    "build:mobile-fallback": "node scripts/build-mobile-fallback.mjs",
+    "cap:sync": "npm run build:mobile-fallback && npx cap sync",
     "cap:android": "npx cap open android",
     "cap:ios": "npx cap open ios"
   },

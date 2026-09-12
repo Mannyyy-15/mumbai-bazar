@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Associated Domains — the iOS half of deep linking. Without this the app
+	  had no entitlements file at all, so Universal Links could never work even
+	  though the Android side declared autoVerify.
+
+	  Three things must line up or links silently fall back to Safari:
+	    1. this file, referenced by CODE_SIGN_ENTITLEMENTS in the Xcode project;
+	    2. the Associated Domains capability enabled on the App ID in the
+	       Apple Developer portal (it is NOT enabled by default);
+	    3. https://mumbaibazar.com/.well-known/apple-app-site-association
+	       returning JSON — it 404s until APPLE_TEAM_ID is filled in at
+	       src/lib/mobile-app.ts.
+
+	  Use `applinks:` for link handling and `webcredentials:` so a password
+	  saved on the website autofills in the app if accounts are ever added.
+
+	  TIP while testing: appending `?mode=developer` to the applinks entry makes
+	  iOS bypass Apple's CDN and fetch the file directly from the server, which
+	  saves waiting on cache. Remove it before shipping to the App Store.
+	-->
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:mumbaibazar.com</string>
+		<string>applinks:www.mumbaibazar.com</string>
+		<string>webcredentials:mumbaibazar.com</string>
+	</array>
+</dict>
+</plist>

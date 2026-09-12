@@ -7,8 +7,12 @@ android {
         applicationId "com.mumbaibazar.store"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        // Play requires a strictly higher versionCode for every upload, so this
+        // must be bumped on each release. versionName is what users see.
+        // Override from CI without editing the file:
+        //   ./gradlew bundleRelease -PversionCode=7 -PversionName=1.0.6
+        versionCode project.hasProperty("versionCode") ? project.versionCode.toInteger() : 1
+        versionName project.hasProperty("versionName") ? project.versionName : "1.0.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,10 +20,46 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    /**
+     * Release signing.
+     *
+     * Play will not accept an unsigned or debug-signed bundle, and there was no
+     * signingConfig at all — so `assembleRelease` produced something that could
+     * never be uploaded.
+     *
+     * Credentials come from android/keystore.properties, which is gitignored.
+     * If that file is absent the release build still succeeds but stays
+     * unsigned, so CI and any developer without the key can still compile.
+     * See MOBILE_RELEASE.md for how to generate the keystore.
+     */
+    signingConfigs {
+        release {
+            def propsFile = rootProject.file("keystore.properties")
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                storeFile file(props['storeFile'])
+                storePassword props['storePassword']
+                keyAlias props['keyAlias']
+                keyPassword props['keyPassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Only attach the signing config when the keystore actually exists;
+            // pointing at an absent file fails the build outright.
+            if (rootProject.file("keystore.properties").exists()) {
+                signingConfig signingConfigs.release
+            }
+
+            // R8 shrinking. Capacitor apps are mostly web assets, so the win is
+            // modest, but Play bases its download-size warnings on it and there
+            // is no reason to ship dead framework code.
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }

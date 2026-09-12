@@ -35,6 +35,8 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as TrousseauBuilderRouteImport } from './routes/trousseau-builder'
 import { Route as WeddingSareesRouteImport } from './routes/wedding-sarees'
+import { Route as DotwellKnownAppleAppSiteAssociationRouteImport } from './routes/[.]well-known.apple-app-site-association'
+import { Route as DotwellKnownAssetlinksDotjsonRouteImport } from './routes/[.]well-known.assetlinks[.]json'
 import { Route as GuidesIndexRouteImport } from './routes/guides.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as PoliciesPolicyRouteImport } from './routes/policies.$policy'
@@ -173,6 +175,18 @@ const WeddingSareesRoute = WeddingSareesRouteImport.update({
   path: '/wedding-sarees',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DotwellKnownAppleAppSiteAssociationRoute =
+  DotwellKnownAppleAppSiteAssociationRouteImport.update({
+    id: '/.well-known/apple-app-site-association',
+    path: '/.well-known/apple-app-site-association',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotwellKnownAssetlinksDotjsonRoute =
+  DotwellKnownAssetlinksDotjsonRouteImport.update({
+    id: '/.well-known/assetlinks.json',
+    path: '/.well-known/assetlinks.json',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const GuidesIndexRoute = GuidesIndexRouteImport.update({
   id: '/guides/',
   path: '/guides/',
@@ -236,6 +250,8 @@ export interface FileRoutesByFullPath {
   '/terms-of-service': typeof TermsOfServiceRoute
   '/trousseau-builder': typeof TrousseauBuilderRoute
   '/wedding-sarees': typeof WeddingSareesRoute
+  '/.well-known/apple-app-site-association': typeof DotwellKnownAppleAppSiteAssociationRoute
+  '/.well-known/assetlinks.json': typeof DotwellKnownAssetlinksDotjsonRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/policies/$policy': typeof PoliciesPolicyRoute
   '/products/$id': typeof ProductsIdRoute
@@ -271,6 +287,8 @@ export interface FileRoutesByTo {
   '/terms-of-service': typeof TermsOfServiceRoute
   '/trousseau-builder': typeof TrousseauBuilderRoute
   '/wedding-sarees': typeof WeddingSareesRoute
+  '/.well-known/apple-app-site-association': typeof DotwellKnownAppleAppSiteAssociationRoute
+  '/.well-known/assetlinks.json': typeof DotwellKnownAssetlinksDotjsonRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/policies/$policy': typeof PoliciesPolicyRoute
   '/products/$id': typeof ProductsIdRoute
@@ -307,6 +325,8 @@ export interface FileRoutesById {
   '/terms-of-service': typeof TermsOfServiceRoute
   '/trousseau-builder': typeof TrousseauBuilderRoute
   '/wedding-sarees': typeof WeddingSareesRoute
+  '/.well-known/apple-app-site-association': typeof DotwellKnownAppleAppSiteAssociationRoute
+  '/.well-known/assetlinks.json': typeof DotwellKnownAssetlinksDotjsonRoute
   '/guides/$slug': typeof GuidesSlugRoute
   '/policies/$policy': typeof PoliciesPolicyRoute
   '/products/$id': typeof ProductsIdRoute
@@ -344,6 +364,8 @@ export interface FileRouteTypes {
     | '/terms-of-service'
     | '/trousseau-builder'
     | '/wedding-sarees'
+    | '/.well-known/apple-app-site-association'
+    | '/.well-known/assetlinks.json'
     | '/guides/$slug'
     | '/policies/$policy'
     | '/products/$id'
@@ -379,6 +401,8 @@ export interface FileRouteTypes {
     | '/terms-of-service'
     | '/trousseau-builder'
     | '/wedding-sarees'
+    | '/.well-known/apple-app-site-association'
+    | '/.well-known/assetlinks.json'
     | '/guides/$slug'
     | '/policies/$policy'
     | '/products/$id'
@@ -414,6 +438,8 @@ export interface FileRouteTypes {
     | '/terms-of-service'
     | '/trousseau-builder'
     | '/wedding-sarees'
+    | '/.well-known/apple-app-site-association'
+    | '/.well-known/assetlinks.json'
     | '/guides/$slug'
     | '/policies/$policy'
     | '/products/$id'
@@ -450,6 +476,8 @@ export interface RootRouteChildren {
   TermsOfServiceRoute: typeof TermsOfServiceRoute
   TrousseauBuilderRoute: typeof TrousseauBuilderRoute
   WeddingSareesRoute: typeof WeddingSareesRoute
+  DotwellKnownAppleAppSiteAssociationRoute: typeof DotwellKnownAppleAppSiteAssociationRoute
+  DotwellKnownAssetlinksDotjsonRoute: typeof DotwellKnownAssetlinksDotjsonRoute
   GuidesSlugRoute: typeof GuidesSlugRoute
   PoliciesPolicyRoute: typeof PoliciesPolicyRoute
   ProductsIdRoute: typeof ProductsIdRoute
@@ -643,6 +671,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WeddingSareesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.well-known/apple-app-site-association': {
+      id: '/.well-known/apple-app-site-association'
+      path: '/.well-known/apple-app-site-association'
+      fullPath: '/.well-known/apple-app-site-association'
+      preLoaderRoute: typeof DotwellKnownAppleAppSiteAssociationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/assetlinks.json': {
+      id: '/.well-known/assetlinks.json'
+      path: '/.well-known/assetlinks.json'
+      fullPath: '/.well-known/assetlinks.json'
+      preLoaderRoute: typeof DotwellKnownAssetlinksDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guides/': {
       id: '/guides/'
       path: '/guides'
@@ -722,6 +764,9 @@ const rootRouteChildren: RootRouteChildren = {
   TermsOfServiceRoute: TermsOfServiceRoute,
   TrousseauBuilderRoute: TrousseauBuilderRoute,
   WeddingSareesRoute: WeddingSareesRoute,
+  DotwellKnownAppleAppSiteAssociationRoute:
+    DotwellKnownAppleAppSiteAssociationRoute,
+  DotwellKnownAssetlinksDotjsonRoute: DotwellKnownAssetlinksDotjsonRoute,
   GuidesSlugRoute: GuidesSlugRoute,
   PoliciesPolicyRoute: PoliciesPolicyRoute,
   ProductsIdRoute: ProductsIdRoute,
