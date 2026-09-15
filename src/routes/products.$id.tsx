@@ -28,6 +28,7 @@ import { useCatalog } from "@/lib/catalog-context";
 import { seo, jsonLd, SITE } from "@/lib/seo";
 import { productSchema, breadcrumbSchema, priceToSchema } from "@/lib/structured-data";
 import { resolveColorSwatch, getProductColors } from "@/lib/filters";
+import { hapticImpact } from "@/lib/native-bridge";
 
 export const Route = createFileRoute("/products/$id")({
   loader: async ({ params }) => {
@@ -138,6 +139,15 @@ function ProductDetail() {
     }
     return list;
   }, [d.gallery, product.variants, product.img]);
+
+  // Preload all high-resolution gallery images so thumbnail clicks are 100% instant with 0ms network lag
+  useEffect(() => {
+    if (typeof window === "undefined" || !gallery.length) return;
+    gallery.forEach((url) => {
+      const img = new Image();
+      img.src = shopifyImage(url, 1000);
+    });
+  }, [gallery]);
 
   // Dynamically determine color swatches:
   // - If the product has multiple variants with distinct colors (e.g. Red, White, Black), extracts and displays all variant swatches.
@@ -454,7 +464,10 @@ function ProductDetail() {
                         if (el) thumbRefs.current.set(i, el);
                         else thumbRefs.current.delete(i);
                       }}
-                      onClick={() => setActive(i)}
+                      onClick={() => {
+                        setActive(i);
+                        hapticImpact("light");
+                      }}
                       aria-label={`View image ${i + 1}`}
                       className={`aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#F0E9DC] border-2 transition-all duration-200 shrink-0 ${
                         active === i
@@ -486,34 +499,38 @@ function ProductDetail() {
                 )}
               </div>
 
-              {/* Main image */}
+              {/* Main image — instant 0ms stacked crossfade gallery */}
               <div className="flex-1 relative overflow-hidden rounded-2xl md:rounded-none bg-[#F0E9DC] shadow-sm md:shadow-none">
-                <div className="aspect-[4/5] w-full max-h-[calc(100vh-8rem)]">
-                  <img
-                    src={shopifyImage(gallery[active] || product.img, 1000)}
-                    srcSet={shopifyImageSrcSet(
-                      gallery[active] || product.img,
-                      [600, 800, 1000, 1400],
-                    )}
-                    sizes="(max-width: 768px) 100vw, 55vw"
-                    alt={product.name}
-                    width={1000}
-                    height={1250}
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="async"
-                    className="h-full w-full object-cover object-top transition-opacity duration-200"
-                  />
+                <div className="aspect-[4/5] w-full max-h-[calc(100vh-8rem)] relative">
+                  {gallery.map((gUrl: string, idx: number) => (
+                    <img
+                      key={gUrl + idx}
+                      src={shopifyImage(gUrl, 1000)}
+                      srcSet={shopifyImageSrcSet(gUrl, [600, 800, 1000, 1400])}
+                      sizes="(max-width: 768px) 100vw, 55vw"
+                      alt={`${product.name} view ${idx + 1}`}
+                      width={1000}
+                      height={1250}
+                      loading={idx <= 1 ? "eager" : "lazy"}
+                      fetchPriority={idx === 0 ? "high" : "auto"}
+                      decoding="async"
+                      className={`absolute inset-0 h-full w-full object-cover object-top transition-all duration-300 ease-in-out will-change-transform,opacity ${
+                        active === idx
+                          ? "opacity-100 z-10 scale-100"
+                          : "opacity-0 z-0 scale-[1.01] pointer-events-none"
+                      }`}
+                    />
+                  ))}
                 </div>
                 {product.tag && (
-                  <span className="absolute left-4 top-4 bg-maroon text-ivory px-3 py-1.5 text-[9px] tracking-[0.25em] uppercase rounded-sm shadow-sm">
+                  <span className="absolute left-4 top-4 bg-maroon text-ivory px-3 py-1.5 text-[9px] tracking-[0.25em] uppercase rounded-sm shadow-sm z-20">
                     {product.tag === "New" ? "Limited Edition" : product.tag}
                   </span>
                 )}
                 <button
                   aria-label="Add to wishlist"
                   onClick={() => toggleWishlist(product)}
-                  className={`absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full transition-all shadow-sm ${
+                  className={`absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full transition-all shadow-sm z-20 ${
                     isSaved
                       ? "bg-maroon text-ivory scale-105"
                       : "bg-ivory/95 text-maroon hover:bg-ivory"
@@ -536,7 +553,10 @@ function ProductDetail() {
                       if (el) thumbRefs.current.set(i, el);
                       else thumbRefs.current.delete(i);
                     }}
-                    onClick={() => setActive(i)}
+                    onClick={() => {
+                      setActive(i);
+                      hapticImpact("light");
+                    }}
                     aria-label={`Select photo ${i + 1}`}
                     className={`w-16 h-20 sm:w-20 sm:h-24 shrink-0 rounded-xl overflow-hidden bg-[#F0E9DC] border-2 transition-all duration-200 ${
                       active === i
@@ -750,11 +770,11 @@ function ProductDetail() {
                 href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 h-14 border border-maroon/30 text-maroon text-[11px] tracking-[0.28em] uppercase flex items-center justify-center gap-2 hover:bg-maroon hover:text-ivory transition-colors"
+                className="mt-3 h-14 bg-[#25D366] hover:bg-[#1EBE5D] text-white text-[11px] tracking-[0.28em] uppercase font-bold flex items-center justify-center gap-2.5 rounded-sm transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.99]"
               >
-                <MessageCircle className="h-4 w-4" /> Enquire on WhatsApp
+                <MessageCircle className="h-5 w-5 fill-white/20" /> Enquire on WhatsApp
               </a>
-              <p className="mt-3 text-center text-[10px] uppercase tracking-[0.2em] text-maroon/60">
+              <p className="mt-3 text-center text-[11px] uppercase tracking-[0.16em] font-semibold text-ink">
                 Speak to a saree expert · Video call · Custom blouse stitching
               </p>
 
