@@ -19,6 +19,7 @@ import { breadcrumbSchema } from "@/lib/structured-data";
 import {
   COLOR_OPTIONS,
   TYPE_OPTIONS,
+  FABRIC_OPTIONS,
   PRICE_PRESETS,
   parsePriceNumber,
   getDynamicColorOptions,
@@ -27,7 +28,39 @@ import {
   type DynamicColorFilterOption,
 } from "@/lib/filters";
 
+type SortKey = "featured" | "new" | "price-asc" | "price-desc" | "color-asc";
+const SORTS: { key: SortKey; label: string }[] = [
+  { key: "featured", label: "Featured" },
+  { key: "new", label: "Newest Arrivals" },
+  { key: "price-asc", label: "Price: Low to High" },
+  { key: "price-desc", label: "Price: High to Low" },
+  { key: "color-asc", label: "Color: A to Z" },
+];
+
+export type ShopSearch = {
+  price?: string;
+  color?: string;
+  type?: string;
+  fabric?: string;
+  weave?: string;
+  q?: string;
+  tag?: string;
+  sort?: SortKey;
+};
+
 export const Route = createFileRoute("/shop")({
+  validateSearch: (search: Record<string, unknown>): ShopSearch => {
+    return {
+      price: typeof search.price === "string" ? search.price : undefined,
+      color: typeof search.color === "string" ? search.color : undefined,
+      type: typeof search.type === "string" ? search.type : undefined,
+      fabric: typeof search.fabric === "string" ? search.fabric : undefined,
+      weave: typeof search.weave === "string" ? search.weave : undefined,
+      q: typeof search.q === "string" ? search.q : undefined,
+      tag: typeof search.tag === "string" ? search.tag : undefined,
+      sort: typeof search.sort === "string" ? (search.sort as SortKey) : undefined,
+    };
+  },
   head: () => {
     const { meta, links } = seo({
       title: "Shop All Sarees, Lehengas & Ethnic Wear — Mumbai Bazar",
@@ -58,17 +91,9 @@ export const Route = createFileRoute("/shop")({
   component: ShopPage,
 });
 
-type SortKey = "featured" | "new" | "price-asc" | "price-desc" | "color-asc";
-const SORTS: { key: SortKey; label: string }[] = [
-  { key: "featured", label: "Featured" },
-  { key: "new", label: "Newest Arrivals" },
-  { key: "price-asc", label: "Price: Low to High" },
-  { key: "price-desc", label: "Price: High to Low" },
-  { key: "color-asc", label: "Color: A to Z" },
-];
-
 function ShopPage() {
   const { products } = useCatalog();
+  const search = Route.useSearch();
 
   // Dynamic available colors derived from actual Shopify products and variants
   const availableColors = useMemo(() => getDynamicColorOptions(products), [products]);
@@ -76,6 +101,9 @@ function ShopPage() {
   // Filter States
   const [selColors, setSelColors] = useState<Set<string>>(new Set());
   const [selTypes, setSelTypes] = useState<Set<string>>(new Set());
+  const [selFabrics, setSelFabrics] = useState<Set<string>>(new Set());
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selTag, setSelTag] = useState<string | null>(null);
   const [selPricePreset, setSelPricePreset] = useState<string | null>(null);
   const [customPriceMin, setCustomPriceMin] = useState<string>("");
   const [customPriceMax, setCustomPriceMax] = useState<string>("");
@@ -86,6 +114,54 @@ function ShopPage() {
   const [sort, setSort] = useState<SortKey>("featured");
   const [sortOpen, setSortOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Sync URL search parameters on navigation
+  useEffect(() => {
+    if (search.price) {
+      const preset = PRICE_PRESETS.find((p) => p.key === search.price);
+      if (preset) {
+        setSelPricePreset(preset.key);
+        setAppliedPriceRange({ min: preset.min, max: preset.max });
+        setCustomPriceMin(preset.min > 0 ? String(preset.min) : "");
+        setCustomPriceMax(preset.max < Infinity ? String(preset.max) : "");
+      }
+    }
+
+    if (search.color) {
+      const colors = search.color.split(",").map((c) => c.trim()).filter(Boolean);
+      setSelColors(new Set(colors));
+    }
+
+    if (search.type) {
+      const types = search.type.split(",").map((t) => t.trim()).filter(Boolean);
+      setSelTypes(new Set(types));
+    }
+
+    const fw = search.fabric || search.weave;
+    if (fw) {
+      const fKey = fw.toLowerCase().trim();
+      const matchOpt = FABRIC_OPTIONS.find(
+        (f) => f.key === fKey || fKey.includes(f.key) || f.key.includes(fKey),
+      );
+      if (matchOpt) {
+        setSelFabrics(new Set([matchOpt.key]));
+      } else {
+        setSearchQuery(fw);
+      }
+    }
+
+    if (search.q) {
+      setSearchQuery(search.q);
+    }
+
+    if (search.tag) {
+      setSelTag(search.tag);
+    }
+
+    if (search.sort && SORTS.some((s) => s.key === search.sort)) {
+      setSort(search.sort);
+    }
+  }, [search.price, search.color, search.type, search.fabric, search.weave, search.q, search.tag, search.sort]);
 
   // Toggle helper
   const toggle = <T,>(setter: React.Dispatch<React.SetStateAction<Set<T>>>, set: Set<T>, v: T) => {
@@ -126,6 +202,9 @@ function ShopPage() {
   const clearAll = () => {
     setSelColors(new Set());
     setSelTypes(new Set());
+    setSelFabrics(new Set());
+    setSearchQuery("");
+    setSelTag(null);
     setSelPricePreset(null);
     setAppliedPriceRange(null);
     setCustomPriceMin("");
@@ -133,11 +212,25 @@ function ShopPage() {
   };
 
   const activeCount =
-    selColors.size + selTypes.size + (appliedPriceRange || selPricePreset ? 1 : 0);
+    selColors.size +
+    selTypes.size +
+    selFabrics.size +
+    (appliedPriceRange || selPricePreset ? 1 : 0) +
+    (searchQuery.trim() ? 1 : 0) +
+    (selTag ? 1 : 0);
 
   // Filtered Products
   const filtered = useMemo(() => {
     let list = products.slice();
+
+    // 0. Keyword query search (q)
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      list = list.filter((p) => {
+        const full = `${p.name} ${p.weave} ${(p.category || []).join(" ")} ${(p.tags || []).join(" ")} ${p.details?.fabric || ""} ${p.details?.description || ""}`.toLowerCase();
+        return full.includes(q);
+      });
+    }
 
     // 1. Color filter (dynamic from Shopify variants and options)
     if (selColors.size > 0) {
@@ -154,7 +247,27 @@ function ShopPage() {
       );
     }
 
-    // 4. Price range filter
+    // 3. Fabric / Weave filter
+    if (selFabrics.size > 0) {
+      list = list.filter((p) =>
+        Array.from(selFabrics).some((fKey) => {
+          const opt = FABRIC_OPTIONS.find((f) => f.key === fKey);
+          return opt ? opt.match(p) : false;
+        }),
+      );
+    }
+
+    // 4. Tag filter
+    if (selTag) {
+      const t = selTag.toLowerCase().trim();
+      list = list.filter((p) => {
+        if (t === "new" || t === "new-arrivals") return p.tag === "New" || p.category.includes("new-arrivals");
+        if (t === "bestseller" || t === "best-sellers") return p.tag === "Bestseller" || (p.tags || []).includes("bestseller");
+        return (p.tags || []).includes(t) || p.category.includes(t as any);
+      });
+    }
+
+    // 5. Price range filter
     if (appliedPriceRange) {
       list = list.filter((p) => {
         const val = parsePriceNumber(p.price);
@@ -162,7 +275,7 @@ function ShopPage() {
       });
     }
 
-    // 5. Sorting
+    // 6. Sorting
     switch (sort) {
       case "new":
         list.sort((a, b) => Number(b.tag === "New") - Number(a.tag === "New"));
@@ -198,7 +311,7 @@ function ShopPage() {
     }
 
     return list;
-  }, [products, selColors, selTypes, appliedPriceRange, sort]);
+  }, [products, selColors, selTypes, selFabrics, searchQuery, selTag, appliedPriceRange, sort]);
 
   useEffect(() => {
     if (!drawerOpen) return;
@@ -214,11 +327,13 @@ function ShopPage() {
       availableColors={availableColors}
       selColors={selColors}
       selTypes={selTypes}
+      selFabrics={selFabrics}
       selPricePreset={selPricePreset}
       customPriceMin={customPriceMin}
       customPriceMax={customPriceMax}
       onToggleColor={(k) => toggle(setSelColors, selColors, k)}
       onToggleType={(k) => toggle(setSelTypes, selTypes, k)}
+      onToggleFabric={(k) => toggle(setSelFabrics, selFabrics, k)}
       onPricePreset={applyPricePreset}
       onCustomPriceMinChange={setCustomPriceMin}
       onCustomPriceMaxChange={setCustomPriceMax}
@@ -400,6 +515,51 @@ function ShopPage() {
                     );
                   })}
 
+                  {/* Fabric Chips */}
+                  {Array.from(selFabrics).map((fKey) => {
+                    const fOpt = FABRIC_OPTIONS.find((f) => f.key === fKey);
+                    return (
+                      <span
+                        key={fKey}
+                        className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
+                      >
+                        {fOpt?.label || fKey}
+                        <button
+                          onClick={() => toggle(setSelFabrics, selFabrics, fKey)}
+                          className="text-maroon/60 hover:text-maroon ml-0.5"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </span>
+                    );
+                  })}
+
+                  {/* Search Query Chip */}
+                  {searchQuery.trim() && (
+                    <span className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm">
+                      Keyword: "{searchQuery}"
+                      <button
+                        onClick={() => setSearchQuery("")}
+                        className="text-maroon/60 hover:text-maroon ml-0.5"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </span>
+                  )}
+
+                  {/* Tag Chip */}
+                  {selTag && (
+                    <span className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm">
+                      Tag: {selTag}
+                      <button
+                        onClick={() => setSelTag(null)}
+                        className="text-maroon/60 hover:text-maroon ml-0.5"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </span>
+                  )}
+
                   <button
                     onClick={clearAll}
                     className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-maroon hover:text-gold-deep transition-colors ml-auto underline underline-offset-4"
@@ -513,11 +673,13 @@ function ShopFilterSidebar({
   availableColors,
   selColors,
   selTypes,
+  selFabrics,
   selPricePreset,
   customPriceMin,
   customPriceMax,
   onToggleColor,
   onToggleType,
+  onToggleFabric,
   onPricePreset,
   onCustomPriceMinChange,
   onCustomPriceMaxChange,
@@ -528,11 +690,13 @@ function ShopFilterSidebar({
   availableColors: DynamicColorFilterOption[];
   selColors: Set<string>;
   selTypes: Set<string>;
+  selFabrics: Set<string>;
   selPricePreset: string | null;
   customPriceMin: string;
   customPriceMax: string;
   onToggleColor: (k: string) => void;
   onToggleType: (k: string) => void;
+  onToggleFabric: (k: string) => void;
   onPricePreset: (k: string) => void;
   onCustomPriceMinChange: (v: string) => void;
   onCustomPriceMaxChange: (v: string) => void;
@@ -581,7 +745,24 @@ function ShopFilterSidebar({
         </div>
       </FilterAccordion>
 
-      {/* 2. DYNAMIC COLOR FILTER SELECTION FROM SHOPIFY VARIANTS */}
+      {/* 2. FABRIC & HANDLOOM WEAVE FILTER */}
+      <FilterAccordion title="Fabric & Weave" defaultOpen={true}>
+        <div className="space-y-2 pt-1">
+          {FABRIC_OPTIONS.map((f) => {
+            const active = selFabrics.has(f.key);
+            return (
+              <CheckboxItem
+                key={f.key}
+                label={f.label}
+                active={active}
+                onClick={() => onToggleFabric(f.key)}
+              />
+            );
+          })}
+        </div>
+      </FilterAccordion>
+
+      {/* 3. DYNAMIC COLOR FILTER SELECTION FROM SHOPIFY VARIANTS */}
       <FilterAccordion title={`Colour Palette (${availableColors.length})`} defaultOpen={true}>
         {/* No max-height or inner scroll: a nested scroll area inside the
             sidebar hid colours and made the panel awkward to use. The whole
@@ -620,8 +801,8 @@ function ShopFilterSidebar({
         </div>
       </FilterAccordion>
 
-      {/* 3. TYPE & OCCASION FILTER */}
-      <FilterAccordion title="Saree Type" defaultOpen={true}>
+      {/* 4. TYPE & OCCASION FILTER */}
+      <FilterAccordion title="Saree Type & Occasion" defaultOpen={true}>
         <div className="space-y-2 pt-1">
           {TYPE_OPTIONS.map((t) => {
             const active = selTypes.has(t.key);

@@ -13,14 +13,13 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319252189220",
     "name": "Meher Banarasi Silk Saree",
     "weave": "Banarasi Silk",
-    "price": "\u20b9 999",
-    "original": "\u20b9 1,499",
+    "price": "₹ 999",
+    "original": "₹ 1,499",
     "tag": "Bestseller",
     "category": [
       "new-arrivals",
       "wedding-sarees",
-      "silk-sarees",
-      "festive-edit"
+      "silk-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_16_53PM.png?v=1787980094",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/dba35a80-c930-4fb2-9822-74555f401d73.png?v=1787980094",
@@ -29,8 +28,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319252189220",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 999",
-        "original": "\u20b9 1,499",
+        "price": "₹ 999",
+        "original": "₹ 1,499",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_16_53PM.png?v=1787980094",
         "selectedOptions": [
@@ -66,7 +65,16 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/01405a7f-b16b-4c7e-9bbe-e93322bfbd5f.png?v=1787980094",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/6eb25424-78c6-434b-9609-f947f3fa747d.png?v=1787980094"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "banarasi",
+      "banarasi-silk",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "sunehri-rani-saree",
@@ -75,14 +83,15 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319281188900",
     "name": "Sunehri Rani Saree",
     "weave": "Kanjivaram Silk",
-    "price": "\u20b9 999",
-    "original": "\u20b9 4,299",
+    "price": "₹ 999",
+    "original": "₹ 4,299",
     "tag": "Bestseller",
     "category": [
       "new-arrivals",
       "wedding-sarees",
       "silk-sarees",
-      "festive-edit"
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_50_12PM.png?v=1787980563",
@@ -91,8 +100,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319281188900",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 999",
-        "original": "\u20b9 4,299",
+        "price": "₹ 999",
+        "original": "₹ 4,299",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
@@ -127,7 +136,20 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_47_15PM.png?v=1787980563",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_48_01PM.png?v=1787980563"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "kanjivaram",
+      "kanjivaram-silk",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "gulabi-shringar-saree",
@@ -136,8 +158,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319325032484",
     "name": "Gulabi Shringar Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 1,699",
-    "original": "\u20b9 4,299",
+    "price": "₹ 1,699",
+    "original": "₹ 4,299",
     "tag": "New",
     "category": [
       "new-arrivals",
@@ -152,8 +174,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319325032484",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 1,699",
-        "original": "\u20b9 4,299",
+        "price": "₹ 1,699",
+        "original": "₹ 4,299",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/pinksaree9.png?v=1788860406",
         "selectedOptions": [
@@ -186,7 +208,14 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/5.png?v=1788860406",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/pinksaree8.png?v=1788860406"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "festive-woven"
+    ]
   },
   {
     "id": "rangrez-royale-saree",
@@ -195,14 +224,15 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319331913764",
     "name": "Rangrez Royale Saree",
     "weave": "Paithani Weave",
-    "price": "\u20b9 899",
-    "original": "\u20b9 3,399",
+    "price": "₹ 899",
+    "original": "₹ 3,399",
     "tag": "Bestseller",
     "category": [
       "new-arrivals",
       "wedding-sarees",
       "silk-sarees",
-      "festive-edit"
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_26_25AM.png?v=1787981455",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_28_23AM.png?v=1787981455",
@@ -211,8 +241,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319331913764",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 3,399",
+        "price": "₹ 899",
+        "original": "₹ 3,399",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_26_25AM.png?v=1787981455",
         "selectedOptions": [
@@ -237,7 +267,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "Avoid direct sunlight and perfume contact",
         "Iron on low heat with a cotton cloth"
       ],
-      "description": "Make a statement with the Rangrez Royale Saree, a vibrant blend of traditional artistry and contemporary elegance. Designed in a rich red base with intricate multicolour motifs, this saree beautifully combines shades of blue, mustard, black and earthy tones for a striking, regal look. The detailed ethnic-inspired patterns are complemented by an ornate printed border and rich red pallu, adding depth and sophistication to the overall design. Paired with a matching red printed blouse, it creates a graceful and coordinated ensemble. Perfect for: Festive celebrations, weddings, family functions, traditional gatherings and special occasions. Highlights: Rich multicolour traditional-inspired print Elegant red base Intricate decorative border and pallu Matching printed blouse piece Graceful drape with a statement look Ideal for festive and occasion wear Rangrez Royale \u2014 where vibrant colours meet timeless Indian elegance.",
+      "description": "Make a statement with the Rangrez Royale Saree, a vibrant blend of traditional artistry and contemporary elegance. Designed in a rich red base with intricate multicolour motifs, this saree beautifully combines shades of blue, mustard, black and earthy tones for a striking, regal look. The detailed ethnic-inspired patterns are complemented by an ornate printed border and rich red pallu, adding depth and sophistication to the overall design. Paired with a matching red printed blouse, it creates a graceful and coordinated ensemble. Perfect for: Festive celebrations, weddings, family functions, traditional gatherings and special occasions. Highlights: Rich multicolour traditional-inspired print Elegant red base Intricate decorative border and pallu Matching printed blouse piece Graceful drape with a statement look Ideal for festive and occasion wear Rangrez Royale — where vibrant colours meet timeless Indian elegance.",
       "gallery": [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_26_25AM.png?v=1787981455",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_28_23AM.png?v=1787981455",
@@ -247,7 +277,20 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_27_50AM.png?v=1787981455",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_27_58AM.png?v=1787981455"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "paithani",
+      "paithani-weave",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "neelam-rangoli-saree",
@@ -256,13 +299,15 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319336140836",
     "name": "Neelam Rangoli Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 3,599",
+    "price": "₹ 899",
+    "original": "₹ 3,599",
     "tag": null,
     "category": [
       "new-arrivals",
+      "wedding-sarees",
       "silk-sarees",
-      "festive-edit"
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_57_37AM.png?v=1787981867",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_58_19AM.png?v=1787981867",
@@ -271,8 +316,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319336140836",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 3,599",
+        "price": "₹ 899",
+        "original": "₹ 3,599",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_57_37AM.png?v=1787981867",
         "selectedOptions": [
@@ -307,7 +352,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_57_54AM.png?v=1787981868",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_57_46AM.png?v=1787981867"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rangrez-heritage-saree",
@@ -316,13 +372,15 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319338467364",
     "name": "Rangrez Heritage Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 4,299",
+    "price": "₹ 899",
+    "original": "₹ 4,299",
     "tag": null,
     "category": [
       "new-arrivals",
+      "wedding-sarees",
       "silk-sarees",
-      "festive-edit"
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_29_35PM.png?v=1787982135",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_30_10PM.png?v=1787982135",
@@ -331,8 +389,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319338467364",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 4,299",
+        "price": "₹ 899",
+        "original": "₹ 4,299",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_29_35PM.png?v=1787982135",
         "selectedOptions": [
@@ -367,7 +425,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/offwhitesaree.png?v=1787982135",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_29_46PM.png?v=1787982135"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "coral-mosaic-saree",
@@ -376,11 +445,13 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319375298596",
     "name": "Coral Mosaic Saree",
     "weave": "Jacquard Cotton Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 3,599",
+    "price": "₹ 899",
+    "original": "₹ 3,599",
     "tag": null,
     "category": [
       "new-arrivals",
+      "silk-sarees",
+      "festive-edit",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_31_48PM.png?v=1787982556",
@@ -390,8 +461,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319375298596",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 3,599",
+        "price": "₹ 899",
+        "original": "₹ 3,599",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_31_48PM.png?v=1787982556",
         "selectedOptions": [
@@ -426,7 +497,19 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_32_05PM.png?v=1787982556",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_31_18PM.png?v=1787982556"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "cotton",
+      "cotton-silk",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "peacock-mosaic-saree",
@@ -435,13 +518,14 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319400693796",
     "name": "Peacock Mosaic Saree",
     "weave": "Jacquard Cotton Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 3,999",
+    "price": "₹ 899",
+    "original": "₹ 3,999",
     "tag": null,
     "category": [
       "new-arrivals",
       "silk-sarees",
-      "festive-edit"
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_33_31PM.png?v=1787982802",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_35_10PM.png?v=1787982802",
@@ -450,8 +534,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319400693796",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 3,999",
+        "price": "₹ 899",
+        "original": "₹ 3,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_33_31PM.png?v=1787982802",
         "selectedOptions": [
@@ -486,7 +570,19 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_34_44PM.png?v=1787982802",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_34_34PM.png?v=1787982802"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "cotton",
+      "cotton-silk",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "heritage-canvas-saree",
@@ -495,12 +591,14 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319408001060",
     "name": "Heritage Canvas Saree",
     "weave": "Cotton Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 4,199",
+    "price": "₹ 899",
+    "original": "₹ 4,199",
     "tag": null,
     "category": [
       "new-arrivals",
+      "wedding-sarees",
       "silk-sarees",
+      "festive-edit",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_35_52PM_bba115bd-01d1-47dc-b4ce-09a9c435712b.png?v=1787983931",
@@ -510,8 +608,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319408001060",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 4,199",
+        "price": "₹ 899",
+        "original": "₹ 4,199",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_35_52PM_bba115bd-01d1-47dc-b4ce-09a9c435712b.png?v=1787983931",
         "selectedOptions": [
@@ -536,7 +634,7 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "Avoid direct sunlight and perfume contact",
         "Iron on low heat with a cotton cloth"
       ],
-      "description": "Step into timeless elegance with our Heritage Canvas Saree, a beautifully detailed drape inspired by India\u2019s rich artistic traditions. Featuring a striking blend of deep blue, earthy gold, mustard, and vibrant multicolour motifs, this saree creates a luxurious yet artistic look. The intricate story-like patterns are beautifully framed with ornate golden borders and traditional geometric detailing, adding depth and sophistication to the overall design. The elegant golden blouse complements the saree perfectly, making the ensemble effortlessly graceful. Perfect for: Festive celebrations, weddings, cultural occasions, family functions, and elegant evening gatherings. Style Highlights: Rich multicolour artistic print Elegant golden-toned border Detailed traditional motifs Coordinated blouse piece Statement ethnic look with a contemporary finish Heritage Canvas Saree is for the woman who loves wearing tradition with an artistic, sophisticated touch",
+      "description": "Step into timeless elegance with our Heritage Canvas Saree, a beautifully detailed drape inspired by India’s rich artistic traditions. Featuring a striking blend of deep blue, earthy gold, mustard, and vibrant multicolour motifs, this saree creates a luxurious yet artistic look. The intricate story-like patterns are beautifully framed with ornate golden borders and traditional geometric detailing, adding depth and sophistication to the overall design. The elegant golden blouse complements the saree perfectly, making the ensemble effortlessly graceful. Perfect for: Festive celebrations, weddings, cultural occasions, family functions, and elegant evening gatherings. Style Highlights: Rich multicolour artistic print Elegant golden-toned border Detailed traditional motifs Coordinated blouse piece Statement ethnic look with a contemporary finish Heritage Canvas Saree is for the woman who loves wearing tradition with an artistic, sophisticated touch",
       "gallery": [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_35_52PM_bba115bd-01d1-47dc-b4ce-09a9c435712b.png?v=1787983931",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_36_16PM_3b1f9d8c-50f8-4d39-9939-f6d6d70788a9.png?v=1787983931",
@@ -545,7 +643,20 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_36_08PM_675fd2b5-8dee-416d-a497-9e041d28f82e.png?v=1787983931",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_35_59PM_f8c88287-e8bb-4826-bf40-4fe5ec6ed569.png?v=1787983931"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "cotton",
+      "cotton-silk",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rustic-kalamkari-fusion-saree",
@@ -554,8 +665,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51319410491428",
     "name": "Rustic Kalamkari Fusion Saree",
     "weave": "Kalamkari Print",
-    "price": "\u20b9 899",
-    "original": "\u20b9 3,899",
+    "price": "₹ 899",
+    "original": "₹ 3,899",
     "tag": null,
     "category": [
       "new-arrivals",
@@ -569,8 +680,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51319410491428",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 3,899",
+        "price": "₹ 899",
+        "original": "₹ 3,899",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_37_36PM.png?v=1787984121",
         "selectedOptions": [
@@ -604,7 +715,17 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_37_56PM.png?v=1787984121",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_37_48PM.png?v=1787984121"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "festive-edit",
+      "everyday-sarees",
+      "kalamkari",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2755",
@@ -613,8 +734,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408933945380",
     "name": "Women's Kalamkari-Style Multicolor Printed Saree with Zari Work",
     "weave": "Kalamkari Print",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
@@ -629,8 +750,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408933945380",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_31_48PM.png?v=1787982556",
         "selectedOptions": [
@@ -665,7 +786,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_32_05PM.png?v=1787982556",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_31_18PM.png?v=1787982556"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "kalamkari",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2726",
@@ -674,8 +806,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408934207524",
     "name": "Women's Kalamkari-Style Multicolor Printed Saree with Zari Work",
     "weave": "Kalamkari Print",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
@@ -690,8 +822,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408934207524",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_35_52PM_bba115bd-01d1-47dc-b4ce-09a9c435712b.png?v=1787983931",
         "selectedOptions": [
@@ -725,7 +857,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_36_08PM_675fd2b5-8dee-416d-a497-9e041d28f82e.png?v=1787983931",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_35_59PM_f8c88287-e8bb-4826-bf40-4fe5ec6ed569.png?v=1787983931"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "kalamkari",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2704",
@@ -734,8 +877,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408934567972",
     "name": "Women's Kalamkari-Style Multicolor Printed Saree with Zari Work",
     "weave": "Kalamkari Print",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
@@ -750,8 +893,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408934567972",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_57_37AM.png?v=1787981867",
         "selectedOptions": [
@@ -786,7 +929,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_57_54AM.png?v=1787981868",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_57_46AM.png?v=1787981867"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "kalamkari",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2811",
@@ -795,8 +949,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408934600740",
     "name": "Women's Kalamkari-Style Multicolor Printed Saree with Zari Work",
     "weave": "Kalamkari Print",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
@@ -811,8 +965,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408934600740",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_33_31PM.png?v=1787982802",
         "selectedOptions": [
@@ -847,7 +1001,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_34_44PM.png?v=1787982802",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_34_34PM.png?v=1787982802"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "kalamkari",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2810",
@@ -856,8 +1021,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408934961188",
     "name": "Women's Kalamkari-Style Multicolor Printed Saree with Zari Work",
     "weave": "Kalamkari Print",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
@@ -872,8 +1037,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408934961188",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_29_35PM.png?v=1787982135",
         "selectedOptions": [
@@ -902,7 +1067,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
       "gallery": [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_03_29_35PM.png?v=1787982135"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "kalamkari",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2719",
@@ -911,8 +1087,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408934993956",
     "name": "Women's Kalamkari-Style Multicolor Printed Saree with Zari Work",
     "weave": "Kalamkari Print",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
@@ -927,8 +1103,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408934993956",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_26_25AM.png?v=1787981455",
         "selectedOptions": [
@@ -957,7 +1133,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
       "gallery": [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug26_2026_11_26_25AM.png?v=1787981455"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "kalamkari",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "bandani-firozi-border-saree",
@@ -966,13 +1153,15 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408935223332",
     "name": "Women's White Silk Blend Saree with Embroidered Border & Unstitched Blouse",
     "weave": "Silk Blend Embroidery",
-    "price": "\u20b9 1,249",
-    "original": "\u20b9 2,999",
+    "price": "₹ 1,249",
+    "original": "₹ 2,999",
     "tag": "Bestseller",
     "category": [
       "new-arrivals",
       "wedding-sarees",
-      "silk-sarees"
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_2.png?v=1788797034",
@@ -981,8 +1170,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935223332",
         "title": "Blue",
         "color": "Blue",
-        "price": "\u20b9 1,249",
-        "original": "\u20b9 2,999",
+        "price": "₹ 1,249",
+        "original": "₹ 2,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
         "selectedOptions": [
@@ -996,8 +1185,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935256100",
         "title": "Green",
         "color": "Green",
-        "price": "\u20b9 1,249",
-        "original": "\u20b9 2,999",
+        "price": "₹ 1,249",
+        "original": "₹ 2,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
         "selectedOptions": [
@@ -1011,8 +1200,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935288868",
         "title": "Rani",
         "color": "Rani",
-        "price": "\u20b9 1,249",
-        "original": "\u20b9 2,999",
+        "price": "₹ 1,249",
+        "original": "₹ 2,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
         "selectedOptions": [
@@ -1053,7 +1242,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_3.png?v=1788797034",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_4.png?v=1788797034"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "embroidered",
+      "ready-to-wear",
+      "1-minute",
+      "festive-woven"
+    ]
   },
   {
     "id": "gulab-box-silk-blend-embroidered-saree",
@@ -1062,13 +1262,15 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408935518244",
     "name": "Women's Silk Blend Saree with Embroidered Border & Unstitched Blouse Piece",
     "weave": "Silk Blend Embroidery",
-    "price": "\u20b9 1,199",
-    "original": "\u20b9 2,999",
+    "price": "₹ 1,199",
+    "original": "₹ 2,999",
     "tag": "Bestseller",
     "category": [
       "new-arrivals",
       "wedding-sarees",
-      "silk-sarees"
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/redsaree_1.png?v=1788796965",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/redsaree_2.png?v=1788796964",
@@ -1077,8 +1279,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935518244",
         "title": "Black",
         "color": "Black",
-        "price": "\u20b9 1,199",
-        "original": "\u20b9 2,999",
+        "price": "₹ 1,199",
+        "original": "₹ 2,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/blacksaree_1.png?v=1788797046",
         "selectedOptions": [
@@ -1092,8 +1294,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935551012",
         "title": "Red",
         "color": "Red",
-        "price": "\u20b9 1,199",
-        "original": "\u20b9 2,999",
+        "price": "₹ 1,199",
+        "original": "₹ 2,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/redsaree_1.png?v=1788796965",
         "selectedOptions": [
@@ -1107,8 +1309,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935583780",
         "title": "White",
         "color": "White",
-        "price": "\u20b9 1,199",
-        "original": "\u20b9 2,999",
+        "price": "₹ 1,199",
+        "original": "₹ 2,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesaare_1.png?v=1788797034",
         "selectedOptions": [
@@ -1158,7 +1360,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/blacksaree_3.png?v=1788797046",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/blacksaree_4.png?v=1788797046"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "embroidered",
+      "ready-to-wear",
+      "1-minute",
+      "festive-woven"
+    ]
   },
   {
     "id": "cream-3dprint-buta",
@@ -1167,12 +1380,15 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408935616548",
     "name": "Women's Ivory Floral Embroidered Saree with Silver Scalloped Border",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 1,649",
-    "original": "\u20b9 2,999",
+    "price": "₹ 1,649",
+    "original": "₹ 2,999",
     "tag": null,
     "category": [
       "new-arrivals",
-      "wedding-sarees"
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug27_2026_08_11_27PM.png?v=1788796869",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug27_2026_08_23_34PM.png?v=1788796869",
@@ -1181,8 +1397,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935616548",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 1,649",
-        "original": "\u20b9 2,999",
+        "price": "₹ 1,649",
+        "original": "₹ 2,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug27_2026_08_11_27PM.png?v=1788796869",
         "selectedOptions": [
@@ -1216,7 +1432,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug27_2026_08_46_27PM.png?v=1788796869",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug27_2026_08_35_33PM.png?v=1788796869"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "embroidered",
+      "ready-to-wear",
+      "1-minute",
+      "festive-woven"
+    ]
   },
   {
     "id": "kalyani-cotton-jhumar-silk-saree",
@@ -1225,8 +1452,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408935649316",
     "name": "Kalyani Cotton Jhumar Silk Saree with Zari Buti & Jhalar Pallu",
     "weave": "Cotton Silk",
-    "price": "\u20b9 1,249",
-    "original": "\u20b9 1,899",
+    "price": "₹ 1,249",
+    "original": "₹ 1,899",
     "tag": "Bestseller",
     "category": [
       "new-arrivals",
@@ -1242,8 +1469,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935649316",
         "title": "Bottle Green",
         "color": "Bottle Green",
-        "price": "\u20b9 1,249",
-        "original": "\u20b9 1,899",
+        "price": "₹ 1,249",
+        "original": "₹ 1,899",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareebottlegreen1.png?v=1788797386",
         "selectedOptions": [
@@ -1257,8 +1484,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935682084",
         "title": "Magenta",
         "color": "Magenta",
-        "price": "\u20b9 1,249",
-        "original": "\u20b9 1,899",
+        "price": "₹ 1,249",
+        "original": "₹ 1,899",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/IMG-20260826-WA0034_jpg.png?v=1788797349",
         "selectedOptions": [
@@ -1272,8 +1499,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935714852",
         "title": "Rama",
         "color": "Rama",
-        "price": "\u20b9 1,249",
-        "original": "\u20b9 1,899",
+        "price": "₹ 1,249",
+        "original": "₹ 1,899",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareerama1.png?v=1788797377",
         "selectedOptions": [
@@ -1287,8 +1514,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935747620",
         "title": "Wine",
         "color": "Wine",
-        "price": "\u20b9 1,249",
-        "original": "\u20b9 1,899",
+        "price": "₹ 1,249",
+        "original": "₹ 1,899",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine1.png?v=1788797370",
         "selectedOptions": [
@@ -1338,7 +1565,23 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine2.png?v=1788797370",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/Kalyanicottonjhumarsilksareewine3.png?v=1788797370"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "banarasi",
+      "banarasi-silk",
+      "cotton",
+      "cotton-silk",
+      "temple-border",
+      "temple",
+      "ready-to-wear",
+      "1-minute",
+      "festive-woven"
+    ]
   },
   {
     "id": "maheshwari-silk-woven-butti-saree",
@@ -1347,13 +1590,14 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408935976996",
     "name": "Women's Maheshwari Silk Woven Butti Saree with Gold Zari Border",
     "weave": "Maheshwari Silk",
-    "price": "\u20b9 999",
-    "original": "\u20b9 1,999",
+    "price": "₹ 999",
+    "original": "₹ 1,999",
     "tag": "Bestseller",
     "category": [
       "new-arrivals",
       "wedding-sarees",
-      "silk-sarees"
+      "silk-sarees",
+      "festive-edit"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_50_12PM.png?v=1787980563",
@@ -1362,8 +1606,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408935976996",
         "title": "Blue",
         "color": "Blue",
-        "price": "\u20b9 999",
-        "original": "\u20b9 1,999",
+        "price": "₹ 999",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
@@ -1377,8 +1621,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936009764",
         "title": "Green",
         "color": "Green",
-        "price": "\u20b9 999",
-        "original": "\u20b9 1,999",
+        "price": "₹ 999",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
@@ -1392,8 +1636,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936042532",
         "title": "Maroon",
         "color": "Maroon",
-        "price": "\u20b9 999",
-        "original": "\u20b9 1,999",
+        "price": "₹ 999",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
@@ -1407,8 +1651,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936075300",
         "title": "Navy Blue",
         "color": "Navy Blue",
-        "price": "\u20b9 999",
-        "original": "\u20b9 1,999",
+        "price": "₹ 999",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
@@ -1422,8 +1666,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936108068",
         "title": "Purple",
         "color": "Purple",
-        "price": "\u20b9 999",
-        "original": "\u20b9 1,999",
+        "price": "₹ 999",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
@@ -1437,8 +1681,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936140836",
         "title": "Rani",
         "color": "Rani",
-        "price": "\u20b9 999",
-        "original": "\u20b9 1,999",
+        "price": "₹ 999",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_46_31PM.png?v=1787980563",
         "selectedOptions": [
@@ -1482,7 +1726,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_47_15PM.png?v=1787980563",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug22_2026_02_47_25PM.png?v=1787980563"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "maheshwari",
+      "zari-butti",
+      "zari",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "maroon-big-border",
@@ -1491,12 +1746,13 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408936173604",
     "name": "Women's White Linen Blend Saree with Maroon Embroidered Border",
     "weave": "Linen Blend",
-    "price": "\u20b9 1,499",
-    "original": "\u20b9 2,999",
+    "price": "₹ 1,499",
+    "original": "₹ 2,999",
     "tag": null,
     "category": [
       "new-arrivals",
       "wedding-sarees",
+      "festive-edit",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesareeredborder_1.png?v=1788796782",
@@ -1506,8 +1762,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936173604",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 1,499",
-        "original": "\u20b9 2,999",
+        "price": "₹ 1,499",
+        "original": "₹ 2,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesareeredborder_1.png?v=1788796782",
         "selectedOptions": [
@@ -1540,7 +1796,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesareeredborder_4.png?v=1788796782",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/whitesareeredborder_5.png?v=1788796782"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "linen",
+      "embroidered",
+      "ready-to-wear",
+      "1-minute",
+      "festive-woven"
+    ]
   },
   {
     "id": "rajwadi-2688",
@@ -1549,12 +1816,13 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408936534052",
     "name": "Rangrez Multicolour Patchwork Printed Art Silk Saree",
     "weave": "Art Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
       "silk-sarees",
+      "festive-edit",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2688_2.png?v=1788796638",
@@ -1564,8 +1832,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936534052",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2688_2.png?v=1788796638",
         "selectedOptions": [
@@ -1599,7 +1867,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2688_3.png?v=1788796638",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2688_5.png?v=1788796638"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "art-silk",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2691",
@@ -1608,12 +1887,14 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408936566820",
     "name": "Sindoori Red Traditional Story Print Art Silk Saree",
     "weave": "Art Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
-      "silk-sarees"
+      "wedding-sarees",
+      "silk-sarees",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2691_5.png?v=1788796594",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2691_1.png?v=1788796594",
@@ -1622,8 +1903,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936566820",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2691_5.png?v=1788796594",
         "selectedOptions": [
@@ -1656,7 +1937,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2691_4.png?v=1788796594",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2691_2.png?v=1788796594"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "everyday-sarees",
+      "art-silk",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2727",
@@ -1665,11 +1957,12 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408936599588",
     "name": "Sanskriti Rust Red Madhubani Art Printed Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
+      "silk-sarees",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2727_2.png?v=1788796502",
@@ -1679,8 +1972,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936599588",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2727_2.png?v=1788796502",
         "selectedOptions": [
@@ -1713,7 +2006,16 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2727_5.png?v=1788796502",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2727_1.png?v=1788796502"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "everyday-sarees",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2753",
@@ -1722,11 +2024,12 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408936960036",
     "name": "Neel Tarang Turquoise Blue Folk Art Printed Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
+      "silk-sarees",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2753_3.png?v=1788796547",
@@ -1736,8 +2039,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936960036",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2753_3.png?v=1788796547",
         "selectedOptions": [
@@ -1770,7 +2073,16 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2753_5.png?v=1788796547",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2753_1.png?v=1788796547"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "everyday-sarees",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2754",
@@ -1779,12 +2091,14 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408936992804",
     "name": "Rangbahar Multicolour Mandala Print Yellow Zari Border Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
-      "wedding-sarees"
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2754_1.png?v=1788796454",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2754_4.png?v=1788796454",
@@ -1793,8 +2107,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408936992804",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2754_1.png?v=1788796454",
         "selectedOptions": [
@@ -1827,7 +2141,17 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2754_3.png?v=1788796454",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2754_2.png?v=1788796454"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2761",
@@ -1836,12 +2160,12 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408937025572",
     "name": "Neelanjali Navy Blue Folk Art Printed Zari Border Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
-      "wedding-sarees",
+      "silk-sarees",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2761_2.png?v=1788796400",
@@ -1851,8 +2175,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408937025572",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2761_2.png?v=1788796400",
         "selectedOptions": [
@@ -1886,7 +2210,16 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2761_1.png?v=1788796399",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2761_3.png?v=1788796399"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "everyday-sarees",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2808",
@@ -1895,11 +2228,13 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408937091108",
     "name": "Shyamali Black Multicolour Patchwork Printed Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
+      "silk-sarees",
+      "festive-edit",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2808_1.png?v=1788796333",
@@ -1909,8 +2244,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408937091108",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2808_1.png?v=1788796333",
         "selectedOptions": [
@@ -1943,7 +2278,17 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2808_5.png?v=1788796333",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2808_3.png?v=1788796333"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2815",
@@ -1952,12 +2297,12 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408937451556",
     "name": "Pushpangan Ivory Floral Printed Red Zari Border Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
-      "wedding-sarees",
+      "silk-sarees",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2815_1.png?v=1788796296",
@@ -1967,8 +2312,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408937451556",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2815_1.png?v=1788796296",
         "selectedOptions": [
@@ -2001,7 +2346,16 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2815_4.png?v=1788796296",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2815_5.png?v=1788796297"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "everyday-sarees",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "rajwadi-2839",
@@ -2010,11 +2364,13 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51408937484324",
     "name": "Swarnika Multicolour Patchwork Printed Golden Border Saree",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 899",
-    "original": "\u20b9 1,999",
+    "price": "₹ 899",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
+      "silk-sarees",
+      "festive-edit",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2839_1.png?v=1788796240",
@@ -2024,8 +2380,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51408937484324",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 899",
-        "original": "\u20b9 1,999",
+        "price": "₹ 899",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2839_1.png?v=1788796240",
         "selectedOptions": [
@@ -2058,7 +2414,17 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2839_4.png?v=1788796111",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2839_5.png?v=1788796111"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "swarna-off-white-gadwal-cotton-saree-with-golden-border-striped-pallu",
@@ -2067,11 +2433,12 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51418512883748",
     "name": "Swarna Off-White Gadwal Cotton Saree with Golden Border & Striped Pallu",
     "weave": "Handloom Cotton",
-    "price": "\u20b9 649",
-    "original": "\u20b9 1,499",
+    "price": "₹ 649",
+    "original": "₹ 1,499",
     "tag": null,
     "category": [
       "new-arrivals",
+      "festive-edit",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/649gadwalcotton1255A.png?v=1788865565",
@@ -2081,8 +2448,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51418512883748",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 649",
-        "original": "\u20b9 1,499",
+        "price": "₹ 649",
+        "original": "₹ 1,499",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/649gadwalcotton1255A.png?v=1788865565",
         "selectedOptions": [
@@ -2115,7 +2482,18 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree1.png?v=1788865565",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree2.png?v=1788865565"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "festive-edit",
+      "everyday-sarees",
+      "cotton",
+      "cotton-silk",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   },
   {
     "id": "swarnika-cream-kerala-cotton-saree-with-gold-zari-butti-designer-pallu",
@@ -2124,12 +2502,14 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51418717093924",
     "name": "Swarnika Cream Kerala Cotton Saree with Gold Zari Butti & Designer Pallu",
     "weave": "Handloom Cotton",
-    "price": "\u20b9 1,099",
-    "original": "\u20b9 2,999",
+    "price": "₹ 1,099",
+    "original": "₹ 2,999",
     "tag": null,
     "category": [
       "new-arrivals",
       "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
       "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/1099kerlacottongoldzari.png?v=1788866353",
@@ -2139,8 +2519,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51418717093924",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 1,099",
-        "original": "\u20b9 2,999",
+        "price": "₹ 1,099",
+        "original": "₹ 2,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/1099kerlacottongoldzari.png?v=1788866353",
         "selectedOptions": [
@@ -2172,7 +2552,21 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug13_2026_11_13_56PM.png?v=1788866353",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/ChatGPTImageAug13_2026_11_14_05PM.png?v=1788866353"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "cotton",
+      "cotton-silk",
+      "zari-butti",
+      "zari",
+      "ready-to-wear",
+      "1-minute",
+      "festive-woven"
+    ]
   },
   {
     "id": "kesarika-orange-saree-with-temple-zari-border-teal-green-pallu-blouse-piece",
@@ -2181,12 +2575,15 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
     "shopifyVariantId": "gid://shopify/ProductVariant/51419092451364",
     "name": "Kesarika Orange Saree with Temple Zari Border, Teal Green Pallu & Blouse Piece",
     "weave": "Handcrafted Silk",
-    "price": "\u20b9 999",
-    "original": "\u20b9 1,999",
+    "price": "₹ 999",
+    "original": "₹ 1,999",
     "tag": null,
     "category": [
       "new-arrivals",
-      "wedding-sarees"
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees"
     ],
     "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree_5.png?v=1788867541",
     "secondaryImg": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree_3.png?v=1788867541",
@@ -2195,8 +2592,8 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "id": "gid://shopify/ProductVariant/51419092451364",
         "title": "Default Title",
         "color": null,
-        "price": "\u20b9 999",
-        "original": "\u20b9 1,999",
+        "price": "₹ 999",
+        "original": "₹ 1,999",
         "available": true,
         "img": "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree_5.png?v=1788867541",
         "selectedOptions": [
@@ -2229,6 +2626,19 @@ export const SHOPIFY_CATALOG_PRODUCTS: ShopifyProduct[] = [
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree_2.png?v=1788867541",
         "https://cdn.shopify.com/s/files/1/0807/1197/4948/files/saree_1.png?v=1788867541"
       ]
-    }
+    },
+    "tags": [
+      "new-arrivals",
+      "wedding-sarees",
+      "silk-sarees",
+      "festive-edit",
+      "everyday-sarees",
+      "temple-border",
+      "temple",
+      "ready-to-wear",
+      "1-minute",
+      "under-1000",
+      "budget-picks"
+    ]
   }
 ];

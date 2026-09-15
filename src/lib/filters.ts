@@ -232,27 +232,33 @@ export const FABRIC_OPTIONS: FabricFilterOption[] = [
     key: "banarasi",
     label: "Pure Banarasi Silk",
     match: (p) =>
-      (p.weave + " " + p.name + " " + (p.details?.fabric || "")).toLowerCase().includes("banarasi"),
+      (p.weave + " " + p.name + " " + (p.details?.fabric || "") + " " + (p.tags || []).join(" ")).toLowerCase().includes("banarasi"),
   },
   {
     key: "kanjivaram",
     label: "Kanjivaram Silk",
     match: (p) =>
-      (p.weave + " " + p.name + " " + (p.details?.fabric || "")).toLowerCase().includes("kanjivaram"),
+      (p.weave + " " + p.name + " " + (p.details?.fabric || "") + " " + (p.tags || []).join(" ")).toLowerCase().includes("kanjivaram"),
   },
   {
     key: "paithani",
     label: "Paithani Weave",
     match: (p) =>
-      (p.weave + " " + p.name + " " + (p.details?.fabric || "")).toLowerCase().includes("paithani"),
+      (p.weave + " " + p.name + " " + (p.details?.fabric || "") + " " + (p.tags || []).join(" ")).toLowerCase().includes("paithani"),
   },
   {
-    key: "katan-mulberry",
-    label: "Katan & Mulberry Silk",
+    key: "zari-butti",
+    label: "Zari Butti & Brocade",
     match: (p) => {
-      const text = (p.weave + " " + p.name + " " + (p.details?.fabric || "")).toLowerCase();
-      return text.includes("katan") || text.includes("mulberry") || text.includes("pure silk");
+      const text = (p.weave + " " + p.name + " " + (p.details?.fabric || "") + " " + (p.details?.description || "")).toLowerCase();
+      return text.includes("zari") || text.includes("butti") || text.includes("brocade");
     },
+  },
+  {
+    key: "temple-border",
+    label: "Temple Border Silk",
+    match: (p) =>
+      (p.weave + " " + p.name + " " + (p.details?.fabric || "")).toLowerCase().includes("temple"),
   },
   {
     key: "cotton-silk",
@@ -265,6 +271,14 @@ export const FABRIC_OPTIONS: FabricFilterOption[] = [
     label: "Kalamkari Handblock Print",
     match: (p) =>
       (p.weave + " " + p.name + " " + (p.details?.fabric || "")).toLowerCase().includes("kalamkari"),
+  },
+  {
+    key: "katan-mulberry",
+    label: "Katan & Mulberry Silk",
+    match: (p) => {
+      const text = (p.weave + " " + p.name + " " + (p.details?.fabric || "")).toLowerCase();
+      return text.includes("katan") || text.includes("mulberry") || text.includes("pure silk");
+    },
   },
   {
     key: "tissue-brocade",

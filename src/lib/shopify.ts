@@ -366,21 +366,112 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
   const inCat = (slug: string, ...textHints: string[]) =>
     tags.has(slug) || textHints.some((h) => text.includes(h));
 
-  // Each spread is annotated so TypeScript keeps the literal union rather than
-  // widening the branches to string[].
+  // Comprehensive multi-category mapping so no collection or occasion is ever empty.
   const category: Product["category"] = [
     ...(inCat("new-arrivals") || tags.size === 0 ? (["new-arrivals"] as const) : []),
-    ...(inCat("wedding-sarees", "wedding", "bridal", "dulhan")
+    ...(inCat(
+      "wedding-sarees",
+      "wedding",
+      "bridal",
+      "dulhan",
+      "zari butti",
+      "temple border",
+      "shringar",
+      "banarasi",
+      "kanjivaram",
+      "paithani",
+      "embroidered border",
+      "royal silk",
+      "sindoori",
+      "rajrang",
+      "ornate gold zari",
+    )
       ? (["wedding-sarees"] as const)
       : []),
-    ...(inCat("silk-sarees", "silk", "banarasi", "kanjivaram", "paithani")
+    ...(inCat(
+      "silk-sarees",
+      "silk",
+      "katan",
+      "banarasi",
+      "kanjivaram",
+      "paithani",
+      "maheshwari",
+      "art silk",
+      "zari butti",
+      "temple border",
+      "jhumar",
+      "shringar",
+      "brocade",
+    )
       ? (["silk-sarees"] as const)
       : []),
-    ...(inCat("festive-edit", "festive") ? (["festive-edit"] as const) : []),
-    ...(inCat("everyday-sarees", "everyday", "daily wear", "office")
+    ...(inCat(
+      "festive-edit",
+      "festive",
+      "party",
+      "zari butti",
+      "temple border",
+      "bandhani",
+      "mandala",
+      "patchwork",
+      "shringar",
+      "embroidered",
+      "kalamkari",
+      "embellished",
+      "kesariya",
+      "rangbahar",
+      "rangvalli",
+    )
+      ? (["festive-edit"] as const)
+      : []),
+    ...(inCat(
+      "everyday-sarees",
+      "ready-to-wear",
+      "everyday",
+      "daily",
+      "office",
+      "cotton",
+      "linen",
+      "gadwal",
+      "kerala",
+      "printed",
+      "print",
+      "stripe",
+      "floral",
+      "kalamkari",
+      "mosaic",
+      "lightweight",
+      "casual",
+      "chikoo",
+      "rangrekha",
+    )
       ? (["everyday-sarees"] as const)
       : []),
   ];
+
+  const computedTags = Array.from(
+    new Set([
+      ...(node.tags ?? []).map((t) => t.trim().toLowerCase()),
+      ...category,
+      ...(text.includes("banarasi") ? ["banarasi", "banarasi-silk"] : []),
+      ...(text.includes("kanjivaram") ? ["kanjivaram", "kanjivaram-silk"] : []),
+      ...(text.includes("paithani") ? ["paithani", "paithani-weave"] : []),
+      ...(text.includes("maheshwari") ? ["maheshwari"] : []),
+      ...(text.includes("cotton") ? ["cotton", "cotton-silk"] : []),
+      ...(text.includes("linen") ? ["linen"] : []),
+      ...(text.includes("art silk") ? ["art-silk"] : []),
+      ...(text.includes("kalamkari") ? ["kalamkari"] : []),
+      ...(text.includes("zari butti") || text.includes("butti") ? ["zari-butti", "zari"] : []),
+      ...(text.includes("temple") ? ["temple-border", "temple"] : []),
+      ...(text.includes("bandhani") ? ["bandhani"] : []),
+      ...(text.includes("embroidered") ? ["embroidered"] : []),
+      ...(text.includes("ready-to-wear") || category.includes("everyday-sarees")
+        ? ["ready-to-wear", "1-minute"]
+        : []),
+      ...(price < 1000 ? ["under-1000", "budget-picks"] : []),
+      ...(price >= 1000 && price <= 3000 ? ["festive-woven"] : []),
+    ]),
+  );
   const fkData = FLIPKART_GALLERIES[node.handle];
   const gallery =
     fkData?.gallery && fkData.gallery.length > 0
@@ -457,6 +548,7 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
           )
         : undefined,
     category,
+    tags: computedTags,
     variants,
     options: node.options,
     details: {
