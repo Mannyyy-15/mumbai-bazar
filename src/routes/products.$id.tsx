@@ -220,12 +220,29 @@ function ProductDetail() {
           name: primaryColor,
           hex: resolved.hex,
           border: resolved.border,
+          price: product.price,
+          original: product.original,
+          img: product.img,
           available: true,
         },
       ];
     }
 
-    return [];
+    // 4. Safe default fallback: ensure productColors is never empty
+    const fallbackName = product.color || product.weave || "Authentic Drape";
+    const resolvedFallback = resolveColorSwatch(fallbackName);
+    return [
+      {
+        variantId: product.shopifyVariantId,
+        name: fallbackName,
+        hex: resolvedFallback.hex,
+        border: resolvedFallback.border,
+        price: product.price,
+        original: product.original,
+        img: product.img,
+        available: true,
+      },
+    ];
   }, [product]);
 
   // Sync selected swatch with the product's primary featured image
@@ -247,10 +264,23 @@ function ProductDetail() {
     }
   }, [product.id, productColors, gallery, product.img]);
 
-  const currentSwatch = productColors[swatch] || productColors[0];
-  const activePrice = currentSwatch.price || product.price;
-  const activeOriginal = currentSwatch.original || product.original;
-  const activeVariantId = currentSwatch.variantId || product.shopifyVariantId;
+  const defaultSwatch = useMemo(
+    () => ({
+      variantId: product.shopifyVariantId,
+      name: product.color || product.weave || "Authentic Drape",
+      hex: "#9B1018",
+      price: product.price,
+      original: product.original,
+      img: product.img,
+      available: true,
+    }),
+    [product],
+  );
+
+  const currentSwatch = productColors[swatch] || productColors[0] || defaultSwatch;
+  const activePrice = currentSwatch?.price || product.price;
+  const activeOriginal = currentSwatch?.original || product.original;
+  const activeVariantId = currentSwatch?.variantId || product.shopifyVariantId;
 
   const priceNum = parsePriceToNumber(activePrice);
   const origNum = activeOriginal ? parsePriceToNumber(activeOriginal) : 0;
@@ -289,9 +319,9 @@ function ProductDetail() {
         name: product.name,
         price: priceNum,
         priceLabel: activePrice,
-        image: currentSwatch.img || gallery[active] || product.img,
+        image: currentSwatch?.img || gallery[active] || product.img,
         weave: product.weave,
-        color: currentSwatch.name,
+        color: currentSwatch?.name,
         shopifyVariantId: activeVariantId,
       },
       qty,

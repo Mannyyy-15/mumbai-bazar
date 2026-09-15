@@ -104,19 +104,22 @@ export function resolveColorSwatch(colorName: string): { name: string; hex: stri
   }
 
   // 3. Fallbacks for standard fashion colors
+  if (lower.includes("slate")) return { name: clean, hex: "#708090", border: "#94A3B8" };
+  if (lower.includes("grey") || lower.includes("gray") || lower.includes("silver") || lower.includes("ash") || lower.includes("charcoal")) return { name: clean, hex: "#8E8E93", border: "#B0B0B5" };
   if (lower.includes("black") || lower.includes("noir")) return { name: clean, hex: "#1A1A1A", border: "#444444" };
   if (lower.includes("white") || lower.includes("off white") || lower.includes("ivory")) return { name: clean, hex: "#F5EFEB", border: "#C5A880" };
+  if (lower.includes("beige") || lower.includes("cream") || lower.includes("sand") || lower.includes("khaki")) return { name: clean, hex: "#D9C8B4", border: "#C5B29B" };
   if (lower.includes("red") || lower.includes("crimson") || lower.includes("ruby")) return { name: clean, hex: "#A31D1D" };
   if (lower.includes("maroon") || lower.includes("wine") || lower.includes("burgundy")) return { name: clean, hex: "#58111A" };
   if (lower.includes("pink") || lower.includes("rose") || lower.includes("blush") || lower.includes("magenta")) return { name: clean, hex: "#D63384" };
   if (lower.includes("gold") || lower.includes("mustard") || lower.includes("yellow")) return { name: clean, hex: "#D4AF37" };
   if (lower.includes("green") || lower.includes("emerald") || lower.includes("olive") || lower.includes("mehendi")) return { name: clean, hex: "#196F3D" };
   if (lower.includes("blue") || lower.includes("navy") || lower.includes("royal") || lower.includes("peacock")) return { name: clean, hex: "#1A5276" };
-  if (lower.includes("teal") || lower.includes("cyan")) return { name: clean, hex: "#0E8686" };
-  if (lower.includes("purple") || lower.includes("violet") || lower.includes("lavender")) return { name: clean, hex: "#6C3483" };
-  if (lower.includes("coral") || lower.includes("peach") || lower.includes("orange") || lower.includes("rust")) return { name: clean, hex: "#E76F51" };
-  if (lower.includes("grey") || lower.includes("gray") || lower.includes("silver")) return { name: clean, hex: "#8E8E93", border: "#B0B0B5" };
-  if (lower.includes("brown") || lower.includes("copper") || lower.includes("beige")) return { name: clean, hex: "#795548" };
+  if (lower.includes("teal") || lower.includes("cyan") || lower.includes("sea green") || lower.includes("aqua")) return { name: clean, hex: "#008080", border: "#006666" };
+  if (lower.includes("purple") || lower.includes("violet") || lower.includes("lavender") || lower.includes("lilac") || lower.includes("mauve")) return { name: clean, hex: "#6C3483" };
+  if (lower.includes("coral") || lower.includes("peach") || lower.includes("orange") || lower.includes("rust") || lower.includes("apricot")) return { name: clean, hex: "#E76F51" };
+  if (lower.includes("brown") || lower.includes("copper") || lower.includes("tan") || lower.includes("chocolate") || lower.includes("coffee")) return { name: clean, hex: "#795548", border: "#5D4037" };
+  if (lower.includes("multi") || lower.includes("rainbow")) return { name: clean, hex: "#A27633", border: "#D4AF37" };
 
   return { name: clean, hex: "#641F2A" };
 }
@@ -305,6 +308,7 @@ export function getProductColors(p: Product): string[] {
       ["Rama", ["rama"]],
       ["Navy Blue", ["navy blue", "navy"]],
       ["Turquoise", ["turquoise", "neel tarang"]],
+      ["Teal", ["teal", "cyan", "sea green", "aqua"]],
       ["Blue", ["blue", "neelam"]],
       ["Rani", ["rani"]],
       ["Magenta", ["magenta"]],
@@ -313,13 +317,20 @@ export function getProductColors(p: Product): string[] {
       ["Maroon", ["maroon"]],
       ["Red", ["red", "sindoori", "lal"]],
       ["Rust", ["rust"]],
+      ["Peach", ["peach", "coral", "apricot"]],
       ["Orange", ["orange", "kesarika"]],
       ["Yellow", ["yellow", "rangbahar"]],
       ["Gold", ["gold", "sunehri"]],
       ["Green", ["green"]],
       ["Purple", ["purple"]],
+      ["Lavender", ["lavender", "lilac", "mauve", "plum"]],
+      ["Slate Grey", ["slate grey", "slate gray", "slate"]],
+      ["Grey", ["grey", "gray", "silver", "ash", "charcoal"]],
       ["Black", ["black", "shyamali"]],
-      ["White", ["white", "ivory", "cream", "off-white"]],
+      ["White", ["white", "ivory", "off-white"]],
+      ["Beige", ["beige", "cream", "khaki", "sand", "ecru"]],
+      ["Brown", ["brown", "copper", "tan", "bronze", "chocolate", "coffee"]],
+      ["Multicolor", ["multicolor", "multi-color", "rainbow"]],
     ];
 
     for (const [label, kws] of colorRules) {
