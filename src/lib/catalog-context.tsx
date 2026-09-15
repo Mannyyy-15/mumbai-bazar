@@ -41,7 +41,7 @@ export function CatalogProvider({
     // the client bundle. Only pages that actually fall back to a client fetch
     // should pay for it.
     import("./shopify")
-      .then(({ fetchShopifyProducts }) => fetchShopifyProducts(50))
+      .then(({ fetchShopifyProducts }) => fetchShopifyProducts(100))
       .then((remote) => {
         if (!cancelled) setClientProducts(remote);
       })

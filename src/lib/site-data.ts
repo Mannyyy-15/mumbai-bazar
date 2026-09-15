@@ -92,6 +92,8 @@ export type Product = {
   details?: ProductDetails;
   variants?: ProductVariant[];
   options?: Array<{ id?: string; name: string; values: string[] }> | null;
+  color?: string;
+  colors?: string[];
 };
 
 const commonCare = [

@@ -150,6 +150,8 @@ function ProductDetail() {
         variantId: string;
         name: string;
         hex: string;
+        secondaryHex?: string;
+        isDual?: boolean;
         border?: string;
         img?: string;
         price?: string;
@@ -173,6 +175,8 @@ function ProductDetail() {
               variantId: v.id,
               name: colorName,
               hex: resolved.hex,
+              secondaryHex: resolved.secondaryHex,
+              isDual: resolved.isDual,
               border: resolved.border,
               img: v.img,
               price: v.price,
@@ -200,6 +204,8 @@ function ProductDetail() {
           variantId: matchingVariant?.id || product.shopifyVariantId,
           name: val,
           hex: resolved.hex,
+          secondaryHex: resolved.secondaryHex,
+          isDual: resolved.isDual,
           border: resolved.border,
           img: matchingVariant?.img,
           price: matchingVariant?.price,
@@ -209,16 +215,21 @@ function ProductDetail() {
       });
     }
 
-    // 3. For single-variant products: identify authentic saree color from Shopify garment data
+    // 3. For single-variant products: identify authentic saree color (single or dual) from Shopify garment data
     const detectedColors = getProductColors(product);
     if (detectedColors.length > 0) {
-      const primaryColor = detectedColors[0];
+      const primaryColor =
+        detectedColors.length >= 2
+          ? `${detectedColors[0]} & ${detectedColors[1]}`
+          : detectedColors[0];
       const resolved = resolveColorSwatch(primaryColor);
       return [
         {
           variantId: product.shopifyVariantId,
           name: primaryColor,
           hex: resolved.hex,
+          secondaryHex: resolved.secondaryHex,
+          isDual: resolved.isDual,
           border: resolved.border,
           price: product.price,
           original: product.original,
@@ -236,6 +247,8 @@ function ProductDetail() {
         variantId: product.shopifyVariantId,
         name: fallbackName,
         hex: resolvedFallback.hex,
+        secondaryHex: resolvedFallback.secondaryHex,
+        isDual: resolvedFallback.isDual,
         border: resolvedFallback.border,
         price: product.price,
         original: product.original,
@@ -602,7 +615,9 @@ function ProductDetail() {
                             : "border-maroon/30 hover:border-maroon/60"
                         }`}
                         style={{
-                          backgroundColor: s.hex,
+                          background: s.secondaryHex
+                            ? `linear-gradient(135deg, ${s.hex} 50%, ${s.secondaryHex} 50%)`
+                            : s.hex,
                           borderColor: s.border || undefined,
                         }}
                       >
@@ -620,16 +635,19 @@ function ProductDetail() {
                   </div>
                 </div>
               ) : productColors.length === 1 && productColors[0].name ? (
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-3">
                   <span className="text-xs uppercase tracking-[0.16em] text-maroon font-bold">
                     Saree Colour:
                   </span>
                   <span
-                    className="w-4 h-4 rounded-full border border-maroon/30 inline-block shadow-inner"
+                    className="w-5 h-5 rounded-full border border-maroon/30 inline-block shadow-sm shrink-0"
                     style={{
-                      backgroundColor: productColors[0].hex,
+                      background: productColors[0].secondaryHex
+                        ? `linear-gradient(135deg, ${productColors[0].hex} 50%, ${productColors[0].secondaryHex} 50%)`
+                        : productColors[0].hex,
                       borderColor: productColors[0].border || undefined,
                     }}
+                    title={productColors[0].name}
                   />
                   <span className="text-xs uppercase tracking-[0.14em] text-maroon font-semibold">
                     {productColors[0].name}

@@ -6,7 +6,7 @@ import { shopifyImage, shopifyImageSrcSet } from "@/lib/shopify";
 import type { Product } from "@/lib/site-data";
 import { useCart, parsePriceToNumber } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
-import { resolveColorSwatch } from "@/lib/filters";
+import { resolveColorSwatch, getProductColors, type SwatchResolution } from "@/lib/filters";
 import { hapticImpact, hapticSuccess } from "@/lib/native-bridge";
 
 export function ProductCard({ p }: { p: Product }) {
@@ -23,19 +23,36 @@ export function ProductCard({ p }: { p: Product }) {
     [],
   );
 
-  const variantColors = useMemo(() => {
-    if (!p.variants || p.variants.length <= 1) return [];
-    const seen = new Set<string>();
-    const list: Array<{ name: string; hex: string; border?: string }> = [];
-    for (const v of p.variants) {
-      const c = v.color || (v.title !== "Default Title" ? v.title.split("/")[0].trim() : null);
-      if (c && !seen.has(c.toLowerCase())) {
-        seen.add(c.toLowerCase());
-        list.push(resolveColorSwatch(c));
+  const colorDisplay = useMemo(() => {
+    // 1. Multi-variant products
+    if (p.variants && p.variants.length > 1) {
+      const seen = new Set<string>();
+      const list: SwatchResolution[] = [];
+      for (const v of p.variants) {
+        const c = v.color || (v.title !== "Default Title" ? v.title.split("/")[0].trim() : null);
+        if (c && !seen.has(c.toLowerCase())) {
+          seen.add(c.toLowerCase());
+          list.push(resolveColorSwatch(c));
+        }
+      }
+      if (list.length > 1) {
+        return { isMulti: true, swatches: list, swatch: null };
       }
     }
-    return list;
-  }, [p.variants]);
+
+    // 2. Single-variant products: check for authentic saree color (e.g. dual color "Dark Red & Black")
+    const detected = getProductColors(p);
+    if (detected.length >= 2) {
+      const dualName = `${detected[0]} & ${detected[1]}`;
+      const resolved = resolveColorSwatch(dualName);
+      return { isMulti: false, swatches: [], swatch: resolved };
+    } else if (detected.length === 1) {
+      const resolved = resolveColorSwatch(detected[0]);
+      return { isMulti: false, swatches: [], swatch: resolved };
+    }
+
+    return null;
+  }, [p]);
 
   const inCartItem = items.find(
     (i) => (p.shopifyVariantId && i.shopifyVariantId === p.shopifyVariantId) || i.id === p.id,
@@ -52,7 +69,7 @@ export function ProductCard({ p }: { p: Product }) {
       priceLabel: p.price,
       image: p.img,
       weave: p.weave,
-      color: variantColors[0]?.name,
+      color: colorDisplay?.isMulti ? colorDisplay.swatches[0]?.name : colorDisplay?.swatch?.name || p.color,
       shopifyVariantId: p.shopifyVariantId,
     });
 
@@ -136,24 +153,45 @@ export function ProductCard({ p }: { p: Product }) {
             {p.name}
           </h3>
 
-          {/* Variant Colours Indicator if product has multiple colors */}
-          {variantColors.length > 1 && (
+          {/* Colours Indicator (multi-variant or single/dual saree shade) */}
+          {colorDisplay?.isMulti && colorDisplay.swatches.length > 1 ? (
             <div className="flex items-center gap-1.5 pt-1">
               <div className="flex items-center -space-x-1">
-                {variantColors.slice(0, 4).map((c, idx) => (
+                {colorDisplay.swatches.slice(0, 4).map((c, idx) => (
                   <span
                     key={idx}
                     className="inline-block h-3 w-3 rounded-full border border-white shadow-xs"
-                    style={{ backgroundColor: c.hex, borderColor: c.border || "#C5A880" }}
+                    style={{
+                      background: c.secondaryHex
+                        ? `linear-gradient(135deg, ${c.hex} 50%, ${c.secondaryHex} 50%)`
+                        : c.hex,
+                      borderColor: c.border || "#C5A880",
+                    }}
                     title={c.name}
                   />
                 ))}
               </div>
               <span className="text-[10px] font-semibold text-ink/75">
-                {variantColors.length} Colours
+                {colorDisplay.swatches.length} Colours
               </span>
             </div>
-          )}
+          ) : colorDisplay?.swatch ? (
+            <div className="flex items-center gap-1.5 pt-1">
+              <span
+                className="inline-block h-3.5 w-3.5 rounded-full border border-white shadow-xs shrink-0"
+                style={{
+                  background: colorDisplay.swatch.secondaryHex
+                    ? `linear-gradient(135deg, ${colorDisplay.swatch.hex} 50%, ${colorDisplay.swatch.secondaryHex} 50%)`
+                    : colorDisplay.swatch.hex,
+                  borderColor: colorDisplay.swatch.border || "#C5A880",
+                }}
+                title={colorDisplay.swatch.name}
+              />
+              <span className="text-[10px] font-semibold text-ink/75 truncate max-w-[140px]">
+                {colorDisplay.swatch.name}
+              </span>
+            </div>
+          ) : null}
 
           <div className="flex items-baseline gap-2 pt-1.5 border-t border-[#A27633]/30 mt-1">
             <span className="font-sans text-sm sm:text-base md:text-lg font-bold text-maroon tracking-tight">

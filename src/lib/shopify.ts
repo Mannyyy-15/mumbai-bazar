@@ -1,12 +1,12 @@
 import { type Product, type ProductVariant } from "./site-data";
 
 const domain =
-  (import.meta.env.VITE_SHOPIFY_STORE_DOMAIN as string | undefined) ||
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_SHOPIFY_STORE_DOMAIN as string | undefined) ||
   "mumbai-baazar-store.myshopify.com";
 const token =
-  (import.meta.env.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN as string | undefined) ||
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN as string | undefined) ||
   "ecd6dae011aac9106c8c42c5085d516e";
-const apiVersion = (import.meta.env.VITE_SHOPIFY_API_VERSION as string | undefined) ?? "2024-10";
+const apiVersion = (typeof import.meta !== "undefined" && import.meta.env?.VITE_SHOPIFY_API_VERSION as string | undefined) ?? "2024-10";
 
 export const shopifyConfigured = Boolean(domain && token);
 
@@ -40,6 +40,14 @@ type ProductNode = {
       image?: { url: string; altText?: string | null } | null;
     }>;
   };
+  metafield?: {
+    references?: {
+      nodes?: Array<{
+        handle?: string;
+        fields?: Array<{ key: string; value: string }>;
+      }>;
+    };
+  } | null;
 };
 
 type ShopifyResponse<T> = { data?: T; errors?: Array<{ message: string }> };
@@ -60,6 +68,16 @@ const PRODUCT_FIELDS = `
       compareAtPrice { amount currencyCode }
       selectedOptions { name value }
       image { url altText }
+    }
+  }
+  metafield(namespace: "shopify", key: "color-pattern") {
+    references(first: 5) {
+      nodes {
+        ... on Metaobject {
+          handle
+          fields { key value }
+        }
+      }
     }
   }
 `;
@@ -148,7 +166,7 @@ let livePromise: Promise<ShopifyProduct[]> | null = null;
 let liveFetchedAt = 0;
 const LIVE_TTL_MS = 5 * 60 * 1000;
 
-export async function fetchShopifyProducts(first = 50): Promise<ShopifyProduct[]> {
+export async function fetchShopifyProducts(first = 100): Promise<ShopifyProduct[]> {
   const fresh = livePromise && Date.now() - liveFetchedAt < LIVE_TTL_MS;
   if (!fresh) {
     liveFetchedAt = Date.now();
@@ -406,6 +424,17 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
   const variantImages = variants.map((v) => v.img).filter(Boolean) as string[];
   const finalGallery = Array.from(new Set([...gallery, ...variantImages]));
 
+  const metaColors: string[] = [];
+  if (node.metafield?.references?.nodes) {
+    for (const mNode of node.metafield.references.nodes) {
+      const colorField = mNode.fields?.find((f) => f.key === "color");
+      const labelField = mNode.fields?.find((f) => f.key === "label");
+      if (colorField && colorField.value && labelField?.value) {
+        metaColors.push(labelField.value.trim());
+      }
+    }
+  }
+
   return {
     id: node.handle,
     handle: node.handle,
@@ -415,6 +444,7 @@ function toProduct(node: ProductNode): ShopifyProduct | null {
     secondaryImg: secondaryImage,
     name,
     weave,
+    colors: metaColors.length > 0 ? metaColors : undefined,
     price: formatShopifyPrice(
       node.priceRange.minVariantPrice.amount,
       node.priceRange.minVariantPrice.currencyCode,

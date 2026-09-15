@@ -113,7 +113,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     // (~94 KB) is not pulled into the client bundle that every page loads.
     // The loader still runs on the server, so grids stay in the initial HTML.
     const { fetchShopifyProducts } = await import("@/lib/shopify");
-    return { products: await fetchShopifyProducts(50).catch(() => []) };
+    return { products: await fetchShopifyProducts(100).catch(() => []) };
   },
   staleTime: 5 * 60 * 1000,
   head: () => ({

@@ -73,22 +73,59 @@ export const COLOR_OPTIONS: ColorFilterOption[] = [
   },
 ];
 
+export type SwatchResolution = {
+  name: string;
+  hex: string;
+  secondaryHex?: string;
+  isDual?: boolean;
+  border?: string;
+};
+
 /**
- * Maps any variant color name (e.g. "Red", "White", "Black", "Wine", "Navy") to
- * the best matching hex color and border for visual swatches.
+ * Resolves an individual shade name to its curated hex and border.
  */
-export function resolveColorSwatch(colorName: string): { name: string; hex: string; border?: string } {
+function resolveSingleColorSwatch(colorName: string): { name: string; hex: string; border?: string } {
   const clean = colorName.trim();
   const lower = clean.toLowerCase();
 
-  // 1. Direct match for ethnic shade names
+  // 1. Direct match for multi-word and ethnic shades
+  if (lower.includes("dark red") || lower.includes("deep red")) return { name: clean, hex: "#7D0A14" };
   if (lower.includes("bottle green")) return { name: clean, hex: "#004225" };
+  if (lower.includes("olive green")) return { name: clean, hex: "#556B2F" };
+  if (lower.includes("emerald green") || lower.includes("emerald")) return { name: clean, hex: "#0D5C3A" };
+  if (lower.includes("teal green")) return { name: clean, hex: "#006D6D" };
+  if (lower.includes("teal") || lower.includes("cyan") || lower.includes("sea green")) return { name: clean, hex: "#008080" };
   if (lower.includes("rama") || lower.includes("firozi") || lower.includes("turquoise")) return { name: clean, hex: "#008B8B" };
+  if (lower.includes("navy blue") || lower.includes("navy")) return { name: clean, hex: "#0B1D51" };
+  if (lower.includes("royal blue")) return { name: clean, hex: "#1A365D" };
+  if (lower.includes("peacock blue")) return { name: clean, hex: "#1A5276" };
+  if (lower.includes("royal purple")) return { name: clean, hex: "#4B1E6D" };
+  if (lower.includes("plum purple") || lower.includes("plum")) return { name: clean, hex: "#5C1D49" };
+  if (lower.includes("golden yellow")) return { name: clean, hex: "#E5A91E" };
+  if (lower.includes("cream gold")) return { name: clean, hex: "#D4AF37", border: "#C5A880" };
+  if (lower.includes("slate grey") || lower.includes("slate gray") || lower.includes("slate")) return { name: clean, hex: "#708090", border: "#94A3B8" };
+  if (lower.includes("off white") || lower.includes("off-white")) return { name: clean, hex: "#F5EFEB", border: "#C5A880" };
   if (lower.includes("rani")) return { name: clean, hex: "#E71D73" };
-  if (lower.includes("navy")) return { name: clean, hex: "#0B1D51" };
+  if (lower.includes("magenta")) return { name: clean, hex: "#C2185B" };
   if (lower.includes("wine")) return { name: clean, hex: "#58111A" };
   if (lower.includes("maroon")) return { name: clean, hex: "#63101E" };
-  if (lower.includes("magenta")) return { name: clean, hex: "#C2185B" };
+  if (lower.includes("red") || lower.includes("crimson") || lower.includes("sindoori")) return { name: clean, hex: "#A31D1D" };
+  if (lower.includes("pink") || lower.includes("rose") || lower.includes("blush")) return { name: clean, hex: "#D63384" };
+  if (lower.includes("gold") || lower.includes("sunehri")) return { name: clean, hex: "#D4AF37" };
+  if (lower.includes("yellow") || lower.includes("haldi") || lower.includes("mustard")) return { name: clean, hex: "#EAB308" };
+  if (lower.includes("orange") || lower.includes("kesarika") || lower.includes("kesariya")) return { name: clean, hex: "#E65100" };
+  if (lower.includes("rust") || lower.includes("rustic")) return { name: clean, hex: "#C0392B" };
+  if (lower.includes("peach") || lower.includes("coral") || lower.includes("apricot")) return { name: clean, hex: "#E76F51" };
+  if (lower.includes("green") || lower.includes("mehendi") || lower.includes("pista")) return { name: clean, hex: "#196F3D" };
+  if (lower.includes("blue") || lower.includes("neelam")) return { name: clean, hex: "#1A5276" };
+  if (lower.includes("purple") || lower.includes("violet") || lower.includes("jamuni")) return { name: clean, hex: "#6C3483" };
+  if (lower.includes("lavender") || lower.includes("lilac") || lower.includes("mauve")) return { name: clean, hex: "#967BB6" };
+  if (lower.includes("black") || lower.includes("ebony") || lower.includes("shyamali")) return { name: clean, hex: "#1A1A1A", border: "#444444" };
+  if (lower.includes("grey") || lower.includes("gray") || lower.includes("silver") || lower.includes("ash") || lower.includes("charcoal")) return { name: clean, hex: "#8E8E93", border: "#B0B0B5" };
+  if (lower.includes("white") || lower.includes("ivory")) return { name: clean, hex: "#F5EFEB", border: "#C5A880" };
+  if (lower.includes("beige") || lower.includes("cream") || lower.includes("chikoo") || lower.includes("khaki") || lower.includes("sand")) return { name: clean, hex: "#D9C8B4", border: "#C5B29B" };
+  if (lower.includes("brown") || lower.includes("copper") || lower.includes("tan") || lower.includes("chocolate") || lower.includes("coffee")) return { name: clean, hex: "#795548", border: "#5D4037" };
+  if (lower.includes("multi") || lower.includes("rainbow")) return { name: clean, hex: "#A27633", border: "#D4AF37" };
 
   // 2. Direct match in COLOR_OPTIONS keywords
   for (const c of COLOR_OPTIONS) {
@@ -103,25 +140,30 @@ export function resolveColorSwatch(colorName: string): { name: string; hex: stri
     }
   }
 
-  // 3. Fallbacks for standard fashion colors
-  if (lower.includes("slate")) return { name: clean, hex: "#708090", border: "#94A3B8" };
-  if (lower.includes("grey") || lower.includes("gray") || lower.includes("silver") || lower.includes("ash") || lower.includes("charcoal")) return { name: clean, hex: "#8E8E93", border: "#B0B0B5" };
-  if (lower.includes("black") || lower.includes("noir")) return { name: clean, hex: "#1A1A1A", border: "#444444" };
-  if (lower.includes("white") || lower.includes("off white") || lower.includes("ivory")) return { name: clean, hex: "#F5EFEB", border: "#C5A880" };
-  if (lower.includes("beige") || lower.includes("cream") || lower.includes("sand") || lower.includes("khaki")) return { name: clean, hex: "#D9C8B4", border: "#C5B29B" };
-  if (lower.includes("red") || lower.includes("crimson") || lower.includes("ruby")) return { name: clean, hex: "#A31D1D" };
-  if (lower.includes("maroon") || lower.includes("wine") || lower.includes("burgundy")) return { name: clean, hex: "#58111A" };
-  if (lower.includes("pink") || lower.includes("rose") || lower.includes("blush") || lower.includes("magenta")) return { name: clean, hex: "#D63384" };
-  if (lower.includes("gold") || lower.includes("mustard") || lower.includes("yellow")) return { name: clean, hex: "#D4AF37" };
-  if (lower.includes("green") || lower.includes("emerald") || lower.includes("olive") || lower.includes("mehendi")) return { name: clean, hex: "#196F3D" };
-  if (lower.includes("blue") || lower.includes("navy") || lower.includes("royal") || lower.includes("peacock")) return { name: clean, hex: "#1A5276" };
-  if (lower.includes("teal") || lower.includes("cyan") || lower.includes("sea green") || lower.includes("aqua")) return { name: clean, hex: "#008080", border: "#006666" };
-  if (lower.includes("purple") || lower.includes("violet") || lower.includes("lavender") || lower.includes("lilac") || lower.includes("mauve")) return { name: clean, hex: "#6C3483" };
-  if (lower.includes("coral") || lower.includes("peach") || lower.includes("orange") || lower.includes("rust") || lower.includes("apricot")) return { name: clean, hex: "#E76F51" };
-  if (lower.includes("brown") || lower.includes("copper") || lower.includes("tan") || lower.includes("chocolate") || lower.includes("coffee")) return { name: clean, hex: "#795548", border: "#5D4037" };
-  if (lower.includes("multi") || lower.includes("rainbow")) return { name: clean, hex: "#A27633", border: "#D4AF37" };
-
   return { name: clean, hex: "#641F2A" };
+}
+
+/**
+ * Maps any color name (single or dual, e.g. "Dark Red & Black", "Emerald Green & Red", "Wine")
+ * to the best matching hex colors and split diagonal styling for visual swatches.
+ */
+export function resolveColorSwatch(colorName: string): SwatchResolution {
+  const clean = colorName.trim();
+  const dualParts = clean.split(/\s+(?:&|and)\s+/i);
+
+  if (dualParts.length >= 2) {
+    const part1 = resolveSingleColorSwatch(dualParts[0]);
+    const part2 = resolveSingleColorSwatch(dualParts[1]);
+    return {
+      name: clean,
+      hex: part1.hex,
+      secondaryHex: part2.hex,
+      isDual: true,
+      border: part1.border || part2.border || undefined,
+    };
+  }
+
+  return resolveSingleColorSwatch(clean);
 }
 
 export type TypeFilterOption = {
@@ -265,21 +307,65 @@ export type DynamicColorFilterOption = {
   count: number;
 };
 
+export const DETAILED_COLOR_RULES: Array<{ label: string; kws: string[] }> = [
+  // Multi-word specific shades first (to prioritize e.g. "Dark Red" over "Red")
+  { label: "Dark Red", kws: ["dark red", "deep red"] },
+  { label: "Bottle Green", kws: ["bottle green"] },
+  { label: "Olive Green", kws: ["olive green"] },
+  { label: "Emerald Green", kws: ["emerald green", "emerald"] },
+  { label: "Teal Green", kws: ["teal green"] },
+  { label: "Teal", kws: ["teal", "cyan", "sea green", "aqua"] },
+  { label: "Navy Blue", kws: ["navy blue", "navy"] },
+  { label: "Royal Blue", kws: ["royal blue"] },
+  { label: "Peacock Blue", kws: ["peacock blue"] },
+  { label: "Rani Pink", kws: ["rani pink", "rani"] },
+  { label: "Plum Purple", kws: ["plum purple", "plum"] },
+  { label: "Royal Purple", kws: ["royal purple"] },
+  { label: "Golden Yellow", kws: ["golden yellow"] },
+  { label: "Cream Gold", kws: ["cream gold"] },
+  { label: "Slate Grey", kws: ["slate grey", "slate gray", "slate"] },
+  { label: "Off White", kws: ["off white", "off-white"] },
+  // Single-word shades
+  { label: "Rama", kws: ["rama", "firozi"] },
+  { label: "Turquoise", kws: ["turquoise", "neel tarang"] },
+  { label: "Blue", kws: ["blue", "neelam"] },
+  { label: "Magenta", kws: ["magenta"] },
+  { label: "Pink", kws: ["pink", "gulabi", "rose"] },
+  { label: "Wine", kws: ["wine", "burgundy"] },
+  { label: "Maroon", kws: ["maroon", "oxblood"] },
+  { label: "Red", kws: ["red", "sindoori", "crimson", "lal"] },
+  { label: "Rust", kws: ["rust", "rustic"] },
+  { label: "Peach", kws: ["peach", "coral", "apricot"] },
+  { label: "Orange", kws: ["orange", "kesarika", "kesariya"] },
+  { label: "Yellow", kws: ["yellow", "haldi", "mustard", "rangbahar"] },
+  { label: "Gold", kws: ["gold", "sunehri"] },
+  { label: "Green", kws: ["green", "mehendi", "pista"] },
+  { label: "Purple", kws: ["purple", "violet", "jamuni"] },
+  { label: "Lavender", kws: ["lavender", "lilac", "mauve"] },
+  { label: "Grey", kws: ["grey", "gray", "silver", "ash", "charcoal"] },
+  { label: "Black", kws: ["black", "shyamali", "ebony"] },
+  { label: "White", kws: ["white", "ivory"] },
+  { label: "Beige", kws: ["beige", "cream", "chikoo", "khaki", "sand", "ecru"] },
+  { label: "Brown", kws: ["brown", "copper", "tan", "bronze", "chocolate", "coffee"] },
+  { label: "Multicolor", kws: ["multicolor", "multi-color", "rainbow"] },
+];
+
 /**
  * Extracts all authentic colors for a product based on its Shopify variants,
- * options, or garment title (for single-variant products).
+ * options, metafields, or garment title and weave (for single-variant products).
+ * Accurately detects dual-color / contrast drape combinations in authentic title order.
  */
 export function getProductColors(p: Product): string[] {
   const colors: string[] = [];
 
-  // 1. Explicit variants from Shopify
-  if (p.variants && Array.isArray(p.variants)) {
+  // 1. Explicit multi-variant products from Shopify
+  if (p.variants && Array.isArray(p.variants) && p.variants.length > 1) {
     for (const v of p.variants) {
       if (v.color && v.color.trim().toLowerCase() !== "default title") {
         colors.push(v.color.trim());
       } else if (v.selectedOptions && Array.isArray(v.selectedOptions)) {
         for (const opt of v.selectedOptions) {
-          if (/colou?r/i.test(opt.name) && opt.value) {
+          if (/colou?r/i.test(opt.name) && opt.value && opt.value.trim().toLowerCase() !== "default title") {
             colors.push(opt.value.trim());
           }
         }
@@ -289,54 +375,76 @@ export function getProductColors(p: Product): string[] {
     }
   }
 
-  // 2. Product options from Shopify
-  if (p.options && Array.isArray(p.options)) {
+  // 2. Product options from Shopify with multiple values
+  if (colors.length === 0 && p.options && Array.isArray(p.options)) {
     for (const opt of p.options) {
       if (/colou?r/i.test(opt.name) && Array.isArray(opt.values)) {
         for (const val of opt.values) {
-          if (val) colors.push(val.trim());
+          if (val && val.trim().toLowerCase() !== "default title") {
+            colors.push(val.trim());
+          }
         }
       }
     }
   }
 
-  // 3. For single-variant products without explicit variant options, identify primary saree color
+  // 3. For single-variant products: extract authentic constituent saree colors from title, metafields, or garment text
   if (colors.length === 0) {
-    const text = `${p.name} ${p.id} ${p.weave || ""}`.toLowerCase();
-    const colorRules: Array<[string, string[]]> = [
-      ["Bottle Green", ["bottle green"]],
-      ["Rama", ["rama"]],
-      ["Navy Blue", ["navy blue", "navy"]],
-      ["Turquoise", ["turquoise", "neel tarang"]],
-      ["Teal", ["teal", "cyan", "sea green", "aqua"]],
-      ["Blue", ["blue", "neelam"]],
-      ["Rani", ["rani"]],
-      ["Magenta", ["magenta"]],
-      ["Pink", ["pink", "gulabi"]],
-      ["Wine", ["wine"]],
-      ["Maroon", ["maroon"]],
-      ["Red", ["red", "sindoori", "lal"]],
-      ["Rust", ["rust"]],
-      ["Peach", ["peach", "coral", "apricot"]],
-      ["Orange", ["orange", "kesarika"]],
-      ["Yellow", ["yellow", "rangbahar"]],
-      ["Gold", ["gold", "sunehri"]],
-      ["Green", ["green"]],
-      ["Purple", ["purple"]],
-      ["Lavender", ["lavender", "lilac", "mauve", "plum"]],
-      ["Slate Grey", ["slate grey", "slate gray", "slate"]],
-      ["Grey", ["grey", "gray", "silver", "ash", "charcoal"]],
-      ["Black", ["black", "shyamali"]],
-      ["White", ["white", "ivory", "off-white"]],
-      ["Beige", ["beige", "cream", "khaki", "sand", "ecru"]],
-      ["Brown", ["brown", "copper", "tan", "bronze", "chocolate", "coffee"]],
-      ["Multicolor", ["multicolor", "multi-color", "rainbow"]],
-    ];
+    const title = p.name || "";
+    const matched: Array<{ label: string; index: number }> = [];
 
-    for (const [label, kws] of colorRules) {
-      if (kws.some((kw) => text.includes(kw))) {
-        colors.push(label);
-        break;
+    // Scan title first (preserves authentic drape ordering e.g. "Dark Red & Black")
+    for (const rule of DETAILED_COLOR_RULES) {
+      for (const kw of rule.kws) {
+        const regex = new RegExp(`\\b${kw}\\b`, "i");
+        const m = regex.exec(title);
+        if (m) {
+          const alreadySubsumed = matched.some(
+            (x) =>
+              x.label.toLowerCase().includes(rule.label.toLowerCase()) ||
+              rule.label.toLowerCase().includes(x.label.toLowerCase()),
+          );
+          if (!alreadySubsumed) {
+            matched.push({ label: rule.label, index: m.index });
+          }
+          break;
+        }
+      }
+    }
+
+    // Sort by appearance in title
+    matched.sort((a, b) => a.index - b.index);
+    for (const m of matched) {
+      colors.push(m.label);
+    }
+
+    // Also include Shopify category metafield colors if present on product
+    if (p.colors && Array.isArray(p.colors)) {
+      for (const mc of p.colors) {
+        if (
+          !colors.some(
+            (c) =>
+              c.toLowerCase().includes(mc.toLowerCase()) ||
+              mc.toLowerCase().includes(c.toLowerCase()),
+          )
+        ) {
+          colors.push(mc);
+        }
+      }
+    }
+
+    // Fallback: check weave, description, or id if still no colors found
+    if (colors.length === 0) {
+      const fullText = `${p.name} ${p.id} ${p.weave || ""} ${p.details?.description || ""}`.toLowerCase();
+      for (const rule of DETAILED_COLOR_RULES) {
+        for (const kw of rule.kws) {
+          const regex = new RegExp(`\\b${kw}\\b`, "i");
+          if (regex.test(fullText)) {
+            colors.push(rule.label);
+            break;
+          }
+        }
+        if (colors.length > 0) break;
       }
     }
   }
