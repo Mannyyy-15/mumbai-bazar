@@ -1,0 +1,625 @@
+@import "tailwindcss";
+@source "../";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@utility no-scrollbar {
+  &::-webkit-scrollbar { display: none; }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+@utility boutique-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 16, 24, 0.45) rgba(162, 118, 51, 0.08);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: rgba(162, 118, 51, 0.07);
+    border-radius: 9999px;
+    margin: 6px 0;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(155, 16, 24, 0.4);
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    transition: background-color 0.2s ease;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(155, 16, 24, 0.8);
+  }
+  &::-webkit-scrollbar-thumb:active {
+    background: #9B1018;
+  }
+}
+
+/*
+ * Invisible at rest, faintly visible while the area is hovered or actively
+ * scrolled. Used where a visible track is distracting — the product gallery
+ * thumbnails and the shop sidebar — without removing the ability to drag,
+ * which display:none would.
+ */
+@utility ghost-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 9999px;
+    transition: background-color 0.25s ease;
+  }
+
+  &:hover {
+    scrollbar-color: rgba(155, 16, 24, 0.28) transparent;
+  }
+  &:hover::-webkit-scrollbar-thumb {
+    background: rgba(155, 16, 24, 0.28);
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(155, 16, 24, 0.5);
+  }
+}
+
+/* ---------------------------------------------------------------
+   Mumbai Bazar — Premium saree boutique design system.
+   Palette: Mumbai Bazar red, deep red, warm white,
+   muted + antique gold, dark brown, muted taupe.
+   Typography: DM Serif Display (selective display) + Manrope (clear UI/body).
+--------------------------------------------------------------- */
+
+@theme inline {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+  --radius-2xl: 10px;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand tokens */
+  --color-brand-red: var(--brand-red);
+  --color-maroon: var(--maroon);
+  --color-wine: var(--wine);
+  --color-ivory: var(--ivory);
+  --color-beige: var(--beige);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-border-gold: var(--border-gold);
+  --color-ink: var(--ink);
+  --color-taupe: var(--taupe);
+}
+
+:root {
+  --radius: 3px;
+
+  /* Brand */
+  --brand-red: #F20D18;
+  --maroon: #9B1018;
+  --wine: #680910;
+  --ivory: #FFFDF8;
+  --beige: #EADBC8;
+  --gold: #A27633;
+  --gold-deep: #744D1E;
+  --border-gold: #A27633;
+  --ink: #191313;
+  --taupe: #4A3D37;
+
+  /* Semantic mapping */
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
+  --primary: var(--brand-red);
+  --primary-foreground: var(--ivory);
+  --secondary: var(--beige);
+  --secondary-foreground: var(--ink);
+  --muted: #F3E9DA;
+  --muted-foreground: var(--taupe);
+  --accent: var(--gold);
+  --accent-foreground: var(--wine);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: var(--ivory);
+  --border: rgba(162, 118, 51, 0.5);
+  --input: rgba(162, 118, 51, 0.35);
+  --ring: var(--gold-deep);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-foreground);
+    background-color: var(--color-background);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-synthesis: none;
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+
+  h4, h5 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  button, a, input { text-rendering: optimizeLegibility; }
+
+  ::selection {
+    background-color: var(--color-maroon);
+    color: var(--color-ivory);
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-maroon);
+}
+
+@utility gold-divider {
+  display: inline-block;
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+}
+
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.75rem;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background-color: var(--color-brand-red);
+  color: var(--color-ivory);
+  border: 1px solid var(--color-brand-red);
+  transition: background-color 220ms ease, color 220ms ease, transform 220ms ease;
+
+  &:hover {
+    background-color: var(--color-maroon);
+    border-color: var(--color-maroon);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+}
+
+@utility btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.75rem;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background-color: transparent;
+  color: var(--color-maroon);
+  border: 1px solid var(--color-maroon);
+  transition: background-color 220ms ease, color 220ms ease;
+
+  &:hover {
+    background-color: var(--color-maroon);
+    color: var(--color-ivory);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+}
+
+@utility link-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold-deep);
+  border-bottom: 1px solid var(--color-gold);
+  padding-bottom: 3px;
+  transition: color 200ms ease, border-color 200ms ease;
+
+  &:hover {
+    color: var(--color-maroon);
+    border-color: var(--color-maroon);
+  }
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: reveal-in 700ms ease-out forwards;
+}
+
+@keyframes reveal-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@utility marquee-track {
+  display: flex;
+  gap: 3rem;
+  width: max-content;
+  animation: marquee 42s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .marquee-track { animation: none !important; opacity: 1; transform: none; }
+}
+
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Lenis owns scroll interpolation; prevent native CSS smooth-scroll from
+   competing with its momentum on route changes and anchor links. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* Luxury Scroll Reveal Transitions */
+.reveal-init,
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 800ms cubic-bezier(0.16, 1, 0.3, 1), transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-init.is-visible,
+[data-reveal][data-revealed="true"],
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Apparel & Model Image Framing — Always anchor to top-center so model heads and jewelry are never cut off */
+.aspect-\[3\/4\] img,
+.aspect-\[4\/5\] img,
+.aspect-\[2\/3\] img,
+.aspect-\[3\/2\] img {
+  object-position: center top !important;
+}
+
+/*
+ * Cart feedback. A single settle — the bag dips, lifts, and comes to rest —
+ * rather than Tailwind's animate-bounce, which loops indefinitely and reads as
+ * a placeholder. Short enough to register without holding the eye.
+ */
+@keyframes cart-settle {
+  0%   { transform: translateY(0) scale(1); }
+  30%  { transform: translateY(3px) scale(0.92); }
+  60%  { transform: translateY(-4px) scale(1.08); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@utility animate-cart-settle {
+  animation: cart-settle 420ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+@keyframes cart-toast-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-cart-toast {
+  animation: cart-toast-in 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-cart-settle,
+  .animate-cart-toast {
+    animation: none;
+  }
+}
+
+/* Mobile Safe Area Utility Classes */
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@utility pl-safe {
+  padding-left: env(safe-area-inset-left, 0px);
+}
+@utility pr-safe {
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+/* ---------------------------------------------------------------------------
+   Native app shell
+   ---------------------------------------------------------------------------
+   Everything below applies ONLY when the page is running inside the Capacitor
+   webview, gated on <html class="native-app"> which native-bridge.ts sets at
+   startup. The website is completely unaffected by this block.
+
+   These are the small conventions that separate "a website in a frame" from
+   "an app": text you cannot accidentally select, no blue flash on tap, no
+   rubber-band overscroll revealing a white void, and pages that move rather
+   than snap.
+   --------------------------------------------------------------------------- */
+
+/* Chrome that only makes sense in a browser — the "add to home screen" style
+   prompts and install nudges — hidden once we ARE the app. */
+.native-app .web-only {
+  display: none !important;
+}
+
+.native-app {
+  /* A webview that bounces past the end of the content shows the background
+     behind the page, which instantly reads as a web frame. */
+  overscroll-behavior-y: none;
+}
+
+.native-app body {
+  /* Long-press selecting body copy is a browser behaviour; in an app it looks
+     like a bug. Inputs and anything explicitly marked stay selectable. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  /* Kill the translucent blue rectangle Android paints over tapped elements. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Text the customer may legitimately want to copy: addresses, phone numbers,
+   order references. */
+.native-app input,
+.native-app textarea,
+.native-app [contenteditable="true"],
+.native-app .selectable,
+.native-app address {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* --- Page transitions ---------------------------------------------------
+   Web pages replace their content instantly. Apps move: the incoming view
+   slides up a few pixels as it fades in. Deliberately short (220ms) — long
+   enough to read as motion, short enough that it never delays the tap.
+
+   Applied per-route via a key on the outlet wrapper, so every navigation
+   re-runs it. */
+@keyframes app-page-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.native-app .app-page {
+  animation: app-page-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* Hint the compositor so the animation runs off the main thread. */
+  will-change: opacity, transform;
+}
+
+/* The animation is decoration. Anyone who has asked the system for less motion
+   gets the content without it. */
+@media (prefers-reduced-motion: reduce) {
+  .native-app .app-page {
+    animation: none;
+  }
+}
+
+/* --- Tap feedback -------------------------------------------------------
+   With the browser's tap highlight removed above, buttons need their own
+   acknowledgement or taps feel dead. A fast scale-down is what native
+   controls do. */
+.native-app button:active,
+.native-app a[role="button"]:active,
+.native-app .tap-scale:active {
+  transform: scale(0.97);
+  transition: transform 90ms ease-out;
+}
+
+/* Momentum scrolling in scrollable regions, matching the platform. */
+.native-app .overflow-y-auto,
+.native-app .overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---------------------------------------------------------------------------
+   Brand loader
+   ---------------------------------------------------------------------------
+   Used by BrandLoader during route navigation and by the first-paint preloader
+   in the document shell. Both the ring and the monogram animate, so a slow
+   connection still shows honest motion rather than a frozen mark.
+   --------------------------------------------------------------------------- */
+
+@keyframes brand-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes brand-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@utility animate-brand-spin {
+  animation: brand-spin 900ms linear infinite;
+}
+
+@utility animate-brand-pulse {
+  animation: brand-pulse 1400ms ease-in-out infinite;
+}
+
+/* Motion here is informative, not decorative — it is the signal that something
+   is happening — so it is reduced rather than removed: the ring stops, the
+   monogram keeps a slow fade. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-brand-spin {
+    animation: none;
+  }
+  .animate-brand-pulse {
+    animation: brand-pulse 2400ms ease-in-out infinite;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   First-paint preloader
+   ---------------------------------------------------------------------------
+   Sits in the document shell and covers the page until React hydrates, then
+   removes itself. Without it the native app goes: native splash -> white gap
+   -> content, and that white gap is the single most "website in a frame"
+   moment in the whole launch.
+
+   Inlined in the shell rather than loaded as a component, because anything
+   that has to be fetched first cannot cover the gap before it is fetched.
+   --------------------------------------------------------------------------- */
+
+#app-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background: #fffdf8;
+  /* Fades out once hydration sets data-ready, then stops intercepting taps. */
+  opacity: 1;
+  transition: opacity 260ms ease-out;
+}
+
+#app-preloader[data-ready="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#app-preloader .preloader-mark {
+  position: relative;
+  height: 4rem;
+  width: 4rem;
+}
+
+#app-preloader .preloader-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid rgba(197, 160, 89, 0.25);
+  border-top-color: #c5a059;
+  animation: brand-spin 900ms linear infinite;
+}
+
+#app-preloader .preloader-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.5rem;
+  object-fit: contain;
+  animation: brand-pulse 1400ms ease-in-out infinite;
+}
+
+#app-preloader .preloader-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #78716c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #app-preloader .preloader-ring {
+    animation: none;
+  }
+}

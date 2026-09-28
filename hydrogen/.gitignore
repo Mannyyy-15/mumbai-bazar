@@ -1,0 +1,11 @@
+node_modules
+/dist
+/.react-router
+/guides
+.shopify
+.wrangler
+*.tsbuildinfo
+
+.env
+.env.*
+!.env.example

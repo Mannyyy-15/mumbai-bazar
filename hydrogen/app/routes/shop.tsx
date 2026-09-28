@@ -1,0 +1,898 @@
+import { useMemo, useState, useEffect } from "react";
+import { useLoaderData, useSearchParams } from "react-router";
+import type { Route } from "./+types/shop";
+import {
+  Check,
+  X,
+  ChevronDown,
+  SlidersHorizontal,
+  Filter,
+  IndianRupee,
+  RotateCcw,
+} from "lucide-react";
+import { ProductCard } from "~/components/ProductCard";
+import { SITE, getSeoMeta, jsonLdScript } from "~/lib/seo";
+import { breadcrumbSchema, collectionSchema } from "~/lib/structured-data";
+import { fetchLiveProducts, type ShopifyProduct } from "~/lib/shopify.server";
+import {
+  COLOR_OPTIONS,
+  TYPE_OPTIONS,
+  FABRIC_OPTIONS,
+  PRICE_PRESETS,
+  parsePriceNumber,
+  getDynamicColorOptions,
+  matchesDynamicColor,
+  getProductColors,
+  type DynamicColorFilterOption,
+} from "~/lib/filters";
+
+type SortKey = "featured" | "new" | "price-asc" | "price-desc" | "color-asc";
+const SORTS: { key: SortKey; label: string }[] = [
+  { key: "featured", label: "Featured" },
+  { key: "new", label: "Newest Arrivals" },
+  { key: "price-asc", label: "Price: Low to High" },
+  { key: "price-desc", label: "Price: High to Low" },
+  { key: "color-asc", label: "Color: A to Z" },
+];
+
+export const meta: Route.MetaFunction = () => {
+  return getSeoMeta({
+    title: "Shop All Sarees, Lehengas & Ethnic Wear — Mumbai Bazar",
+    description:
+      "Browse the full Mumbai Bazar catalog. Filter by price range, colour and occasion across authentic Banarasi, Kanjivaram, and party wear sarees.",
+    path: "/shop",
+    keywords: [
+      "buy sarees online",
+      "saree online shopping",
+      "banarasi silk saree",
+      "kanjivaram saree online",
+      "saree shop near me",
+      "party wear sarees",
+      "mumbai bazar catalog",
+    ],
+  });
+};
+
+export async function loader({ context }: Route.LoaderArgs) {
+  const products = await fetchLiveProducts(context, 100);
+  return { products };
+}
+
+export default function ShopPage() {
+  const { products } = useLoaderData<typeof loader>();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Dynamic available colors derived from actual Shopify products and variants
+  const availableColors = useMemo(() => getDynamicColorOptions(products as any), [products]);
+
+  // Filter States
+  const [selColors, setSelColors] = useState<Set<string>>(new Set());
+  const [selTypes, setSelTypes] = useState<Set<string>>(new Set());
+  const [selFabrics, setSelFabrics] = useState<Set<string>>(new Set());
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selTag, setSelTag] = useState<string | null>(null);
+  const [selPricePreset, setSelPricePreset] = useState<string | null>(null);
+  const [customPriceMin, setCustomPriceMin] = useState<string>("");
+  const [customPriceMax, setCustomPriceMax] = useState<string>("");
+  const [appliedPriceRange, setAppliedPriceRange] = useState<{ min: number; max: number } | null>(
+    null,
+  );
+
+  const [sort, setSort] = useState<SortKey>("featured");
+  const [sortOpen, setSortOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Sync URL search parameters on navigation
+  useEffect(() => {
+    const priceParam = searchParams.get("price");
+    if (priceParam) {
+      const preset = PRICE_PRESETS.find((p) => p.key === priceParam);
+      if (preset) {
+        setSelPricePreset(preset.key);
+        setAppliedPriceRange({ min: preset.min, max: preset.max });
+        setCustomPriceMin(preset.min > 0 ? String(preset.min) : "");
+        setCustomPriceMax(preset.max < Infinity ? String(preset.max) : "");
+      }
+    }
+
+    const colorParam = searchParams.get("color");
+    if (colorParam) {
+      const colors = colorParam.split(",").map((c) => c.trim()).filter(Boolean);
+      setSelColors(new Set(colors));
+    }
+
+    const typeParam = searchParams.get("type");
+    if (typeParam) {
+      const types = typeParam.split(",").map((t) => t.trim()).filter(Boolean);
+      setSelTypes(new Set(types));
+    }
+
+    const fw = searchParams.get("fabric") || searchParams.get("weave");
+    if (fw) {
+      const fKey = fw.toLowerCase().trim();
+      const matchOpt = FABRIC_OPTIONS.find(
+        (f) => f.key === fKey || fKey.includes(f.key) || f.key.includes(fKey),
+      );
+      if (matchOpt) {
+        setSelFabrics(new Set([matchOpt.key]));
+      } else {
+        setSearchQuery(fw);
+      }
+    }
+
+    const qParam = searchParams.get("q");
+    if (qParam) {
+      setSearchQuery(qParam);
+    }
+
+    const tagParam = searchParams.get("tag");
+    if (tagParam) {
+      setSelTag(tagParam);
+    }
+
+    const sortParam = searchParams.get("sort");
+    if (sortParam && SORTS.some((s) => s.key === sortParam)) {
+      setSort(sortParam as SortKey);
+    }
+  }, [searchParams]);
+
+  // Toggle helper
+  const toggle = <T,>(setter: React.Dispatch<React.SetStateAction<Set<T>>>, set: Set<T>, v: T) => {
+    const next = new Set(set);
+    if (next.has(v)) {
+      next.delete(v);
+    } else {
+      next.add(v);
+    }
+    setter(next);
+  };
+
+  // Price range applicator
+  const applyPricePreset = (presetKey: string) => {
+    if (selPricePreset === presetKey) {
+      setSelPricePreset(null);
+      setAppliedPriceRange(null);
+      setCustomPriceMin("");
+      setCustomPriceMax("");
+    } else {
+      setSelPricePreset(presetKey);
+      const preset = PRICE_PRESETS.find((p) => p.key === presetKey);
+      if (preset) {
+        setAppliedPriceRange({ min: preset.min, max: preset.max });
+        setCustomPriceMin(preset.min > 0 ? String(preset.min) : "");
+        setCustomPriceMax(preset.max < Infinity ? String(preset.max) : "");
+      }
+    }
+  };
+
+  const applyCustomPrice = () => {
+    const min = customPriceMin ? Number(customPriceMin) : 0;
+    const max = customPriceMax ? Number(customPriceMax) : Infinity;
+    setAppliedPriceRange({ min, max });
+    setSelPricePreset(null);
+  };
+
+  const clearAll = () => {
+    setSelColors(new Set());
+    setSelTypes(new Set());
+    setSelFabrics(new Set());
+    setSearchQuery("");
+    setSelTag(null);
+    setSelPricePreset(null);
+    setAppliedPriceRange(null);
+    setCustomPriceMin("");
+    setCustomPriceMax("");
+    setSearchParams(new URLSearchParams());
+  };
+
+  const activeCount =
+    selColors.size +
+    selTypes.size +
+    selFabrics.size +
+    (appliedPriceRange || selPricePreset ? 1 : 0) +
+    (searchQuery.trim() ? 1 : 0) +
+    (selTag ? 1 : 0);
+
+  // Filtered Products
+  const filtered = useMemo(() => {
+    let list = (products as any[]).slice();
+
+    // 0. Keyword query search (q)
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      list = list.filter((p) => {
+        const full = `${p.name} ${p.weave} ${(p.category || []).join(" ")} ${(p.tags || []).join(" ")} ${p.details?.fabric || ""} ${p.details?.description || ""}`.toLowerCase();
+        return full.includes(q);
+      });
+    }
+
+    // 1. Color filter (dynamic from Shopify variants and options)
+    if (selColors.size > 0) {
+      list = list.filter((p) => Array.from(selColors).some((cKey) => matchesDynamicColor(p, cKey)));
+    }
+
+    // 2. Type filter
+    if (selTypes.size > 0) {
+      list = list.filter((p) =>
+        Array.from(selTypes).some((tKey) => {
+          const opt = TYPE_OPTIONS.find((t) => t.key === tKey);
+          return opt ? opt.match(p) : false;
+        }),
+      );
+    }
+
+    // 3. Fabric / Weave filter
+    if (selFabrics.size > 0) {
+      list = list.filter((p) =>
+        Array.from(selFabrics).some((fKey) => {
+          const opt = FABRIC_OPTIONS.find((f) => f.key === fKey);
+          return opt ? opt.match(p) : false;
+        }),
+      );
+    }
+
+    // 4. Tag filter
+    if (selTag) {
+      const t = selTag.toLowerCase().trim();
+      list = list.filter((p) => {
+        if (t === "new" || t === "new-arrivals") return p.tag === "New" || (p.category || []).includes("new-arrivals");
+        if (t === "bestseller" || t === "best-sellers") return p.tag === "Bestseller" || (p.tags || []).includes("bestseller");
+        return (p.tags || []).includes(t) || (p.category || []).includes(t as any);
+      });
+    }
+
+    // 5. Price range filter
+    if (appliedPriceRange) {
+      list = list.filter((p) => {
+        const val = p.rawPrice || parsePriceNumber(p.price);
+        return val >= appliedPriceRange.min && val <= appliedPriceRange.max;
+      });
+    }
+
+    // 6. Sorting
+    switch (sort) {
+      case "new":
+        list.sort((a, b) => Number(b.tag === "New") - Number(a.tag === "New"));
+        break;
+      case "price-asc":
+        list.sort((a, b) => (a.rawPrice || parsePriceNumber(a.price)) - (b.rawPrice || parsePriceNumber(b.price)));
+        break;
+      case "price-desc":
+        list.sort((a, b) => (b.rawPrice || parsePriceNumber(b.price)) - (a.rawPrice || parsePriceNumber(a.price)));
+        break;
+      case "color-asc":
+        list.sort((a, b) => {
+          const colA = (getProductColors(a)[0] || "").toLowerCase();
+          const colB = (getProductColors(b)[0] || "").toLowerCase();
+          return colA.localeCompare(colB);
+        });
+        break;
+      case "featured":
+      default:
+        if (selColors.size > 0) {
+          list.sort((a, b) => {
+            const matchesSelectedColor = (v: { color?: string | null }) => {
+              const color = v.color?.toLowerCase();
+              return Boolean(color) && Array.from(selColors).some((ck) => ck.includes(color!));
+            };
+            const hasVarA = (a.variants || []).some(matchesSelectedColor);
+            const hasVarB = (b.variants || []).some(matchesSelectedColor);
+            return Number(hasVarB) - Number(hasVarA);
+          });
+        }
+        break;
+    }
+
+    return list;
+  }, [products, selColors, selTypes, selFabrics, searchQuery, selTag, appliedPriceRange, sort]);
+
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [drawerOpen]);
+
+  const sidebarContent = (
+    <ShopFilterSidebar
+      availableColors={availableColors}
+      selColors={selColors}
+      selTypes={selTypes}
+      selFabrics={selFabrics}
+      selPricePreset={selPricePreset}
+      customPriceMin={customPriceMin}
+      customPriceMax={customPriceMax}
+      onToggleColor={(k) => toggle(setSelColors, selColors, k)}
+      onToggleType={(k) => toggle(setSelTypes, selTypes, k)}
+      onToggleFabric={(k) => toggle(setSelFabrics, selFabrics, k)}
+      onPricePreset={applyPricePreset}
+      onCustomPriceMinChange={setCustomPriceMin}
+      onCustomPriceMaxChange={setCustomPriceMax}
+      onApplyCustomPrice={applyCustomPrice}
+      clearAll={clearAll}
+      activeCount={activeCount}
+    />
+  );
+
+  const schemas = [
+    breadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Shop", path: "/shop" },
+    ]),
+    collectionSchema(
+      "Shop All Sarees",
+      "Browse the full Mumbai Bazar catalog.",
+      "/shop",
+      (filtered as any[]).slice(0, 12),
+    ),
+  ];
+
+  return (
+    <div className="w-full bg-[#FAF7F2] text-ink min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(schemas) }}
+      />
+      {/*
+        The visible breadcrumb, heading, intro paragraph and result count were
+        removed so the page opens straight onto the products. The h1 stays as
+        screen-reader-only text: it is this page's only one, and dropping it
+        entirely would leave the main product page with no heading for search
+        engines or assistive tech. Same pattern as the homepage.
+      */}
+      <h1 className="sr-only">Shop All Sarees, Lehengas &amp; Ethnic Wear</h1>
+
+      {/* Main Grid Section */}
+      <section className="pt-6 pb-16 md:pt-8 md:pb-24">
+        <div className="w-full px-4 md:px-8 lg:px-12 xl:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[300px_1fr] xl:grid-cols-[320px_1fr] gap-8 md:gap-10 lg:gap-12 items-start">
+            {/* Desktop Left Sticky Sidebar */}
+            <aside
+              data-lenis-prevent
+              onWheel={(e) => e.stopPropagation()}
+              className="hidden md:block sticky top-[120px] z-20 max-h-[calc(100vh-136px)] overflow-y-auto overscroll-contain rounded-2xl border border-gold/40 bg-white p-6 shadow-sm ghost-scrollbar"
+            >
+              {sidebarContent}
+            </aside>
+
+            {/* Main Products Grid & Toolbar */}
+            <div className="min-w-0">
+              {/* Toolbar */}
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gold/40 pb-5">
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex items-center gap-1.5 bg-maroon/10 px-3 py-1 rounded-full text-xs font-bold text-maroon uppercase tracking-wider">
+                    Authentic Weaves
+                  </span>
+                  <p className="text-xs sm:text-sm text-ink/80 font-medium">
+                    <strong className="text-maroon font-bold">{filtered.length}</strong> drapes
+                    found
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  {/* Mobile Filter Button */}
+                  <button
+                    onClick={() => setDrawerOpen(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border-2 border-maroon bg-white text-xs tracking-wider uppercase text-maroon font-bold hover:bg-maroon hover:text-white transition-all md:hidden shadow-sm"
+                  >
+                    <SlidersHorizontal className="h-4 w-4" />
+                    Filters
+                    {activeCount > 0 && (
+                      <span className="ml-1 grid h-5 w-5 place-items-center rounded-full bg-maroon text-white text-[10px] font-bold">
+                        {activeCount}
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Sort Dropdown */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setSortOpen((v) => !v)}
+                      onBlur={() => setTimeout(() => setSortOpen(false), 200)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-gold-deep/50 bg-white text-xs tracking-wider uppercase text-maroon font-bold hover:border-maroon transition-all shadow-sm"
+                    >
+                      <span>Sort: {SORTS.find((s) => s.key === sort)!.label}</span>
+                      <ChevronDown
+                        className={`h-3.5 w-3.5 transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {sortOpen && (
+                      <ul className="absolute right-0 top-full z-30 mt-2 w-56 rounded-2xl border border-gold-deep/40 bg-white p-2 shadow-2xl">
+                        {SORTS.map((s) => (
+                          <li key={s.key}>
+                            <button
+                              onMouseDown={(e) => {
+                                e.preventDefault();
+                                setSort(s.key);
+                                setSortOpen(false);
+                              }}
+                              className={`flex w-full items-center justify-between px-4 py-2.5 rounded-xl text-left text-xs tracking-wider uppercase transition-colors ${
+                                sort === s.key
+                                  ? "bg-maroon text-white font-bold"
+                                  : "text-ink hover:bg-[#FAF7F2] font-medium"
+                              }`}
+                            >
+                              {s.label}
+                              {sort === s.key && <Check className="h-4 w-4 text-white" />}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Active Filter Chips */}
+              {activeCount > 0 && (
+                <div className="flex flex-wrap items-center gap-2.5 pt-4 pb-2">
+                  <span className="text-[11px] uppercase tracking-wider text-maroon font-bold mr-1">
+                    Active Filters:
+                  </span>
+
+                  {/* Price Chip */}
+                  {(appliedPriceRange || selPricePreset) && (
+                    <span className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm">
+                      <IndianRupee className="h-3 w-3 text-gold-deep" />
+                      {selPricePreset
+                        ? PRICE_PRESETS.find((p) => p.key === selPricePreset)?.label ||
+                          "Price Filter"
+                        : `₹ ${appliedPriceRange?.min.toLocaleString("en-IN")} – ${appliedPriceRange?.max === Infinity ? "Above" : "₹ " + appliedPriceRange?.max.toLocaleString("en-IN")}`}
+                      <button
+                        onClick={() => {
+                          setSelPricePreset(null);
+                          setAppliedPriceRange(null);
+                          setCustomPriceMin("");
+                          setCustomPriceMax("");
+                        }}
+                        className="text-maroon/60 hover:text-maroon ml-0.5"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </span>
+                  )}
+
+                  {/* Color Chips */}
+                  {Array.from(selColors).map((cKey) => {
+                    const cOpt =
+                      availableColors.find((c) => c.key === cKey) ||
+                      (typeof COLOR_OPTIONS !== "undefined"
+                        ? COLOR_OPTIONS.find((c) => c.key === cKey)
+                        : undefined);
+                    const label =
+                      cOpt?.label ||
+                      cKey.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+                    const hex = cOpt?.hex || "#D4AF37";
+                    return (
+                      <span
+                        key={cKey}
+                        className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
+                      >
+                        <span
+                          className="w-3 h-3 rounded-full border border-black/20"
+                          style={{ backgroundColor: hex }}
+                        />
+                        {label}
+                        <button
+                          onClick={() => toggle(setSelColors, selColors, cKey)}
+                          className="text-maroon/60 hover:text-maroon ml-0.5"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </span>
+                    );
+                  })}
+
+                  {/* Type Chips */}
+                  {Array.from(selTypes).map((tKey) => {
+                    const tOpt = TYPE_OPTIONS.find((t) => t.key === tKey);
+                    return (
+                      <span
+                        key={tKey}
+                        className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
+                      >
+                        {tOpt?.label || tKey}
+                        <button
+                          onClick={() => toggle(setSelTypes, selTypes, tKey)}
+                          className="text-maroon/60 hover:text-maroon ml-0.5"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </span>
+                    );
+                  })}
+
+                  {/* Fabric Chips */}
+                  {Array.from(selFabrics).map((fKey) => {
+                    const fOpt = FABRIC_OPTIONS.find((f) => f.key === fKey);
+                    return (
+                      <span
+                        key={fKey}
+                        className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm"
+                      >
+                        {fOpt?.label || fKey}
+                        <button
+                          onClick={() => toggle(setSelFabrics, selFabrics, fKey)}
+                          className="text-maroon/60 hover:text-maroon ml-0.5"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </span>
+                    );
+                  })}
+
+                  {/* Search Query Chip */}
+                  {searchQuery.trim() && (
+                    <span className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm">
+                      Keyword: "{searchQuery}"
+                      <button
+                        onClick={() => setSearchQuery("")}
+                        className="text-maroon/60 hover:text-maroon ml-0.5"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </span>
+                  )}
+
+                  {/* Tag Chip */}
+                  {selTag && (
+                    <span className="inline-flex items-center gap-1.5 border border-gold-deep/40 bg-white px-3 py-1.5 rounded-full text-xs text-maroon font-bold shadow-sm">
+                      Tag: {selTag}
+                      <button
+                        onClick={() => setSelTag(null)}
+                        className="text-maroon/60 hover:text-maroon ml-0.5"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </span>
+                  )}
+
+                  <button
+                    onClick={clearAll}
+                    className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-maroon hover:text-gold-deep transition-colors ml-auto underline underline-offset-4"
+                  >
+                    <RotateCcw className="h-3 w-3" /> Reset All ({activeCount})
+                  </button>
+                </div>
+              )}
+
+              {/* Product Grid */}
+              <div className="mt-6">
+                {filtered.length === 0 ? (
+                  <div className="py-20 text-center rounded-3xl border-2 border-dashed border-gold/60 bg-white p-8">
+                    <Filter className="h-10 w-10 text-gold-deep mx-auto mb-3" />
+                    <h3 className="font-serif text-2xl md:text-3xl text-maroon font-bold">
+                      No Sarees Match Your Selected Filters
+                    </h3>
+                    <p className="mt-2 text-sm text-ink/75 max-w-md mx-auto">
+                      Try widening your price range, selecting a different colour, or reset all
+                      filters.
+                    </p>
+                    <button
+                      onClick={clearAll}
+                      className="mt-6 px-8 py-3 rounded-full bg-maroon text-white text-xs font-bold uppercase tracking-widest hover:bg-wine transition-all shadow-md"
+                    >
+                      Reset All Filters
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3.5 sm:gap-6 md:grid-cols-3 xl:grid-cols-4 lg:gap-8">
+                    {filtered.map((p) => (
+                      <ProductCard key={p.id} p={p as any} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mobile Filter Drawer */}
+      {drawerOpen && (
+        <div
+          className="fixed inset-0 z-50 md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filter Sarees"
+        >
+          <button
+            aria-label="Close filters"
+            className="absolute inset-0 bg-ink/70 backdrop-blur-sm transition-opacity"
+            onClick={() => setDrawerOpen(false)}
+          />
+          <div
+            data-lenis-prevent
+            onWheel={(e) => e.stopPropagation()}
+            className="absolute inset-y-0 left-0 flex w-[90%] max-w-md flex-col bg-white shadow-2xl"
+          >
+            <div className="flex items-center justify-between border-b border-gold/40 px-6 py-5 bg-[#FAF7F2]">
+              <div className="flex items-center gap-2.5">
+                <Filter className="h-5 w-5 text-maroon" />
+                <h2 className="font-serif text-xl font-bold text-maroon">Filter Catalog</h2>
+              </div>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="text-ink hover:text-maroon p-1.5 rounded-lg border border-gold/40"
+                aria-label="Close"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div
+              data-lenis-prevent
+              onWheel={(e) => e.stopPropagation()}
+              className="flex-1 overflow-y-auto px-6 py-6 overscroll-contain ghost-scrollbar"
+            >
+              {sidebarContent}
+            </div>
+
+            <div className="flex gap-3 border-t border-gold/40 p-5 bg-[#FAF7F2]">
+              <button
+                onClick={clearAll}
+                className="flex-1 py-3 rounded-xl border border-maroon text-maroon text-xs font-bold uppercase tracking-wider hover:bg-maroon/5 transition-colors"
+              >
+                Clear All
+              </button>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                className="flex-1 py-3 rounded-xl bg-maroon text-white text-xs font-bold uppercase tracking-wider hover:bg-wine transition-colors shadow-md"
+              >
+                Show {filtered.length} Sarees
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Filter Sidebar Component with:
+ * 1. Price Range (Presets + Custom Min/Max)
+ * 2. Color Swatches (Visual circles with labels)
+ * 3. Saree Type & Occasion
+ * 4. Fabric & Handloom Weave
+ */
+function ShopFilterSidebar({
+  availableColors,
+  selColors,
+  selTypes,
+  selFabrics,
+  selPricePreset,
+  customPriceMin,
+  customPriceMax,
+  onToggleColor,
+  onToggleType,
+  onToggleFabric,
+  onPricePreset,
+  onCustomPriceMinChange,
+  onCustomPriceMaxChange,
+  onApplyCustomPrice,
+  clearAll,
+  activeCount,
+}: {
+  availableColors: DynamicColorFilterOption[];
+  selColors: Set<string>;
+  selTypes: Set<string>;
+  selFabrics: Set<string>;
+  selPricePreset: string | null;
+  customPriceMin: string;
+  customPriceMax: string;
+  onToggleColor: (k: string) => void;
+  onToggleType: (k: string) => void;
+  onToggleFabric: (k: string) => void;
+  onPricePreset: (k: string) => void;
+  onCustomPriceMinChange: (v: string) => void;
+  onCustomPriceMaxChange: (v: string) => void;
+  onApplyCustomPrice: () => void;
+  clearAll: () => void;
+  activeCount: number;
+}) {
+  return (
+    <div className="space-y-6 text-sm">
+      {/* Sidebar Header */}
+      <div className="flex items-center justify-between border-b border-gold/40 pb-4">
+        <h3 className="font-serif text-xl font-bold text-maroon">Refine Collection</h3>
+        {activeCount > 0 && (
+          <button
+            onClick={clearAll}
+            className="text-xs uppercase tracking-wider text-maroon font-bold hover:text-gold-deep transition-colors underline"
+          >
+            Reset ({activeCount})
+          </button>
+        )}
+      </div>
+
+      {/* 1. PRICE RANGE FILTER */}
+      <FilterAccordion title="Price Range" defaultOpen={true}>
+        <div className="pt-1">
+          {/* Quick Preset Buttons */}
+          <div className="grid grid-cols-1 gap-2">
+            {PRICE_PRESETS.map((preset) => {
+              const active = selPricePreset === preset.key;
+              return (
+                <button
+                  key={preset.key}
+                  onClick={() => onPricePreset(preset.key)}
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl border text-xs font-semibold tracking-wide transition-all text-left ${
+                    active
+                      ? "border-maroon bg-maroon text-white shadow-sm"
+                      : "border-gold/40 bg-[#FAF7F2] text-ink hover:border-maroon"
+                  }`}
+                >
+                  <span>{preset.label}</span>
+                  {active && <Check className="h-3.5 w-3.5 text-white" />}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Custom Price Inputs */}
+          <div className="mt-3 pt-3 border-t border-gold/30">
+            <p className="text-[11px] uppercase tracking-wider text-taupe font-semibold mb-2">
+              Custom Range (₹)
+            </p>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                placeholder="Min"
+                value={customPriceMin}
+                onChange={(e) => onCustomPriceMinChange(e.target.value)}
+                className="w-full rounded-lg border border-gold/40 bg-[#FAF7F2] px-2.5 py-1.5 text-xs text-ink placeholder:text-taupe/60 focus:border-maroon focus:outline-none"
+              />
+              <span className="text-taupe text-xs">–</span>
+              <input
+                type="number"
+                placeholder="Max"
+                value={customPriceMax}
+                onChange={(e) => onCustomPriceMaxChange(e.target.value)}
+                className="w-full rounded-lg border border-gold/40 bg-[#FAF7F2] px-2.5 py-1.5 text-xs text-ink placeholder:text-taupe/60 focus:border-maroon focus:outline-none"
+              />
+              <button
+                onClick={onApplyCustomPrice}
+                className="rounded-lg bg-maroon px-3 py-1.5 text-xs font-bold text-white hover:bg-wine transition-colors"
+              >
+                Go
+              </button>
+            </div>
+          </div>
+        </div>
+      </FilterAccordion>
+
+      {/* 2. FABRIC & HANDLOOM WEAVE FILTER */}
+      <FilterAccordion title="Fabric & Weave" defaultOpen={true}>
+        <div className="space-y-2 pt-1">
+          {FABRIC_OPTIONS.map((f) => {
+            const active = selFabrics.has(f.key);
+            return (
+              <CheckboxItem
+                key={f.key}
+                label={f.label}
+                active={active}
+                onClick={() => onToggleFabric(f.key)}
+              />
+            );
+          })}
+        </div>
+      </FilterAccordion>
+
+      {/* 3. DYNAMIC COLOR FILTER SELECTION FROM SHOPIFY VARIANTS */}
+      <FilterAccordion title={`Colour Palette (${availableColors.length})`} defaultOpen={true}>
+        <div className="grid grid-cols-2 gap-2 pt-1">
+          {availableColors.map((col) => {
+            const active = selColors.has(col.key);
+            return (
+              <button
+                key={col.key}
+                onClick={() => onToggleColor(col.key)}
+                className={`flex items-center justify-between p-2 rounded-xl border text-xs font-semibold transition-all text-left ${
+                  active
+                    ? "border-maroon bg-maroon/10 text-maroon shadow-sm ring-1 ring-maroon/50"
+                    : "border-gold/40 bg-[#FAF7F2] text-ink hover:border-maroon"
+                }`}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <span
+                    className="w-5 h-5 rounded-full border shrink-0 relative grid place-items-center"
+                    style={{
+                      backgroundColor: col.hex,
+                      borderColor: col.border || "rgba(0,0,0,0.15)",
+                    }}
+                  >
+                    {active && <Check className="h-3 w-3 text-white drop-shadow-sm" />}
+                  </span>
+                  <span className="truncate text-xs font-medium">{col.label}</span>
+                </div>
+                <span className="text-[10px] text-taupe font-bold shrink-0 ml-1">
+                  ({col.count})
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </FilterAccordion>
+
+      {/* 4. TYPE & OCCASION FILTER */}
+      <FilterAccordion title="Saree Type & Occasion" defaultOpen={true}>
+        <div className="space-y-2 pt-1">
+          {TYPE_OPTIONS.map((t) => {
+            const active = selTypes.has(t.key);
+            return (
+              <CheckboxItem
+                key={t.key}
+                label={t.label}
+                active={active}
+                onClick={() => onToggleType(t.key)}
+              />
+            );
+          })}
+        </div>
+      </FilterAccordion>
+    </div>
+  );
+}
+
+function FilterAccordion({
+  title,
+  defaultOpen = true,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-gold/40 pb-5">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between text-xs uppercase tracking-wider text-maroon font-bold"
+      >
+        <span>{title}</span>
+        <ChevronDown
+          className={`h-4 w-4 text-maroon transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open && <div className="mt-3.5">{children}</div>}
+    </div>
+  );
+}
+
+function CheckboxItem({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      className={`group flex w-full items-center justify-between p-2 rounded-xl text-left transition-colors border ${
+        active
+          ? "border-maroon bg-maroon/10 text-maroon font-bold"
+          : "border-transparent text-ink hover:bg-[#FAF7F2] font-medium"
+      }`}
+    >
+      <span className="text-xs">{label}</span>
+      <span
+        className={`grid h-4 w-4 shrink-0 place-items-center rounded border transition-all ${
+          active
+            ? "border-maroon bg-maroon text-white"
+            : "border-gold/60 bg-white group-hover:border-maroon"
+        }`}
+      >
+        {active && <Check className="h-3 w-3" strokeWidth={3} />}
+      </span>
+    </button>
+  );
+}
