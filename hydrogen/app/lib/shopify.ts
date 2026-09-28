@@ -1,4 +1,4 @@
-const domain = "mumbai-baazar-store.myshopify.com";
+const domain = "checkout.mumbaibazar.com";
 
 /**
  * Rewrites a Shopify CDN image URL to request a resized, modern-format copy.

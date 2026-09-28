@@ -247,6 +247,33 @@ export function getWeaveFromProduct(
   return "Handloom Saree";
 }
 
+export function inferFabricFromProduct(
+  title: string,
+  productType?: string | null,
+  description?: string | null,
+  overrideFabric?: string | null,
+): string {
+  if (overrideFabric && overrideFabric.trim()) return overrideFabric.trim();
+  const t = `${title || ""} ${productType || ""} ${description || ""}`.toLowerCase();
+  if (t.includes("cotton silk") || t.includes("cotton-silk") || t.includes("gadwal cotton")) return "Cotton Silk";
+  if (t.includes("pure cotton") || t.includes("kerala cotton") || t.includes("cotton")) return "Pure Cotton";
+  if (t.includes("katan")) return "Pure Katan Silk";
+  if (t.includes("kanjivaram")) return "Pure Kanjivaram Silk";
+  if (t.includes("banarasi")) return "Banarasi Silk";
+  if (t.includes("paithani")) return "Paithani Silk";
+  if (t.includes("organza")) return "Organza Silk";
+  if (t.includes("tissue")) return "Metallic Tissue Silk";
+  if (t.includes("georgette")) return "Pure Georgette";
+  if (t.includes("chiffon")) return "Chiffon";
+  if (t.includes("tussar")) return "Tussar Silk";
+  if (t.includes("chanderi")) return "Chanderi Silk";
+  if (t.includes("satin")) return "Satin Silk";
+  if (t.includes("linen")) return "Linen Silk";
+  if (t.includes("art silk")) return "Art Silk Blend";
+  if (t.includes("silk blend") || t.includes("silk")) return "Silk Blend";
+  return "Ethnic Weave";
+}
+
 /**
  * Derives color name from options, tags or title.
  * Detects dual-color combinations such as "Dark Red & Black" or "Teal & Red".

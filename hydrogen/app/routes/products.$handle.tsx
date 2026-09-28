@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-import { useLoaderData, Link } from "react-router";
+import { useLoaderData, Link, useSearchParams } from "react-router";
 import type { Route } from "./+types/products.$handle";
 import {
   ChevronRight,
@@ -25,7 +25,7 @@ import { useWishlist } from "~/lib/wishlist-context";
 import { useAside } from "~/components/Aside";
 import { ProductCard } from "~/components/ProductCard";
 import { hapticImpact, hapticSuccess } from "~/lib/native-bridge";
-import { CartForm } from "@shopify/hydrogen";
+import { CartForm, Analytics } from "@shopify/hydrogen";
 import { trackViewContent, trackAddToCart } from "~/lib/meta-pixel";
 
 export const meta: Route.MetaFunction = ({ data }) => {
@@ -113,9 +113,9 @@ export default function ProductDetailPage() {
     gallery: [product.img],
   };
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [active, setActive] = useState(0);
   const [qty, setQty] = useState(1);
-  const [swatch, setSwatch] = useState(0);
   const [added, setAdded] = useState(false);
   const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -123,7 +123,7 @@ export default function ProductDetailPage() {
     const list = [...(d.gallery && d.gallery.length > 0 ? d.gallery : [product.img])];
     if (product.variants) {
       for (const v of product.variants) {
-        if (v.img && !list.includes(v.img)) {
+        if (v.img && !list.some((g) => g.split("?")[0] === v.img?.split("?")[0])) {
           list.push(v.img);
         }
       }
@@ -138,17 +138,6 @@ export default function ProductDetailPage() {
       img.src = shopifyImage(url, 1000);
     });
   }, [gallery]);
-
-  // Meta Pixel: ViewContent event
-  useEffect(() => {
-    trackViewContent({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      weave: product.weave,
-      handle: product.handle,
-    });
-  }, [product.id]);
 
   const productColors = useMemo(() => {
     const explicitVariants = product.variants;
@@ -223,11 +212,89 @@ export default function ProductDetailPage() {
     return [];
   }, [product]);
 
+  const isColorOption = useMemo(() => {
+    if (product.options && product.options.length > 0) {
+      return product.options.some((o) => /colou?r|shade/i.test(o.name));
+    }
+    return true;
+  }, [product.options]);
+
+  const optionHeading = useMemo(() => {
+    if (product.options && product.options.length > 0) {
+      const customOpt = product.options.find((o) => o.name !== "Title");
+      if (customOpt) return customOpt.name;
+    }
+    return "Colour";
+  }, [product.options]);
+
+  // Pre-select variant from ad URL query parameters (?variant=... or ?color=...)
+  const initialSwatchIdx = useMemo(() => {
+    if (!productColors.length) return 0;
+    const variantParam = searchParams.get("variant")?.toLowerCase();
+    const colorParam = (
+      searchParams.get("color") ||
+      searchParams.get("Color") ||
+      searchParams.get("shade")
+    )?.toLowerCase();
+
+    if (variantParam) {
+      const idx = productColors.findIndex((c) => {
+        const numId = c.variantId.split("/").pop()?.toLowerCase();
+        return c.variantId.toLowerCase() === variantParam || numId === variantParam;
+      });
+      if (idx !== -1) return idx;
+    }
+
+    if (colorParam) {
+      const idx = productColors.findIndex(
+        (c) =>
+          c.name.toLowerCase() === colorParam ||
+          c.name.toLowerCase().includes(colorParam),
+      );
+      if (idx !== -1) return idx;
+    }
+
+    return 0;
+  }, [productColors, searchParams]);
+
+  const [swatch, setSwatch] = useState(initialSwatchIdx);
+
+  useEffect(() => {
+    setSwatch(initialSwatchIdx);
+  }, [initialSwatchIdx]);
+
+  // Sync main gallery photo to active variant image
+  useEffect(() => {
+    const chosen = productColors[swatch];
+    if (chosen?.img && gallery.length > 0) {
+      const cleanImg = chosen.img.split("?")[0];
+      const idx = gallery.findIndex((g) => g.split("?")[0] === cleanImg);
+      if (idx !== -1) {
+        setActive(idx);
+      }
+    }
+  }, [swatch, productColors, gallery]);
+
   const currentSwatch = productColors[swatch] || productColors[0];
-  const isAvailable = currentSwatch ? Boolean(currentSwatch.available) : (product.variants?.some((v) => v.available) ?? true);
+  const isAvailable = currentSwatch
+    ? Boolean(currentSwatch.available)
+    : (product.variants?.some((v) => v.available) ?? true);
   const activeVariantId = currentSwatch?.variantId || product.shopifyVariantId;
   const activePrice = currentSwatch?.price || product.price;
   const activeOriginal = currentSwatch?.original || product.original;
+
+  // Meta Pixel: ViewContent event with full multi-ID catalog matching
+  useEffect(() => {
+    trackViewContent({
+      id: product.id,
+      name: product.name,
+      price: activePrice || product.price,
+      weave: product.weave,
+      handle: product.handle,
+      shopifyProductId: product.shopifyProductId,
+      shopifyVariantId: activeVariantId,
+    });
+  }, [product.id, activeVariantId, activePrice]);
 
   const savePct = useMemo(() => {
     if (!activeOriginal || !activePrice) return 0;
@@ -242,8 +309,23 @@ export default function ProductDetailPage() {
     hapticImpact("light");
     const chosen = productColors[i];
     if (chosen?.img) {
-      const idx = gallery.findIndex((g) => g === chosen.img);
+      const cleanImg = chosen.img.split("?")[0];
+      const idx = gallery.findIndex((g) => g.split("?")[0] === cleanImg);
       if (idx !== -1) setActive(idx);
+    }
+    // Update URL variant parameter for ad tracking and direct sharing
+    if (chosen?.variantId) {
+      const numId = chosen.variantId.split("/").pop();
+      if (numId) {
+        setSearchParams(
+          (prev) => {
+            const next = new URLSearchParams(prev);
+            next.set("variant", numId);
+            return next;
+          },
+          { replace: true },
+        );
+      }
     }
   };
 
@@ -290,6 +372,21 @@ export default function ProductDetailPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdScript(schemas) }}
+      />
+      <Analytics.ProductView
+        data={{
+          products: [
+            {
+              id: product.shopifyProductId || product.id,
+              title: product.name,
+              price: activePrice ? String(activePrice.replace(/[^0-9.]/g, "")) : "0",
+              vendor: "Mumbai Bazar",
+              variantId: activeVariantId,
+              variantTitle: currentSwatch?.name || "Default Title",
+              quantity: 1,
+            },
+          ],
+        }}
       />
 
       {/* Breadcrumbs */}
@@ -485,64 +582,81 @@ export default function ProductDetailPage() {
 
               <div className="my-7 h-px bg-maroon/15" />
 
-              {/* Colour swatches */}
+              {/* Colour / Option swatches */}
               {productColors.length > 1 ? (
                 <div>
                   <div className="flex items-center justify-between">
                     <p className="text-xs uppercase tracking-[0.16em] text-maroon font-bold">
-                      Select Variant Colour
+                      Select {isColorOption ? "Variant Colour" : optionHeading}
                     </p>
                     <span className="text-xs uppercase tracking-[0.14em] text-maroon font-semibold">
                       {currentSwatch?.name}
                     </span>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-3">
-                    {productColors.map((s, i) => (
-                      <button
-                        key={s.name + i}
-                        onClick={() => handleSelectSwatch(i)}
-                        aria-label={`Select ${s.name}`}
-                        title={s.name}
-                        className={`relative h-11 w-11 rounded-full border transition-all duration-200 ${
-                          swatch === i
-                            ? "border-maroon ring-2 ring-maroon ring-offset-2 ring-offset-ivory scale-105 shadow-sm"
-                            : "border-maroon/30 hover:border-maroon/60"
-                        }`}
-                        style={{
-                          background: s.secondaryHex
-                            ? `linear-gradient(135deg, ${s.hex} 50%, ${s.secondaryHex} 50%)`
-                            : s.hex,
-                          borderColor: s.border || undefined,
-                        }}
-                      >
-                        {swatch === i && (
-                          <Check
-                            className={`absolute inset-0 m-auto h-4 w-4 ${
-                              s.hex.toLowerCase() === "#f5efeb" || s.hex.toLowerCase() === "#ffffff"
-                                ? "text-maroon"
-                                : "text-ivory"
-                            } drop-shadow-sm`}
-                          />
-                        )}
-                      </button>
-                    ))}
+                    {productColors.map((s, i) =>
+                      isColorOption ? (
+                        <button
+                          key={s.name + i}
+                          onClick={() => handleSelectSwatch(i)}
+                          aria-label={`Select ${s.name}`}
+                          title={s.name}
+                          className={`relative h-11 w-11 rounded-full border transition-all duration-200 ${
+                            swatch === i
+                              ? "border-maroon ring-2 ring-maroon ring-offset-2 ring-offset-ivory scale-105 shadow-sm"
+                              : "border-maroon/30 hover:border-maroon/60"
+                          }`}
+                          style={{
+                            background: s.secondaryHex
+                              ? `linear-gradient(135deg, ${s.hex} 50%, ${s.secondaryHex} 50%)`
+                              : s.hex,
+                            borderColor: s.border || undefined,
+                          }}
+                        >
+                          {swatch === i && (
+                            <Check
+                              className={`absolute inset-0 m-auto h-4 w-4 ${
+                                s.hex.toLowerCase() === "#f5efeb" || s.hex.toLowerCase() === "#ffffff"
+                                  ? "text-maroon"
+                                  : "text-ivory"
+                              } drop-shadow-sm`}
+                            />
+                          )}
+                        </button>
+                      ) : (
+                        <button
+                          key={s.name + i}
+                          onClick={() => handleSelectSwatch(i)}
+                          aria-label={`Select ${s.name}`}
+                          className={`px-4 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+                            swatch === i
+                              ? "bg-maroon text-ivory border-maroon shadow-sm scale-102"
+                              : "bg-white text-ink/80 border-maroon/20 hover:border-maroon/60"
+                          }`}
+                        >
+                          {s.name}
+                        </button>
+                      ),
+                    )}
                   </div>
                 </div>
               ) : productColors.length === 1 && productColors[0].name ? (
                 <div className="flex items-center gap-3">
                   <span className="text-xs uppercase tracking-[0.16em] text-maroon font-bold">
-                    Saree Colour:
+                    {isColorOption ? "Saree Colour:" : `${optionHeading}:`}
                   </span>
-                  <span
-                    className="w-5 h-5 rounded-full border border-maroon/30 inline-block shadow-sm shrink-0"
-                    style={{
-                      background: productColors[0].secondaryHex
-                        ? `linear-gradient(135deg, ${productColors[0].hex} 50%, ${productColors[0].secondaryHex} 50%)`
-                        : productColors[0].hex,
-                      borderColor: productColors[0].border || undefined,
-                    }}
-                    title={productColors[0].name}
-                  />
+                  {isColorOption && (
+                    <span
+                      className="w-5 h-5 rounded-full border border-maroon/30 inline-block shadow-sm shrink-0"
+                      style={{
+                        background: productColors[0].secondaryHex
+                          ? `linear-gradient(135deg, ${productColors[0].hex} 50%, ${productColors[0].secondaryHex} 50%)`
+                          : productColors[0].hex,
+                        borderColor: productColors[0].border || undefined,
+                      }}
+                      title={productColors[0].name}
+                    />
+                  )}
                   <span className="text-xs uppercase tracking-[0.14em] text-maroon font-semibold">
                     {productColors[0].name}
                   </span>

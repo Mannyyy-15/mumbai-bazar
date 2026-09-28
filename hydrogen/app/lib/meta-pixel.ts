@@ -39,10 +39,25 @@ export function trackViewContent(product: {
   price: string;
   weave?: string;
   handle?: string;
+  shopifyProductId?: string;
+  shopifyVariantId?: string;
 }) {
+  const content_ids = Array.from(
+    new Set(
+      [
+        product.id,
+        product.handle,
+        product.shopifyProductId,
+        product.shopifyProductId ? product.shopifyProductId.split("/").pop() : null,
+        product.shopifyVariantId,
+        product.shopifyVariantId ? product.shopifyVariantId.split("/").pop() : null,
+      ].filter(Boolean) as string[],
+    ),
+  );
+
   fbq("track", "ViewContent", {
     content_name: product.name,
-    content_ids: [product.id],
+    content_ids,
     content_type: "product",
     value: cleanPrice(product.price),
     currency: "INR",
@@ -61,9 +76,19 @@ export function trackAddToCart(product: {
   quantity: number;
   variantId?: string;
 }) {
+  const content_ids = Array.from(
+    new Set(
+      [
+        product.variantId,
+        product.variantId ? product.variantId.split("/").pop() : null,
+        product.id,
+      ].filter(Boolean) as string[],
+    ),
+  );
+
   fbq("track", "AddToCart", {
     content_name: product.name,
-    content_ids: [product.variantId || product.id],
+    content_ids,
     content_type: "product",
     value: cleanPrice(product.price) * product.quantity,
     currency: "INR",

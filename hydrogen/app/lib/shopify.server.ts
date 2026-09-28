@@ -4,6 +4,7 @@ import {
   inferCategories,
   getWeaveFromProduct,
   extractColorFromProduct,
+  inferFabricFromProduct,
   type CategorySlug,
 } from '~/lib/product-enrichment';
 import type { Product, ProductVariant, ProductDetails } from '~/lib/site-data';
