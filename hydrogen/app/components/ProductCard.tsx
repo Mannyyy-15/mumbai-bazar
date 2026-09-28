@@ -15,6 +15,7 @@ export function ProductCard({ p }: { p: Product }) {
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { open } = useAside();
   const isSaved = isInWishlist(p.id);
+  const isAvailable = p.variants && p.variants.length > 0 ? p.variants.some((v) => v.available) : true;
   const [added, setAdded] = useState(false);
   const addedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -89,11 +90,15 @@ export function ProductCard({ p }: { p: Product }) {
         )}
 
         {/* Tag Badge */}
-        {p.tag && (
+        {!isAvailable ? (
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-stone-700 text-ivory px-3 py-1 text-[9px] font-semibold tracking-[0.2em] uppercase shadow-md">
+            Sold Out
+          </span>
+        ) : p.tag ? (
           <span className="absolute left-3 top-3 z-10 rounded-full bg-maroon text-ivory px-3 py-1 text-[9px] font-medium tracking-[0.2em] uppercase shadow-md border border-[#A27633]/60">
             {p.tag}
           </span>
-        )}
+        ) : null}
 
         {/* Wishlist Button */}
         <button
@@ -181,9 +186,11 @@ export function ProductCard({ p }: { p: Product }) {
         <div className="mt-2.5">
           <button
             type="button"
+            disabled={!isAvailable || fetcher.state !== "idle"}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              if (!isAvailable) return;
               hapticSuccess();
               trackAddToCart({
                 id: p.id,
@@ -207,10 +214,16 @@ export function ProductCard({ p }: { p: Product }) {
               }
               open("cart");
             }}
-            className="w-full py-2 sm:py-2.5 px-3 rounded-xl text-[10px] sm:text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 shadow-xs bg-maroon text-white hover:bg-wine active:scale-98 group-hover:bg-wine"
+            className={`w-full py-2 sm:py-2.5 px-3 rounded-xl text-[10px] sm:text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 shadow-xs ${
+              !isAvailable
+                ? "bg-taupe/30 text-ink/50 cursor-not-allowed"
+                : "bg-maroon text-white hover:bg-wine active:scale-98 group-hover:bg-wine"
+            }`}
           >
             <ShoppingBag className="h-3.5 w-3.5" />
-            <span>{fetcher.state !== "idle" ? "Adding..." : "Shop Now"}</span>
+            <span>
+              {!isAvailable ? "Sold Out" : fetcher.state !== "idle" ? "Adding..." : "Shop Now"}
+            </span>
           </button>
         </div>
       </div>

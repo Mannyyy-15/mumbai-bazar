@@ -215,7 +215,7 @@ export default function ProductDetailPage() {
           price: product.price,
           original: product.original,
           img: product.img,
-          available: true,
+          available: product.variants?.[0]?.available ?? true,
         },
       ];
     }
@@ -224,6 +224,7 @@ export default function ProductDetailPage() {
   }, [product]);
 
   const currentSwatch = productColors[swatch] || productColors[0];
+  const isAvailable = currentSwatch ? Boolean(currentSwatch.available) : (product.variants?.some((v) => v.available) ?? true);
   const activeVariantId = currentSwatch?.variantId || product.shopifyVariantId;
   const activePrice = currentSwatch?.price || product.price;
   const activeOriginal = currentSwatch?.original || product.original;
@@ -619,8 +620,9 @@ export default function ProductDetailPage() {
                       {(fetcher) => (
                         <button
                           type="submit"
-                          disabled={fetcher.state !== "idle"}
+                          disabled={!isAvailable || fetcher.state !== "idle"}
                           onClick={() => {
+                            if (!isAvailable) return;
                             hapticSuccess();
                             setAdded(true);
                             trackAddToCart({
@@ -632,9 +634,13 @@ export default function ProductDetailPage() {
                             });
                             setTimeout(() => open("cart"), 600);
                           }}
-                          className="h-14 px-10 bg-[#641F2A] text-ivory hover:bg-wine inline-flex items-center justify-center gap-2.5 text-[12px] font-bold tracking-[0.2em] uppercase transition-all duration-200 active:scale-[0.98] whitespace-nowrap"
+                          className={`h-14 px-10 inline-flex items-center justify-center gap-2.5 text-[12px] font-bold tracking-[0.2em] uppercase transition-all duration-200 active:scale-[0.98] whitespace-nowrap ${
+                            !isAvailable
+                              ? "bg-taupe/30 text-ink/50 cursor-not-allowed"
+                              : "bg-[#641F2A] text-ivory hover:bg-wine"
+                          }`}
                         >
-                          <ShoppingBag className="h-4.5 w-4.5" /> Shop Now
+                          <ShoppingBag className="h-4.5 w-4.5" /> {isAvailable ? "Shop Now" : "Sold Out"}
                         </button>
                       )}
                     </CartForm>
@@ -778,8 +784,9 @@ export default function ProductDetailPage() {
             {(fetcher) => (
               <button
                 type="submit"
-                disabled={fetcher.state !== "idle"}
+                disabled={!isAvailable || fetcher.state !== "idle"}
                 onClick={() => {
+                  if (!isAvailable) return;
                   hapticSuccess();
                   setAdded(true);
                   if (addedTimer.current) clearTimeout(addedTimer.current);
@@ -787,10 +794,16 @@ export default function ProductDetailPage() {
                   setTimeout(() => open("cart"), 600);
                 }}
                 className={`w-full py-3.5 px-4 rounded-xl text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95 shadow-md ${
-                  added ? "bg-green-700 text-white" : "bg-maroon text-white hover:bg-wine active:bg-wine"
+                  !isAvailable
+                    ? "bg-taupe/30 text-ink/50 cursor-not-allowed"
+                    : added
+                    ? "bg-green-700 text-white"
+                    : "bg-maroon text-white hover:bg-wine active:bg-wine"
                 }`}
               >
-                {added ? (
+                {!isAvailable ? (
+                  "Sold Out"
+                ) : added ? (
                   <>
                     <Check className="h-4 w-4" /> Added to Cart
                   </>
