@@ -70,6 +70,10 @@ export function links() {
       href: 'https://shop.app',
     },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    {rel: 'icon', type: 'image/png', href: '/favicon.png'},
+    {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
+    {rel: 'shortcut icon', href: '/favicon.ico'},
+    {rel: 'apple-touch-icon', href: '/apple-touch-icon.png'},
   ];
 }
 

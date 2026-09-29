@@ -12,7 +12,6 @@ import {
   Truck,
   RotateCcw,
   ShieldCheck,
-  MessageCircle,
   Check,
   ArrowRight,
 } from "lucide-react";
@@ -334,10 +333,6 @@ export default function ProductDetailPage() {
     window.location.href = directUrl;
   };
 
-  const waMsg = encodeURIComponent(
-    `Hello Mumbai Bazar, I'd like to enquire about "${product.name}" (${product.price}). Could you share availability and drape details?`,
-  );
-  const waHref = `https://wa.me/${SITE.whatsapp}?text=${waMsg}`;
   const thumbRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
   const desktopRailRef = useRef<HTMLDivElement>(null);
 
@@ -699,23 +694,25 @@ export default function ProductDetailPage() {
                   </div>
                 ) : (
                   <div className="flex items-center gap-3">
-                    <div className="inline-flex items-center border border-maroon/30 h-14 bg-white shrink-0">
+                    <div className="inline-flex items-center h-14 rounded-2xl border-2 border-[#A27633]/40 bg-white/90 shadow-sm shrink-0 px-1">
                       <button
-                        aria-label="Decrease"
+                        type="button"
+                        aria-label="Decrease quantity"
                         onClick={() => setQty((q) => Math.max(1, q - 1))}
-                        className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5 transition-colors"
+                        className="grid h-11 w-11 place-items-center rounded-xl text-maroon hover:bg-maroon/10 active:scale-90 transition-all"
                       >
-                        <Minus className="h-4 w-4" />
+                        <Minus className="h-4 w-4 stroke-[2.5]" />
                       </button>
-                      <span className="w-10 text-center text-sm font-bold text-maroon tabular-nums">
+                      <span className="w-10 text-center font-sans text-base font-extrabold text-maroon tabular-nums">
                         {qty}
                       </span>
                       <button
-                        aria-label="Increase"
+                        type="button"
+                        aria-label="Increase quantity"
                         onClick={() => setQty((q) => q + 1)}
-                        className="grid h-14 w-12 place-items-center text-maroon hover:bg-maroon/5 transition-colors"
+                        className="grid h-11 w-11 place-items-center rounded-xl text-maroon hover:bg-maroon/10 active:scale-90 transition-all"
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus className="h-4 w-4 stroke-[2.5]" />
                       </button>
                     </div>
 
@@ -730,50 +727,59 @@ export default function ProductDetailPage() {
                           },
                         ],
                       }}
+                      className="flex-1"
                     >
-                      {(fetcher) => (
-                        <button
-                          type="submit"
-                          disabled={!isAvailable || fetcher.state !== "idle"}
-                          onClick={() => {
-                            if (!isAvailable) return;
-                            hapticSuccess();
-                            setAdded(true);
-                            trackAddToCart({
-                              id: product.id,
-                              name: product.name,
-                              price: activePrice,
-                              quantity: qty,
-                              variantId: activeVariantId,
-                            });
-                            setTimeout(() => open("cart"), 600);
-                          }}
-                          className={`h-14 px-10 inline-flex items-center justify-center gap-2.5 text-[12px] font-bold tracking-[0.2em] uppercase transition-all duration-200 active:scale-[0.98] whitespace-nowrap ${
-                            !isAvailable
-                              ? "bg-taupe/30 text-ink/50 cursor-not-allowed"
-                              : "bg-[#641F2A] text-ivory hover:bg-wine"
-                          }`}
-                        >
-                          <ShoppingBag className="h-4.5 w-4.5" /> {isAvailable ? "Shop Now" : "Sold Out"}
-                        </button>
-                      )}
+                      {(fetcher) => {
+                        const isSubmitting = fetcher.state !== "idle";
+                        return (
+                          <button
+                            type="submit"
+                            disabled={!isAvailable || isSubmitting}
+                            onClick={() => {
+                              if (!isAvailable) return;
+                              hapticSuccess();
+                              setAdded(true);
+                              if (addedTimer.current) clearTimeout(addedTimer.current);
+                              addedTimer.current = setTimeout(() => setAdded(false), 2200);
+                              trackAddToCart({
+                                id: product.id,
+                                name: product.name,
+                                price: activePrice,
+                                quantity: qty,
+                                variantId: activeVariantId,
+                              });
+                              setTimeout(() => open("cart"), 600);
+                            }}
+                            className={`relative w-full h-14 rounded-2xl flex items-center justify-center gap-3 px-6 text-sm font-extrabold tracking-[0.16em] uppercase transition-all duration-300 active:scale-[0.98] overflow-hidden ${
+                              !isAvailable
+                                ? "bg-stone-300 text-stone-500 cursor-not-allowed border border-stone-300 shadow-none"
+                                : added
+                                ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-[0_8px_24px_rgba(5,150,105,0.4)]"
+                                : "bg-gradient-to-r from-[#D91621] via-[#B3131B] to-[#8A0D14] hover:from-[#E51B26] hover:to-[#990F17] text-white shadow-[0_10px_28px_rgba(217,22,33,0.38)] border border-amber-300/30"
+                            }`}
+                          >
+                            {!isAvailable ? (
+                              <span>Sold Out</span>
+                            ) : isSubmitting ? (
+                              <span>Adding to Bag...</span>
+                            ) : added ? (
+                              <>
+                                <Check className="h-5 w-5 stroke-[2.5]" />
+                                <span>Added to Bag</span>
+                              </>
+                            ) : (
+                              <>
+                                <ShoppingBag className="h-5 w-5 stroke-[2.2]" />
+                                <span>Shop Now</span>
+                              </>
+                            )}
+                          </button>
+                        );
+                      }}
                     </CartForm>
                   </div>
                 )}
               </div>
-
-              {/* WhatsApp */}
-              <a
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 h-[52px] w-full bg-[#25D366] hover:bg-[#1EBE5D] text-white text-[11px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-2.5 transition-all duration-200 active:scale-[0.99] shadow-sm"
-              >
-                <MessageCircle className="h-5 w-5 fill-white/20" /> Enquire on WhatsApp
-              </a>
-              <p className="mt-3 text-center text-[9px] uppercase tracking-[0.16em] font-semibold text-ink/80">
-                Speak to a saree expert · Video call · Custom blouse stitching
-              </p>
 
               {/* Highlights grid */}
               <div className="mt-8 border-t border-maroon/40 pt-8 grid grid-cols-2 gap-x-6 gap-y-6">
@@ -864,24 +870,27 @@ export default function ProductDetailPage() {
       )}
 
       {/* Mobile Floating Bottom Bar */}
-      <div className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-ivory/95 backdrop-blur-xl border-t border-gold/50 px-3 py-2.5 shadow-[0_-8px_30px_rgba(100,31,42,0.15)] pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
-        <div className="flex items-center justify-between gap-2 max-w-md mx-auto">
-          <div className="flex flex-col min-w-0 pr-1">
+      <div className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-white/95 backdrop-blur-xl border-t border-[#A27633]/40 px-3.5 py-2.5 shadow-[0_-8px_32px_rgba(0,0,0,0.12)] pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
+        <div className="flex items-center justify-between gap-3 max-w-md mx-auto">
+          {/* Price & Guarantee Column */}
+          <div className="flex flex-col min-w-0 shrink-0">
             <div className="flex items-baseline gap-1.5">
-              <span className="font-sans text-lg font-black text-maroon tracking-tight">
+              <span className="font-sans text-xl font-black text-[#9B1018] tracking-tight">
                 {activePrice}
               </span>
               {activeOriginal && (
-                <span className="text-[11px] text-taupe font-medium line-through font-sans">
+                <span className="text-xs text-taupe font-medium line-through font-sans">
                   {activeOriginal}
                 </span>
               )}
             </div>
-            <span className="text-[9px] text-ink/75 font-semibold tracking-wide truncate">
-              Free Express Shipping
+            <span className="text-[10px] text-ink/80 font-bold tracking-wide flex items-center gap-1">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+              Free Express Delivery
             </span>
           </div>
 
+          {/* High-Converting Shop Now CTA */}
           <CartForm
             route="/cart"
             action={CartForm.ACTIONS.LinesAdd}
@@ -893,41 +902,48 @@ export default function ProductDetailPage() {
                 },
               ],
             }}
-            className="flex-1 max-w-[200px]"
+            className="flex-1"
           >
-            {(fetcher) => (
-              <button
-                type="submit"
-                disabled={!isAvailable || fetcher.state !== "idle"}
-                onClick={() => {
-                  if (!isAvailable) return;
-                  hapticSuccess();
-                  setAdded(true);
-                  if (addedTimer.current) clearTimeout(addedTimer.current);
-                  addedTimer.current = setTimeout(() => setAdded(false), 2000);
-                  setTimeout(() => open("cart"), 600);
-                }}
-                className={`w-full py-3.5 px-4 rounded-xl text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-1.5 active:scale-95 shadow-md ${
-                  !isAvailable
-                    ? "bg-taupe/30 text-ink/50 cursor-not-allowed"
-                    : added
-                    ? "bg-green-700 text-white"
-                    : "bg-maroon text-white hover:bg-wine active:bg-wine"
-                }`}
-              >
-                {!isAvailable ? (
-                  "Sold Out"
-                ) : added ? (
-                  <>
-                    <Check className="h-4 w-4" /> Added to Cart
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag className="h-4 w-4" /> Shop Now
-                  </>
-                )}
-              </button>
-            )}
+            {(fetcher) => {
+              const isSubmitting = fetcher.state !== "idle";
+              return (
+                <button
+                  type="submit"
+                  disabled={!isAvailable || isSubmitting}
+                  onClick={() => {
+                    if (!isAvailable) return;
+                    hapticSuccess();
+                    setAdded(true);
+                    if (addedTimer.current) clearTimeout(addedTimer.current);
+                    addedTimer.current = setTimeout(() => setAdded(false), 2200);
+                    setTimeout(() => open("cart"), 600);
+                  }}
+                  className={`w-full h-12 rounded-xl text-xs font-black tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.97] ${
+                    !isAvailable
+                      ? "bg-stone-300 text-stone-500 cursor-not-allowed shadow-none"
+                      : added
+                      ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-[0_6px_20px_rgba(5,150,105,0.45)]"
+                      : "bg-gradient-to-r from-[#D91621] via-[#B3131B] to-[#8A0D14] text-white shadow-[0_6px_22px_rgba(217,22,33,0.4)] border border-amber-300/30"
+                  }`}
+                >
+                  {!isAvailable ? (
+                    <span>Sold Out</span>
+                  ) : isSubmitting ? (
+                    <span>Adding...</span>
+                  ) : added ? (
+                    <>
+                      <Check className="h-4 w-4 stroke-[2.5]" />
+                      <span>Added to Bag</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag className="h-4 w-4 stroke-[2.2]" />
+                      <span>Shop Now</span>
+                    </>
+                  )}
+                </button>
+              );
+            }}
           </CartForm>
         </div>
       </div>
