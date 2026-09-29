@@ -10,6 +10,7 @@
     "preview": "shopify hydrogen preview --build",
     "lint": "eslint --no-error-on-unmatched-pattern .",
     "typecheck": "react-router typegen && tsc --noEmit",
+    "check:seo": "node scripts/check-seo-claims.mjs",
     "codegen": "shopify hydrogen codegen && react-router typegen"
   },
   "prettier": "@shopify/prettier-config",

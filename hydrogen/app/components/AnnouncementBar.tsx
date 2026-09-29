@@ -2,7 +2,7 @@ import { MessageCircle } from "lucide-react";
 
 export function AnnouncementBar() {
   return (
-    <div className="bg-maroon text-ivory">
+    <div className="web-only bg-maroon text-ivory">
       <div className="mx-auto flex max-w-[1360px] items-center justify-center gap-4 px-4 py-2 text-[11px] font-medium tracking-[0.22em] uppercase sm:justify-between">
         <span className="hidden sm:block text-ivory/95 font-semibold">8 Stores Since 2009</span>
         <span className="text-center text-ivory font-semibold">

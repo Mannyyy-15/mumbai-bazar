@@ -18,6 +18,7 @@ import favicon from '~/assets/favicon.svg';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import tailwindCss from './styles/tailwind.css?url';
 import {PageLayout} from './components/PageLayout';
+import {initializeNativeApp} from './lib/native-bridge';
 
 declare global {
   interface Window {
@@ -211,6 +212,13 @@ export default function App() {
   const data = useRouteLoaderData<RootLoader>('root');
   const location = useLocation();
 
+  // Mark the document when running inside the Capacitor shell, and route
+  // tel:/WhatsApp/Maps links to the system handler. No-op in a browser.
+  // Runs before the effects below so the app styling is present on first paint.
+  useEffect(() => {
+    initializeNativeApp();
+  }, []);
+
   useEffect(() => {
     if (typeof window !== 'undefined' && window.fbq) {
       window.fbq('track', 'PageView');
@@ -218,6 +226,18 @@ export default function App() {
   }, [location.pathname, location.search]);
 
   useEffect(() => {
+    // Never run Lenis inside the app.
+    //
+    // It is ~88 KB that hijacks the wheel to add momentum a desktop browser
+    // lacks. A phone webview already has momentum scrolling in the compositor,
+    // off the main thread — so on native this is not an enhancement, it is a
+    // second scroll implementation competing with the first, on the main
+    // thread, and it is a large part of why the app felt laggy.
+    const cap = (window as unknown as {
+      Capacitor?: {isNativePlatform?: () => boolean};
+    }).Capacitor;
+    if (cap?.isNativePlatform?.()) return;
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -249,7 +269,12 @@ export default function App() {
       consent={data.consent}
     >
       <PageLayout {...data}>
-        <Outlet />
+        {/* Re-keyed on pathname so each route mounts fresh and the native
+            slide-and-fade re-runs. `app-page` only animates under
+            `.native-app`, so the website is unchanged. */}
+        <div key={location.pathname} className="app-page">
+          <Outlet />
+        </div>
       </PageLayout>
     </Analytics.Provider>
   );

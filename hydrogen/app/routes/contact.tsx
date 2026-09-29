@@ -45,7 +45,7 @@ const CONTACT_FAQS = [
   },
   {
     q: "Can I get custom unstitched blouse pairing or fall-pico done?",
-    a: "Yes. Our boutique master tailors offer complimentary fall-pico and can pair custom unstitched designer blouse fabrics, contrast borders, and lining for your bridal or festive drapes.",
+    a: "Yes. Blouse stitching and fall-and-pico are arranged in store, and we can help you pair a contrast blouse fabric, border or lining. Turnaround is usually a few days depending on the work and the season.",
   },
   {
     q: "How fast is delivery across Mumbai and India?",

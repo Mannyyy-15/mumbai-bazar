@@ -107,7 +107,7 @@ const SLIDES: Slide[] = [
     accent: "Volume I",
   },
   {
-    eyebrow: "Ancestral Master Weaves",
+    eyebrow: "Wedding & Festive",
     title: "Silk & Silk-Blend",
     italic: "Silk Archive",
     copy: "Banarasi, Kanjivaram and Paithani styles, in store across Nalasopara, Virar, Bhayandar and Goregaon.",
@@ -283,11 +283,11 @@ function HeroCarousel() {
               <div
                 className={`absolute inset-x-5 bottom-20 flex flex-col items-start text-left text-ivory sm:inset-x-8 md:inset-x-auto md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:max-w-[560px] lg:max-w-[620px] ${positionCls}`}
               >
-                <span className="flex items-center gap-3 text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-gold">
+                <span className="flex items-center gap-3 self-start rounded-full bg-black/35 px-3 py-1.5 text-[10px] md:text-[11px] tracking-[0.4em] uppercase text-[#F0D9A8] backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.9)]">
                   <span className="h-px w-10 bg-gold" />
                   {s.eyebrow}
                 </span>
-                <h2 className="mt-4 md:mt-6 font-serif text-3xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92]">
+                <h2 className="mt-4 md:mt-6 font-serif text-3xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92] [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
                   {s.title}
                   {s.italic && (
                     <>

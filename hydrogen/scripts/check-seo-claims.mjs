@@ -18,7 +18,12 @@ const RULES = [
   {
     id: "unverifiable-claims",
     pattern:
-      /100% Certified|100% Authentic|Pure Mulberry|Tested Gold|Silk Mark|Assured Authenticity|Authentic Loom|Handwoven Heritage|Heritage Pure Silk|master artisans|Master Weavers/i,
+      // Widened 2026-09-29. The Hydrogen port reintroduced four claims the
+      // previous pattern did not cover -- "master weaving clusters",
+      // "Handcrafted ethnic wear", "ensure the authenticity", "master tailors"
+      // -- and all four shipped to production. The terms below are the exact
+      // wordings this project keeps regressing to.
+      /100% Certified|100% Authentic|Pure Mulberry|Tested Gold|Silk Mark|Assured Authenticity|Authentic Loom|Handwoven Heritage|Heritage Pure Silk|master artisans|Master Weavers|master weav\\w*|master tailors|Handcrafted ethnic|handcrafted saree|ensure the authenticity|guarantee\\w*\\s+authentic|weaving clusters/i,
     allow: EDUCATIONAL,
     why: "Unverifiable claims violate Consumer Protection Act guidelines.",
   },

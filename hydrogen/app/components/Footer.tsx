@@ -171,7 +171,7 @@ export function Footer() {
             © {new Date().getFullYear()} Mumbai Bazar. All rights reserved.
             {" · "}
             <span className="text-white/65">
-              Handcrafted ethnic wear from India's master weaving clusters.
+              Sarees, dress material, designer lehengas and dulhan wear across 8 stores.
             </span>
           </p>
 

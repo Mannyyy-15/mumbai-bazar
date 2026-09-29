@@ -121,7 +121,7 @@ export function mapProductNode(node: any): ShopifyProduct | null {
     border: 'Woven zari border with traditional craftsmanship',
     palla: 'Artisanal zari pallu with ornate butti motifs',
     care: commonCare,
-    description: galleryOverride?.description || node.description || `${title} hand-curated from regional weaving clusters.`,
+    description: galleryOverride?.description || node.description || `${title}. See it and try it on at any of our stores, or order online with delivery across India.`,
     gallery: imagesList,
   };
 

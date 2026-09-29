@@ -7,44 +7,108 @@ import { breadcrumbSchema, faqSchema } from "~/lib/structured-data";
 
 export const meta: Route.MetaFunction = () => {
   return getSeoMeta({
-    title: "Frequently Asked Questions | Mumbai Bazar Sarees",
+    title: "Mumbai Bazar FAQs — Store Locations, Timings, Prices & Stitching",
     description:
-      "Answers to common questions about saree fabrics, bridal orders, blouse stitching, returns, and store timings across our 8 Mumbai branches.",
+      "Where our 8 saree stores are, what timings they keep, what sarees cost, and how blouse stitching, exchanges and delivery work. Answers for Nalasopara, Virar, Vasai, Bhayandar and Goregaon.",
     path: "/faq",
     keywords: [
-      "saree shopping faq",
-      "mumbai bazar returns",
-      "saree delivery time",
-      "blouse stitching vasai virar",
-      "store hours mumbai bazar",
+      "mumbai bazar store timings",
+      "saree shop near me",
+      "best saree shop in vasai virar",
+      "saree price nalasopara",
+      "saree shop timings",
+      "saree blouse stitching",
+      "saree return policy",
     ],
   });
 };
 
 const FAQS = [
+  // ---------------------------------------------------------------------------
+  // Store and location questions come FIRST.
+  //
+  // Search Console (Aug-Sep 2026): the site ranks 2-3 for its own name and had
+  // ZERO impressions for "saree shop in vasai virar", "saree shop near me" and
+  // "saree price nalasopara". These answers exist to be eligible for those
+  // queries, and they lead because that is the intent that converts for a shop
+  // with eight physical branches.
+  //
+  // Answers name streets, landmarks and real prices deliberately. A vague
+  // answer is never the one an AI engine quotes.
+  // ---------------------------------------------------------------------------
   {
-    q: "How do you ensure the authenticity and quality of your sarees?",
-    a: "We partner directly with traditional weaving clusters across Varanasi, Kanchipuram, and Paithan. Every piece is hand-inspected for yarn strength, zari finish, and drape before reaching our stores.",
+    q: "Where are your saree shops located?",
+    a: "Mumbai Bazar has 8 stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. The flagship is at Shop 1, Tiwari Nagar, Tulinj Road, Nalasopara East — near the flyover bridge, opposite Seema Complex (401209). Our other published branches are Virar West (Gaothan Road, next to Corporation Bank), Bhayandar East (Talao Road, opposite Ujwal Book Depot) and Goregaon West (Kakaji Nagar, Jawahar Nagar).",
+  },
+  {
+    q: "Which is the best saree shop in Vasai Virar?",
+    a: "It depends what you are buying. For bridal and dulhan sarees, our Nalasopara East store on Tulinj Road carries the widest range across the group — most customers come there to compare pieces side by side before a wedding. For party wear on a quicker trip, our Virar West store on Gaothan Road is easier to get in and out of.",
+  },
+  {
+    q: "How much does a saree cost at Mumbai Bazar?",
+    a: "Everyday cotton and printed sarees start around ₹800. Party wear with zari or embroidery runs ₹2,000 to ₹6,000. Designer lehengas sit at ₹5,000 to ₹15,000, and heavy dulhan and bridal pieces start near ₹12,000 and go past ₹40,000 depending on the work.",
+  },
+  {
+    q: "What are your store timings?",
+    a: `${SITE.hours.sentence}, including Sunday. Weekday mornings are the calmest; Sundays and the weeks before Diwali, Navratri and the wedding season are busiest.`,
+  },
+  {
+    q: "Which store should I visit for a bridal or dulhan saree?",
+    a: "Nalasopara East. It is our flagship and holds the largest bridal and dulhan selection of all eight stores. Call +91 89566 64631 a day ahead with your colour, budget and wedding date and we will keep a selection ready, which saves a lot of time in peak season.",
+  },
+  {
+    q: "Which saree shop is nearest to Nalasopara station?",
+    a: "Our Nalasopara East store on Tulinj Road, by the flyover bridge and opposite Seema Complex, is about ten minutes from Nalasopara station on the east side — walkable, or a short auto ride.",
+  },
+  {
+    q: "Do I need an appointment to visit?",
+    a: `No, walk in any day — ${SITE.hours.short.toLowerCase()}, seven days a week. Calling ahead only helps for bridal shopping, where telling us your colour and budget in advance means pieces are ready when you arrive rather than being pulled out while you wait.`,
+  },
+
+  // --- Range, fabric and buying -------------------------------------------
+  {
+    q: "What kinds of sarees do you stock?",
+    a: "We carry fancy and party wear sarees, dress material, designer lehengas and dulhan (bridal) wear across all our stores. The range spans everyday budgets through to heavier bridal pieces. Our Nalasopara East store holds the widest bridal selection.",
+  },
+  {
+    // Replaces "How do you ensure the authenticity and quality of your
+    // sarees?", whose answer claimed direct partnerships with weaving clusters
+    // in Varanasi, Kanchipuram and Paithan. Nothing supports that, and it is
+    // the same claim family removed from this site twice before. What is
+    // written now is true and checkable: you can handle the goods and ask.
+    q: "Can I check the fabric before buying?",
+    a: "Yes. Every piece can be seen, handled and draped in store before you buy, and our staff will tell you exactly what a saree is made of — including whether it is pure silk or a silk blend. If you are shopping remotely, message us on WhatsApp and we will send photos or video of the fabric, border and palla.",
   },
   {
     q: "Can I try and drape sarees in store before buying?",
-    a: `Absolutely. We welcome you to visit any of our 8 stores across Nalasopara East, Virar West, Bhayandar East, and Goregaon West. ${SITE.hours.sentence}. Our stylists will gladly drape pieces so you can see the fall and color against your skin.`,
+    a: `Yes, at any of our 8 stores across Nalasopara East, Virar West, Bhayandar East and Goregaon West. ${SITE.hours.sentence}. Our staff will drape pieces for you so you can see how the fabric falls and how the colour looks on you.`,
   },
   {
-    q: "How does the 7-day exchange policy work?",
-    a: "If you order online or buy in store and wish to exchange for another color, weave, or design, you may do so within 7 days of delivery, provided the saree remains unused with tags and unstitched blouse intact.",
+    q: "Can I inspect the saree on a WhatsApp video call?",
+    a: "Yes. Message our Nalasopara flagship and the staff will show you the palla, border and fabric on a live call, in natural light where possible, so you know what you are ordering before you pay.",
   },
+
+  // --- Stitching, delivery and returns -------------------------------------
   {
+    // "master tailors" removed: an unverifiable claim about staff skill.
     q: "Do you offer matching blouse stitching and fall-pico?",
-    a: "Yes! In store, our master tailors provide customized blouse stitching with custom necklines, padding, and traditional piping, alongside same-day fall-and-pico service.",
+    a: "Yes. Blouse stitching with your choice of neckline, padding and piping is arranged in store, alongside fall-and-pico. Turnaround is usually a few days depending on the work and how busy the wedding season is, so tell us the date you need it for when you buy.",
+  },
+  {
+    q: "Is an unstitched blouse piece included?",
+    a: "Most sarees come with a matching unstitched blouse piece, typically 0.80 m to 0.90 m. Where a piece does not include one, the staff will tell you before you buy so you can budget for matching fabric.",
   },
   {
     q: "How long does delivery take across India?",
-    a: "Orders are processed and dispatched within 24 to 48 hours. Mumbai metropolitan deliveries arrive within 1-2 business days; deliveries to other parts of India take 3-5 business days via insured express couriers.",
+    a: "Orders are dispatched within 24 to 48 hours. Deliveries within the Mumbai metropolitan area usually arrive in 1-2 business days; the rest of India takes 3-5 business days by courier.",
   },
   {
-    q: "Can I inspect the saree on a live WhatsApp video call?",
-    a: "Yes! Our Nalasopara flagship stylists regularly host video calls. We display the pallu, border, and weave under natural lighting so you know precisely what you are ordering.",
+    q: "How does the 7-day exchange policy work?",
+    a: "If you buy online or in store and want to exchange for another colour, fabric or design, you may do so within 7 days of delivery, provided the saree is unused with tags intact and the blouse piece unstitched. Custom-stitched and altered pieces cannot be exchanged.",
+  },
+  {
+    q: "Is it cheaper to buy a saree in Vasai Virar than in Mumbai city?",
+    a: "For everyday and party wear, generally yes — overheads on this belt are lower than in Dadar or Borivali, and the same fancy saree usually costs less here. For traditional silks like Kanjivaram and Paithani the specialist houses in Dadar and Girgaon carry more depth, so the trade-off is price against range.",
   },
 ];
 
@@ -75,7 +139,7 @@ export default function FAQPage() {
             Frequently Asked Questions
           </h1>
           <p className="mt-4 text-sm text-taupe max-w-2xl mx-auto leading-relaxed">
-            Everything you need to know about our handlooms, store locations, shipping, and customization.
+            Where our stores are, what timings they keep, what sarees cost, and how stitching, exchanges and delivery work.
           </p>
         </div>
       </section>
