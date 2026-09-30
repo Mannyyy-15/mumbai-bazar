@@ -707,7 +707,7 @@ export default function ProductDetailPage() {
               {/* Shop Now CTA and Quantity Stepper */}
               <div className="mt-8">
                 <div className="flex items-center gap-3">
-                  <div className="inline-flex items-center h-14 rounded-2xl border-2 border-[#A27633]/40 bg-white/90 shadow-sm shrink-0 px-1">
+                  <div className="inline-flex items-center h-14 rounded-2xl border border-maroon/30 bg-white shadow-sm shrink-0 px-1">
                     <button
                       type="button"
                       aria-label="Decrease quantity"
@@ -764,12 +764,12 @@ export default function ProductDetailPage() {
                                   variantId: activeVariantId,
                                 });
                               }}
-                              className={`relative w-full h-14 rounded-2xl flex items-center justify-center gap-3 px-6 text-sm font-extrabold tracking-[0.16em] uppercase transition-all duration-300 active:scale-[0.98] overflow-hidden ${
+                              className={`relative w-full h-14 rounded-2xl flex items-center justify-center gap-3 px-6 text-sm font-bold tracking-[0.16em] uppercase transition-all duration-300 active:scale-[0.98] ${
                                 !isAvailable
-                                  ? "bg-stone-300 text-stone-500 cursor-not-allowed border border-stone-300 shadow-none"
+                                  ? "bg-taupe/30 text-ink/50 cursor-not-allowed shadow-none"
                                   : added
-                                  ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-[0_8px_24px_rgba(5,150,105,0.4)]"
-                                  : "bg-gradient-to-r from-[#D91621] via-[#B3131B] to-[#8A0D14] hover:from-[#E51B26] hover:to-[#990F17] text-white shadow-[0_10px_28px_rgba(217,22,33,0.38)] border border-amber-300/30"
+                                  ? "bg-emerald-700 text-white shadow-md"
+                                  : "bg-maroon hover:bg-wine text-white shadow-md"
                               }`}
                             >
                               {!isAvailable ? (
@@ -941,12 +941,12 @@ export default function ProductDetailPage() {
                           variantId: activeVariantId,
                         });
                       }}
-                      className={`w-full h-12 rounded-xl text-xs font-black tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.97] ${
+                      className={`w-full h-12 rounded-xl text-xs font-bold tracking-[0.14em] uppercase transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.97] ${
                         !isAvailable
-                          ? "bg-stone-300 text-stone-500 cursor-not-allowed shadow-none"
+                          ? "bg-taupe/30 text-ink/50 cursor-not-allowed shadow-none"
                           : added
-                          ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-[0_6px_20px_rgba(5,150,105,0.45)]"
-                          : "bg-gradient-to-r from-[#D91621] via-[#B3131B] to-[#8A0D14] text-white shadow-[0_6px_22px_rgba(217,22,33,0.4)] border border-amber-300/30"
+                          ? "bg-emerald-700 text-white shadow-md"
+                          : "bg-maroon hover:bg-wine text-white shadow-md"
                       }`}
                     >
                       {!isAvailable ? (
