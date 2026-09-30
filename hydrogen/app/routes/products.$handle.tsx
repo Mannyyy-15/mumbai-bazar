@@ -572,7 +572,7 @@ export default function ProductDetailPage() {
                 )}
               </div>
               <p className="mt-2 text-xs text-ink/80 font-medium">
-                Inclusive of all taxes · Complimentary shipping across India
+                Inclusive of all taxes · Free delivery on prepaid orders
               </p>
 
               <div className="my-7 h-px bg-maroon/15" />

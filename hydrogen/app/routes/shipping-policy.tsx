@@ -38,7 +38,7 @@ export default function ShippingPolicyPage() {
             Shipping &amp; Delivery Policy
           </h1>
           <p className="mt-4 text-sm text-taupe max-w-2xl mx-auto leading-relaxed">
-            Fast, complimentary shipping with full transit insurance across every pincode in India.
+            Free insured delivery on every prepaid order, to every pincode in India. Cash on Delivery is available and carries a handling fee.
           </p>
         </div>
       </section>

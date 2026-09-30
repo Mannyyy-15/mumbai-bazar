@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import type { Route } from "./+types/faq";
 import { ChevronDown, MessageCircle } from "lucide-react";
+import { COD_FEE_LABEL } from "~/lib/commerce";
 import { SITE, getSeoMeta, jsonLdScript } from "~/lib/seo";
 import { breadcrumbSchema, faqSchema } from "~/lib/structured-data";
 
@@ -101,6 +102,17 @@ const FAQS = [
   {
     q: "How long does delivery take across India?",
     a: "Orders are dispatched within 24 to 48 hours. Deliveries within the Mumbai metropolitan area usually arrive in 1-2 business days; the rest of India takes 3-5 business days by courier.",
+  },
+  {
+    // Stated as its own question because "why is there an extra charge?" is
+    // the one customers ask at the payment step, where a surprise fee costs
+    // the order outright.
+    q: "Do you charge for delivery?",
+    a: `Delivery is free anywhere in India when you pay online — UPI, card or netbanking. Cash on Delivery orders carry a ${COD_FEE_LABEL} handling fee, which covers the cost of collecting and remitting cash. The fee is shown at checkout before you pay.`,
+  },
+  {
+    q: "Do you accept Cash on Delivery?",
+    a: `Yes, across India. A ${COD_FEE_LABEL} handling fee applies, and the full amount is paid to the courier at your door. Paying online avoids the fee and gets the order dispatched faster, since we do not need to confirm a COD order by phone first.`,
   },
   {
     q: "How does the 7-day exchange policy work?",

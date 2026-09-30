@@ -4,6 +4,7 @@ import {CartForm, Money, type OptimisticCart} from '@shopify/hydrogen';
 import {useEffect, useId, useRef, useState} from 'react';
 import {useFetcher} from 'react-router';
 import {Lock, ArrowRight, MessageCircle, Truck, ShieldCheck, RotateCcw} from 'lucide-react';
+import {COD_FEE_LABEL} from '~/lib/commerce';
 import {SITE} from '~/lib/seo';
 import {trackInitiateCheckout} from '~/lib/meta-pixel';
 
@@ -38,8 +39,33 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
       </div>
 
       <p className="mt-1.5 text-xs text-ink/70 font-medium">
-        Inclusive of all taxes. Free insured doorstep delivery.
+        Inclusive of all taxes.
       </p>
+
+      {/*
+        Payment-method pricing, stated before checkout.
+
+        Shopify cannot vary a discount by payment method from a headless
+        storefront: discounts are computed when the cart is built, and the
+        customer chooses COD vs prepaid later, inside Shopify's own checkout.
+        So the COD fee is configured as a shipping rate in Shopify admin, and
+        this block exists so the number is never a surprise at the payment step
+        — which is where an unexpected charge turns into an abandoned cart.
+      */}
+      <div className="mt-3 rounded-lg border border-gold/40 bg-beige/25 p-3">
+        <div className="flex items-start gap-2">
+          <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-deep" />
+          <p className="text-[11px] leading-snug text-ink/80">
+            <strong className="font-semibold text-maroon">
+              Free delivery on online payment
+            </strong>{' '}
+            — UPI, card or netbanking.{' '}
+            <span className="text-ink/65">
+              Cash on Delivery adds a {COD_FEE_LABEL} handling fee, shown at checkout.
+            </span>
+          </p>
+        </div>
+      </div>
 
       <CartDiscounts
         discountCodes={cart?.discountCodes}
@@ -58,7 +84,7 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
       <div className="mt-4 grid grid-cols-3 gap-2 border-t border-gold/30 pt-3.5 text-center text-[10px] uppercase font-bold tracking-wider text-ink/75">
         <div className="flex flex-col items-center gap-1">
           <Truck className="h-4 w-4 text-gold-deep" />
-          <span>Free Shipping</span>
+          <span>Free on prepaid</span>
         </div>
         <div className="flex flex-col items-center gap-1">
           <ShieldCheck className="h-4 w-4 text-gold-deep" />
