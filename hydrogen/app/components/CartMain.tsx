@@ -49,7 +49,7 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
       <div className="border-b border-gold/30 bg-gold/10 px-5 py-2.5 flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs font-bold text-maroon">
           <Truck className="h-4 w-4 text-gold-deep shrink-0" />
-          <span>100% Free Express Insured Shipping Across India</span>
+          <span>Free express insured delivery on prepaid orders</span>
         </div>
       </div>
 
