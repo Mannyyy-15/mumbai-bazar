@@ -38,9 +38,31 @@ export const meta: Route.MetaFunction = ({ data }) => {
   }
 
   const p = data.product;
+
+  /*
+    Only trust the Shopify description if it actually describes something.
+
+    Supplier-imported products arrive with descriptions like "Pink" or "Blue".
+    The previous `description ?? fallback` shipped those to Google verbatim,
+    because `??` only fires on null -- a one-word colour counts as present.
+    Eight words is a low bar that every real description clears and every
+    colour-only stub fails.
+  */
+  const raw = (p.details?.description ?? "").replace(/\s+/g, " ").trim();
+  const usable = raw.split(" ").filter(Boolean).length >= 8;
+  const fabric = p.details?.fabric && p.details.fabric !== p.weave ? p.details.fabric : p.weave;
+  const generated =
+    `${p.name} — ${fabric} saree at ${p.price}. ` +
+    `See it in person at our Nalasopara, Virar, Bhayandar and Goregaon stores, ` +
+    `or order online with free delivery on prepaid orders across India.`;
+  const fullDesc = usable ? raw : generated;
+
+  // Trim on a word boundary; a description cut mid-word reads as broken in
+  // the search result.
   const desc =
-    p.details?.description ??
-    `${p.name} in ${p.weave}. See it and drape it at our stores or order online across India.`;
+    fullDesc.length <= 158
+      ? fullDesc
+      : fullDesc.slice(0, fullDesc.lastIndexOf(" ", 155)).replace(/[\s,;:—-]+$/, "") + "…";
 
   const BRAND_SUFFIX = " | Mumbai Bazar";
   const nameBudget = 60 - BRAND_SUFFIX.length;
@@ -51,7 +73,7 @@ export const meta: Route.MetaFunction = ({ data }) => {
 
   const metaList = getSeoMeta({
     title: `${shortName}${BRAND_SUFFIX}`,
-    description: desc.slice(0, 160),
+    description: desc,
     path: `/products/${p.handle}`,
     image: p.img,
     type: "product",
@@ -62,7 +84,7 @@ export const meta: Route.MetaFunction = ({ data }) => {
       "buy saree online",
       "saree online shopping",
       "mumbai bazar saree",
-      "pure silk saree mumbai",
+      "saree shop vasai virar",
     ],
   });
 

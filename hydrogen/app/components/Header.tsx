@@ -81,8 +81,8 @@ const MEGA_CATEGORIES: MegaMenu[] = [
         items: [
           { label: "Soft Cotton Silk Drapes", to: "/shop?fabric=cotton-silk" },
           { label: "Office & Daily Wear", to: "/everyday-sarees" },
-          { label: "Kalamkari Handblock Prints", to: "/shop?weave=kalamkari" },
-          { label: "Under ₹1,000 Daily Silks", to: "/shop?price=u1k&type=everyday-casual" },
+          { label: "Kalamkari-Style Prints", to: "/shop?weave=kalamkari" },
+          { label: "Sarees Under ₹1,000", to: "/sarees-under-1000" },
         ],
       },
       {
@@ -207,8 +207,8 @@ const MOBILE_NAV_ITEMS: MobileNavItem[] = [
     subItems: [
       { label: "Soft Cotton Silk Drapes", to: "/shop?fabric=cotton-silk" },
       { label: "Office & Daily Wear", to: "/everyday-sarees" },
-      { label: "Kalamkari Handblock Prints", to: "/shop?weave=kalamkari" },
-      { label: "Under ₹1,000 Daily Silks", to: "/shop?price=u1k&type=everyday-casual" },
+      { label: "Kalamkari-Style Prints", to: "/shop?weave=kalamkari" },
+      { label: "Sarees Under ₹1,000", to: "/sarees-under-1000" },
       { label: "Pre-Pleated Easy Drapes", to: "/everyday-sarees" },
       { label: "View All Ready-to-Wear", to: "/everyday-sarees" },
     ],

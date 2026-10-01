@@ -104,6 +104,22 @@ export type SeoInput = {
 /**
  * Returns React Router 7 / Remix meta descriptor array.
  */
+/**
+ * Clamp a meta description to what Google actually displays (~155-160 chars),
+ * on a word boundary.
+ *
+ * The crawl found 17 pages over 165 characters. Google truncates those
+ * mid-sentence with its own ellipsis, which usually cuts off the part that
+ * carries the call to action. Clamping centrally means a long description
+ * written anywhere degrades gracefully instead of needing every page fixed.
+ */
+export function clampDescription(text: string, max = 158): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, clean.lastIndexOf(" ", max - 1));
+  return cut.replace(/[\s,;:—-]+$/, "") + "…";
+}
+
 export function getSeoMeta({
   title,
   description,
@@ -115,6 +131,7 @@ export function getSeoMeta({
 }: SeoInput) {
   const url = absoluteUrl(path);
   const img = absoluteUrl(image);
+  description = clampDescription(description);
 
   const metaList: Array<Record<string, string>> = [
     { title },

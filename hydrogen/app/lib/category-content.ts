@@ -40,9 +40,36 @@ export type CategoryCopy = {
 };
 
 export const CATEGORY_COPY: Record<string, CategoryCopy> = {
+  // Written for the searches autocomplete actually returns: "saree under 1000
+  // for farewell", "office wear saree", "silk saree under 1000". Plain retail
+  // language, and honest about what this price buys.
+  "sarees-under-1000": {
+    intro:
+      "Every saree on this page is ₹1,000 or less — printed, zari butti, kalamkari-style and soft art silk. These are the sarees people buy for office, college farewells, pujas, and for a family wedding where they are a guest rather than the bride.",
+    guide: [
+      {
+        heading: "What ₹1,000 actually gets you",
+        body: "At this price you are buying art silk, soft georgette blends and printed fabrics, usually with a woven or printed zari border. The zari is metallic thread rather than real gold or silver — it shines the same in photographs and is far lighter to wear. Most of these can be washed gently at home, which matters more than people expect if you are wearing a saree every week.",
+      },
+      {
+        heading: "Farewell, office or function — which one to pick",
+        body: "For a farewell or college function, pick a soft art silk or georgette blend with a zari border: it is easy to drape for a first-timer and holds its pleats through a long evening. For office, choose a lighter printed saree you can wash at home. For a family wedding or puja, the zari butti pieces carry the most shine for the money. If you are not sure, message us on WhatsApp with the occasion and we will suggest three.",
+      },
+      {
+        heading: "Making a budget saree look expensive",
+        body: "The saree is only half of it. A well-fitted blouse, a proper fall and pico, and a sharp iron on the pleats do more for how a saree looks than another ₹2,000 of fabric. Pin the pallu neatly at the shoulder, keep the pleats even, and choose one strong piece of jewellery rather than several.",
+      },
+    ],
+    relatedGuides: [
+      { slug: "pure-silk-vs-art-silk-test", label: "Pure Silk vs Art Silk: How to Tell" },
+      { slug: "how-to-choose-a-saree-shop", label: "8 Checks Before You Buy a Saree" },
+      { slug: "silk-saree-care", label: "Washing and Storing Your Sarees" },
+    ],
+  },
+
   "silk-sarees": {
     intro:
-      "Silk and silk-blend sarees in Banarasi, Kanjivaram, Paithani and Chanderi styles. You can open any saree and see it in daylight at any of our stores before you decide — the part a photograph cannot do for you.",
+      "Art silk and silk-blend sarees with zari borders and woven motifs. You can open any saree and see it in daylight at any of our stores before you decide — the part a photograph cannot do for you.",
     guide: [
       {
         heading: "Silk, silk-blend, and how to tell what you are holding",
@@ -66,7 +93,7 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
 
   "wedding-sarees": {
     intro:
-      "Dulhan sarees, reception sarees and bridal lehengas, with blouse stitching and fittings handled in store. Bridal buying is rarely one visit — most families come two or three times, and that is entirely normal.",
+      "Online you will find sarees for the functions around a wedding — haldi, mehendi, sangeet, and for the bride's family. Dulhan sarees and bridal lehengas are sold in store, with blouse stitching and fittings handled there. Bridal buying is rarely one visit — most families come two or three times, and that is entirely normal.",
     guide: [
       {
         heading: "Start earlier than feels necessary",

@@ -1,25 +1,47 @@
 import { useLoaderData } from "react-router";
 import type { Route } from "./+types/wedding-sarees";
 import { SITE, getSeoMeta, jsonLdScript } from "~/lib/seo";
+import { lowestPriceLabel } from "~/lib/commerce";
 import { breadcrumbSchema, collectionSchema } from "~/lib/structured-data";
 import { fetchLiveProducts } from "~/lib/shopify.server";
 import { CategoryPage } from "~/components/CategoryPage";
 import { IMG } from "~/lib/site-data";
 
-export const meta: Route.MetaFunction = () => {
+/*
+  Targets what the online stock actually is.
+
+  The page used to be titled "Dulhan Sarees & Bridal Lehengas" while listing
+  the Rs 649-1,699 printed and zari sarees that make up the whole online
+  catalogue -- there is no bridal or lehenga product online. A "bridal
+  lehenga" searcher landed, saw an Rs 899 printed saree and bounced, which
+  is a ranking signal against the page as well as a broken promise.
+
+  Autocomplete shows strong demand this stock genuinely fits: "saree for
+  wedding function", "wedding saree for bride sister", "haldi saree",
+  "mehendi saree". The dulhan range is real -- it is in store -- so the
+  description sends that intent to Nalasopara East rather than dropping it.
+
+  The "from" price is computed from the products this page renders, so it
+  cannot drift from the catalogue.
+*/
+export const meta: Route.MetaFunction = ({ data }) => {
+  const from = lowestPriceLabel(data?.products ?? []);
   return getSeoMeta({
-    title: "Dulhan Sarees & Bridal Lehengas | Mumbai Bazar",
-    description:
-      "Dulhan sarees, designer lehengas and bridal wear for weddings, sangeet and reception. Visit our Nalasopara East store for the widest bridal range, or shop online.",
+    title: from
+      ? `Sarees for Wedding Functions from ${from} | Mumbai Bazar`
+      : "Sarees for Wedding Functions | Mumbai Bazar",
+    description: `Zari and printed sarees for wedding functions, haldi and mehendi${
+      from ? `, from ${from} online` : " online"
+    }. Dulhan sarees and bridal lehengas are in store at Nalasopara East.`,
     path: "/wedding-sarees",
     keywords: [
-      "dulhan sarees",
-      "bridal sarees mumbai",
-      "wedding sarees online",
-      "bridal lehenga nalasopara",
-      "sangeet sarees",
-      "reception sarees",
-      "zari butti wedding saree",
+      "saree for wedding function",
+      "wedding saree for bride sister",
+      "wedding guest saree",
+      "haldi saree",
+      "mehendi saree",
+      "dulhan saree nalasopara",
+      "bridal saree shop vasai virar",
     ],
   });
 };
@@ -52,10 +74,10 @@ export default function WeddingSareesRoute() {
         dangerouslySetInnerHTML={{ __html: jsonLdScript(schemas) }}
       />
       <CategoryPage
-        eyebrow="Trousseau Curation"
-        title="Wedding & Bridal Sarees"
+        eyebrow="Wedding Season"
+        title="Sarees for Wedding Functions"
         crumb="Wedding Sarees"
-        copy="Rich wedding sarees for the bride, and for every function around it."
+        copy="Sarees for haldi, mehendi, sangeet and the bride's family. The dulhan and bridal lehenga range is in store at Nalasopara East."
         heroImg={IMG.colFestive}
         category="wedding-sarees"
         showHero={false}

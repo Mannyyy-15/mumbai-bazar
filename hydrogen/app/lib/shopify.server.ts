@@ -121,7 +121,13 @@ export function mapProductNode(node: any): ShopifyProduct | null {
     border: 'Woven zari border with traditional craftsmanship',
     palla: 'Artisanal zari pallu with ornate butti motifs',
     care: commonCare,
-    description: galleryOverride?.description || node.description || `${title}. See it and try it on at any of our stores, or order online with delivery across India.`,
+    // A description must be a sentence, not a colour. Supplier imports arrive
+    // with node.description = "Pink" / "Blue", which `||` accepted because a
+    // non-empty string is truthy -- so 15 product pages showed one word under
+    // "The Craft" and in their meta. Eight words separates the two cleanly.
+    description: [galleryOverride?.description, node.description].find(
+      (d) => typeof d === "string" && d.trim().split(/\s+/).length >= 8,
+    ) ?? `${title}. See it and try it on at any of our stores, or order online with free delivery on prepaid orders across India.`,
     gallery: imagesList,
   };
 

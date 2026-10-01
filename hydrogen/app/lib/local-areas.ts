@@ -84,7 +84,7 @@ export const LOCAL_AREAS: LocalArea[] = [
       "Manickpur",
     ],
     stations: ["Vasai Road", "Nalasopara", "Virar", "Naigaon"],
-    title: "Saree Shops in Vasai Virar — Bridal, Party Wear & Dress Material | Mumbai Bazar",
+    title: "Saree Shops in Vasai Virar — Bridal & Party Wear | Mumbai Bazar",
     description: `Looking for a saree shop in Vasai Virar? Mumbai Bazar has stores at Nalasopara East (Tulinj Road) and Virar West (Gaothan Road). Sarees from ₹800, dulhan wear, lehengas and dress material. ${SITE.hours.shortDaily}.`,
     keywords: [
       "saree shop in vasai virar",

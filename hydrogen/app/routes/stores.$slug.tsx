@@ -27,7 +27,11 @@ export const meta: Route.MetaFunction = ({ data }) => {
   }
 
   const o = data.outlet;
-  const title = `Saree Shop in ${o.area} | Mumbai Bazar`;
+  // Exact searched phrase first ("saree shop in nalasopara east" is what
+  // autocomplete returns), then the categories people pair with it, then the
+  // brand -- Search Console shows people searching "mumbai bazar virar west".
+  // Longest outlet name lands at 62 characters.
+  const title = `Saree Shop in ${o.area} | Bridal & Lehenga | Mumbai Bazar`;
   const description =
     `Mumbai Bazar ${o.area} — sarees, dress material, designer lehengas and dulhan wear. ` +
     `${o.landmark}. ${SITE.hours.shortDaily}, serving ${o.nearby.slice(0, 3).join(", ")}.`;
@@ -37,6 +41,8 @@ export const meta: Route.MetaFunction = ({ data }) => {
     description,
     path: `/stores/${o.slug}`,
     keywords: [
+      `saree shop in ${o.area.toLowerCase()}`,
+      `best saree shop in ${o.area.toLowerCase()}`,
       `saree shop in ${o.city}`,
       `saree shop near me ${o.city}`,
       `lehenga shop ${o.city}`,

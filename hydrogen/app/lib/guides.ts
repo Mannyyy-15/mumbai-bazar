@@ -20,6 +20,11 @@ export type GuideSection = {
   body: string[];
   /** Optional comparison table — AI engines lift these near-verbatim. */
   table?: { caption: string; headers: string[]; rows: string[][] };
+  /**
+   * Optional links to shop pages, rendered as chips under the section. Lets a
+   * guide hand a reader straight to matching stock instead of dead-ending.
+   */
+  links?: { label: string; to: string }[];
 };
 
 export type GuideStep = { name: string; text: string };
@@ -68,6 +73,111 @@ const AUTHOR_CURATOR = {
 };
 
 export const GUIDES: Guide[] = [
+  {
+    slug: "navratri-colours-2026",
+    title: "Navratri Colours 2026: 9 Days, Dates & Saree Ideas",
+    h1: "Navratri 2026 Colours: All 9 Days, Dates and What to Wear",
+    description:
+      "The Navratri 2026 colours for all nine days, 11 to 19 October, with the goddess for each day and which saree to wear in each colour.",
+    published: "2026-10-01",
+    modified: "2026-10-01",
+    author: AUTHOR_CURATOR,
+    readMinutes: 5,
+    relatedPath: "/sarees-under-1000",
+    relatedLabel: "Navratri sarees under ₹1,000",
+    keywords: [
+      "navratri colours 2026",
+      "navratri saree colours for 9 days 2026",
+      "navratri 2026 colours list",
+      "navratri day 1 colour 2026",
+      "navratri saree",
+      "garba saree",
+    ],
+    standfirst:
+      "Navratri 2026 runs from Sunday 11 October to Monday 19 October, with Dussehra on Tuesday 20 October. Here are the nine colours, one for each day, and the kind of saree that works for each.",
+    sections: [
+      {
+        heading: "What are the Navratri colours for 2026?",
+        answer:
+          "The Navratri 2026 colours are Orange (11 Oct), White (12 Oct), Red (13 Oct), Royal Blue (14 Oct), Yellow (15 Oct), Green (16 Oct), Grey (17 Oct), Purple (18 Oct) and Peacock Green (19 Oct). Each day honours one form of the goddess.",
+        body: [
+          "The list changes every year because it is set by the weekday Navratri begins on. In 2026 the first day falls on a Sunday, which is why the sequence opens with orange. Always check the current year's list rather than reusing last year's.",
+        ],
+        table: {
+          caption: "Navratri 2026 — colour for each day",
+          headers: ["Day", "Date", "Colour", "Goddess"],
+          rows: [
+            ["Day 1", "Sun, 11 Oct", "Orange", "Maa Shailaputri"],
+            ["Day 2", "Mon, 12 Oct", "White", "Maa Brahmacharini"],
+            ["Day 3", "Tue, 13 Oct", "Red", "Maa Chandraghanta"],
+            ["Day 4", "Wed, 14 Oct", "Royal Blue", "Maa Kushmanda"],
+            ["Day 5", "Thu, 15 Oct", "Yellow", "Maa Skandamata"],
+            ["Day 6", "Fri, 16 Oct", "Green", "Maa Katyayani"],
+            ["Day 7", "Sat, 17 Oct", "Grey", "Maa Kalaratri"],
+            ["Day 8 (Ashtami)", "Sun, 18 Oct", "Purple", "Maa Mahagauri"],
+            ["Day 9 (Navami)", "Mon, 19 Oct", "Peacock Green", "Maa Siddhidatri"],
+          ],
+        },
+      },
+      {
+        heading: "Which saree should I wear for each Navratri colour?",
+        answer:
+          "Pick from the colour family rather than chasing an exact shade. Saffron and rust count as orange, ivory and cream as white, maroon as red, navy as royal blue, mustard as yellow, and teal or firozi as peacock green.",
+        body: [
+          "For days you will spend at the pandal or at work, a light printed or art silk saree is easier to carry through a long day. Keep heavier zari butti pieces for Ashtami and Navami, when most families dress up most.",
+          "Red, white and peacock green are the easiest days to dress for — there is plenty of choice in every price band. Grey is the hardest; a grey-and-silver border on an ivory or white saree is a common way around it.",
+        ],
+        links: [
+          { label: "Orange", to: "/shop?color=coral-peach" },
+          { label: "White", to: "/shop?color=ivory-cream" },
+          { label: "Red", to: "/shop?color=red-crimson" },
+          { label: "Royal Blue", to: "/shop?color=blue-peacock" },
+          { label: "Yellow", to: "/shop?color=gold-yellow" },
+          { label: "Green", to: "/shop?color=green-emerald" },
+          { label: "Purple", to: "/shop?color=purple-violet" },
+          { label: "Peacock Green", to: "/shop?color=blue-peacock,green-emerald" },
+        ],
+      },
+      {
+        heading: "Can I wear a saree to garba?",
+        answer:
+          "Yes, if it is light. Choose georgette, art silk or a soft blend, pin the pleats and pallu securely, and skip heavy zari that drags when you turn. For hours of fast dancing many people switch to a chaniya choli for the later nights.",
+        body: [
+          "Wear the pleats a little shorter than usual so they clear your feet, and use two safety pins at the shoulder rather than one. A fitted blouse matters more than usual — garba is the one occasion where a loose blouse becomes a real problem.",
+        ],
+      },
+      {
+        heading: "When do Ashtami and Navami fall in 2026?",
+        answer:
+          "Ashtami, the eighth day, is Sunday 18 October and its colour is purple. Navami, the ninth day, is Monday 19 October in peacock green. Dussehra (Vijayadashami) follows on Tuesday 20 October.",
+        body: [
+          "These are the two days most families plan their best outfits around, so if you are buying only one or two new sarees for Navratri, buy for these.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "What is the colour of day 1 of Navratri 2026?",
+        a: "Orange. Day 1 is Sunday 11 October 2026 and is dedicated to Maa Shailaputri. Saffron and rust also work if you do not own a true orange.",
+      },
+      {
+        q: "What colour is Ashtami in Navratri 2026?",
+        a: "Purple. Ashtami falls on Sunday 18 October 2026, the day of Maa Mahagauri. Wine and violet sit in the same family.",
+      },
+      {
+        q: "What colour should I wear on Navami 2026?",
+        a: "Peacock green. Navami is Monday 19 October 2026, dedicated to Maa Siddhidatri. Teal and firozi are close enough for most people.",
+      },
+      {
+        q: "Do I have to wear the exact shade each day?",
+        a: "No. The colour of the day is a tradition, not a rule, and most people wear something from the same colour family. What matters is that you are comfortable through a long day.",
+      },
+      {
+        q: "Why are the Navratri colours different every year?",
+        a: "The sequence depends on the weekday Navratri begins on, so it shifts from year to year. That is why a list from last year will be wrong this year.",
+      },
+    ],
+  },
   {
     slug: "banarasi-saree-guide",
     title: "Banarasi Saree Guide | How to Identify a Real Handloom Banarasi",
@@ -246,7 +356,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "paithani-saree-guide",
-    title: "Paithani Saree Guide | Yeola vs Paithan, Motifs & Nauvari Draping",
+    title: "Paithani Saree Guide: Yeola vs Paithan & Motifs",
     h1: "The Paithani Saree Guide",
     description:
       "The difference between Yeola and Paithan weaving, what the peacock and lotus motifs mean, how to drape a Nauvari, and which Paithani suits Gudi Padwa and Ganesh Chaturthi.",
@@ -452,7 +562,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "bridal-trousseau-guide",
-    title: "Bridal Saree Trousseau Guide | Checklist, Colours & Budget by Ceremony",
+    title: "Bridal Trousseau Checklist: Sarees by Ceremony & Budget",
     h1: "The Bridal Trousseau Guide",
     description:
       "How many sarees a trousseau needs, which colour suits each ceremony, realistic budget tiers, and the buying timeline that avoids last-minute compromises.",
@@ -533,7 +643,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "mumbai-saree-shopping-guide",
-    title: "Best Saree Shops in Mumbai | Local Buying Guide to Nalasopara, Virar & Suburbs",
+    title: "Best Saree Shops in Mumbai: Nalasopara, Virar & Suburbs",
     h1: "The Mumbai Saree Shopping Guide",
     description:
       "Where to buy authentic bridal, silk, and everyday sarees in Mumbai without South Mumbai markups. A neighbourhood breakdown of Nalasopara, Virar, Vasai, Bhayandar, and Goregaon.",
@@ -610,7 +720,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "pure-silk-vs-art-silk-test",
-    title: "Pure Silk vs Art Silk | 5 Tests to Identify Real Silk Sarees (Burn, Ring & Touch)",
+    title: "Pure Silk vs Art Silk: 5 Tests to Identify Real Silk",
     h1: "How to Test Pure Silk vs Art Silk",
     description:
       "How to tell real pure silk from artificial polyester or viscose silk. Complete testing guide including the burn test, wedding ring test, touch warmth, and Central Silk Board verification.",
@@ -697,7 +807,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "wedding-saree-trends-2026",
-    title: "2026 Indian Wedding Saree Trends | Colors, Weaves, Fabrics & Silhouette Guide",
+    title: "Wedding Saree Trends 2026: Colours, Fabrics & Styles",
     h1: "Top 2026 Wedding Saree Trends",
     description:
       "The definitive trend forecast for 2026 Indian weddings: metallic tissue silks, pastel korvai Kanjivarams, sculpted contrast blouses, and modern heirloom draping.",
@@ -769,7 +879,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "kalamkari-saree-styling-guide",
-    title: "Kalamkari Saree Guide | Authentic Natural Dyes, Motifs & Daily Styling",
+    title: "Kalamkari Saree Guide: Dyes, Motifs & How to Style It",
     h1: "The Authentic Kalamkari Saree Guide",
     description:
       "A complete guide to hand-painted Srikalahasti and block-printed Machilipatnam Kalamkari sarees. Learn about natural vegetable dyes, sacred mythological motifs, and contemporary styling.",
@@ -840,7 +950,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "saree-shopping-vasai-virar",
-    title: "Saree Shopping in Vasai Virar: Markets, Prices & What to Buy Where",
+    title: "Saree Shopping in Vasai Virar: Markets & Prices",
     h1: "Saree Shopping in Vasai Virar: Markets, Prices and What to Buy Where",
     description:
       "A local guide to buying sarees in Nalasopara, Virar and Vasai — which market is best for bridal, what sarees actually cost, and how the belt compares to shopping in Borivali or Dadar.",

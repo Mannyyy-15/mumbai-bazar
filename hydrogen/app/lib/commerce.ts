@@ -32,3 +32,18 @@ export const COD_FEE_LABEL = `₹${COD_FEE}`;
  * prepaid the obvious choice, not to make delivery sound expensive.
  */
 export const DELIVERY_SUMMARY = `Free delivery on prepaid orders · ${COD_FEE_LABEL} for Cash on Delivery`;
+
+/**
+ * Lowest price in a product list, formatted for copy ("₹649"), or null.
+ *
+ * Category titles and descriptions quote a "from" price. Hardcoding it means
+ * the copy drifts the first time the catalogue changes; deriving it from the
+ * same products the page renders keeps the promise true by construction.
+ */
+export function lowestPriceLabel(products: Array<{ price?: string }>): string | null {
+  const nums = products
+    .map((p) => Number(String(p.price ?? "").replace(/[^0-9.]/g, "")))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  if (!nums.length) return null;
+  return `₹${Math.round(Math.min(...nums)).toLocaleString("en-IN")}`;
+}

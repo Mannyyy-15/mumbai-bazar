@@ -13,6 +13,7 @@ const STATIC_ENTRIES = [
   { path: '/new-arrivals' },
   { path: '/festive-edit' },
   { path: '/everyday-sarees' },
+  { path: '/sarees-under-1000' },
   { path: '/collections' },
   { path: '/trousseau-builder' },
   { path: '/our-story' },
