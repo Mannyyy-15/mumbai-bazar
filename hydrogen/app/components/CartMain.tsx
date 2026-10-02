@@ -4,7 +4,7 @@ import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import {useAside} from '~/components/Aside';
 import {CartLineItem, type CartLine} from '~/components/CartLineItem';
 import {CartSummary} from './CartSummary';
-import {ShoppingBag, Truck} from 'lucide-react';
+import {ShoppingBag} from 'lucide-react';
 
 export type CartLayout = 'page' | 'aside';
 
@@ -44,17 +44,6 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
       className="flex-1 flex flex-col justify-between overflow-hidden"
       aria-label={layout === 'page' ? 'Cart page' : 'Cart drawer'}
     >
-      {/* Free Shipping Assurance Banner */}
-      <div className="border-b border-gold/30 bg-[#FAF5ED] px-5 py-2.5 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-2 text-xs font-semibold text-maroon">
-          <Truck className="h-4 w-4 text-gold-deep shrink-0" />
-          <span>Free Express Insured Delivery on Prepaid Orders</span>
-        </div>
-        <span className="hidden sm:inline text-[10px] uppercase font-bold tracking-wider text-gold-deep">
-          Direct From Weavers
-        </span>
-      </div>
-
       {!cartHasItems ? (
         <CartEmpty layout={layout} />
       ) : (

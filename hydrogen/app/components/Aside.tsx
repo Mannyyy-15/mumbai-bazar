@@ -74,32 +74,22 @@ export function Aside({
         }`}
       >
         {/* Header */}
-        <header className="flex items-center justify-between border-b border-gold/30 bg-white px-5 py-3.5 shadow-sm shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="grid h-8 w-8 place-items-center rounded-full bg-maroon/10 text-maroon shrink-0">
-              <ShoppingBag className="h-4 w-4" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 id={id} className="font-serif text-base sm:text-lg font-bold text-maroon">
-                  Your Shopping Bag
-                </h2>
-                {typeof count === 'number' && count > 0 && (
-                  <span className="inline-flex items-center rounded-full bg-maroon/10 px-2 py-0.5 text-[11px] font-bold text-maroon">
-                    {count}
-                  </span>
-                )}
-              </div>
-              <p className="text-[10px] text-ink/60 font-medium tracking-wide">
-                Authentic Handcrafted Sarees
-              </p>
-            </div>
+        <header className="flex items-center justify-between border-b border-gold/25 bg-white px-5 py-4 shrink-0">
+          <div className="flex items-center gap-2">
+            <h2 id={id} className="font-serif text-lg font-bold text-ink">
+              Shopping Bag
+            </h2>
+            {typeof count === 'number' && count > 0 && (
+              <span className="text-xs font-semibold text-ink/50">
+                ({count})
+              </span>
+            )}
           </div>
 
           <button
             onClick={close}
             aria-label="Close bag"
-            className="grid h-8 w-8 place-items-center rounded-full border border-gold/40 text-ink/70 hover:bg-maroon hover:text-white hover:border-maroon transition-all"
+            className="grid h-8 w-8 place-items-center rounded-full text-ink/60 hover:text-maroon hover:bg-black/5 transition-colors"
           >
             <X className="h-4 w-4" />
           </button>

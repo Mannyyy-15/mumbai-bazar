@@ -30,14 +30,14 @@ export function CartLineItem({
   const childrenLabelId = `cart-line-children-${id}`;
 
   return (
-    <li key={id} className="flex gap-3.5 rounded-2xl border border-gold/35 bg-white p-3.5 shadow-sm">
+    <li key={id} className="flex gap-3.5 rounded-xl border border-[#EAE6DF] bg-white p-3.5 shadow-xs">
       {image && (
         <Link
           to={lineItemUrl}
           onClick={() => {
             if (layout === 'aside') close();
           }}
-          className="block h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F0E9DC] border border-gold/30"
+          className="block h-24 w-20 shrink-0 overflow-hidden rounded-lg bg-[#F5F2EB] border border-[#EAE6DF]"
         >
           <Image
             alt={title}
@@ -62,7 +62,7 @@ export function CartLineItem({
                   close();
                 }
               }}
-              className="font-sans text-sm sm:text-base font-bold text-ink hover:text-maroon transition-colors line-clamp-2 leading-snug"
+              className="font-sans text-sm font-semibold text-ink hover:text-maroon transition-colors line-clamp-2 leading-snug"
             >
               {product.title}
             </Link>
@@ -78,14 +78,11 @@ export function CartLineItem({
             </CartLineRemoveButton>
           </div>
 
-          <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+          <div className="flex items-center gap-2 mt-1 flex-wrap text-xs text-ink/60">
             {selectedOptions
               .filter((opt) => opt.value !== 'Default Title')
               .map((option) => (
-                <span
-                  key={option.name}
-                  className="px-2 py-0.5 rounded-full bg-maroon/10 text-[10px] font-bold uppercase tracking-wider text-maroon"
-                >
+                <span key={option.name}>
                   {option.name}: {option.value}
                 </span>
               ))}
