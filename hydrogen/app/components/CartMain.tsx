@@ -36,7 +36,6 @@ function getLineItemChildrenMap(lines: CartLine[]): LineItemChildrenMap {
 
 export function CartMain({layout, cart: originalCart}: CartMainProps) {
   const cart = useOptimisticCart(originalCart);
-  const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
   const cartHasItems = cart?.totalQuantity ? cart.totalQuantity > 0 : false;
   const childrenMap = getLineItemChildrenMap(cart?.lines?.nodes ?? []);
 
@@ -46,11 +45,14 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
       aria-label={layout === 'page' ? 'Cart page' : 'Cart drawer'}
     >
       {/* Free Shipping Assurance Banner */}
-      <div className="border-b border-gold/30 bg-gold/10 px-5 py-2.5 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-bold text-maroon">
+      <div className="border-b border-gold/30 bg-[#FAF5ED] px-5 py-2.5 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-2 text-xs font-semibold text-maroon">
           <Truck className="h-4 w-4 text-gold-deep shrink-0" />
-          <span>Free express insured delivery on prepaid orders</span>
+          <span>Free Express Insured Delivery on Prepaid Orders</span>
         </div>
+        <span className="hidden sm:inline text-[10px] uppercase font-bold tracking-wider text-gold-deep">
+          Direct From Weavers
+        </span>
       </div>
 
       {!cartHasItems ? (
@@ -59,7 +61,7 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
         <div className="flex-1 flex flex-col justify-between overflow-hidden">
           <ul
             aria-label="Line items"
-            className="flex-1 divide-y divide-gold/25 overflow-y-auto px-4 py-3 space-y-3"
+            className="flex-1 overflow-y-auto px-4 py-4 space-y-3"
           >
             {(cart?.lines?.nodes ?? []).map((line) => {
               if (
@@ -88,28 +90,31 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
 function CartEmpty({layout}: {layout?: CartMainProps['layout']}) {
   const {close} = useAside();
   return (
-    <div className="flex flex-1 flex-col items-center justify-center px-6 py-12 text-center">
-      <div className="grid h-20 w-20 place-items-center rounded-3xl border border-gold/40 bg-white shadow-sm">
-        <ShoppingBag className="h-9 w-9 text-maroon/70" />
+    <div className="flex flex-1 flex-col items-center justify-center px-6 py-14 text-center">
+      <div className="relative mb-5 grid h-20 w-20 place-items-center rounded-full bg-maroon/5 border border-gold/30 shadow-inner">
+        <ShoppingBag className="h-9 w-9 text-maroon/80" />
+        <span className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-gold text-white text-xs">
+          ✦
+        </span>
       </div>
-      <h3 className="mt-5 font-serif text-2xl font-bold text-maroon">Your bag is empty</h3>
-      <p className="mt-2 max-w-xs text-xs sm:text-sm text-ink/75 font-medium leading-relaxed">
-        Explore our bridal heirlooms, Banarasi katan silks, and festive drapes.
+      <h3 className="font-serif text-2xl font-bold text-ink">Your bag is empty</h3>
+      <p className="mt-2 max-w-xs text-xs sm:text-sm text-ink/70 font-medium leading-relaxed">
+        Discover our heirloom Banarasi silks, Kanjivaram weaves, and bridal drapes.
       </p>
       <div className="mt-6 flex flex-col gap-2.5 w-full max-w-xs">
         <Link
           to="/shop"
           onClick={close}
-          className="w-full py-3.5 rounded-full bg-maroon text-white text-xs font-bold uppercase tracking-wider hover:bg-wine transition-all shadow-md text-center"
+          className="w-full py-3.5 rounded-xl bg-maroon text-white text-xs font-bold uppercase tracking-[0.14em] hover:bg-[#4a020c] transition-all shadow-md text-center"
         >
-          Browse All Sarees
+          Explore All Sarees
         </Link>
         <Link
           to="/collections"
           onClick={close}
-          className="w-full py-3 rounded-full border border-maroon/30 text-maroon text-xs font-bold uppercase tracking-wider hover:bg-maroon/5 transition-all text-center"
+          className="w-full py-3 rounded-xl border border-gold/40 text-maroon text-xs font-bold uppercase tracking-[0.12em] hover:bg-maroon/5 transition-all text-center bg-white"
         >
-          Explore Collections
+          Browse Collections
         </Link>
       </div>
     </div>

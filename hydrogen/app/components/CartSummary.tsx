@@ -1,11 +1,9 @@
 import type {CartApiQueryFragment} from 'storefrontapi.generated';
 import type {CartLayout} from '~/components/CartMain';
-import {CartForm, Money, type OptimisticCart} from '@shopify/hydrogen';
-import {useEffect, useId, useRef, useState} from 'react';
-import {useFetcher} from 'react-router';
-import {Lock, ArrowRight, MessageCircle, Truck, ShieldCheck, RotateCcw} from 'lucide-react';
+import {Money, type OptimisticCart} from '@shopify/hydrogen';
+import {useEffect, useId} from 'react';
+import {Lock, ArrowRight, Truck, ShieldCheck, RotateCcw, CheckCircle2} from 'lucide-react';
 import {COD_FEE_LABEL} from '~/lib/commerce';
-import {SITE} from '~/lib/seo';
 import {trackInitiateCheckout} from '~/lib/meta-pixel';
 
 type CartSummaryProps = {
@@ -15,95 +13,38 @@ type CartSummaryProps = {
 
 export function CartSummary({cart, layout}: CartSummaryProps) {
   const summaryId = useId();
-  const discountsHeadingId = useId();
-  const discountCodeInputId = useId();
-  const giftCardHeadingId = useId();
-  const giftCardInputId = useId();
+  const checkoutUrl = cart?.checkoutUrl;
+  const isAside = layout === 'aside';
 
-  return (
-    <div
-      aria-labelledby={summaryId}
-      className="border-t border-gold/40 bg-white px-5 pb-6 pt-4 shadow-lg"
-    >
-      <div className="flex items-center justify-between">
-        <span className="text-xs uppercase tracking-wider font-semibold text-taupe">
-          Subtotal
-        </span>
-        <span className="font-sans text-xl font-extrabold text-black">
-          {cart?.cost?.subtotalAmount?.amount ? (
-            <Money data={cart?.cost?.subtotalAmount} />
-          ) : (
-            '—'
-          )}
-        </span>
-      </div>
+  const discountAmount = cart?.cost?.totalDiscountAmount;
+  const hasDiscount =
+    Boolean(discountAmount?.amount) && Number(discountAmount?.amount || 0) > 0;
 
-      <p className="mt-1.5 text-xs text-ink/70 font-medium">
-        Inclusive of all taxes.
-      </p>
+  /**
+   * Warm the connection to the checkout domain while the customer is still
+   * looking at their bag for instantaneous transition to checkout.
+   */
+  useEffect(() => {
+    if (!checkoutUrl) return;
+    let origin: string;
+    try {
+      origin = new URL(checkoutUrl).origin;
+    } catch {
+      return;
+    }
+    if (document.querySelector(`link[rel="preconnect"][href="${origin}"]`)) return;
 
-      {/*
-        Payment-method pricing, stated before checkout.
+    const preconnect = document.createElement('link');
+    preconnect.rel = 'preconnect';
+    preconnect.href = origin;
+    preconnect.crossOrigin = 'anonymous';
+    document.head.appendChild(preconnect);
 
-        Shopify cannot vary a discount by payment method from a headless
-        storefront: discounts are computed when the cart is built, and the
-        customer chooses COD vs prepaid later, inside Shopify's own checkout.
-        So the COD fee is configured as a shipping rate in Shopify admin, and
-        this block exists so the number is never a surprise at the payment step
-        — which is where an unexpected charge turns into an abandoned cart.
-      */}
-      <div className="mt-3 rounded-lg border border-gold/40 bg-beige/25 p-3">
-        <div className="flex items-start gap-2">
-          <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-deep" />
-          <p className="text-[11px] leading-snug text-ink/80">
-            <strong className="font-semibold text-maroon">
-              Free delivery on online payment
-            </strong>{' '}
-            — UPI, card or netbanking.{' '}
-            <span className="text-ink/65">
-              Cash on Delivery adds a {COD_FEE_LABEL} handling fee, shown at checkout.
-            </span>
-          </p>
-        </div>
-      </div>
-
-      <CartDiscounts
-        discountCodes={cart?.discountCodes}
-        discountsHeadingId={discountsHeadingId}
-        discountCodeInputId={discountCodeInputId}
-      />
-      <CartGiftCard
-        giftCardCodes={cart?.appliedGiftCards}
-        giftCardHeadingId={giftCardHeadingId}
-        giftCardInputId={giftCardInputId}
-      />
-
-      <CartCheckoutActions checkoutUrl={cart?.checkoutUrl} cart={cart} />
-
-      {/* Trust Badges */}
-      <div className="mt-4 grid grid-cols-3 gap-2 border-t border-gold/30 pt-3.5 text-center text-[10px] uppercase font-bold tracking-wider text-ink/75">
-        <div className="flex flex-col items-center gap-1">
-          <Truck className="h-4 w-4 text-gold-deep" />
-          <span>Free on prepaid</span>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <ShieldCheck className="h-4 w-4 text-gold-deep" />
-          <span>See in store</span>
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <RotateCcw className="h-4 w-4 text-gold-deep" />
-          <span>7-Day Returns</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function CartCheckoutActions({checkoutUrl, cart}: {checkoutUrl?: string; cart?: OptimisticCart<CartApiQueryFragment | null>}) {
-  const waMsg = encodeURIComponent(
-    `Hello Mumbai Bazar, I would like to place an order from my online cart. Please assist me with payment and delivery confirmation.`,
-  );
-  const waHref = `https://wa.me/${SITE.whatsapp}?text=${waMsg}`;
+    const dns = document.createElement('link');
+    dns.rel = 'dns-prefetch';
+    dns.href = origin;
+    document.head.appendChild(dns);
+  }, [checkoutUrl]);
 
   const handleCheckoutClick = () => {
     if (cart?.lines?.nodes) {
@@ -115,274 +56,110 @@ function CartCheckoutActions({checkoutUrl, cart}: {checkoutUrl?: string; cart?: 
   };
 
   return (
-    <div className="mt-4 grid gap-2.5">
-      {checkoutUrl && (
-        <a
-          href={checkoutUrl}
-          target="_self"
-          onClick={handleCheckoutClick}
-          className="flex flex-col items-center justify-center gap-1 w-full rounded-xl bg-maroon py-3.5 px-4 text-white hover:bg-wine active:scale-98 transition-all shadow-md group"
-        >
-          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-            <Lock className="h-4 w-4 text-gold" />
-            <span>Proceed to Checkout</span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </div>
-          <span className="text-[10px] text-white/80 font-medium tracking-normal">
-            UPI • Cards • Cash on Delivery (COD)
-          </span>
-        </a>
-      )}
-
-      <a
-        href={waHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[#25D366] bg-[#25D366]/10 py-3 text-xs font-bold uppercase tracking-wider text-[#128C7E] hover:bg-[#25D366] hover:text-white active:scale-98 transition-all shadow-sm"
-      >
-        <MessageCircle className="h-4 w-4" />
-        <span>Order Directly on WhatsApp</span>
-      </a>
-    </div>
-  );
-}
-
-function CartDiscounts({
-  discountCodes,
-  discountsHeadingId,
-  discountCodeInputId,
-}: {
-  discountCodes?: CartApiQueryFragment['discountCodes'];
-  discountsHeadingId: string;
-  discountCodeInputId: string;
-}) {
-  const codes: string[] =
-    discountCodes
-      ?.filter((discount) => discount.applicable)
-      ?.map(({code}) => code) || [];
-
-  return (
-    <section aria-label="Discounts">
-      {/* Have existing discount, display it with a remove option */}
-      <dl hidden={!codes.length}>
-        <div>
-          <dt id={discountsHeadingId}>Discounts</dt>
-          <UpdateDiscountForm>
-            <div
-              className="cart-discount"
-              role="group"
-              aria-labelledby={discountsHeadingId}
-            >
-              <code>{codes?.join(', ')}</code>
-              &nbsp;
-              <button type="submit" aria-label="Remove discount">
-                Remove
-              </button>
-            </div>
-          </UpdateDiscountForm>
-        </div>
-      </dl>
-
-      {/* Show an input to apply a discount */}
-      <UpdateDiscountForm discountCodes={codes}>
-        <div>
-          <label htmlFor={discountCodeInputId} className="sr-only">
-            Discount code
-          </label>
-          <input
-            id={discountCodeInputId}
-            type="text"
-            name="discountCode"
-            placeholder="Discount code"
-          />
-          &nbsp;
-          <button type="submit" aria-label="Apply discount code">
-            Apply
-          </button>
-        </div>
-      </UpdateDiscountForm>
-    </section>
-  );
-}
-
-function UpdateDiscountForm({
-  discountCodes,
-  children,
-}: {
-  discountCodes?: string[];
-  children: React.ReactNode;
-}) {
-  return (
-    <CartForm
-      route="/cart"
-      action={CartForm.ACTIONS.DiscountCodesUpdate}
-      inputs={{
-        discountCodes: discountCodes || [],
-      }}
+    <div
+      aria-labelledby={summaryId}
+      className={`border-t border-gold/30 bg-white ${
+        isAside
+          ? 'p-5 sm:p-6 shadow-[0_-4px_24px_rgba(0,0,0,0.06)] shrink-0 mt-auto'
+          : 'p-6 rounded-2xl border border-gold/40 max-w-lg mx-auto shadow-sm my-6'
+      }`}
     >
-      {children}
-    </CartForm>
-  );
-}
-
-function CartGiftCard({
-  giftCardCodes,
-  giftCardHeadingId,
-  giftCardInputId,
-}: {
-  giftCardCodes: CartApiQueryFragment['appliedGiftCards'] | undefined;
-  giftCardHeadingId: string;
-  giftCardInputId: string;
-}) {
-  const giftCardCodeInput = useRef<HTMLInputElement>(null);
-  const removeButtonRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
-  const previousCardIdsRef = useRef<string[]>([]);
-  const giftCardAddFetcher = useFetcher({key: 'gift-card-add'});
-  const [removedCardIndex, setRemovedCardIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (giftCardAddFetcher.data) {
-      if (giftCardCodeInput.current !== null) {
-        giftCardCodeInput.current.value = '';
-      }
-    }
-  }, [giftCardAddFetcher.data]);
-
-  useEffect(() => {
-    const currentCardIds = giftCardCodes?.map((card) => card.id) || [];
-
-    if (removedCardIndex !== null && giftCardCodes) {
-      const focusTargetIndex = Math.min(
-        removedCardIndex,
-        giftCardCodes.length - 1,
-      );
-      const focusTargetCard = giftCardCodes[focusTargetIndex];
-      const focusButton = focusTargetCard
-        ? removeButtonRefs.current.get(focusTargetCard.id)
-        : null;
-
-      if (focusButton) {
-        focusButton.focus();
-      } else if (giftCardCodeInput.current) {
-        giftCardCodeInput.current.focus();
-      }
-
-      setRemovedCardIndex(null);
-    }
-
-    previousCardIdsRef.current = currentCardIds;
-  }, [giftCardCodes, removedCardIndex]);
-
-  const handleRemoveClick = (cardId: string) => {
-    const index = previousCardIdsRef.current.indexOf(cardId);
-    if (index !== -1) {
-      setRemovedCardIndex(index);
-    }
-  };
-
-  return (
-    <section aria-label="Gift cards">
-      {giftCardCodes && giftCardCodes.length > 0 && (
-        <dl>
-          <dt id={giftCardHeadingId}>Applied Gift Card(s)</dt>
-          {giftCardCodes.map((giftCard) => (
-            <dd key={giftCard.id} className="cart-discount">
-              <RemoveGiftCardForm
-                giftCardId={giftCard.id}
-                lastCharacters={giftCard.lastCharacters}
-                onRemoveClick={() => handleRemoveClick(giftCard.id)}
-                buttonRef={(el: HTMLButtonElement | null) => {
-                  if (el) {
-                    removeButtonRefs.current.set(giftCard.id, el);
-                  } else {
-                    removeButtonRefs.current.delete(giftCard.id);
-                  }
-                }}
-              >
-                <code>***{giftCard.lastCharacters}</code>
-                &nbsp;
-                <Money data={giftCard.amountUsed} />
-              </RemoveGiftCardForm>
-            </dd>
-          ))}
-        </dl>
-      )}
-
-      <AddGiftCardForm fetcherKey="gift-card-add">
-        <div>
-          <label htmlFor={giftCardInputId} className="sr-only">
-            Gift card code
-          </label>
-          <input
-            id={giftCardInputId}
-            type="text"
-            name="giftCardCode"
-            placeholder="Gift card code"
-            ref={giftCardCodeInput}
-          />
-          &nbsp;
-          <button
-            type="submit"
-            disabled={giftCardAddFetcher.state !== 'idle'}
-            aria-label="Apply gift card code"
+      {/* Price breakdown */}
+      <div className="space-y-2.5">
+        <div className="flex items-baseline justify-between">
+          <span
+            id={summaryId}
+            className="text-xs uppercase tracking-widest font-semibold text-ink/70"
           >
-            Apply
-          </button>
+            Subtotal
+          </span>
+          <span className="font-sans text-2xl font-extrabold text-black tabular-nums tracking-tight">
+            {cart?.cost?.subtotalAmount?.amount ? (
+              <Money data={cart?.cost?.subtotalAmount} />
+            ) : (
+              '—'
+            )}
+          </span>
         </div>
-      </AddGiftCardForm>
-    </section>
-  );
-}
 
-function AddGiftCardForm({
-  fetcherKey,
-  children,
-}: {
-  fetcherKey?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <CartForm
-      fetcherKey={fetcherKey}
-      route="/cart"
-      action={CartForm.ACTIONS.GiftCardCodesAdd}
-    >
-      {children}
-    </CartForm>
-  );
-}
+        {hasDiscount && (
+          <div className="flex items-center justify-between text-xs font-semibold text-emerald-700 bg-emerald-50/80 px-2.5 py-1.5 rounded-lg border border-emerald-200">
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+              <span>Promotional Savings</span>
+            </span>
+            <span>-<Money data={discountAmount} /></span>
+          </div>
+        )}
 
-function RemoveGiftCardForm({
-  giftCardId,
-  lastCharacters,
-  children,
-  onRemoveClick,
-  buttonRef,
-}: {
-  giftCardId: string;
-  lastCharacters: string;
-  children: React.ReactNode;
-  onRemoveClick?: () => void;
-  buttonRef?: (el: HTMLButtonElement | null) => void;
-}) {
-  return (
-    <CartForm
-      route="/cart"
-      action={CartForm.ACTIONS.GiftCardCodesRemove}
-      inputs={{
-        giftCardCodes: [giftCardId],
-      }}
-    >
-      {children}
-      &nbsp;
-      <button
-        type="submit"
-        aria-label={`Remove gift card ending in ${lastCharacters}`}
-        onClick={onRemoveClick}
-        ref={buttonRef}
-      >
-        Remove
-      </button>
-    </CartForm>
+        <div className="flex items-center justify-between text-xs text-ink/75 pt-1">
+          <span className="font-medium">Estimated Delivery</span>
+          <span className="font-semibold text-emerald-800">
+            Free on Prepaid <span className="font-normal text-ink/60">(COD available)</span>
+          </span>
+        </div>
+
+        <p className="text-[11px] text-ink/60 font-medium leading-relaxed">
+          Taxes included. Standard shipping and COD options confirmed at checkout.
+        </p>
+      </div>
+
+      {/* Value Reassurance Strip */}
+      <div className="mt-3.5 rounded-xl border border-gold/30 bg-[#FAF7F2] p-3">
+        <div className="flex items-start gap-2.5">
+          <Truck className="h-4 w-4 shrink-0 text-maroon mt-0.5" />
+          <p className="text-[11px] leading-snug text-ink/85">
+            <strong className="font-semibold text-maroon">
+              Free Express Delivery
+            </strong>{' '}
+            on prepaid orders via UPI, Cards & NetBanking. COD available across India.
+          </p>
+        </div>
+      </div>
+
+      {/* Checkout Action Button */}
+      <div className="mt-4">
+        {checkoutUrl ? (
+          <a
+            href={checkoutUrl}
+            target="_self"
+            onClick={handleCheckoutClick}
+            className="group relative flex w-full flex-col items-center justify-center rounded-xl bg-maroon py-3.5 px-4 text-white shadow-md transition-all duration-200 hover:bg-[#4a020c] active:scale-[0.99]"
+          >
+            <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-[0.14em]">
+              <Lock className="h-4 w-4 text-gold shrink-0" />
+              <span>Proceed to Checkout</span>
+              <ArrowRight className="h-4 w-4 text-gold transition-transform group-hover:translate-x-1" />
+            </div>
+            <span className="mt-0.5 text-[10px] font-normal tracking-wide text-white/85">
+              UPI • Cards • NetBanking • Cash on Delivery (COD)
+            </span>
+          </a>
+        ) : (
+          <button
+            disabled
+            className="flex w-full items-center justify-center rounded-xl bg-maroon/50 py-3.5 px-4 text-xs font-bold uppercase tracking-wider text-white cursor-not-allowed"
+          >
+            Checkout Unavailable
+          </button>
+        )}
+      </div>
+
+      {/* Trust Pillars */}
+      <div className="mt-4 grid grid-cols-3 gap-2 border-t border-gold/25 pt-3.5 text-center text-[10px] font-bold uppercase tracking-wider text-ink/75">
+        <div className="flex flex-col items-center gap-1">
+          <Truck className="h-3.5 w-3.5 text-gold-deep" />
+          <span>Insured Transit</span>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <ShieldCheck className="h-3.5 w-3.5 text-gold-deep" />
+          <span>100% Authentic</span>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <RotateCcw className="h-3.5 w-3.5 text-gold-deep" />
+          <span>7-Day Returns</span>
+        </div>
+      </div>
+    </div>
   );
 }
