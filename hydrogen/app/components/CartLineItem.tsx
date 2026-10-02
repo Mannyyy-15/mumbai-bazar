@@ -97,7 +97,7 @@ export function CartLineItem({
           <CartLineQuantity line={line} />
 
           {/* Price */}
-          <div className="font-sans text-base font-bold text-maroon tabular-nums tracking-tight">
+          <div className="font-sans text-base font-extrabold text-black tabular-nums tracking-tight">
             <ProductPrice price={line?.cost?.totalAmount} />
           </div>
         </div>

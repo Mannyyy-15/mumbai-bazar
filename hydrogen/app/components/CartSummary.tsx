@@ -29,7 +29,7 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
         <span className="text-xs uppercase tracking-wider font-semibold text-taupe">
           Subtotal
         </span>
-        <span className="font-serif text-xl font-bold text-maroon">
+        <span className="font-sans text-xl font-extrabold text-black">
           {cart?.cost?.subtotalAmount?.amount ? (
             <Money data={cart?.cost?.subtotalAmount} />
           ) : (

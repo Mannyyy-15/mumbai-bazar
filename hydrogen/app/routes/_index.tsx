@@ -33,7 +33,7 @@ import { ProductCard } from "~/components/ProductCard";
 
 export const meta: Route.MetaFunction = () => {
   const metaList = getSeoMeta({
-    title: "Mumbai Bazar — Saree Shops in Vasai Virar, Nalasopara & Mumbai",
+    title: "Mumbai Bazar — Saree Shops in Vasai, Virar & Mumbai",
     description: `Sarees from ₹800, designer lehengas, dulhan wear and dress material at 8 Mumbai Bazar stores across Nalasopara, Virar, Vasai, Bhayandar and Goregaon. ${SITE.hours.shortDaily}.`,
     path: "/",
     keywords: [
@@ -204,10 +204,6 @@ function HeroCarousel() {
       aria-roledescription="carousel"
       aria-label="Featured collections"
     >
-      <h1 className="sr-only">
-        Mumbai Bazar — Sarees, Lehengas &amp; Bridal Wear across 8 stores in Nalasopara, Virar,
-        Vasai, Bhayandar and Goregaon
-      </h1>
       <div
         ref={trackRef}
         onTouchStart={onTouchStart}
@@ -287,15 +283,27 @@ function HeroCarousel() {
                   <span className="h-px w-10 bg-gold" />
                   {s.eyebrow}
                 </span>
-                <h2 className="mt-4 md:mt-6 font-serif text-3xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92] [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
-                  {s.title}
-                  {s.italic && (
-                    <>
-                      <br />
-                      <span className="italic font-light">{s.italic}</span>
-                    </>
-                  )}
-                </h2>
+                {i === 0 ? (
+                  <h1 className="mt-4 md:mt-6 font-serif text-3xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92] [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
+                    {s.title}
+                    {s.italic && (
+                      <>
+                        <br />
+                        <span className="italic font-light">{s.italic}</span>
+                      </>
+                    )}
+                  </h1>
+                ) : (
+                  <h2 className="mt-4 md:mt-6 font-serif text-3xl !text-ivory md:text-6xl lg:text-7xl xl:text-8xl leading-[0.92] [text-shadow:0_2px_12px_rgba(0,0,0,0.6)]">
+                    {s.title}
+                    {s.italic && (
+                      <>
+                        <br />
+                        <span className="italic font-light">{s.italic}</span>
+                      </>
+                    )}
+                  </h2>
+                )}
                 <p className="mt-4 md:mt-6 max-w-md text-sm md:text-base lg:text-lg leading-relaxed text-ivory/85">
                   {s.copy}
                 </p>

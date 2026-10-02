@@ -18,6 +18,7 @@ import favicon from '~/assets/favicon.svg';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import tailwindCss from './styles/tailwind.css?url';
 import {PageLayout} from './components/PageLayout';
+import {SaleAlertPopup} from './components/SaleAlertPopup';
 import {initializeNativeApp} from './lib/native-bridge';
 
 declare global {
@@ -276,6 +277,7 @@ export default function App() {
           <Outlet />
         </div>
       </PageLayout>
+      <SaleAlertPopup />
     </Analytics.Provider>
   );
 }

@@ -171,11 +171,11 @@ export function ProductCard({ p }: { p: Product }) {
           ) : null}
 
           <div className="flex items-baseline gap-2 pt-1.5 border-t border-[#A27633]/30 mt-1">
-            <span className="font-sans text-sm sm:text-base md:text-lg font-bold text-maroon tracking-tight">
+            <span className="font-sans text-sm sm:text-base md:text-lg font-extrabold text-black tracking-tight">
               {p.price}
             </span>
             {p.original && (
-              <span className="text-[11px] sm:text-xs text-taupe font-medium line-through font-sans">
+              <span className="text-[11px] sm:text-xs text-red-600 font-semibold line-through font-sans">
                 {p.original}
               </span>
             )}

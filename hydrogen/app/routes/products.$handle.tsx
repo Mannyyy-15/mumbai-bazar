@@ -26,6 +26,7 @@ import { ProductCard } from "~/components/ProductCard";
 import { hapticImpact, hapticSuccess } from "~/lib/native-bridge";
 import { CartForm, Analytics } from "@shopify/hydrogen";
 import { trackViewContent, trackAddToCart } from "~/lib/meta-pixel";
+import { SaleCountdown } from "~/components/SaleCountdown";
 
 export const meta: Route.MetaFunction = ({ data }) => {
   if (!data?.product) {
@@ -625,12 +626,12 @@ export default function ProductDetailPage() {
 
               {/* Price row */}
               <div className="mt-6 flex items-baseline gap-4">
-                <span className="font-sans text-3xl md:text-4xl font-extrabold text-maroon tracking-tight">
+                <span className="font-sans text-3xl md:text-4xl font-black text-black tracking-tight">
                   {activePrice}
                 </span>
                 {activeOriginal && (
                   <>
-                    <span className="text-sm font-sans text-taupe font-medium line-through">
+                    <span className="text-sm font-sans text-red-600 font-semibold line-through">
                       {activeOriginal}
                     </span>
                     <span className="text-[10px] tracking-[0.22em] uppercase bg-maroon text-ivory px-2.5 py-1 font-semibold rounded-md shadow-sm">
@@ -640,8 +641,11 @@ export default function ProductDetailPage() {
                 )}
               </div>
               <p className="mt-2 text-xs text-ink/80 font-medium">
-                Inclusive of all taxes · Free delivery on prepaid orders
+                Inclusive of all taxes · Free express delivery across India
               </p>
+
+              {/* 4-Hour Auto-refreshing Festive Sale Timer */}
+              <SaleCountdown />
 
               <div className="my-7 h-px bg-maroon/15" />
 
@@ -912,11 +916,11 @@ export default function ProductDetailPage() {
           {/* Price & Guarantee Column */}
           <div className="flex flex-col min-w-0 shrink-0">
             <div className="flex items-baseline gap-1.5">
-              <span className="font-sans text-xl font-black text-[#9B1018] tracking-tight">
+              <span className="font-sans text-xl font-black text-black tracking-tight">
                 {activePrice}
               </span>
               {activeOriginal && (
-                <span className="text-xs text-taupe font-medium line-through font-sans">
+                <span className="text-xs text-red-600 font-semibold line-through font-sans">
                   {activeOriginal}
                 </span>
               )}
