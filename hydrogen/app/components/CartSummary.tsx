@@ -121,11 +121,16 @@ function CartCheckoutActions({checkoutUrl, cart}: {checkoutUrl?: string; cart?: 
           href={checkoutUrl}
           target="_self"
           onClick={handleCheckoutClick}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-maroon py-3.5 text-xs font-bold uppercase tracking-wider text-white hover:bg-wine active:scale-98 transition-all shadow-md"
+          className="flex flex-col items-center justify-center gap-1 w-full rounded-xl bg-maroon py-3.5 px-4 text-white hover:bg-wine active:scale-98 transition-all shadow-md group"
         >
-          <Lock className="h-4 w-4" />
-          <span>Shop Now</span>
-          <ArrowRight className="h-4 w-4" />
+          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
+            <Lock className="h-4 w-4 text-gold" />
+            <span>Proceed to Checkout</span>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </div>
+          <span className="text-[10px] text-white/80 font-medium tracking-normal">
+            UPI • Cards • Cash on Delivery (COD)
+          </span>
         </a>
       )}
 
