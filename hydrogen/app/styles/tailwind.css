@@ -318,8 +318,29 @@
   animation: marquee 42s linear infinite;
 }
 
+/* Infinite Marquee with zero stutter & hardware acceleration */
+@keyframes infinite-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-infinite-marquee {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: infinite-marquee 34s linear infinite;
+}
+
+.marquee-pause:hover .animate-infinite-marquee {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .reveal, .marquee-track { animation: none !important; opacity: 1; transform: none; }
+  .reveal, .marquee-track, .animate-infinite-marquee { animation: none !important; opacity: 1; transform: none; }
 }
 
 @utility scrollbar-hide {

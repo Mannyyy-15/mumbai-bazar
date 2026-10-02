@@ -19,6 +19,7 @@ import { useWishlist } from "~/lib/wishlist-context";
 import { useFocusTrap } from "~/hooks/use-focus-trap";
 import { SITE } from "~/lib/seo";
 import { registerBackHandler } from "~/lib/native-bridge";
+import { AnnouncementBar } from "~/components/AnnouncementBar";
 
 const PRIMARY_LEFT = [
   { label: "Shop", to: "/shop" },
@@ -386,13 +387,8 @@ export function Header({ cart }: { cart?: CartApiQueryFragment | null }) {
         scrolled ? "shadow-[0_8px_24px_-14px_rgba(100,31,42,0.22)]" : "shadow-none"
       }`}
     >
-      {/* Top Festive Sale Announcement Bar */}
-      <div className="bg-maroon text-white text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] py-2 px-3 text-center border-b border-gold/30 flex items-center justify-center gap-2 sm:gap-4 overflow-hidden">
-        <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
-        <span className="truncate">FESTIVE MEGA SALE LIVE — UP TO 60% OFF SITEWIDE</span>
-        <span className="hidden sm:inline text-gold">·</span>
-        <span className="hidden sm:inline text-amber-200">FREE SHIPPING ACROSS INDIA</span>
-      </div>
+      {/* Single Seamless Infinite Marquee Announcement Bar */}
+      <AnnouncementBar />
 
       {/* Main navigation row */}
       <div

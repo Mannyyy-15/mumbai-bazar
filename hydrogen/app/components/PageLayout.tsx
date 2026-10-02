@@ -2,7 +2,6 @@ import { Await } from 'react-router';
 import { Suspense } from 'react';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 import { Aside } from '~/components/Aside';
-import { AnnouncementBar } from '~/components/AnnouncementBar';
 import { Header } from '~/components/Header';
 import { Footer } from '~/components/Footer';
 import { WhatsAppFab } from '~/components/WhatsAppFab';
@@ -22,7 +21,6 @@ export function PageLayout({ cart, children = null }: PageLayoutProps) {
       <Aside.Provider>
         <CartAside cart={cart} />
         <WishlistDrawer />
-        <AnnouncementBar />
         <Suspense fallback={<Header />}>
           <Await resolve={cart}>
             {(resolvedCart) => <Header cart={resolvedCart} />}
