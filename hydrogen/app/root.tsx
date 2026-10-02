@@ -19,6 +19,7 @@ import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import tailwindCss from './styles/tailwind.css?url';
 import {PageLayout} from './components/PageLayout';
 import {SaleAlertPopup} from './components/SaleAlertPopup';
+import {RecentPurchaseToast} from './components/RecentPurchaseToast';
 import {initializeNativeApp} from './lib/native-bridge';
 
 declare global {
@@ -278,6 +279,7 @@ export default function App() {
         </div>
       </PageLayout>
       <SaleAlertPopup />
+      <RecentPurchaseToast />
     </Analytics.Provider>
   );
 }
